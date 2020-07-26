@@ -1,0 +1,36 @@
+{
+  "name": "bets_reviewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-force-ssl": "^0.3.2",
+    "geoip-lite": "^1.3.8",
+    "http": "0.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.4.1",
+    "node-fetch": "^2.6.0",
+    "socket.io": "^2.3.0",
+    "web-push": "^3.4.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node src/server.js",
+    "prod": "MONGO_HOST=mongo HOST=0.0.0.0 PORT=4001 node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swrd06bp/bets_reviewer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swrd06bp/bets_reviewer/issues"
+  },
+  "homepage": "https://github.com/swrd06bp/bets_reviewer#readme"
+}

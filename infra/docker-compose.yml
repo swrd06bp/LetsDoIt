@@ -1,0 +1,52 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: $PWD/../frontend/Dockerfile
+    ports:
+      - "4002"
+    volumes:
+      - $PWD/../frontend/src:/app/src
+      - $PWD/../frontend/public:/app/public
+    networks:
+      - todolistnet
+  backend:
+    build:
+      context: ../backend
+      dockerfile: $PWD/../backend/Dockerfile
+    ports:
+      - "4001"
+    volumes:
+      - $PWD/../backend/src:/app/src
+    depends_on:
+      - mongo
+    networks:
+      - todolistnet
+  mongo:
+    image: "mongo"
+    volumes:
+      - ./db-data:/data/db
+    networks:
+      - todolistnet
+  nginx: 
+    image: nginx
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/error.log:/etc/nginx/error_log.log
+      - ./nginx/cache/:/etc/nginx/cache
+      - ./nginx/cert/:/etc/letsencrypt  
+    ports:
+      - "4002:4002"
+      - "4001:4001"
+    depends_on:
+      - frontend
+      - backend  
+    networks:
+      - todolistnet
+networks:
+  todolistnet:
+    external:
+      name: nat
+
+
