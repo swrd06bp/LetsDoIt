@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import Api from '../Api.js'
+import Api from '../../Api.js'
 
 
 function AddTask (props) {
@@ -9,13 +9,16 @@ function AddTask (props) {
   const onSubmit = async (e) => {
     e.preventDefault();
     const api = new Api() 
-    if (taskInput)
+    if (taskInput) {
       await api.insertTask({
         content: taskInput,
         list: 'Personal',
         dueDate: new Date().toJSON(),
+        note: null,
       })
+    }
     setTaskInput('')
+    props.onUpdate()
   }
 
 

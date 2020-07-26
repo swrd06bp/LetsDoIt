@@ -24,7 +24,6 @@ class Api {
 
   async updateTask(taskId, task) {
     const url = this.baseUrl + `/task/${taskId}`
-    console.log(taskId, task)
     return await this.put(url, task)
   }
   

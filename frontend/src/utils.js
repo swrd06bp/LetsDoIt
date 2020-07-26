@@ -10,16 +10,25 @@ const dayAfterDate = () => {
     return date
 } 
 
-const decomposeTasks = allTasks => {
+const weekDayDate = (date, day) => {
+  const d = new Date(new Date(date).getFullYear(), new Date(date).getMonth(), new Date(date).getDate())
+  const currentDay = d.getDay()
+  const diff = d.getDate() - currentDay + (currentDay == 0 ? -6 + day :1 + day)
+
+  return new Date(d.setDate(diff));
+}
+
+
+const decomposeTasksToday = allTasks => {
     const todayTasks = allTasks.filter( x => {
-      return x.dueDate && new Date(x.dueDate) > todayDate() && new Date(x.dueDate) < tomorrowDate()
+      return x.dueDate && new Date(x.dueDate) >= todayDate() && new Date(x.dueDate) < tomorrowDate()
     }).map(x => {
       let task = x
       task.id = task._id
       return task
     })
     const tomorrowTasks = allTasks.filter( x => {
-      return x.dueDate && new Date(x.dueDate) > tomorrowDate() && new Date(x.dueDate) < dayAfterDate()
+      return x.dueDate && new Date(x.dueDate) >= tomorrowDate() && new Date(x.dueDate) < dayAfterDate()
     }).map(x => {
       let task = x
       task.id = task._id
@@ -43,9 +52,26 @@ const decomposeTasks = allTasks => {
   return { todayTasks, tomorrowTasks, upcomingTasks, somedayTasks }
 }
 
+const decomposeTasksWeek = (allTasks, date) => {
+  let weekDaysTasks = []
+  for (let i = 0; i < 7; i++) { 
+    const dayTasks = allTasks.filter( x => {
+      return x.dueDate && new Date(x.dueDate) >= weekDayDate(date, i) && new Date(x.dueDate) < weekDayDate(date, i+1)
+    }).map(x => {
+      let task = x
+      task.id = task._id
+      return task
+    })
+    weekDaysTasks.push(dayTasks)
+  }
+
+  return weekDaysTasks
+}
+
 export {
   todayDate,
   tomorrowDate,
-  dayAfterDate,
-  decomposeTasks,
+  weekDayDate,
+  decomposeTasksToday,
+  decomposeTasksWeek,
 }

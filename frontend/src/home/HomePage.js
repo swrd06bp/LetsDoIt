@@ -1,17 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import AddTask from '../components/AddTask.js'
-import TodayTaskList from '../components/TodayTaskList'
+import TodayTaskList from './TodayTaskList'
+import WeeklyTaskList from './WeeklyTaskList'
+import TaskDescription from '../components/TaskDescription'
 import './HomePage.css'
 
-import Api from '../Api'
 
 function HomePage() {
+  const [task, setTask] = useState(null)
+ 
 
   return (
     <div className='HomePage'>
-      <TodayTaskList />
-      <AddTask />
+      <div style={{display: 'flex', flexDirection: 'row'}}>
+      <WeeklyTaskList task={task} onDescribe={setTask}/>
+      <TodayTaskList task={task} onDescribe={setTask}/>
+      {task && (<TaskDescription onDescribe={setTask} task={task} />)}
+      </div>
     </div>
   )
 

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import Api from '../../Api.js'
-import SingleTaskList from './SingleTaskList'
+import { DragDropContext } from 'react-beautiful-dnd'
+import Api from '../Api.js'
+import TaskList from '../components/TaskList'
+import AddTask from '../components/AddTask'
 import {
   todayDate,
-  tomorrowDate,
-  dayAfterDate,
-  decomposeTasks,
-} from '../../utils'
+  decomposeTasksToday,
+} from '../utils'
 
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -37,14 +36,14 @@ function TodayTaskList (props) {
 
   useEffect(() => {
     getTasks() 
-  },[]) 
+  },[props.task]) 
 
 
   const getTasks = async () => {
     const response = await api.getTasks({from: todayDate().toJSON(), until: null})
     const allTasks = await response.json()
 
-    const { todayTasks, tomorrowTasks, upcomingTasks, somedayTasks } = decomposeTasks(allTasks)
+    const { todayTasks, tomorrowTasks, upcomingTasks, somedayTasks } = decomposeTasksToday(allTasks)
 
     setItemsToday(todayTasks)
     setItemsTomorrow(tomorrowTasks)
@@ -90,8 +89,6 @@ function TodayTaskList (props) {
               destination
           )
 
-        console.log(action)
-
         if (result.today)
           setItemsToday(result.today)
         if (result.tomorrow)
@@ -112,26 +109,39 @@ function TodayTaskList (props) {
     <div>
             <DragDropContext onDragEnd={onDragEnd}>
                 <h2>Today</h2>
-                <SingleTaskList
+                <TaskList
                   droppableId={"today"}
                   items={itemsToday}
+                  onUpdate={getTasks}
+                  onDescribe={props.onDescribe}
+                  task={props.task}
                 />
                 <h2>Tomorrow</h2>
-                <SingleTaskList
+                <TaskList
                   droppableId={"tomorrow"}
                   items={itemsTomorrow}
+                  onUpdate={getTasks}
+                  onDescribe={props.onDescribe}
+                  task={props.task}
                 />
                 <h2>Upcoming</h2>
-                <SingleTaskList
+                <TaskList
                   droppableId={"upcoming"}
                   items={itemsUpcoming}
+                  onUpdate={getTasks}
+                  onDescribe={props.onDescribe}
+                  task={props.task}
                 />
                 <h2>Someday</h2>
-                <SingleTaskList
+                <TaskList
                   droppableId={"someday"}
                   items={itemsSomeday}
+                  onUpdate={getTasks}
+                  onDescribe={props.onDescribe}
+                  task={props.task}
                 />
             </DragDropContext>
+      <AddTask onUpdate={getTasks}/>
     </div>
   )
 }
