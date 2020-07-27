@@ -144,14 +144,14 @@ function WeeklyTaskList (props) {
   return (
     <div>
       <div style={{display: 'flex', flexDirection: 'row'}}>
+        <button onClick={() => {getOtherWeek(0)}}>
+          now
+        </button>
         <button onClick={() => {getOtherWeek(-1)}}>
           &lt;
       </button>
         <button onClick={() => {getOtherWeek(1)}}>
           &gt;
-        </button>
-        <button onClick={() => {getOtherWeek(0)}}>
-          now
         </button>
       </div>
             <DragDropContext onDragEnd={onDragEnd}>
