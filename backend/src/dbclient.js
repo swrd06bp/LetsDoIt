@@ -23,7 +23,7 @@ function wrapped(operation)  {
 
 
 async function getTasks(client, {params}) {
-  const {from, until} = params
+  const {from, until, unfinished, someday} = params
   let timeQuery = {
     'dueDate': {
       '$gte': new Date(from).toJSON(),
@@ -31,13 +31,18 @@ async function getTasks(client, {params}) {
   }
   if (until)
     timeQuery.dueDate['$lt'] = new Date(until).toJSON()
+
+  let query = [timeQuery]
+
+  if (someday === 'true')
+    query.push({'dueDate': null})
+  if (unfinished === 'true')
+    query.push({'isDone' : false})
+
   const db = client.db('toDoList')
   let collection = db.collection('tasks')
   return await collection.find(
-    {'$or': [
-      timeQuery, 
-      {'dueDate': until ? true : null}
-    ]},
+    {'$or': query},
     {"sort": [['createdAt', 'desc']]}
   ).toArray()
 }

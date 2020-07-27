@@ -10,8 +10,11 @@ class Api {
   }
 
   
-  async getTasks({from, until}) {
-    let url = this.baseUrl + `/tasks?from=${from}` 
+  async getTasks({from, until, unfinished, someday}) {
+    let url = this.baseUrl 
+      + `/tasks?unfinished=${unfinished ? 'true' : 'false'}`
+      + `&someday=${someday? 'true' : 'false'}`
+      + `&from=${from}` 
     if (until)
       url += `&until=${until}`
     return await this.get(url)

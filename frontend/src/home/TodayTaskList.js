@@ -27,6 +27,7 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
 
 function TodayTaskList (props) {
+  const [itemsUnfinished, setItemsUnifinished] = useState([])
   const [itemsToday, setItemsToday] = useState([])
   const [itemsTomorrow, setItemsTomorrow] = useState([])
   const [itemsUpcoming, setItemsUpcoming] = useState([])
@@ -40,20 +41,23 @@ function TodayTaskList (props) {
 
 
   const getTasks = async () => {
-    const response = await api.getTasks({from: todayDate().toJSON(), until: null})
+    const response = await api.getTasks({from: todayDate().toJSON(), someday: true, unfinished: true})
     const allTasks = await response.json()
 
-    const { todayTasks, tomorrowTasks, upcomingTasks, somedayTasks } = decomposeTasksToday(allTasks)
+    if (allTasks) {
+      const { unfinishedTasks, todayTasks, tomorrowTasks, upcomingTasks, somedayTasks } = decomposeTasksToday(allTasks)
 
-    setItemsToday(todayTasks)
-    setItemsTomorrow(tomorrowTasks)
-    setItemsUpcoming(upcomingTasks)
-    setItemsSomeday(somedayTasks)
+      setItemsUnifinished(unfinishedTasks)
+      setItemsToday(todayTasks)
+      setItemsTomorrow(tomorrowTasks)
+      setItemsUpcoming(upcomingTasks)
+      setItemsSomeday(somedayTasks)
+    }
   }
-
 
   
   const id2List = {
+    unfinished: itemsUnfinished,
     today: itemsToday,
     tomorrow: itemsTomorrow,
     upcoming: itemsUpcoming,
@@ -81,7 +85,7 @@ function TodayTaskList (props) {
           return
       }
 
-      if (source.droppableId !== destination.droppableId) {
+      if (source.droppableId !== destination.droppableId && destination.droppableId !== 'unfinished') {
           const result = move(
               getList(source.droppableId),
               getList(destination.droppableId),
@@ -89,6 +93,8 @@ function TodayTaskList (props) {
               destination
           )
 
+        if (result.unfinished)
+          setItemsUnifinished(result.unfinished)
         if (result.today)
           setItemsToday(result.today)
         if (result.tomorrow)
@@ -109,8 +115,21 @@ function TodayTaskList (props) {
   return (
     <div>
             <DragDropContext onDragEnd={onDragEnd}>
+              {itemsUnfinished.length > 0 && (
+                <div style={{width: 250}}>
+                  <h3>Unfinished</h3>
+                  <TaskList
+                    droppableId={"unfinished"}
+                    items={itemsUnfinished}
+                    onUpdate={getTasks}
+                    onDescribe={props.onDescribe}
+                    task={props.task}
+                    scale={1}
+                  />
+                </div>
+              )}
               <div style={{width: 250}}>
-                <h2>Today</h2>
+                <h3>Today</h3>
                 <TaskList
                   droppableId={"today"}
                   items={itemsToday}
@@ -121,7 +140,7 @@ function TodayTaskList (props) {
                 />
               </div>
               <div style={{width: 250}}>
-                <h2>Tomorrow</h2>
+                <h3>Tomorrow</h3>
                 <TaskList
                   droppableId={"tomorrow"}
                   items={itemsTomorrow}
@@ -132,7 +151,7 @@ function TodayTaskList (props) {
                 />
               </div>
               <div style={{width: 250}}>
-                <h2>Upcoming</h2>
+                <h3>Upcoming</h3>
                 <TaskList
                   droppableId={"upcoming"}
                   items={itemsUpcoming}
@@ -143,7 +162,7 @@ function TodayTaskList (props) {
                 />
               </div>
               <div style={{width: 250}}>
-                <h2>Someday</h2>
+                <h3>Someday</h3>
                 <TaskList
                   droppableId={"someday"}
                   items={itemsSomeday}

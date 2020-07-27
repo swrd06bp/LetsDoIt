@@ -72,7 +72,7 @@ function Task (props) {
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
         <div 
-          style={{fontSize: 9*props.scale, background: props.item.list === 'Personal' ? 'blue' : 'brown', fontWeight: 'bold',  color: 'white',  borderRadius: 60}}
+          style={{fontSize: 9*props.scale, background: props.item.list === 'Personal' ? 'blue' : 'brown', cursor: 'pointer', fontWeight: 'bold',  color: 'white',  borderRadius: 60}}
           onClick={onListChange}
         >
           <div style={{margin: 2}}>
@@ -80,7 +80,7 @@ function Task (props) {
           </div>
         </div>
       
-        <div style={{visibility: props.item.isDone && isOver ? 'visible': 'hidden'}} onClick={onDelete}>
+        <div style={{visibility: props.item.isDone && isOver ? 'visible': 'hidden', cursor: 'pointer'}} onClick={onDelete}>
           <img className='deleteTask' alt='delete' src='/trash.png' width='10' height='10'/>
         </div>
       </div>

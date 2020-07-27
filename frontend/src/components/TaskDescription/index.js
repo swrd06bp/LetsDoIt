@@ -19,8 +19,6 @@ function TaskDescription (props) {
     props.onDescribe(null)
   }
 
-  console.log(dueDate)
-
 
   return (
     <div style={{display: 'flex', flexDirection: 'column', width: 250}}>
