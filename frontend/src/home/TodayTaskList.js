@@ -100,6 +100,7 @@ function TodayTaskList (props) {
 
            
           api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
+            .then(getTasks())
         }
     }
 
@@ -108,6 +109,7 @@ function TodayTaskList (props) {
   return (
     <div>
             <DragDropContext onDragEnd={onDragEnd}>
+              <div style={{width: 250}}>
                 <h2>Today</h2>
                 <TaskList
                   droppableId={"today"}
@@ -115,7 +117,10 @@ function TodayTaskList (props) {
                   onUpdate={getTasks}
                   onDescribe={props.onDescribe}
                   task={props.task}
+                  scale={1}
                 />
+              </div>
+              <div style={{width: 250}}>
                 <h2>Tomorrow</h2>
                 <TaskList
                   droppableId={"tomorrow"}
@@ -123,7 +128,10 @@ function TodayTaskList (props) {
                   onUpdate={getTasks}
                   onDescribe={props.onDescribe}
                   task={props.task}
+                  scale={1}
                 />
+              </div>
+              <div style={{width: 250}}>
                 <h2>Upcoming</h2>
                 <TaskList
                   droppableId={"upcoming"}
@@ -131,7 +139,10 @@ function TodayTaskList (props) {
                   onUpdate={getTasks}
                   onDescribe={props.onDescribe}
                   task={props.task}
+                  scale={1}
                 />
+              </div>
+              <div style={{width: 250}}>
                 <h2>Someday</h2>
                 <TaskList
                   droppableId={"someday"}
@@ -139,7 +150,9 @@ function TodayTaskList (props) {
                   onUpdate={getTasks}
                   onDescribe={props.onDescribe}
                   task={props.task}
+                  scale={1}
                 />
+              </div>
             </DragDropContext>
       <AddTask onUpdate={getTasks}/>
     </div>

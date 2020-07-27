@@ -12,7 +12,7 @@ function AddTask (props) {
     if (taskInput) {
       await api.insertTask({
         content: taskInput,
-        list: 'Personal',
+        list: 'Work',
         dueDate: new Date().toJSON(),
         note: null,
       })

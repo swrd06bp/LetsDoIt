@@ -2,13 +2,16 @@ import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 
 import Api from '../../Api'
+import { todayDate } from '../../utils'
 
 const grid = 2
 
-const getListStyle = isDraggingOver => ({
+const getListStyle = (isDraggingOver, scale, isPast) => ({
     background: isDraggingOver ? 'lightblue' : 'lightgrey',
     padding: grid,
-    width: 250
+    height: scale === 1 ? null : 300,
+    overflow: scale === 1 ? null : 'auto',
+    opacity: isPast ? 0.4 : 1,
 })
 
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -18,7 +21,8 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     margin: `0 0 ${grid}px 0`,
 
     // change background colour if dragging
-    background: isDragging ? 'lightgreen' : 'grey',
+    background: isDragging ? 'lightgreen' : 'white',
+    borderRadius: 10,
 
 
     // styles we need to apply on draggables
@@ -62,13 +66,13 @@ function Task (props) {
         checked={props.item.isDone}
         onChange={onCheckboxChange}
       />
-      <div style={{display: 'flex', flexGrow: 1}} onClick={() => props.onDescribe(props.task ? null : props.item)}>
+      <div style={{display: 'flex', flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.isDone ? 'line-through': null, color: props.item.isDone ? 'grey': 'black'}} onClick={() => props.onDescribe(props.task ? null : props.item)}>
       {props.item.content}
       </div>
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
         <div 
-          style={{fontSize: 11, background: 'yellow', borderRadius: 60}}
+          style={{fontSize: 9*props.scale, background: props.item.list === 'Personal' ? 'blue' : 'brown', fontWeight: 'bold',  color: 'white',  borderRadius: 60}}
           onClick={onListChange}
         >
           <div style={{margin: 2}}>
@@ -92,24 +96,29 @@ function TaskList (props) {
         {(provided, snapshot) => (
             <div
                 ref={provided.innerRef}
-                style={getListStyle(snapshot.isDraggingOver)}>
+                style={getListStyle(snapshot.isDraggingOver, props.scale)}>
                 {props.items.map((item, index) => (
                     <Draggable
                         key={item.id}
                         draggableId={item.id}
                         index={index}>
-                        {(provided, snapshot) => (
+                        {(provided, snapshot) => {
+                          const isSelected = snapshot.isDragging || (props.task && props.task.id === item.id)
+                          const isPast = item.dueDate && todayDate() >= new Date(item.dueDate)
+                          return (
                             <div
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                                 style={getItemStyle(
-                                    snapshot.isDragging,
-                                    provided.draggableProps.style
+                                    isSelected,
+                                    provided.draggableProps.style,
+                                    isPast,
                                 )}>
-                                 <Task item={item} onDescribe={props.onDescribe} task={props.task} onUpdate={props.onUpdate}/>
+                                 <Task item={item} onDescribe={props.onDescribe} scale={props.scale} task={props.task} onUpdate={props.onUpdate}/>
                             </div>
-                        )}
+                          )
+                        }}
                     </Draggable>
                 ))}
                 {provided.placeholder}

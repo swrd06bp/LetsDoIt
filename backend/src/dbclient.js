@@ -24,16 +24,22 @@ function wrapped(operation)  {
 
 async function getTasks(client, {params}) {
   const {from, until} = params
-  let query = {
-    'createdAt': {
-      '$gte': new Date(from),
-      '$lt': new Date(),
+  let timeQuery = {
+    'dueDate': {
+      '$gte': new Date(from).toJSON(),
     },
   }
-  console.log('qeury', query, params)
+  if (until)
+    timeQuery.dueDate['$lt'] = new Date(until).toJSON()
   const db = client.db('toDoList')
   let collection = db.collection('tasks')
-  return await collection.find({}, {"sort": [['createdAt', 'desc']]}).toArray()
+  return await collection.find(
+    {'$or': [
+      timeQuery, 
+      {'dueDate': until ? true : null}
+    ]},
+    {"sort": [['createdAt', 'desc']]}
+  ).toArray()
 }
 
 async function writeTask(client, {task}) {

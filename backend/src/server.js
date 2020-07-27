@@ -14,9 +14,7 @@ const app = express()
 
 router.get('/tasks', async (req, res) => {
   const params = req.query
-  console.log(params)
   const tasks = await dbClient.getTasks({params})
-  console.log('lol', tasks)
   res.status(200)
   res.json(tasks)
   res.end()

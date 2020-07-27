@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import Api from '../Api.js'
 import TaskList from '../components/TaskList'
-import AddTask from '../components/AddTask'
 import {
-  todayDate,
   weekDayDate,
   decomposeTasksWeek,
 } from '../utils'
@@ -42,19 +40,17 @@ function WeeklyTaskList (props) {
 
   useEffect(() => {
     getTasks() 
-  },[props.task]) 
+  },[props.task, date]) 
 
 
   const getTasks = async () => {
     const response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
     const allTasks = await response.json()
 
-    console.log(weekDates, allTasks)
     if (allTasks) {
 
       const weekDaysTasks = decomposeTasksWeek(allTasks, date)
 
-      console.log('lol', weekDaysTasks)
 
       setItemsMonday(weekDaysTasks[0])
       setItemsTuesday(weekDaysTasks[1])
@@ -131,88 +127,118 @@ function WeeklyTaskList (props) {
         }
     }
 
+  const getOtherWeek = next => {
+    let newDate
+    if (next === 0) {
+      newDate = new Date()
+    } else {
+      newDate = new Date(JSON.parse(JSON.stringify(date)))
+      newDate.setDate(newDate.getDate() + 7*next)
+    }
+    setDate(newDate)
+    setWeekDates([weekDayDate(newDate, 0), weekDayDate(newDate, 7)])
+  }
+
 
 
   return (
     <div>
+      <div style={{display: 'flex', flexDirection: 'row'}}>
+        <button onClick={() => {getOtherWeek(-1)}}>
+          &lt;
+      </button>
+        <button onClick={() => {getOtherWeek(1)}}>
+          &gt;
+        </button>
+        <button onClick={() => {getOtherWeek(0)}}>
+          now
+        </button>
+      </div>
             <DragDropContext onDragEnd={onDragEnd}>
               <div style={{display: 'flex', flexDirection: 'row'}}>
-                <div>
-                <h2>Monday</h2>
-                <h5>{id2DueDate('monday').toLocaleDateString()}</h5>
-                <TaskList
-                  droppableId={"monday"}
-                  items={itemsMonday}
-                  onUpdate={getTasks}
-                  onDescribe={props.onDescribe}
-                  task={props.task}
-                />
+                <div style={{textAlign: 'center', width: 150}}>
+                  <h2>Monday</h2>
+                  <h5>{id2DueDate('monday').toLocaleDateString()}</h5>
+                  <TaskList
+                    droppableId={"monday"}
+                    items={itemsMonday}
+                    onUpdate={getTasks}
+                    onDescribe={props.onDescribe}
+                    task={props.task}
+                    scale={0.7}
+                  />
                 </div>
-                <div>
-                <h2>Tuesday</h2>
-                <h5>{id2DueDate('tuesday').toLocaleDateString()}</h5>
-                <TaskList
-                  droppableId={"tuesday"}
-                  items={itemsTuesday}
-                  onUpdate={getTasks}
-                  onDescribe={props.onDescribe}
-                  task={props.task}
-                />
+                <div style={{textAlign: 'center', width: 150}}>
+                  <h2>Tuesday</h2>
+                  <h5>{id2DueDate('tuesday').toLocaleDateString()}</h5>
+                  <TaskList
+                    droppableId={"tuesday"}
+                    items={itemsTuesday}
+                    onUpdate={getTasks}
+                    onDescribe={props.onDescribe}
+                    task={props.task}
+                    scale={0.7}
+                  />
                 </div>
-                <div>
-                <h2>Wednesday</h2>
-                <h5>{id2DueDate('wednesday').toLocaleDateString()}</h5>
-                <TaskList
-                  droppableId={"wednesday"}
-                  items={itemsWednesday}
-                  onUpdate={getTasks}
-                  onDescribe={props.onDescribe}
-                  task={props.task}
-                />
+                <div style={{textAlign: 'center', width: 150}}>
+                  <h2>Wednesday</h2>
+                  <h5>{id2DueDate('wednesday').toLocaleDateString()}</h5>
+                  <TaskList
+                    droppableId={"wednesday"}
+                    items={itemsWednesday}
+                    onUpdate={getTasks}
+                    onDescribe={props.onDescribe}
+                    task={props.task}
+                    scale={0.7}
+                  />
                 </div>
-                <div>
-                <h2>Thursday</h2>
-                <h5>{id2DueDate('thursday').toLocaleDateString()}</h5>
-                <TaskList
-                  droppableId={"thursday"}
-                  items={itemsThursday}
-                  onUpdate={getTasks}
-                  onDescribe={props.onDescribe}
-                  task={props.task}
-                />
+                <div style={{textAlign: 'center', width: 150}}>
+                  <h2>Thursday</h2>
+                  <h5>{id2DueDate('thursday').toLocaleDateString()}</h5>
+                  <TaskList
+                    droppableId={"thursday"}
+                    items={itemsThursday}
+                    onUpdate={getTasks}
+                    onDescribe={props.onDescribe}
+                    task={props.task}
+                    scale={0.7}
+                  />
                 </div>
-                <div>
-                <h2>Friday</h2>
-                <h5>{id2DueDate('friday').toLocaleDateString()}</h5>
-                <TaskList
-                  droppableId={"friday"}
-                  items={itemsFriday}
-                  onUpdate={getTasks}
-                  onDescribe={props.onDescribe}
-                  task={props.task}
-                />
+                <div style={{textAlign: 'center', width: 150}}>
+                  <h2>Friday</h2>
+                  <h5>{id2DueDate('friday').toLocaleDateString()}</h5>
+                  <TaskList
+                    droppableId={"friday"}
+                    items={itemsFriday}
+                    onUpdate={getTasks}
+                    onDescribe={props.onDescribe}
+                    task={props.task}
+                    scale={0.7}
+                  />
                 </div>
-                <div>
-                <h2>Saturday</h2>
-                <h5>{id2DueDate('saturday').toLocaleDateString()}</h5>
-                <TaskList
-                  droppableId={"saturday"}
-                  items={itemsSaturday}
-                  onUpdate={getTasks}
-                  onDescribe={props.onDescribe}
-                  task={props.task}
-                />
+                <div style={{textAlign: 'center', width: 150}}>
+                  <h2>Saturday</h2>
+                  <h5>{id2DueDate('saturday').toLocaleDateString()}</h5>
+                  <TaskList
+                    droppableId={"saturday"}
+                    items={itemsSaturday}
+                    onUpdate={getTasks}
+                    onDescribe={props.onDescribe}
+                    task={props.task}
+                    scale={0.7}
+                  />
                 </div>
-                <div>
-                <h2>Sunday</h2>
-                <h5>{id2DueDate('sunday').toLocaleDateString()}</h5>
-                <TaskList
-                  droppableId={"sunday"}
-                  items={itemsSunday}
-                  onUpdate={getTasks}
-                  onDescribe={props.onDescribe}
-                  task={props.task}
-                />
+                <div style={{textAlign: 'center', width: 150}}>
+                  <h2>Sunday</h2>
+                  <h5>{id2DueDate('sunday').toLocaleDateString()}</h5>
+                  <TaskList
+                    droppableId={"sunday"}
+                    items={itemsSunday}
+                    onUpdate={getTasks}
+                    onDescribe={props.onDescribe}
+                    task={props.task}
+                    scale={0.7}
+                  />
                 </div>
               </div>
             </DragDropContext>

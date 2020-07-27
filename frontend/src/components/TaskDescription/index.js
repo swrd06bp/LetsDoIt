@@ -6,21 +6,32 @@ function TaskDescription (props) {
   const [content, setContent] = useState(props.task.content)
   const [note, setNote] = useState(props.task.note)
   const [dueDate, setDueDate] = useState(props.task.dueDate)
+  const api = new Api()
 
 
   const onSave = async () => {
-    const api = new Api()
     await api.updateTask(props.task.id, {content, dueDate, note})
     props.onDescribe(null)
   }
 
+  const onDelete = async () => {
+    await api.deleteTask(props.task.id)
+    props.onDescribe(null)
+  }
+
+  console.log(dueDate)
 
 
   return (
     <div style={{display: 'flex', flexDirection: 'column', width: 250}}>
-      <button onClick={() => props.onDescribe(null)} style={{display: 'flex', justifyContent: 'flex-end'}}> 
-        x
-      </button>
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+        <button onClick={() => props.onDescribe(null)}> 
+          x
+        </button>
+        <button onClick={onDelete}> 
+          delete
+        </button>
+      </div>
       <div>
           <input 
             type='text' 
@@ -54,7 +65,7 @@ function TaskDescription (props) {
           <textarea 
             type='text' 
             name='note'
-            value={note} 
+            value={note ? note : ''} 
             onChange={(event) => setNote(event.target.value)} 
             style={{height: 100}}
           />
