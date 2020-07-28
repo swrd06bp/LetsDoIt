@@ -37,7 +37,7 @@ async function getTasks(client, {params}) {
   if (someday === 'true')
     query.push({'dueDate': null})
   if (unfinished === 'true')
-    query.push({'isDone' : false})
+    query.push({'doneAt' : null})
 
   const db = client.db('toDoList')
   let collection = db.collection('tasks')
