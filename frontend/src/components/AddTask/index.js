@@ -29,7 +29,7 @@ function AddTask (props) {
         <input 
           type="text"
           name="task"
-          placeholder="Task"
+          placeholder="I want to.."
           value={taskInput}
           onChange={(event) => setTaskInput(event.target.value)}
         />
