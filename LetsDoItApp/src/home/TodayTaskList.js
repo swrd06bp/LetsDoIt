@@ -52,7 +52,7 @@ const Item = (props) => {
 
   return(
     <View 
-      style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 37, backgroundColor: props.isSelected ? 'lightgreen' :'white', borderRadius: 40, marginHorizontal: 5}}
+      style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 37, backgroundColor: props.isSelected ? 'lightgreen' :'white', borderRadius: 40, marginHorizontal: 5, elevation: props.item.doneAt ? 0 : 20}}
     >
       <View style={{flexDirection: 'row', alignItems: 'center', width: '80%', left: 10}}> 
         <CheckBox 
@@ -65,7 +65,7 @@ const Item = (props) => {
       </View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity 
-          style={{backgroundColor: props.item.list === 'Personal' ? 'blue' : 'brown', borderRadius: 60, marginHorizontal: 10}}
+          style={{backgroundColor: props.item.list === 'Personal' ? 'blue' : 'brown', borderRadius: 60, marginHorizontal: 10, elevation: 6}}
           onPress={onListChange}
         >
           <View style={{margin: 2}}>
@@ -184,7 +184,7 @@ function TodayTaskList (props) {
 
            
           api.updateTask(source.id, {dueDate: id2DueDate(destination.droppableId)})
-            .then(getTasks())
+            .then(getTasks)
         }
     }
 
@@ -204,8 +204,9 @@ function TodayTaskList (props) {
               sections={DATA}
               keyExtractor={(item) => item.id}
               renderItem={({ item, section }) => (
-                <View style={{height: 40, backgroundColor: '#E5E5E5'}}>
                 <DraxView
+                  style={{height: 40, backgroundColor: '#E5E5E5'}}
+                  receivingStyle={{height: 40, backgroundColor: 'lightblue'}}
                   renderContent={({ viewState }) => {
                     return (
                       <Item item={item} onUpdate={getTasks} isSelected={draggedTask && draggedTask.id === item.id} />
@@ -225,7 +226,6 @@ function TodayTaskList (props) {
                   }}
                   onDragEnd={() => setDraggedTask(null)}
                  />
-                </View>
               )}
               renderSectionHeader={({ section }) => {
                 if (section.title === 'Unfinished' && !section.data.length)
@@ -234,13 +234,14 @@ function TodayTaskList (props) {
                   return (
                     <DraxView
                       noHover={true}
+                      style={{height: 50, flexDirection: 'column-reverse', left: 10}}
+                      receivingStyle={{height: 50, flexDirection: 'column-reverse', left: 10, backgroundColor: 'lightblue'}}
                       renderContent={({ viewState }) => {
                         return (
-                          <View style={{height: 50, flexDirection: 'column-reverse', left: 10}}>
-                            <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10}}>{section.title}</Text>
-                          </View>
+                          <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10}}>{section.title}</Text>
                         )
                       }}
+                      onReceiveDragEnter={(event) => {console.log(event)}}
                       onReceiveDragDrop={(event) => {
                         const destination = {droppableId: section.title}
                         if (draggedTask)
@@ -253,7 +254,7 @@ function TodayTaskList (props) {
               }}
             />     
             </View>
-            <View style={{height: '20%', justifyContent: 'center', backgroundColor: showDeletion ? 'lightblue': 'white'}}>
+            <View style={{height: '15%', justifyContent: 'center', backgroundColor: showDeletion ? 'lightblue': 'white'}}>
               {!draggedTask && (
                 <AddTask onUpdate={getTasks}/>
               )}
