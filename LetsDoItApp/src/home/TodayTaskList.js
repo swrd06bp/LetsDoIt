@@ -241,7 +241,6 @@ function TodayTaskList (props) {
                           <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10}}>{section.title}</Text>
                         )
                       }}
-                      onReceiveDragEnter={(event) => {console.log(event)}}
                       onReceiveDragDrop={(event) => {
                         const destination = {droppableId: section.title}
                         if (draggedTask)
