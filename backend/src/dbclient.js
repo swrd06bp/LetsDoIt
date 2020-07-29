@@ -21,55 +21,42 @@ function wrapped(operation)  {
   }
 }
 
-
-async function getTasks(client, {params}) {
-  const {from, until, unfinished, someday} = params
-  let timeQuery = {
-    'dueDate': {
-      '$gte': new Date(from).toJSON(),
-    },
-  }
-  if (until)
-    timeQuery.dueDate['$lt'] = new Date(until).toJSON()
-
-  let query = [timeQuery]
-
-  if (someday === 'true')
-    query.push({'dueDate': null})
-  if (unfinished === 'true')
-    query.push({'doneAt' : null})
-
+// -----------------------------------------
+// tasks
+// -----------------------------------------
+async function getElems(client, {table, query}) {
   const db = client.db('toDoList')
-  let collection = db.collection('tasks')
+  let collection = db.collection(table)
   return await collection.find(
-    {'$or': query},
+    query,
     {"sort": [['createdAt', 'desc']]}
   ).toArray()
 }
 
-async function writeTask(client, {task}) {
+async function writeElem(client, {table, task}) {
   const db = client.db('toDoList')
-  let collection = db.collection('tasks')
+  let collection = db.collection(table)
   return await collection.insertOne(task)
 }
 
-async function updateTask(client, {task, taskId}) {
+async function updateElem(client, {table, task, taskId}) {
   const db = client.db('toDoList')
-  let collection = db.collection('tasks')
+  let collection = db.collection(table)
   return await collection.updateOne(
     {"_id": new ObjectId(taskId)},
     {$set: task}
   )
 }
 
-async function deleteTask(client, {taskId}) {
+async function deleteElem(client, {table, taskId}) {
   const db = client.db('toDoList')
-  let collection = db.collection('tasks')
+  let collection = db.collection(table)
   return await collection.deleteOne({'_id': new ObjectId(taskId)})
 }
 
 
-exports.getTasks = wrapped(getTasks)
-exports.deleteTask = wrapped(deleteTask)
-exports.updateTask = wrapped(updateTask)
-exports.writeTask = wrapped(writeTask)
+exports.getElems = wrapped(getElems)
+exports.deleteElem = wrapped(deleteElem)
+exports.updateElem = wrapped(updateElem)
+exports.writeElem = wrapped(writeElem)
+

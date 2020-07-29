@@ -7,14 +7,15 @@ const path = require('path')
 const dbClient = require('./dbclient')
 const cors = require('cors')
 const { host, port, dns } = require('./config')
+const { buildGetQuery } = require('./utils')
 
 
 const app = express()
 
 
 router.get('/tasks', async (req, res) => {
-  const params = req.query
-  const tasks = await dbClient.getTasks({params})
+  const query = buildGetQuery(req.query)
+  const tasks = await dbClient.getElems({table: 'tasks', query})
   res.status(200)
   res.json(tasks)
   res.end()
@@ -25,7 +26,7 @@ router.post('/task', async (req, res) => {
   task.createdAt = new Date().toJSON()
   task.updatedAt = new Date().toJSON()
   task.isDone = false
-  const taskId = await dbClient.writeTask({task})
+  const taskId = await dbClient.writeElem({table: 'tasks', task})
   res.status(200)
   res.json({'taskId': taskId})
   res.end()
@@ -35,7 +36,7 @@ router.put('/task/:taskId', async (req, res) => {
   const taskId = req.params.taskId
   const task = req.body
   task.updatedAt = new Date().toJSON()
-  await dbClient.updateTask({task, taskId})
+  await dbClient.updateElem({table: 'tasks', task, taskId})
   res.status(200)
   res.json({'taskId': taskId})
   res.end()
@@ -43,12 +44,85 @@ router.put('/task/:taskId', async (req, res) => {
 
 router.delete('/task/:taskId', async (req, res) => {
   const taskId = req.params.taskId
-  await dbClient.deleteTask({taskId})
+  await dbClient.deleteElem({table: 'tasks', taskId})
   res.status(200)
   res.json({'taskId': taskId})
   res.end()
 })
 
+router.get('/goals', async (req, res) => {
+  const query = buildGetQuery(req.query)
+  const goals = await dbClient.getElems({table: 'goals', params})
+  res.status(200)
+  res.json(goals)
+  res.end()
+})
+
+router.post('/goal', async (req, res) => {
+  const task = req.body
+  task.createdAt = new Date().toJSON()
+  task.updatedAt = new Date().toJSON()
+  task.isDone = false
+  const goalId = await dbClient.writeElem({table: 'goals', task})
+  res.status(200)
+  res.json({'goalId': goalId})
+  res.end()
+})
+
+router.put('/goal/:taskId', async (req, res) => {
+  const taskId = req.params.taskId
+  const task = req.body
+  task.updatedAt = new Date().toJSON()
+  await dbClient.updateElem({table: 'goals', task, taskId})
+  res.status(200)
+  res.json({'goalId': taskId})
+  res.end()
+})
+
+router.delete('/goal/:taskId', async (req, res) => {
+  const taskId = req.params.taskId
+  await dbClient.deleteElem({table: 'goals', taskId})
+  res.status(200)
+  res.json({'goalId': taskId})
+  res.end()
+})
+
+router.get('/projects', async (req, res) => {
+  const query = buildGetQuery(req.query)
+  const projects = await dbClient.getElems({table: 'projects', params})
+  res.status(200)
+  res.json(projects)
+  res.end()
+})
+
+router.post('/project', async (req, res) => {
+  const task = req.body
+  task.createdAt = new Date().toJSON()
+  task.updatedAt = new Date().toJSON()
+  task.isDone = false
+  const projectId = await dbClient.writeElem({table: 'projects', task})
+  res.status(200)
+  res.json({'projectId': projectId})
+  res.end()
+})
+
+router.put('/project/:taskId', async (req, res) => {
+  const taskId = req.params.taskId
+  const task = req.body
+  task.updatedAt = new Date().toJSON()
+  await dbClient.updateElem({table: 'projects', task, taskId})
+  res.status(200)
+  res.json({'projectId': taskId})
+  res.end()
+})
+
+router.delete('/project/:taskId', async (req, res) => {
+  const taskId = req.params.taskId
+  await dbClient.deleteElem({table: 'projects', taskId})
+  res.status(200)
+  res.json({'projectId': taskId})
+  res.end()
+})
 
 app.use(cors())
 app.use(bodyParser.json())
