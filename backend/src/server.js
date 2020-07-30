@@ -51,8 +51,9 @@ router.delete('/task/:taskId', async (req, res) => {
 })
 
 router.get('/goals', async (req, res) => {
-  const query = buildGetQuery(req.query)
-  const goals = await dbClient.getElems({table: 'goals', params})
+  const query = {}
+  console.log('sdfsdf')
+  const goals = await dbClient.getElems({table: 'goals', query})
   res.status(200)
   res.json(goals)
   res.end()
@@ -88,8 +89,8 @@ router.delete('/goal/:taskId', async (req, res) => {
 })
 
 router.get('/projects', async (req, res) => {
-  const query = buildGetQuery(req.query)
-  const projects = await dbClient.getElems({table: 'projects', params})
+  const query = {}
+  const projects = await dbClient.getElems({table: 'projects', query})
   res.status(200)
   res.json(projects)
   res.end()

@@ -12,9 +12,9 @@ function buildGetQuery (params) {
   let queryArr = [timeQuery]
 
   if (someday === 'true')
-    queryArr.push({'dueDate': null})
+    queryArr.push({'$and': [{'dueDate': null}, {'doneAt': null}]})
   if (unfinished === 'true')
-    queryArr.push({'doneAt' : null})
+    queryArr.push({'$and': [{'doneAt' : null}, {'dueDate': {$ne:null}}]})
 
   const query =  {'$or': queryArr}
 
