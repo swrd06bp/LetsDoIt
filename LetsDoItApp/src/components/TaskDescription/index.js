@@ -1,81 +1,202 @@
 import React, { useState } from 'react'
+import { 
+  View,
+  TouchableOpacity,
+  Text,
+  TextInput,
+  Image,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native'
+import DatePicker from 'react-native-datepicker'
+import CheckBox from '@react-native-community/checkbox'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import Modal from 'react-native-modal'
 
 import Api from '../../Api'
+import ActionButton from '../ActionButton'
+import ListButton from '../ListButton'
 
 function TaskDescription (props) {
   const [content, setContent] = useState(props.task.content)
   const [note, setNote] = useState(props.task.note)
   const [dueDate, setDueDate] = useState(props.task.dueDate)
+  const [list, setList] = useState(props.task.list)
+  const [showDatePicker, setShowDatePicker] = useState(false)
   const api = new Api()
 
-
   const onSave = async () => {
-    await api.updateTask(props.task.id, {content, dueDate, note})
+    await api.updateTask(props.task._id, {content, dueDate, note, list})
     props.onDescribe(null)
+    props.onUpdate()
   }
 
+  const onDateChange = async (event, selectedDate) => {
+    if (selectedDate) {
+      setShowDatePicker(false)
+      setDueDate(selectedDate)
+    }
+  }
+  
   const onDelete = async () => {
-    await api.deleteTask(props.task.id)
+    await api.deleteTask(props.task._id)
     props.onDescribe(null)
+    props.onUpdate()
   }
-
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column', width: 250}}>
-      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-        <button onClick={() => props.onDescribe(null)}> 
-          x
-        </button>
-        <button onClick={onDelete}> 
-          delete
-        </button>
-      </div>
-      <div>
-          <input 
-            type='text' 
-            name='content'
+    <Modal 
+      style={styles.wrapper}
+      onBackdropPress={() => props.onDescribe(null)}
+      isVisible={props.isVisible}
+    >
+      {showDatePicker && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={new Date(dueDate)}
+          is24Hour={true}
+          mode={'date'}
+          display="default"
+          onChange={onDateChange}
+        />
+      )}
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : null}
+        style={{flex: 1}}
+      >
+        <View style={styles.header}>
+          <Text style={styles.descriptionText}>Description</Text>
+          <TouchableOpacity
+            onPress={onDelete}
+            style={styles.trashContainer}
+          >
+            <Image 
+              source={require('../../../static/trash.png')}
+              style={styles.trashImage}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.titleContainer}>
+          <TextInput 
+            style={styles.titleText}
             value={content} 
-            onChange={(event) => setContent(event.target.value)} 
-            style={{borderWidth: 0}}
+            onChangeText={(text) => setContent(text)} 
           />
-      </div>
-      <div>
-        <div>
-        <input type='checkbox' checked={dueDate ? false : true} onChange={() => {
-          if (dueDate) 
-            setDueDate(null)
-          else
-            setDueDate(new Date())
-        }}/>
-        Someday
-        </div>
-        {dueDate && (
-        <div>
-        Due 
-        <input type='date' value={new Date(dueDate).toJSON().slice(0, 10)} onChange={(event) => {setDueDate(new Date(event.target.value))}} />
-        </div>
-        )}
-      </div>
+          <ListButton list={list} onListChange={() => {
+            const newList = list === 'Personal' ? 'Work' : 'Personal'
+            setList(newList)
+          }} />
+        </View>
+      <View>
+        <View style={styles.dueContainer}>
+          <View style={styles.dueContainer}>
+          <Text>Someday</Text>
+          <CheckBox 
+            value={dueDate ? false : true}
+            onChange={() => {
+            if (dueDate) 
+              setDueDate(null)
+            else
+              setDueDate(new Date())
+          }}/>
+          </View>
+          {dueDate && (
+            <View style={styles.dueContainer}>
+            <Text>Due</Text>
+            <TouchableOpacity
+              onPress={() => {setShowDatePicker(true)}}
+              style={styles.dueDate}
+            >
+              <Text>{new Date(dueDate).toJSON().slice(0, 10)}</Text> 
+            </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      </View>
 
-      <div>
-         <h4>
-         </h4>
-          <textarea 
-            type='text' 
-            name='note'
+      <View>
+         <Text style={styles.noteTitle}>Note</Text>
+          <TextInput 
+            multiline={true}
+            numberOfLines = {4}
             value={note ? note : ''} 
-            onChange={(event) => setNote(event.target.value)} 
-            style={{height: 100}}
+            onChangeText={(text) => setNote(text)} 
+            style={styles.noteText}
           />
-      </div>
+      </View>
 
-      <button onClick={onSave}>
-        save
-      </button>
-    </div>
+      <ActionButton onSubmit={onSave} text={'Save'} />
+      </KeyboardAvoidingView>
+    </Modal>
   )
 }
 
+const styles = StyleSheet.create({
+  wrapper: {
+    position: 'absolute',
+    alignSelf: 'center',
+    height: 340,
+    width: '70%',
+    borderRadius: 10,
+    backgroundColor: 'white',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  trashContainer: {
+    height: 30,
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  trashImage: {
+    height: 20,
+    width: 20,
+  },
+  descriptionText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#32A3BC',
+    margin: 10,
+  },
+  titleContainer: {
+    backgroundColor: 'lightgrey',
+    height: 70,
+    width: '90%',
+    marginVertical: 10,
+    alignSelf: 'center',
+  },
+  titleText: {
+    marginHorizontal: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  dueContainer: {
+    marginHorizontal: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dueDate: {
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+  },
+  noteTitle: {
+    fontWeight: 'bold',
+    marginHorizontal: 10,
+
+  },
+  noteText: {
+    borderColor: 'lightgrey',
+    borderWidth: 1,
+    marginHorizontal: 10,
+  },
+  
+
+})
 
 export default TaskDescription
 

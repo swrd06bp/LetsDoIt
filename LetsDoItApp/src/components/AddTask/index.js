@@ -1,7 +1,17 @@
 import React, { useState } from 'react'
-import { View, TextInput, Text, TouchableOpacity } from 'react-native'
+import { 
+  View, 
+  Keyboard,
+  TextInput,
+  Text, 
+  TouchableOpacity,
+  Platform,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from 'react-native'
 
 import Api from '../../Api.js'
+import ActionButton from '../ActionButton'
 
 
 function AddTask (props) {
@@ -18,25 +28,47 @@ function AddTask (props) {
       })
     }
     setTaskInput('')
+    Keyboard.dismiss()
     props.onUpdate()
   }
 
   return (
-    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-      <TextInput 
-        type="text"
-        name="task"
-        placeholder="I want to.."
-        value={taskInput}
-        style={{paddingHorizontal: 20, width: '80%', borderWidth: 1, borderColor: 'lightgrey', borderRadius: 10}}
-        onChangeText={(text) => setTaskInput(text)}
-      />
-      <TouchableOpacity onPress={onSubmit} style={{backgroundColor: 'lightblue', margin: 10, borderRadius: 40}}>
-        <Text style={{color: 'white', fontWeight: 'bold', margin: 10}}>Add</Text>
-      </TouchableOpacity>
-    </View>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS == "ios" ? "padding" : null}
+      style={{height: 100}}
+    >
+      <View style={styles.wrapper}>
+        <TextInput 
+          type="text"
+          name="task"
+          placeholder="I want to.."
+          value={taskInput}
+          style={styles.textInput}
+          onChangeText={(text) => setTaskInput(text)}
+        />
+        <ActionButton onSubmit={onSubmit} text={'Add'}/>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
+
+const styles = StyleSheet.create({
+
+  wrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  textInput: {
+    paddingHorizontal: 20,
+    width: '80%',
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+    borderRadius: 10,
+  },
+})
+
 
 export default AddTask
 

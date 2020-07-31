@@ -4,16 +4,15 @@ import {
   Text,
   SectionList,
   Vibration,
-  ScrollView,
+  StyleSheet,
   Image,
-  SafeAreaView,
   TouchableOpacity,
-  KeyboardAvoidingView,
 } from 'react-native'
 import { DraxProvider, DraxView } from 'react-native-drax'
-import CheckBox from '@react-native-community/checkbox'
 import Api from '../Api.js'
 import AddTask from '../components/AddTask'
+import TaskDescription from '../components/TaskDescription'
+import Task from '../components/Task'
 
 import {
   todayDate,
@@ -35,51 +34,10 @@ const move = (source, destination, droppableSource, droppableDestination) => {
     return result
 }
 
-const Item = (props) => {
-  const [isOver, setIsOver] = useState(false)
-
-  const onCheckboxChange = async () => {
-    const api = new Api()
-    await api.updateTask(props.item.id, {doneAt: !props.item.doneAt ? new Date() : null})
-    props.onUpdate()
-  }
-
-  const onListChange = async () => {
-    const api = new Api()
-    await api.updateTask(props.item.id, {list: props.item.list === 'Personal' ? 'Work' : 'Personal'})
-    props.onUpdate()
-  }
-
-  return(
-    <View 
-      style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 37, backgroundColor: props.isSelected ? 'lightgreen' :'white', borderRadius: 40, marginHorizontal: 5, elevation: props.item.doneAt ? 0 : 20}}
-    >
-      <View style={{flexDirection: 'row', alignItems: 'center', width: '80%', left: 10}}> 
-        <CheckBox 
-          value={props.item.doneAt ? true : false}
-          onValueChange={onCheckboxChange}
-        />
-        <View style={{flexGrow: 1, }} onClick={() => props.onDescribe(props.task ? null : props.item)}>
-        <Text style={{fontSize:14, textDecorationLine: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}}>{props.item.content}</Text>
-        </View>
-      </View>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <TouchableOpacity 
-          style={{backgroundColor: props.item.list === 'Personal' ? 'blue' : 'brown', borderRadius: 60, marginHorizontal: 10, elevation: 6}}
-          onPress={onListChange}
-        >
-          <View style={{margin: 2}}>
-            <Text style={{fontSize: 10, fontWeight: 'bold',  color: 'white'}}>{props.item.list}</Text>
-          </View>
-        </TouchableOpacity>
-      
-      </View>
-    </View>
-  )  
-}
 
 function TodayTaskList (props) {
   const [isRefreshing, setIsRefreshing] = useState(true)
+  const [describeTask, setDescribeTask] = useState(null)
   const [draggedTask, setDraggedTask] = useState(null)
   const [showDeletion, setShowDeletion] =useState(false)
   const [itemsUnfinished, setItemsUnifinished] = useState([])
@@ -188,13 +146,19 @@ function TodayTaskList (props) {
         }
     }
 
+  
 
   return (
     <View>
-      <SafeAreaView>
-        <View style={{height: '100%'}}>
+      {describeTask && ( <TaskDescription 
+        task={describeTask}
+        isVisible={describeTask ? true : false} 
+        onDescribe={setDescribeTask}
+        onUpdate={getTasks}
+      />)}
+      <View style={styles.wrapper}>
         <DraxProvider>
-          <View style={{height: '80%'}}>
+          <View style={styles.listContainer}>
             <SectionList
               refreshing={isRefreshing}
               onRefresh={() => {
@@ -205,11 +169,17 @@ function TodayTaskList (props) {
               keyExtractor={(item) => item.id}
               renderItem={({ item, section }) => (
                 <DraxView
-                  style={{height: 40, backgroundColor: '#E5E5E5'}}
-                  receivingStyle={{height: 40, backgroundColor: 'lightblue'}}
+                  style={styles.backgroundItem}
+                  receivingStyle={styles.backgroundReceivingItem}
                   renderContent={({ viewState }) => {
                     return (
-                      <Item item={item} onUpdate={getTasks} isSelected={draggedTask && draggedTask.id === item.id} />
+                      <TouchableOpacity onPress={() => setDescribeTask(item)}>
+                      <Task 
+                        item={item}
+                        onUpdate={getTasks}
+                        isSelected={draggedTask && draggedTask.id === item.id} 
+                      />
+                      </TouchableOpacity>
                     )
                   }}
                   longPressDelay={1000}
@@ -234,11 +204,11 @@ function TodayTaskList (props) {
                   return (
                     <DraxView
                       noHover={true}
-                      style={{height: 50, flexDirection: 'column-reverse', left: 10}}
-                      receivingStyle={{height: 50, flexDirection: 'column-reverse', left: 10, backgroundColor: 'lightblue'}}
+                      style={styles.backgroundTitle}
+                      receivingStyle={styles.backgroundReceivingTitle}
                       renderContent={({ viewState }) => {
                         return (
-                          <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10}}>{section.title}</Text>
+                          <Text style={styles.sectionTitleColor}>{section.title}</Text>
                         )
                       }}
                       onReceiveDragDrop={(event) => {
@@ -253,7 +223,7 @@ function TodayTaskList (props) {
               }}
             />     
             </View>
-            <View style={{height: '15%', justifyContent: 'center', backgroundColor: showDeletion ? 'lightblue': 'white'}}>
+            <View style={[styles.addTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
               {!draggedTask && (
                 <AddTask onUpdate={getTasks}/>
               )}
@@ -267,7 +237,7 @@ function TodayTaskList (props) {
                         <View style={{alignItems: 'center'}}>
                           <Image 
                             source={require('../../static/trash.png')}
-                            style={{height: 52, width: 50}}
+                            style={styles.trashImage}
                           /> 
                         </View>
                       )
@@ -287,11 +257,51 @@ function TodayTaskList (props) {
             </View>
           </DraxProvider>
         </View>
-      </SafeAreaView>
     </View>
   )
 }
 
+const styles = StyleSheet.create({
+  wrapper: {
+    height: '100%'
+  },
+  listContainer: {
+    height: '88%'
+  },
+  addTaskContainer: {
+    height: '12%',
+    justifyContent: 'center',
+  },
+  sectionTitleColor: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#32A3BC',
+  },
+  backgroundItem: {
+    height: 40,
+    backgroundColor: '#E5E5E5'
+  },
+  backgroundReceivingItem: {
+    height: 40,
+    backgroundColor: 'lightblue'
+  },
+  backgroundTitle: {
+    height: 50,
+    flexDirection: 'column-reverse',
+    left: 10,
+  },
+  backgroundReceivingTitle: {
+    height: 50,
+    flexDirection: 'column-reverse',
+    left: 10,
+    backgroundColor: 'lightblue'
+  },
+  trashImage: {
+    height: 52,
+    width: 50
+  },
+})
 
 
 export default TodayTaskList
