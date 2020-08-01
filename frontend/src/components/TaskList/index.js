@@ -34,10 +34,12 @@ function Task (props) {
 
   const [isOver, setIsOver] = useState(false)
 
-  const onCheckboxChange = async () => {
-    const api = new Api()
-    await api.updateTask(props.item.id, {doneAt: props.item.doneAt ? null : new Date()})
-    props.onUpdate()
+  const onCheckboxChange = async (doneAt) => {
+    if (new Date(doneAt) >= todayDate() || !doneAt) {
+      const api = new Api()
+      await api.updateTask(props.item.id, {doneAt: props.item.doneAt ? null : new Date()})
+      props.onUpdate()
+    }
   }
   
   const onDelete = async () => {
@@ -64,7 +66,7 @@ function Task (props) {
         type='Checkbox'  
         className='doneCheckbox' 
         checked={props.item.doneAt ? true : false}
-        onChange={onCheckboxChange}
+        onChange={() => onCheckboxChange(props.item.doneAt)}
       />
       <div style={{display: 'flex', flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} onClick={() => props.onDescribe(props.task ? null : props.item)}>
       {props.item.content}
