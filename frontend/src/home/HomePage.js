@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import GoalSection from './GoalSection'
 import TodayTaskList from './TodayTaskList'
 import WeeklyTaskList from './WeeklyTaskList'
 import TaskDescription from '../components/TaskDescription'
@@ -12,11 +13,16 @@ function HomePage() {
  
 
   return (
-    <div className='HomePage'>
+    <div className='HomePage' style={{height: '100%', width: '100%'}}>
       Show weekly <input type='checkbox' checked={isWeekly} onChange={() => {setIsWeekly(!isWeekly)}}/>
       <div style={{display: 'flex', flexDirection: 'row'}}>
-    {isWeekly && (<WeeklyTaskList task={task} onDescribe={setTask}/>)}
-    {!isWeekly && ( <TodayTaskList task={task} onDescribe={setTask}/>)}
+      {!isWeekly && (
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+        <GoalSection />
+        <TodayTaskList task={task} onDescribe={setTask}/>
+        </div>
+      )}
+      {isWeekly && (<WeeklyTaskList task={task} onDescribe={setTask}/>)}
       {task && (<TaskDescription onDescribe={setTask} task={task} />)}
       </div>
     </div>

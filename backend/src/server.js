@@ -7,14 +7,14 @@ const path = require('path')
 const dbClient = require('./dbclient')
 const cors = require('cors')
 const { host, port, dns } = require('./config')
-const { buildGetQuery } = require('./utils')
+const { buildGetTasksQuery } = require('./utils')
 
 
 const app = express()
 
 
 router.get('/tasks', async (req, res) => {
-  const query = buildGetQuery(req.query)
+  const query = buildGetTasksQuery(req.query)
   const tasks = await dbClient.getElems({table: 'tasks', query})
   res.status(200)
   res.json(tasks)
@@ -52,7 +52,6 @@ router.delete('/task/:taskId', async (req, res) => {
 
 router.get('/goals', async (req, res) => {
   const query = {}
-  console.log('sdfsdf')
   const goals = await dbClient.getElems({table: 'goals', query})
   res.status(200)
   res.json(goals)

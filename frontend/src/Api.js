@@ -35,6 +35,48 @@ class Api {
     return await this.delete(url)
   }
 
+  async getGoals() {
+    let url = this.baseUrl + `/goals`
+    return await this.get(url)
+  }
+
+  
+  async insertGoal(goal) {
+    const url = this.baseUrl + '/goal'
+    return await this.post(url, goal)
+  }
+
+  async updateGoal(goalId, goal) {
+    const url = this.baseUrl + `/goal/${goalId}`
+    return await this.put(url, goal)
+  }
+  
+  async deleteGoal(goalId) {
+    const url = this.baseUrl + `/goal/${goalId}`
+    return await this.delete(url)
+  }
+  
+  async getProjects() {
+    let url = this.baseUrl + `/projects`
+    return await this.get(url)
+  }
+
+  
+  async insertProject(project) {
+    const url = this.baseUrl + '/project'
+    return await this.post(url, project)
+  }
+
+  async updateProject(projectId, project) {
+    const url = this.baseUrl + `/project/${projectId}`
+    return await this.put(url, project)
+  }
+  
+  async deleteProject(projectId) {
+    const url = this.baseUrl + `/project/${projectId}`
+    return await this.delete(url)
+  }
+
   async get(url) {
     const headers = this.headers
     return await fetch(url, {headers, cache: 'no-store'})

@@ -70,7 +70,16 @@ const decomposeTasksWeek = (allTasks, date) => {
   let weekDaysTasks = []
   for (let i = 0; i < 7; i++) { 
     const dayTasks = sortTasks(allTasks.filter( x => {
-      return x.dueDate && new Date(x.dueDate) >= weekDayDate(date, i) && new Date(x.dueDate) < weekDayDate(date, i+1)
+      return (
+        (!x.doneAt 
+        && x.dueDate
+        && new Date(x.dueDate) >= weekDayDate(date, i) 
+        && new Date(x.dueDate) < weekDayDate(date, i+1))
+        ||
+        (x.doneAt 
+        && new Date(x.doneAt) >= weekDayDate(date, i) 
+        && new Date(x.doneAt) < weekDayDate(date, i+1))
+      )
     }).map(x => {
       let task = x
       task.id = task._id

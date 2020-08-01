@@ -4,4 +4,5 @@ package-lock.json
 db-data
 data
 data/*
+*.swp
 
