@@ -15,6 +15,7 @@ function AddTask (props) {
         list: 'Work',
         dueDate: new Date().toJSON(),
         note: null,
+        projectId: props.projectId,
       })
     }
     setTaskInput('')

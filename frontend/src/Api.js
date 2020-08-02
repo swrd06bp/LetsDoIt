@@ -9,7 +9,6 @@ class Api {
     }
   }
 
-  
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 
       + `/tasks?unfinished=${unfinished ? 'true' : 'false'}`
@@ -17,6 +16,11 @@ class Api {
       + `&from=${from}` 
     if (until)
       url += `&until=${until}`
+    return await this.get(url)
+  }
+
+  async getTasksProject(projectId) {
+    let url = this.baseUrl + `/project/${projectId}/tasks`
     return await this.get(url)
   }
 

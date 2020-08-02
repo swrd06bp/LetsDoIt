@@ -95,6 +95,7 @@ export {
   todayDate,
   tomorrowDate,
   weekDayDate,
+  sortTasks,
   decomposeTasksToday,
   decomposeTasksWeek,
 }

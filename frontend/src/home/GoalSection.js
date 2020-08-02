@@ -9,23 +9,14 @@ import Api from '../Api'
 
 
 function GoalSection (props) {
-  const [goals, setGoals] = useState([])
-  const [projects, setProjects] = useState([])
   const [modalOpen, setModalOpen] = React.useState(null)
-  const api = new Api()
 
   useEffect(() => {
     Modal.setAppElement('body')
-    getData() 
   }, [])
 
   const getData = async () => {
-    const respGoals = await api.getGoals()
-    const resultGoals = await respGoals.json()
-    const respProjects = await api.getProjects()
-    const resultProjects = await respProjects.json()
-    setGoals(resultGoals)
-    setProjects(resultProjects)
+    props.onUpdate()
     setModalOpen(null)
   }
 
@@ -48,17 +39,29 @@ function GoalSection (props) {
       <div onClick={() => setModalOpen('goals')}>
         <h3>Goals +</h3>
       </div>
-      {goals.map((item) => {
+      {props.goals.map((item) => {
         return (
-          <Goal key={item._id} item={item} onUpdate={getData} />  
+          <Goal
+            key={item._id}
+            item={item}
+            goal={props.goal}
+            onUpdate={getData}
+            onDescribe={props.onDescribe}
+          />  
         )
       })}
       <div onClick={() => {setModalOpen('projects')}}>
         <h3>Projects +</h3>
       </div>
-      {projects.map((item) => {
+      {props.projects.map((item) => {
         return (
-          <Project key={item._id} item={item} onUpdate={getData} />  
+          <Project
+            key={item._id}
+            item={item}
+            project={props.project}
+            onUpdate={getData}
+            onDescribe={props.onDescribe}
+          />  
         )
       })}
     </div>

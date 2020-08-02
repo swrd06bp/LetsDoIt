@@ -166,6 +166,8 @@ function WeeklyTaskList (props) {
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
+                    projects={props.projects}
+                    goals={props.goals}
                   />
                 </div>
                 <div style={{textAlign: 'center', width: 150}}>
@@ -178,6 +180,8 @@ function WeeklyTaskList (props) {
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
+                    projects={props.projects}
+                    goals={props.goals}
                   />
                 </div>
                 <div style={{textAlign: 'center', width: 150}}>
@@ -190,6 +194,8 @@ function WeeklyTaskList (props) {
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
+                    projects={props.projects}
+                    goals={props.goals}
                   />
                 </div>
                 <div style={{textAlign: 'center', width: 150}}>
@@ -202,6 +208,8 @@ function WeeklyTaskList (props) {
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
+                    projects={props.projects}
+                    goals={props.goals}
                   />
                 </div>
                 <div style={{textAlign: 'center', width: 150}}>
@@ -214,6 +222,8 @@ function WeeklyTaskList (props) {
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
+                    projects={props.projects}
+                    goals={props.goals}
                   />
                 </div>
                 <div style={{textAlign: 'center', width: 150}}>
@@ -226,6 +236,8 @@ function WeeklyTaskList (props) {
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
+                    projects={props.projects}
+                    goals={props.goals}
                   />
                 </div>
                 <div style={{textAlign: 'center', width: 150}}>
@@ -238,6 +250,8 @@ function WeeklyTaskList (props) {
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
+                    projects={props.projects}
+                    goals={props.goals}
                   />
                 </div>
               </div>

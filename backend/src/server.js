@@ -7,11 +7,13 @@ const path = require('path')
 const dbClient = require('./dbclient')
 const cors = require('cors')
 const { host, port, dns } = require('./config')
-const { buildGetTasksQuery } = require('./utils')
-
+const { 
+  buildGetTasksQuery,
+  buildGetProjectsQuery,
+  getRandomColor,
+} = require('./utils')
 
 const app = express()
-
 
 router.get('/tasks', async (req, res) => {
   const query = buildGetTasksQuery(req.query)
@@ -25,7 +27,7 @@ router.post('/task', async (req, res) => {
   const task = req.body
   task.createdAt = new Date().toJSON()
   task.updatedAt = new Date().toJSON()
-  task.isDone = false
+  task.doneAt = null
   const taskId = await dbClient.writeElem({table: 'tasks', task})
   res.status(200)
   res.json({'taskId': taskId})
@@ -62,7 +64,8 @@ router.post('/goal', async (req, res) => {
   const task = req.body
   task.createdAt = new Date().toJSON()
   task.updatedAt = new Date().toJSON()
-  task.isDone = false
+  task.colorCode = getRandomColor()
+  task.doneAt = null
   const goalId = await dbClient.writeElem({table: 'goals', task})
   res.status(200)
   res.json({'goalId': goalId})
@@ -88,10 +91,19 @@ router.delete('/goal/:taskId', async (req, res) => {
 })
 
 router.get('/projects', async (req, res) => {
-  const query = {}
+  const query = buildGetProjectsQuery(req.query)
   const projects = await dbClient.getElems({table: 'projects', query})
   res.status(200)
   res.json(projects)
+  res.end()
+})
+
+router.get('/project/:projectId/tasks', async (req, res) => {
+  const projectId = req.params.projectId
+  const query = {'projectId': projectId}
+  const tasks = await dbClient.getElems({table: 'tasks', query})
+  res.status(200)
+  res.json(tasks)
   res.end()
 })
 
@@ -99,7 +111,8 @@ router.post('/project', async (req, res) => {
   const task = req.body
   task.createdAt = new Date().toJSON()
   task.updatedAt = new Date().toJSON()
-  task.isDone = false
+  task.colorCode = getRandomColor()
+  task.doneAt = null
   const projectId = await dbClient.writeElem({table: 'projects', task})
   res.status(200)
   res.json({'projectId': projectId})

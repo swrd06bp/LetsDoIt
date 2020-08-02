@@ -124,6 +124,8 @@ function TodayTaskList (props) {
                     onUpdate={getTasks}
                     onDescribe={props.onDescribe}
                     task={props.task}
+                    projects={props.projects}
+                    goals={props.goals}
                     scale={1}
                   />
                 </div>
@@ -135,6 +137,8 @@ function TodayTaskList (props) {
                   items={itemsToday}
                   onUpdate={getTasks}
                   onDescribe={props.onDescribe}
+                  projects={props.projects}
+                  goals={props.goals}
                   task={props.task}
                   scale={1}
                 />
@@ -146,6 +150,8 @@ function TodayTaskList (props) {
                   items={itemsTomorrow}
                   onUpdate={getTasks}
                   onDescribe={props.onDescribe}
+                  projects={props.projects}
+                  goals={props.goals}
                   task={props.task}
                   scale={1}
                 />
@@ -157,6 +163,8 @@ function TodayTaskList (props) {
                   items={itemsUpcoming}
                   onUpdate={getTasks}
                   onDescribe={props.onDescribe}
+                  projects={props.projects}
+                  goals={props.goals}
                   task={props.task}
                   scale={1}
                 />
@@ -168,6 +176,8 @@ function TodayTaskList (props) {
                   items={itemsSomeday}
                   onUpdate={getTasks}
                   onDescribe={props.onDescribe}
+                  goals={props.goals}
+                  projects={props.projects}
                   task={props.task}
                   scale={1}
                 />

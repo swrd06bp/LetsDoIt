@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import ProjectShape from '../ProjectShape'
 
 import Api from '../../Api'
 
@@ -11,15 +12,20 @@ function Project (props) {
     props.onUpdate()
   }
 
+
   return (
     <div 
-      style={{display: 'flex', flexDirection: 'row'}}
+      style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}
       onMouseOver={() => setIsOver(true)} 
       onMouseLeave={() => setIsOver(false)} 
+      onClick={() => props.onDescribe({
+        task: null,
+        goal: null,
+        project: props.project ? null : props.item,
+      })}
     >
-    <div>
+      <ProjectShape colorCode={props.item.colorCode} />
       {props.item.content}
-    </div>
       <div style={{visibility: isOver ? 'visible': 'hidden', cursor: 'pointer'}} onClick={onDelete}>
         <img className='deleteTask' alt='delete' src='/trash.png' width='10' height='10'/>
       </div>

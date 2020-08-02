@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import GoalShape from '../GoalShape'
 import Api from '../../Api'
 
 function Goal (props) {
@@ -13,10 +14,16 @@ function Goal (props) {
 
   return (
     <div 
-      style={{display: 'flex', flexDirection: 'row'}}
+      style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}
       onMouseOver={() => setIsOver(true)} 
       onMouseLeave={() => setIsOver(false)} 
+      onClick={() => props.onDescribe({
+        task: null,
+        goal: props.goal ? null : props.item,
+        project: null, 
+      })}
     >
+    <GoalShape colorCode={props.item.colorCode} />
     <div>
       {props.item.content}
     </div>

@@ -1,27 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Dropdown from 'react-dropdown'
+import { DragDropContext } from 'react-beautiful-dnd'
 
+import AddTask from '../AddTask'
+import TaskList from '../TaskList'
 import GoalShape from '../GoalShape'
-import ProjectShape from '../ProjectShape'
-
 import Api from '../../Api'
+import { sortTasks} from '../../utils'
 
-function TaskDescription (props) {
-  const [content, setContent] = useState(props.task.content)
-  const [note, setNote] = useState(props.task.note)
-  const [dueDate, setDueDate] = useState(props.task.dueDate)
-  const [doneAt, setDoneAt] = useState(props.task.doneAt)
-  const [projectId, setProjectId] = useState(props.task.projectId)
-  const [goalId, setGoalId] = useState(props.task.goalId)
+
+function ProjectDescription (props) {
+  const [content, setContent] = useState(props.project.content)
+  const [note, setNote] = useState(props.project.note)
+  const [dueDate, setDueDate] = useState(props.project.dueDate)
+  const [doneAt, setDoneAt] = useState(props.project.doneAt)
+  const [goalId, setGoalId] = useState(props.project.goalId)
+  const [tasks, setTasks] = useState([])
   const api = new Api()
 
+  useEffect(() => {
+    getProjectTasks()
+  }, [])
 
-  let projectsOptions = props.projects.map(x => ({value: x._id, label: x.content}))
-  projectsOptions.unshift({value: null, label: 'none'})
+  const getProjectTasks = async () => {
+    const resp = await api.getTasksProject(props.project._id) 
+    const results = await resp.json()
+    const sortedTasks = sortTasks(results).map( x => {
+      const task = x
+      task.id = task._id
+      return task
+    })
+    setTasks(sortedTasks)
+  }
 
-  const projectColorCode = props.projects.filter(x => x._id === projectId).length
-    ? props.projects.filter(x => x._id === projectId)[0].colorCode : null
-  
   const goalColorCode = props.goals.filter(x => x._id === goalId).length
     ? props.goals.filter(x => x._id === goalId)[0].colorCode : null
 
@@ -30,19 +41,16 @@ function TaskDescription (props) {
   goalsOptions.unshift({value: null, label: 'none'})
 
   const onSave = async () => {
-    await api.updateTask(props.task.id, {content, dueDate, note, projectId, goalId, doneAt})
-    props.onDescribe({task: null, project: null, goal: null})
+    await api.updateProject(props.project._id, {content, dueDate, note, goalId, doneAt})
+    props.onDescribe({project: null, project: null, goal: null})
   }
 
   const onDelete = async () => {
-    await api.deleteTask(props.task.id)
-    props.onDescribe({task: null, project: null, goal: null})
+    await api.deleteProject(props.project._id)
+    props.onDescribe({project: null, project: null, goal: null})
   }
-
-
-
   return (
-    <div style={{display: 'flex', flexDirection: 'column', width: 250}}>
+    <div style={{display: 'flex', flexDirection: 'column', width: 500}}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
         <button onClick={() => props.onDescribe({task: null, project: null, goal: null})}> 
           x
@@ -51,7 +59,24 @@ function TaskDescription (props) {
           delete
         </button>
       </div>
-      <div>
+
+
+     <div style={{display: 'flex', flexDirection: 'row'}}>
+      <div style={{width: '50%'}}>
+        <DragDropContext onDragEnd={() => {}}>
+        <h3>Project task</h3>
+        <TaskList
+          droppableId={"tasks"}
+          items={tasks}
+          onUpdate={getProjectTasks}
+          onDescribe={() => {}}
+          scale={1}
+        />
+        </DragDropContext>
+        <AddTask projectId={props.project._id} onUpdate={getProjectTasks}/>
+      </div>
+      <div style={{width: '50%'}}>
+        <div>
           <input 
             type='text' 
             name='content'
@@ -59,7 +84,7 @@ function TaskDescription (props) {
             onChange={(event) => setContent(event.target.value)} 
             style={{borderWidth: 0}}
           />
-      </div>
+        </div>
       <div>
         <div>
           <input
@@ -116,9 +141,6 @@ function TaskDescription (props) {
         <div>
         Link to:
         </div>
-          <ProjectShape colorCode={projectColorCode} />
-        
-        <Dropdown options={projectsOptions} value={projectId} onChange={({value}) => {setProjectId(value)}} placeholder="Project" />
         <GoalShape colorCode={goalColorCode} />
         <Dropdown options={goalsOptions} value={goalId} onChange={({value}) => {setGoalId(value)}} placeholder="Goal" />
         
@@ -136,6 +158,9 @@ function TaskDescription (props) {
           />
       </div>
 
+    </div>
+    </div>
+
       <button onClick={onSave}>
         save
       </button>
@@ -144,5 +169,4 @@ function TaskDescription (props) {
 }
 
 
-export default TaskDescription
-
+export default ProjectDescription

@@ -42,10 +42,29 @@ function buildGetTasksQuery (params) {
 
 
 function buildGetProjectsQuery (params) {
+  const { unfinished } = params
 
+  let query = {}
+
+  if (!unfinished === 'true')
+    query['doneAt'] = {$ne:null}
+
+
+  return query
+}
+
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF'
+    let color = '#'
+    for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)]
+        }
+    return color
 }
 
 
 
 exports.buildGetTasksQuery = buildGetTasksQuery
 exports.buildGetProjectsQuery = buildGetProjectsQuery
+exports.getRandomColor = getRandomColor

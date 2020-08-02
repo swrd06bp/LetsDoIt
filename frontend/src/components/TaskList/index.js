@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 
+import ProjectShape from '../ProjectShape'
+import GoalShape from '../GoalShape'
+import ListButton from '../ListButton'
 import Api from '../../Api'
 import { todayDate } from '../../utils'
 
@@ -48,11 +51,17 @@ function Task (props) {
     props.onUpdate()
   }
 
-  const onListChange = async () => {
-    const api = new Api()
-    await api.updateTask(props.item.id, {list: props.item.list === 'Personal' ? 'Work' : 'Personal'})
-    props.onUpdate()
-  }
+  
+  let projectColorCode 
+  if (props.projects)  
+    projectColorCode = props.projects.filter(x => x._id === props.item.projectId).length
+    ? props.projects.filter(x => x._id === props.item.projectId)[0].colorCode : null
+  
+  let goalColorCode 
+  if (props.goals) 
+    goalColorCode = props.goals.filter(x => x._id === props.item.goalId).length
+    ? props.goals.filter(x => x._id === props.item.goalId)[0].colorCode : null
+
 
   return (
     <div 
@@ -68,17 +77,16 @@ function Task (props) {
         checked={props.item.doneAt ? true : false}
         onChange={() => onCheckboxChange(props.item.doneAt)}
       />
-      <div style={{display: 'flex', flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} onClick={() => props.onDescribe(props.task ? null : props.item)}>
+      <div style={{display: 'flex', flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} onClick={() => props.onDescribe({task: props.task ? null : props.item, project: null, goal: null})}>
       {props.item.content}
       </div>
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
-        <div 
-          style={{fontSize: 9*props.scale, background: props.item.list === 'Personal' ? 'blue' : 'brown', cursor: 'pointer', fontWeight: 'bold',  color: 'white',  borderRadius: 60}}
-          onClick={onListChange}
-        >
-          <div style={{margin: 2}}>
-          {props.item.list}
+       <div>
+          <ListButton scale={props.scale} item={props.item} onUpdate={props.onUpdate}/>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+            <ProjectShape colorCode={projectColorCode} />
+            <GoalShape colorCode={goalColorCode} />
           </div>
         </div>
       
@@ -117,7 +125,15 @@ function TaskList (props) {
                                     provided.draggableProps.style,
                                     isPast,
                                 )}>
-                                 <Task item={item} onDescribe={props.onDescribe} scale={props.scale} task={props.task} onUpdate={props.onUpdate}/>
+                                 <Task 
+                                  item={item}
+                                  onDescribe={props.onDescribe}
+                                  scale={props.scale}
+                                  task={props.task}
+                                  onUpdate={props.onUpdate}
+                                  goals={props.goals}
+                                  projects={props.projects}
+                                />
                             </div>
                           )
                         }}
