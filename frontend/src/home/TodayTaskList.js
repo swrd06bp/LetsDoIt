@@ -113,11 +113,13 @@ function TodayTaskList (props) {
 
 
   return (
-    <div>
+    <div style={styles.wrapper}>
+      <h3 style={styles.titleDoTo}>To Do</h3>
+      <div style={styles.allTasksContainer}>
             <DragDropContext onDragEnd={onDragEnd}>
               {itemsUnfinished.length > 0 && (
-                <div style={{width: 250}}>
-                  <h3>Unfinished</h3>
+                <div>
+                  <h3 style={styles.sectionTitleText}>Unfinished</h3>
                   <TaskList
                     droppableId={"unfinished"}
                     items={itemsUnfinished}
@@ -130,8 +132,8 @@ function TodayTaskList (props) {
                   />
                 </div>
               )}
-              <div style={{width: 250}}>
-                <h3>Today</h3>
+              <div>
+                <h3 style={styles.sectionTitleText}>Today</h3>
                 <TaskList
                   droppableId={"today"}
                   items={itemsToday}
@@ -143,8 +145,8 @@ function TodayTaskList (props) {
                   scale={1}
                 />
               </div>
-              <div style={{width: 250}}>
-                <h3>Tomorrow</h3>
+              <div>
+                <h3 style={styles.sectionTitleText}>Tomorrow</h3>
                 <TaskList
                   droppableId={"tomorrow"}
                   items={itemsTomorrow}
@@ -156,8 +158,8 @@ function TodayTaskList (props) {
                   scale={1}
                 />
               </div>
-              <div style={{width: 250}}>
-                <h3>Upcoming</h3>
+              <div>
+                <h3 style={styles.sectionTitleText}>Upcoming</h3>
                 <TaskList
                   droppableId={"upcoming"}
                   items={itemsUpcoming}
@@ -169,8 +171,8 @@ function TodayTaskList (props) {
                   scale={1}
                 />
               </div>
-              <div style={{width: 250}}>
-                <h3>Someday</h3>
+              <div>
+                <h3 style={styles.sectionTitleText}>Someday</h3>
                 <TaskList
                   droppableId={"someday"}
                   items={itemsSomeday}
@@ -183,11 +185,36 @@ function TodayTaskList (props) {
                 />
               </div>
             </DragDropContext>
+       </div>
       <AddTask onUpdate={getTasks}/>
     </div>
   )
 }
 
+const styles = {
+  wrapper: {
+    background: 'white',
+    width: 550,
+    height: '50%',
+    margin: 30,
+    borderRadius: 20,
+  },
+  allTasksContainer: {
+    overflow: 'scroll',
+    height: '80%',
+    margin: 10,
+  },
+  sectionTitleText: {
+    color: '#32A3BC',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  titleDoTo: {
+    fontSize: 25,
+    marginLeft: 10,
+    fontWeight: 'normal',
+  },
+}
 
 
 export default TodayTaskList

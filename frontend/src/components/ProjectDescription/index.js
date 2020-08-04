@@ -50,7 +50,7 @@ function ProjectDescription (props) {
     props.onDescribe({project: null, project: null, goal: null})
   }
   return (
-    <div style={{display: 'flex', flexDirection: 'column', width: 500}}>
+    <div style={styles.wrapper}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
         <button onClick={() => props.onDescribe({task: null, project: null, goal: null})}> 
           x
@@ -71,6 +71,7 @@ function ProjectDescription (props) {
           onUpdate={getProjectTasks}
           onDescribe={() => {}}
           scale={1}
+          hideList={true}
         />
         </DragDropContext>
         <AddTask projectId={props.project._id} onUpdate={getProjectTasks}/>
@@ -168,5 +169,13 @@ function ProjectDescription (props) {
   )
 }
 
+const styles = {
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: 500,
+    height: '50%',
+  },
+}
 
 export default ProjectDescription

@@ -83,14 +83,16 @@ function Task (props) {
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
        <div>
+          {!props.hideList && (
           <ListButton scale={props.scale} item={props.item} onUpdate={props.onUpdate}/>
+          )}
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <ProjectShape colorCode={projectColorCode} />
             <GoalShape colorCode={goalColorCode} />
           </div>
         </div>
       
-        <div style={{visibility: props.item.isDone && isOver ? 'visible': 'hidden', cursor: 'pointer'}} onClick={onDelete}>
+        <div style={{visibility: props.item.doneAt && isOver ? 'visible': 'hidden', cursor: 'pointer'}} onClick={onDelete}>
           <img className='deleteTask' alt='delete' src='/trash.png' width='10' height='10'/>
         </div>
       </div>
@@ -133,6 +135,7 @@ function TaskList (props) {
                                   onUpdate={props.onUpdate}
                                   goals={props.goals}
                                   projects={props.projects}
+                                  hideList={props.hideList}
                                 />
                             </div>
                           )

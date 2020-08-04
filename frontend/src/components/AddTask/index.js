@@ -24,21 +24,49 @@ function AddTask (props) {
 
 
   return (
-    <div>
-    <form onSubmit={onSubmit}>
-      <label>
-        <input 
-          type="text"
-          name="task"
-          placeholder="I want to.."
-          value={taskInput}
-          onChange={(event) => setTaskInput(event.target.value)}
-        />
-      </label>
-      <input type="submit" value="Add" />
-    </form>
+    <div style={styles.wrapper}>
+          <input 
+            style={styles.inputText}
+            type="text"
+            name="task"
+            placeholder="I want to.."
+            value={taskInput}
+            onChange={(event) => setTaskInput(event.target.value)}
+          />
+        <div style={styles.button} onClick={onSubmit}>
+          Add
+        </div>
     </div>
   )
+}
+
+const styles = {
+  wrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginHorizontal: 10,
+    flexDirection: 'row',
+  },
+  inputText: {
+    borderRadius: 20,
+    width: '70%',
+    height: 30,
+  },
+  button: {
+    display: 'flex',
+    height: 30,
+    width: 40,
+    backgroundColor: 'lightblue',
+    borderRadius: 40,
+    fontSize: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    margin: 10,
+  },
 }
 
 export default AddTask

@@ -21,7 +21,7 @@ const weekDayDate = (date, day) => {
 const sortTasks = tasks => {
   let sortedTasks = JSON.parse(JSON.stringify(tasks))
   sortedTasks.sort((a, b) => {return a.list < b.list})
-  sortedTasks.sort((a, b) => a.isDone > b.isDone)
+  sortedTasks.sort((a, b) => {return(a.doneAt && !b.doneAt)})
   return sortedTasks
 }
 

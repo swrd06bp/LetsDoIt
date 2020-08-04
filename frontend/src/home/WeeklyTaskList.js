@@ -142,7 +142,7 @@ function WeeklyTaskList (props) {
 
 
   return (
-    <div>
+    <div style={{height: '100%'}}>
       <div style={{display: 'flex', flexDirection: 'row'}}>
         <button onClick={() => {getOtherWeek(0)}}>
           now
@@ -155,7 +155,7 @@ function WeeklyTaskList (props) {
         </button>
       </div>
             <DragDropContext onDragEnd={onDragEnd}>
-              <div style={{display: 'flex', flexDirection: 'row'}}>
+              <div style={styles.calendarContainer}>
                 <div style={{textAlign: 'center', width: 150}}>
                   <h2>Monday</h2>
                   <h5>{id2DueDate('monday').toLocaleDateString()}</h5>
@@ -258,6 +258,14 @@ function WeeklyTaskList (props) {
             </DragDropContext>
     </div>
   )
+}
+
+const styles = {
+  calendarContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '50%',
+  }
 }
 
 

@@ -15,7 +15,7 @@ function Project (props) {
 
   return (
     <div 
-      style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}
+      style={{display: 'flex', flexDirection: 'row', alignItems: 'center', background: props.project ? 'lightgreen' : 'white'}}
       onMouseOver={() => setIsOver(true)} 
       onMouseLeave={() => setIsOver(false)} 
       onClick={() => props.onDescribe({

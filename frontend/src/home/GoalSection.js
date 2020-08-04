@@ -25,7 +25,7 @@ function GoalSection (props) {
       <Modal
         isOpen={modalOpen ? true : false}
         onRequestClose={() => {setModalOpen(null)}}
-        style={customStyles}
+        style={styles}
         contentLabel="Example Modal"
       >
         { modalOpen === 'goals' && (
@@ -35,10 +35,11 @@ function GoalSection (props) {
           <AddProject onUpdate={getData}/>
         )}
       </Modal>
-    <div style={{width: 250}}>
+    <div style={styles.wrapper}>
       <div onClick={() => setModalOpen('goals')}>
-        <h3>Goals +</h3>
+        <h3 style={styles.titleSection}>Goals +</h3>
       </div>
+      <div style={styles.goalSection}>
       {props.goals.map((item) => {
         return (
           <Goal
@@ -50,20 +51,23 @@ function GoalSection (props) {
           />  
         )
       })}
-      <div onClick={() => {setModalOpen('projects')}}>
-        <h3>Projects +</h3>
       </div>
-      {props.projects.map((item) => {
-        return (
-          <Project
-            key={item._id}
-            item={item}
-            project={props.project}
-            onUpdate={getData}
-            onDescribe={props.onDescribe}
-          />  
-        )
-      })}
+      <div onClick={() => {setModalOpen('projects')}}>
+        <h3 style={styles.titleSection}>Projects +</h3>
+      </div>
+      <div style={styles.projectSection}>
+        {props.projects.map((item) => {
+          return (
+            <Project
+              key={item._id}
+              item={item}
+              project={props.project}
+              onUpdate={getData}
+              onDescribe={props.onDescribe}
+            />  
+          )
+        })}
+      </div>
     </div>
     </div>
   )
@@ -71,7 +75,16 @@ function GoalSection (props) {
 }
 
 
-const customStyles = {
+const styles = {
+  wrapper: {
+    background: 'white',
+    width: 250,
+    display: 'flex',
+    flexDirection: 'column',
+    height: '50%',
+    borderRadius: 20,
+    margin: 30,
+  },
   content : {
     top: '50%',
     left: '50%',
@@ -79,7 +92,26 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)'
-  }
+  },
+  titleSection: {
+    fontSize: 25,
+    marginLeft: 10,
+    fontWeight: 'normal',
+  },
+  goalSection: {
+    background: 'rgba(196, 196, 196, 0.21)',
+    height: '30%',
+    marginRight: 10,
+    marginLeft: 10,
+    overflow: 'scroll',
+  },
+  projectSection: {
+    background: 'rgba(196, 196, 196, 0.21)',
+    height: '50%',
+    marginRight: 10,
+    marginLeft: 10,
+    overflow: 'scroll',
+  },
 }
 
 export default GoalSection

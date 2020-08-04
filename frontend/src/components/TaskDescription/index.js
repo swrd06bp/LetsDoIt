@@ -42,13 +42,11 @@ function TaskDescription (props) {
 
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column', width: 250}}>
+    <div style={styles.wrapper}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+      <h3 style={styles.title}>Description</h3>
         <button onClick={() => props.onDescribe({task: null, project: null, goal: null})}> 
           x
-        </button>
-        <button onClick={onDelete}> 
-          delete
         </button>
       </div>
       <div>
@@ -136,13 +134,42 @@ function TaskDescription (props) {
           />
       </div>
 
-      <button onClick={onSave}>
-        save
+      <div style={styles.footer}>
+      <button onClick={onDelete}>
+        Delete
       </button>
+      <button onClick={onSave}>
+        Save
+      </button>
+      
+      </div>
     </div>
   )
 }
 
+const styles = {
+  wrapper: {
+    background: 'white',
+    width: 200,
+    height: '50%',
+    margin: 30,
+    display: 'flex',
+    flexDirection: 'column',
+    borderRadius: 20,
+  },
+  title: {
+    fontSize: 25,
+    marginLeft: 10,
+    fontWeight: 'normal',
+  },
+  footer: {
+    height: '10%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+}
 
 export default TaskDescription
 

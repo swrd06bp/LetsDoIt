@@ -30,9 +30,23 @@ function HomePage() {
   }
 
   return (
-    <div className='HomePage' style={{height: '100%', width: '100%'}}>
-      Show weekly <input type='checkbox' checked={isWeekly} onChange={() => {setIsWeekly(!isWeekly)}}/>
-      <div style={{display: 'flex', flexDirection: 'row'}}>
+    <div className='HomePage' style={styles.HomePage}>
+      <div style={styles.titleContainer}>
+        <div style={styles.title}>
+          <h1>Let's do it, Boris!</h1>
+        </div>
+        <div>
+          Show weekly 
+          <input 
+            type='checkbox'
+            checked={isWeekly}
+            onChange={() => {setIsWeekly(!isWeekly)}}
+          />
+        </div>
+    </div>
+      
+      <div style={{display: 'flex'}}>
+      
       {!isWeekly && (
         <div style={{display: 'flex', flexDirection: 'row'}}>
         <GoalSection 
@@ -83,6 +97,25 @@ function HomePage() {
     </div>
   )
 
+}
+
+const styles = {
+  HomePage: {
+    height: '100%',
+    width: '100%',
+    background: 'rgba(196, 196, 196, 0.21)',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  titleContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    width: '50%',
+    marginLeft: 20,
+  },
 }
 
 export default HomePage
