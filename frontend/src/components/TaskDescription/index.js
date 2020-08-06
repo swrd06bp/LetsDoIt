@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Dropdown from 'react-dropdown'
 
+import ListButton from '../ListButton'
 import GoalShape from '../GoalShape'
 import ProjectShape from '../ProjectShape'
 
@@ -45,47 +46,54 @@ function TaskDescription (props) {
     <div style={styles.wrapper}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
       <h3 style={styles.title}>Description</h3>
-        <button onClick={() => props.onDescribe({task: null, project: null, goal: null})}> 
+        <button 
+          onClick={() => props.onDescribe({task: null, project: null, goal: null})}
+          style={styles.buttonBack}
+        > 
           x
         </button>
       </div>
-      <div>
-          <input 
+      <div style={styles.titleTaskContainer}>
+          <textarea 
             type='text' 
             name='content'
             value={content} 
             onChange={(event) => setContent(event.target.value)} 
-            style={{borderWidth: 0}}
+            style={styles.titleTaskText}
           />
+          <ListButton item={props.task} scale={1.5} onUpdate={()=>{}} />
       </div>
       <div>
-        <div>
-          <input
-            type='checkbox'
-            checked={dueDate ? false : true}
-            onChange={() => {
-              if (dueDate) 
-                setDueDate(null)
-              else
-                setDueDate(new Date())
-            }}
-          />
-          Someday
-          </div>
-          {dueDate && (
+        <div style={styles.checkboxContainer}>
           <div>
-          Due 
-          <input 
-            type='date' 
-            value={new Date(dueDate).toJSON().slice(0, 10)} 
-            onChange={(event) => {setDueDate(new Date(event.target.value))}}
-          />
+            Someday
+            <input
+              type='checkbox'
+              checked={dueDate ? false : true}
+              onChange={() => {
+                if (dueDate) 
+                  setDueDate(null)
+                else
+                  setDueDate(new Date())
+              }}
+            />
+            </div>
+            {dueDate && (
+            <div style={styles.checkboxContainer}>
+            Due 
+            <input 
+              type='date' 
+              value={new Date(dueDate).toJSON().slice(0, 10)} 
+              onChange={(event) => {setDueDate(new Date(event.target.value))}}
+            />
+            </div>
+            )}
           </div>
-          )}
         </div>
         
         <div>
-          <div>
+          <div style={styles.checkboxContainer}>
+            Mark as done
           <input
             type='checkbox'
             checked={doneAt ? true : false}
@@ -96,10 +104,8 @@ function TaskDescription (props) {
                 setDoneAt(new Date())
             }}
           />
-            Mark as done
-          </div>
           {doneAt && (
-            <div>
+            <div style={styles.checkboxContainer}>
               Done at 
               <input 
                 type='date' 
@@ -108,39 +114,50 @@ function TaskDescription (props) {
               />
             </div>
           )}
+          </div>
         </div>
 
-       <div style={{'display': 'flex', 'flexDirection': 'row'}}>
+
+       <div style={styles.linkContainer}>
         <div>
         Link to:
         </div>
+        <div style={styles.dropdownContainer}>
           <ProjectShape colorCode={projectColorCode} />
-        
-        <Dropdown options={projectsOptions} value={projectId} onChange={({value}) => {setProjectId(value)}} placeholder="Project" />
-        <GoalShape colorCode={goalColorCode} />
-        <Dropdown options={goalsOptions} value={goalId} onChange={({value}) => {setGoalId(value)}} placeholder="Goal" />
+          <Dropdown 
+            options={projectsOptions}
+            value={projectId}
+            onChange={({value}) => {setProjectId(value)}}
+            placeholder="Project"
+          />
+        </div>
+        <div style={styles.dropdownContainer}>
+          <GoalShape colorCode={goalColorCode} />
+          <Dropdown options={goalsOptions} value={goalId} onChange={({value}) => {setGoalId(value)}} placeholder="Goal" />
+        </div>
         
        </div>
 
-      <div>
-         <h4>
+         <h4 style={styles.noteTitle}>
+          Note
          </h4>
+      <div style={styles.noteContainer}>
           <textarea 
             type='text' 
             name='note'
             value={note ? note : ''} 
             onChange={(event) => setNote(event.target.value)} 
-            style={{height: 100}}
+            style={styles.noteText}
           />
       </div>
 
       <div style={styles.footer}>
-      <button onClick={onDelete}>
-        Delete
-      </button>
-      <button onClick={onSave}>
-        Save
-      </button>
+        <button style={styles.buttonDelete} onClick={onDelete}>
+          Delete
+        </button>
+        <button style={styles.buttonSave} onClick={onSave}>
+          Save
+        </button>
       
       </div>
     </div>
@@ -150,7 +167,7 @@ function TaskDescription (props) {
 const styles = {
   wrapper: {
     background: 'white',
-    width: 200,
+    width: 300,
     height: '50%',
     margin: 30,
     display: 'flex',
@@ -162,12 +179,83 @@ const styles = {
     marginLeft: 10,
     fontWeight: 'normal',
   },
+  buttonBack: {
+    height: 20,
+    width: 20,
+  },
+  titleTaskContainer: {
+    background: 'rgba(196, 196, 196, 0.21)',
+    height: '100%',
+    padding: 3,
+    margin: 10,
+  },
+  titleTaskText: {
+    background: 'transparent',
+    fontSize: 20,
+    width: '100%',
+    justifyContent: 'center',
+    borderWidth: 0,
+    fontWeight: 'bold',
+  },
+  noteTitle: {
+    marginLeft: 10,
+  },
+  noteText: {
+    width: '90%',
+    height: 100,
+  },
+  noteContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  checkboxContainer: {
+    marginLeft: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+
+  },
+  linkContainer: {
+    marginLeft: 10,
+    marginTop: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dropdownContainer: {
+    display: 'flex',
+    marginLeft: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'black',
+  },
   footer: {
-    height: '10%',
+    height: 60,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+  },
+  buttonDelete: {
+    background: '#F51111',
+    height: 30,
+    width: 60,
+    color: 'white',
+    fontWeight: 'bold',
+    borderWidth: 0,
+    borderRadius: 20,
+  },
+  buttonSave: {
+    background: '#32A3BC',
+    height: 30,
+    width: 60,
+    color: 'white',
+    fontWeight: 'bold',
+    borderWidth: 0,
+    borderRadius: 20,
   },
 }
 

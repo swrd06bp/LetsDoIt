@@ -12,7 +12,7 @@ const grid = 2
 const getListStyle = (isDraggingOver, scale, isPast) => ({
     background: isDraggingOver ? 'lightblue' : 'lightgrey',
     padding: grid,
-    height: scale === 1 ? null : 300,
+    height: scale === 1 ? null : 400,
     overflow: scale === 1 ? null : 'auto',
     opacity: isPast ? 0.4 : 1,
 })
@@ -77,7 +77,7 @@ function Task (props) {
         checked={props.item.doneAt ? true : false}
         onChange={() => onCheckboxChange(props.item.doneAt)}
       />
-      <div style={{display: 'flex', flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} onClick={() => props.onDescribe({task: props.task ? null : props.item, project: null, goal: null})}>
+      <div style={{display: 'flex', height: '100%', flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} onClick={() => props.onDescribe({task: props.task ? null : props.item, project: null, goal: null})}>
       {props.item.content}
       </div>
       </div>

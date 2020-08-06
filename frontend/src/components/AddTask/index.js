@@ -53,6 +53,7 @@ const styles = {
     borderRadius: 20,
     width: '70%',
     height: 30,
+    paddingLeft: 20,
   },
   button: {
     display: 'flex',

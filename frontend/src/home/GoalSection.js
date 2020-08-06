@@ -81,7 +81,7 @@ const styles = {
     width: 250,
     display: 'flex',
     flexDirection: 'column',
-    height: '50%',
+    height: '60%',
     borderRadius: 20,
     margin: 30,
   },

@@ -12,7 +12,7 @@ function ListButton (props) {
 
   return (
     <div 
-      style={{fontSize: 9*props.scale, background: props.item.list === 'Personal' ? 'blue' : 'brown', cursor: 'pointer', fontWeight: 'bold',  color: 'white',  borderRadius: 60, width:40, alignItems: 'center', justifyContent: 'center' }}
+      style={{fontSize: 9*props.scale, background: props.item.list === 'Personal' ? 'blue' : 'brown', cursor: 'pointer', fontWeight: 'bold',  color: 'white',  borderRadius: 60, width:45*props.scale, alignItems: 'center', justifyContent: 'center' }}
       onClick={onListChange}
     >
       <div style={{margin: 2, textAlign: 'center'}}>

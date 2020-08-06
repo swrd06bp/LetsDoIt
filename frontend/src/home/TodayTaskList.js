@@ -195,13 +195,13 @@ const styles = {
   wrapper: {
     background: 'white',
     width: 550,
-    height: '50%',
+    height: '60%',
     margin: 30,
     borderRadius: 20,
   },
   allTasksContainer: {
     overflow: 'scroll',
-    height: '80%',
+    height: '75%',
     margin: 10,
   },
   sectionTitleText: {
