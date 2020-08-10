@@ -64,6 +64,9 @@ function TaskDescription (props) {
           <ListButton item={props.task} scale={1.5} onUpdate={()=>{}} />
       </div>
       <div>
+       <h4 style={styles.noteTitle}>
+        Status
+       </h4>
         <div style={styles.checkboxContainer}>
           <div>
             Someday
@@ -142,13 +145,13 @@ function TaskDescription (props) {
           Note
          </h4>
       <div style={styles.noteContainer}>
-          <textarea 
-            type='text' 
-            name='note'
-            value={note ? note : ''} 
-            onChange={(event) => setNote(event.target.value)} 
-            style={styles.noteText}
-          />
+        <textarea 
+          type='text' 
+          name='note'
+          value={note ? note : ''} 
+          onChange={(event) => setNote(event.target.value)} 
+          style={styles.noteText}
+        />
       </div>
 
       <div style={styles.footer}>
@@ -158,7 +161,6 @@ function TaskDescription (props) {
         <button style={styles.buttonSave} onClick={onSave}>
           Save
         </button>
-      
       </div>
     </div>
   )
@@ -199,6 +201,8 @@ const styles = {
   },
   noteTitle: {
     marginLeft: 10,
+    color: '#32A3BC',
+    marginRight: 10,
   },
   noteText: {
     width: '90%',
@@ -214,7 +218,6 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-
   },
   linkContainer: {
     marginLeft: 10,

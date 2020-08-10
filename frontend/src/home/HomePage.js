@@ -43,56 +43,56 @@ function HomePage() {
             onChange={() => {setIsWeekly(!isWeekly)}}
           />
         </div>
-    </div>
+      </div>
       
       <div style={{display: 'flex'}}>
-      
-      {!isWeekly && (
-        <div style={{display: 'flex', flexDirection: 'row'}}>
-        <GoalSection 
-          goals={allGoals}
-          projects={allProjects}
-          onUpdate={getData}
-          project={describeElem.project}
-          goal={describeElem.goal}
-          onDescribe={setDescribeElem}
-        />
-        {!describeElem.project && !describeElem.goal && (
-          <TodayTaskList
-            task={describeElem.task}
+        
+        {!isWeekly && (
+          <div style={styles.mainContainer}>
+            <GoalSection 
+              goals={allGoals}
+              projects={allProjects}
+              onUpdate={getData}
+              project={describeElem.project}
+              goal={describeElem.goal}
+              onDescribe={setDescribeElem}
+            />
+            {!describeElem.project && !describeElem.goal && (
+              <TodayTaskList
+                task={describeElem.task}
+                onDescribe={setDescribeElem}
+                projects={allProjects}
+                goals={allGoals}
+              />
+            )}
+            {describeElem.project && (
+              <ProjectDescription
+                onDescribe={(value) => {
+                  setDescribeElem(value)
+                  getData()
+                }}
+                project={describeElem.project}
+                goals={allGoals}
+              />
+            )}
+          </div>
+        )}
+        {isWeekly && (
+          <WeeklyTaskList 
+            task={describeElem.task} 
             onDescribe={setDescribeElem}
             projects={allProjects}
             goals={allGoals}
           />
         )}
-        </div>
-      )}
-      {isWeekly && (
-        <WeeklyTaskList 
-          task={describeElem.task} 
-          onDescribe={setDescribeElem}
-          projects={allProjects}
-          goals={allGoals}
-        />
-      )}
-      {describeElem.task && (
-        <TaskDescription
-          onDescribe={setDescribeElem}
-          task={describeElem.task}
-          projects={allProjects}
-          goals={allGoals}
-        />
-      )}
-      {describeElem.project && (
-        <ProjectDescription
-          onDescribe={(value) => {
-            setDescribeElem(value)
-            getData()
-          }}
-          project={describeElem.project}
-          goals={allGoals}
-        />
-      )}
+        {describeElem.task && (
+          <TaskDescription
+            onDescribe={setDescribeElem}
+            task={describeElem.task}
+            projects={allProjects}
+            goals={allGoals}
+          />
+        )}
       </div>
     </div>
   )
@@ -113,8 +113,13 @@ const styles = {
     alignItems: 'center',
   },
   title: {
+    display: 'flex',
     width: '50%',
     marginLeft: 20,
+  },
+  mainContainer: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 }
 

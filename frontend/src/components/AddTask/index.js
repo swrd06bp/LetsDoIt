@@ -46,6 +46,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    height: '10%',
     marginHorizontal: 10,
     flexDirection: 'row',
   },

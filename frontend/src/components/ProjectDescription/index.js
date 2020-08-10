@@ -52,56 +52,46 @@ function ProjectDescription (props) {
   return (
     <div style={styles.wrapper}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-        <button onClick={() => props.onDescribe({task: null, project: null, goal: null})}> 
+      <h3 style={styles.title}>Description</h3>
+        <button 
+          onClick={() => props.onDescribe({task: null, project: null, goal: null})}
+          style={styles.buttonBack}
+        > 
           x
         </button>
-        <button onClick={onDelete}> 
-          delete
-        </button>
       </div>
 
-
-     <div style={{display: 'flex', flexDirection: 'row'}}>
-      <div style={{width: '50%'}}>
-        <DragDropContext onDragEnd={() => {}}>
-        <h3>Project task</h3>
-        <TaskList
-          droppableId={"tasks"}
-          items={tasks}
-          onUpdate={getProjectTasks}
-          onDescribe={() => {}}
-          scale={1}
-          hideList={true}
+      <div style={styles.titleTaskContainer}>
+        <input 
+          type='text' 
+          name='content'
+          value={content} 
+          onChange={(event) => setContent(event.target.value)} 
+          style={styles.titleTaskText}
         />
-        </DragDropContext>
-        <AddTask projectId={props.project._id} onUpdate={getProjectTasks}/>
-      </div>
-      <div style={{width: '50%'}}>
-        <div>
-          <input 
-            type='text' 
-            name='content'
-            value={content} 
-            onChange={(event) => setContent(event.target.value)} 
-            style={{borderWidth: 0}}
-          />
         </div>
-      <div>
-        <div>
-          <input
-            type='checkbox'
-            checked={dueDate ? false : true}
-            onChange={() => {
-              if (dueDate) 
-                setDueDate(null)
-              else
-                setDueDate(new Date())
-            }}
-          />
+
+     <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
+      <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
+       <h4 style={styles.noteTitle}>
+        Status
+       </h4>
+        <div style={styles.checkboxContainer}>
           Someday
-          </div>
-          {dueDate && (
           <div>
+            <input
+              type='checkbox'
+              checked={dueDate ? false : true}
+              onChange={() => {
+                if (dueDate) 
+                  setDueDate(null)
+                else
+                  setDueDate(new Date())
+              }}
+            />
+            </div>
+          {dueDate && (
+            <div style={styles.checkboxContainer}>
           Due 
           <input 
             type='date' 
@@ -113,7 +103,8 @@ function ProjectDescription (props) {
         </div>
         
         <div>
-          <div>
+            <div style={styles.checkboxContainer}>
+            Mark as done
           <input
             type='checkbox'
             checked={doneAt ? true : false}
@@ -124,10 +115,8 @@ function ProjectDescription (props) {
                 setDoneAt(new Date())
             }}
           />
-            Mark as done
-          </div>
           {doneAt && (
-            <div>
+            <div style={styles.checkboxContainer}>
               Done at 
               <input 
                 type='date' 
@@ -136,9 +125,10 @@ function ProjectDescription (props) {
               />
             </div>
           )}
+          </div>
         </div>
 
-       <div style={{'display': 'flex', 'flexDirection': 'row'}}>
+       <div style={styles.linkContainer}>
         <div>
         Link to:
         </div>
@@ -148,23 +138,50 @@ function ProjectDescription (props) {
        </div>
 
       <div>
-         <h4>
-         </h4>
+        <h4 style={styles.noteTitle}>
+          Note
+        </h4>
+        <div style={styles.noteContainer}>
           <textarea 
             type='text' 
             name='note'
             value={note ? note : ''} 
             onChange={(event) => setNote(event.target.value)} 
-            style={{height: 100}}
+            style={styles.noteText}
           />
+       </div>
       </div>
 
     </div>
+      <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
+        <DragDropContext onDragEnd={() => {}}>
+        <div style={styles.taskListTitle}>
+          <h4 style={styles.noteTitle}>Tasks</h4>
+          <h4 style={styles.noteTitle}>{tasks.filter(x => x.doneAt).length}/{tasks.length}</h4>
+        </div>
+        <div style={styles.taskList}>
+        <TaskList
+          droppableId={"tasks"}
+          items={tasks}
+          onUpdate={getProjectTasks}
+          onDescribe={() => {}}
+          scale={1}
+          hideList={true}
+        />
+        </div>
+        </DragDropContext>
+        <AddTask projectId={props.project._id} onUpdate={getProjectTasks}/>
+      </div>
     </div>
 
-      <button onClick={onSave}>
-        save
-      </button>
+      <div style={styles.footer}>
+        <button style={styles.buttonDelete} onClick={onDelete}>
+          Delete
+        </button>
+        <button style={styles.buttonSave} onClick={onSave}>
+          Save
+        </button>
+      </div>
     </div>
   )
 }
@@ -173,8 +190,109 @@ const styles = {
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    width: 500,
-    height: '50%',
+    width: 600,
+    height: '70%',
+    margin: 30,
+    background: 'white',
+    borderRadius: 20,
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 25,
+    marginLeft: 10,
+    fontWeight: 'normal',
+  },
+  buttonBack: {
+    height: 20,
+    width: 20,
+  },
+  titleTaskContainer: {
+    background: 'rgba(196, 196, 196, 0.21)',
+    height: '100%',
+    padding: 3,
+    margin: 10,
+  },
+  titleTaskText: {
+    background: 'transparent',
+    fontSize: 20,
+    width: '100%',
+    justifyContent: 'center',
+    borderWidth: 0,
+    fontWeight: 'bold',
+  },
+  taskListTitle: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  taskList: {
+    overflow: 'scroll',
+    height: '100%',
+  },
+  noteTitle: {
+    marginLeft: 10,
+    marginRight: 10,
+    color: '#32A3BC',
+  },
+  noteText: {
+    width: '90%',
+    height: 120,
+  },
+  noteContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  checkboxContainer: {
+    marginLeft: 10,
+    fontSize: 13,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  linkContainer: {
+    marginLeft: 10,
+    marginTop: 10,
+    display: 'flex',
+    fontSize: 13,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dropdownContainer: {
+    display: 'flex',
+    marginLeft: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'black',
+  },
+  footer: {
+    height: '10%',
+    display: 'flex',
+    flexDirection: 'row',
+    margin: 20,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  buttonDelete: {
+    background: '#F51111',
+    height: 30,
+    width: 60,
+    color: 'white',
+    fontWeight: 'bold',
+    borderWidth: 0,
+    borderRadius: 20,
+  },
+  buttonSave: {
+    background: '#32A3BC',
+    height: 30,
+    width: 60,
+    color: 'white',
+    fontWeight: 'bold',
+    borderWidth: 0,
+    borderRadius: 20,
   },
 }
 

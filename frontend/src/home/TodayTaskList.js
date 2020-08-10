@@ -194,7 +194,7 @@ function TodayTaskList (props) {
 const styles = {
   wrapper: {
     background: 'white',
-    width: 550,
+    width: 600,
     height: '60%',
     margin: 30,
     borderRadius: 20,
@@ -213,6 +213,7 @@ const styles = {
     fontSize: 25,
     marginLeft: 10,
     fontWeight: 'normal',
+    height: '5%',
   },
 }
 
