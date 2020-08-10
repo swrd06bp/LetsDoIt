@@ -6,7 +6,10 @@ function ListButton (props) {
   
   const onListChange = async () => {
     const api = new Api()
-    await api.updateTask(props.item.id, {list: props.item.list === 'Personal' ? 'Work' : 'Personal'})
+    if (!props.type || props.type === 'task')
+      await api.updateTask(props.item.id, {list: props.item.list === 'Personal' ? 'Work' : 'Personal'})
+    if (props.type === 'project')
+      await api.updateProject(props.item._id, {list: props.item.list === 'Personal' ? 'Work' : 'Personal'})
     props.onUpdate()
   }
 

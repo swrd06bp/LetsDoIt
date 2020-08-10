@@ -21,12 +21,20 @@ const weekDayDate = (date, day) => {
 const sortTasks = tasks => {
   let sortedTasks = JSON.parse(JSON.stringify(tasks))
   sortedTasks.sort((a, b) => {return a.list < b.list})
-  sortedTasks.sort((a, b) => {return(a.dueAt > b.dueAt)})
+  sortedTasks.sort((a, b) => {return(a.dueDate > b.dueDate)})
   sortedTasks.sort((a, b) => {return(a.doneAt > b.doneAt)})
   sortedTasks.sort((a, b) => {return(a.doneAt && !b.doneAt)})
   return sortedTasks
 }
 
+const sortProjectTasks = tasks => {
+  let sortedTasks = JSON.parse(JSON.stringify(tasks))
+  sortedTasks.sort((a, b) => {return(a.dueDate < b.dueDate)})
+  sortedTasks.sort((a, b) => {return(a.dueDate && !b.dueDate)})
+  sortedTasks.sort((a, b) => {return(a.doneAt < b.doneAt)})
+  sortedTasks.sort((a, b) => {return(a.doneAt && !b.doneAt)})
+  return sortedTasks
+}
 
 const decomposeTasksToday = allTasks => {
     const unfinishedTasks = sortTasks(allTasks.filter( x => {
@@ -97,6 +105,7 @@ export {
   todayDate,
   tomorrowDate,
   weekDayDate,
+  sortProjectTasks,
   sortTasks,
   decomposeTasksToday,
   decomposeTasksWeek,

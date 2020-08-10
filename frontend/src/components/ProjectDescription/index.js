@@ -4,9 +4,10 @@ import { DragDropContext } from 'react-beautiful-dnd'
 
 import AddTask from '../AddTask'
 import TaskList from '../TaskList'
+import ListButton from '../ListButton'
 import GoalShape from '../GoalShape'
 import Api from '../../Api'
-import { sortTasks} from '../../utils'
+import { sortProjectTasks} from '../../utils'
 
 
 function ProjectDescription (props) {
@@ -25,7 +26,7 @@ function ProjectDescription (props) {
   const getProjectTasks = async () => {
     const resp = await api.getTasksProject(props.project._id) 
     const results = await resp.json()
-    const sortedTasks = sortTasks(results).map( x => {
+    const sortedTasks = sortProjectTasks(results).map( x => {
       const task = x
       task.id = task._id
       return task
@@ -69,6 +70,7 @@ function ProjectDescription (props) {
           onChange={(event) => setContent(event.target.value)} 
           style={styles.titleTaskText}
         />
+          <ListButton item={props.project} scale={1.5} onUpdate={()=>{}} type={'project'}/>
         </div>
 
      <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
@@ -166,11 +168,11 @@ function ProjectDescription (props) {
           onUpdate={getProjectTasks}
           onDescribe={() => {}}
           scale={1}
-          hideList={true}
+          projectTask={true}
         />
         </div>
         </DragDropContext>
-        <AddTask projectId={props.project._id} onUpdate={getProjectTasks}/>
+        <AddTask projectId={props.project._id} onUpdate={getProjectTasks} list={props.project.list}/>
       </div>
     </div>
 
