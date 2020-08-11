@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
     alignSelf: 'center',
-    height: 340,
+    height: 362,
     width: '70%',
     borderRadius: 10,
     backgroundColor: 'white',

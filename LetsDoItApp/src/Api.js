@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-community/async-storage'
+
 class Api {
 
   constructor() {
@@ -9,6 +11,34 @@ class Api {
     }
   }
 
+  async status() {
+    const url = this.baseUrl + '/status'
+    const resp = await this.get(url)
+    if (resp.status !== 200) {
+      this.logout()
+
+      return false
+    } else {
+      return true
+    }
+  }
+  
+  async logout() {
+    await AsyncStorage.removeItem('@token') 
+  }
+
+  async login(username, password) {
+    const url = this.baseUrl + '/login'
+    const body = {username, password}
+    const resp = await this.post(url, body)
+    if (resp.status === 200) {
+      const body = await resp.json()
+      await AsyncStorage.setItem('@token', body.token)
+      return(true)
+    } else {
+      return(false)
+    }
+  }
   
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 
@@ -35,23 +65,34 @@ class Api {
     return await this.delete(url)
   }
 
+  async createHeaders(headers) {
+    try {
+      const token = await AsyncStorage.getItem('@token')
+      if (token)
+        headers['x-access-token'] = token
+    } catch (e) {
+      console.log(e)
+    }
+    return headers
+  }
+
   async get(url) {
-    const headers = this.headers
+    const headers = await this.createHeaders(this.headers)
     return await fetch(url, {headers, cache: 'no-store'})
   }
   
   async post(url, body) {
-    const headers = this.headers
+    const headers = await this.createHeaders(this.headers)
     return await fetch(url, {headers, method: 'post', body: JSON.stringify(body)})
   }
   
   async put(url, body) {
-    const headers = this.headers
+    const headers = await this.createHeaders(this.headers)
     return await fetch(url, {headers, method: 'put', body: JSON.stringify(body)})
   }
 
   async delete(url, body) {
-    const headers = this.headers
+    const headers = this.createHeaders(this.headers)
     return await fetch(url, {headers, method: 'delete'})
   }
 
