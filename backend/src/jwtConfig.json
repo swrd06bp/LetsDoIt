@@ -1,5 +1,4 @@
 {
   "secret": "LY7FWTg54AaU8ZZ6bCjCW4gDb6zbAjybdAStp3wS5L4QdrqYQu",
-  "port": 3998,
-  "sessionTokenLife": 900
+  "sessionTokenLife": 999999999
 }

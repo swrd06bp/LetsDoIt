@@ -5,6 +5,7 @@ import TodayTaskList from './TodayTaskList'
 import WeeklyTaskList from './WeeklyTaskList'
 import TaskDescription from '../components/TaskDescription'
 import ProjectDescription from '../components/ProjectDescription'
+import TopNavigation from '../Navigation'
 import './HomePage.css'
 import Api from '../Api'
 
@@ -31,6 +32,7 @@ function HomePage() {
 
   return (
     <div className='HomePage' style={styles.HomePage}>
+      <TopNavigation />
       <div style={styles.titleContainer}>
         <div style={styles.title}>
           <h1>Let's do it, Boris!</h1>

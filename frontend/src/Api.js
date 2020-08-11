@@ -6,8 +6,39 @@ class Api {
     this.headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'x-access-token': localStorage.getItem('user')
     }
   }
+  
+  async status() {
+    const url = this.baseUrl + '/status'
+    const resp = await this.get(url)
+    if (resp.status !== 200) {
+      this.logout()
+
+      return false
+    } else {
+      return true
+    }
+  }
+  
+  logout() {
+    localStorage.removeItem('user')
+  }
+
+  async login(username, password) {
+    const url = this.baseUrl + '/login'
+    const body = {username, password}
+    const resp = await this.post(url, body)
+    if (resp.status === 200) {
+      const body = await resp.json()
+      localStorage.setItem('user', body.token)
+      return(true)
+    } else {
+      return(false)
+    }
+  }
+
 
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 
