@@ -21,7 +21,6 @@ function TopNavigation() {
           <Button variant="outline-success">Search</Button>
         </Form>
         <Nav className="sm-2" align="right">
-          <Nav.Link href="/">Data</Nav.Link>
           <NavDropdown title="Settings" id="basic-nav-dropdown">
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={clickLogoug}>Logout</NavDropdown.Item>

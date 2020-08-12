@@ -39,18 +39,21 @@ function SimpleTask (props) {
       onMouseOver={() => setIsOver(true)} 
       onMouseLeave={() => setIsOver(false)} 
       className='taskWrapper'
-      style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}
+      style={styles.wrapper}
     >
-      <div style={{display: 'flex', alignItems: 'center', width: '80%'}}> 
-      <input 
-        type='Checkbox'  
-        className='doneCheckbox' 
-        checked={props.item.doneAt ? true : false}
-        onChange={() => onCheckboxChange(props.item.doneAt)}
-      />
-      <div style={{display: 'flex', height: '100%', flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} onClick={() => props.onDescribe({task: props.task ? null : props.item, project: null, goal: null})}>
-      {props.item.content}
-      </div>
+      <div style={styles.infoContainer}> 
+        <input 
+          type='Checkbox'  
+          className='doneCheckbox' 
+          checked={props.item.doneAt ? true : false}
+          onChange={() => onCheckboxChange(props.item.doneAt)}
+        />
+        <div
+          style={{display: 'flex', height: '100%', flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} 
+          onClick={() => props.onDescribe({task: props.task ? null : props.item, project: null, goal: null})}
+        >
+          {props.item.content}
+        </div>
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
        <div>
@@ -70,5 +73,19 @@ function SimpleTask (props) {
     </div>
   )
 }
+
+const styles = {
+  wrapper: {
+    display: 'flex', 
+    alignItems: 'center', 
+    justifyContent: 'space-between',
+  },
+  infoContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '80%',
+  }
+}
+
 
 export default SimpleTask

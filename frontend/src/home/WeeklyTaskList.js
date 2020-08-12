@@ -4,6 +4,7 @@ import Api from '../Api.js'
 import TaskList from '../components/TaskList'
 import {
   weekDayDate,
+  todayDate,
   decomposeTasksWeek,
 } from '../utils'
 
@@ -165,6 +166,7 @@ function WeeklyTaskList (props) {
                     onUpdate={getTasks}
                     onDescribe={props.onDescribe}
                     task={props.task}
+                    isPast={id2DueDate('monday') < todayDate()}
                     scale={0.7}
                     projects={props.projects}
                     goals={props.goals}
@@ -179,6 +181,7 @@ function WeeklyTaskList (props) {
                     onUpdate={getTasks}
                     onDescribe={props.onDescribe}
                     task={props.task}
+                    isPast={id2DueDate('tuesday') < todayDate()}
                     scale={0.7}
                     projects={props.projects}
                     goals={props.goals}
@@ -194,6 +197,7 @@ function WeeklyTaskList (props) {
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
+                    isPast={id2DueDate('wednesday') < todayDate()}
                     projects={props.projects}
                     goals={props.goals}
                   />
@@ -206,6 +210,7 @@ function WeeklyTaskList (props) {
                     items={itemsThursday}
                     onUpdate={getTasks}
                     onDescribe={props.onDescribe}
+                    isPast={id2DueDate('thursday') < todayDate()}
                     task={props.task}
                     scale={0.7}
                     projects={props.projects}
@@ -219,6 +224,7 @@ function WeeklyTaskList (props) {
                     droppableId={"friday"}
                     items={itemsFriday}
                     onUpdate={getTasks}
+                    isPast={id2DueDate('friday') < todayDate()}
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
@@ -233,6 +239,7 @@ function WeeklyTaskList (props) {
                     droppableId={"saturday"}
                     items={itemsSaturday}
                     onUpdate={getTasks}
+                    isPast={id2DueDate('saturday') < todayDate()}
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
@@ -247,6 +254,7 @@ function WeeklyTaskList (props) {
                     droppableId={"sunday"}
                     items={itemsSunday}
                     onUpdate={getTasks}
+                    isPast={id2DueDate('sunday') < todayDate()}
                     onDescribe={props.onDescribe}
                     task={props.task}
                     scale={0.7}
