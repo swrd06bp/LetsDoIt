@@ -38,7 +38,15 @@ const sortProjectTasks = tasks => {
 
 const decomposeTasksToday = allTasks => {
     const unfinishedTasks = sortTasks(allTasks.filter( x => {
-      return x.dueDate && new Date(x.dueDate) < todayDate() && !x.doneAt
+      return ((x.dueDate 
+        && new Date(x.dueDate) >= todayDate() 
+        && new Date(x.dueDate) < tomorrowDate() 
+        && !x.doneAt) 
+          ||
+        (x.doneAt 
+        && new Date(x.doneAt) >= todayDate() 
+        && new Date(x.doneAt) < tomorrowDate()
+      ))
     }).map(x => {
       let task = x
       task.id = task._id
@@ -52,21 +60,35 @@ const decomposeTasksToday = allTasks => {
       return task
     }))
     const tomorrowTasks = sortTasks(allTasks.filter( x => {
-      return x.dueDate && new Date(x.dueDate) >= tomorrowDate() && new Date(x.dueDate) < dayAfterDate()
+      return ((x.dueDate 
+        && new Date(x.dueDate) >= tomorrowDate() 
+        && new Date(x.dueDate) < dayAfterDate() 
+        && !x.doneAt) 
+        ||
+        (x.doneAt 
+          && new Date(x.doneAt) >= tomorrowDate() 
+          && new Date(x.doneAt) < dayAfterDate()
+        )) 
     }).map(x => {
       let task = x
       task.id = task._id
       return task
     }))
     const upcomingTasks = sortTasks(allTasks.filter( x => {
-      return x.dueDate && new Date(x.dueDate) > dayAfterDate()
+      return ((x.dueDate 
+        && new Date(x.dueDate) > dayAfterDate() 
+        && !x.doneAt)
+        ||
+        (x.doneAt 
+        && new Date(x.doneAt) > dayAfterDate() 
+        ))
     }).map(x => {
       let task = x
       task.id = task._id
       return task
     }))
     const somedayTasks = sortTasks(allTasks.filter( x => {
-      return !x.dueDate
+      return !x.dueDate && !x.doneAt
     }).map(x => {
       let task = x
       task.id = task._id
