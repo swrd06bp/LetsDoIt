@@ -13,6 +13,7 @@ import DatePicker from 'react-native-datepicker'
 import CheckBox from '@react-native-community/checkbox'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Modal from 'react-native-modal'
+import { Dropdown } from 'react-native-material-dropdown'
 
 import Api from '../../Api'
 import ActionButton from '../ActionButton'
@@ -22,20 +23,24 @@ function TaskDescription (props) {
   const [content, setContent] = useState(props.task.content)
   const [note, setNote] = useState(props.task.note)
   const [dueDate, setDueDate] = useState(props.task.dueDate)
+  const [doneAt, setDoneAt] = useState(props.task.doneAt)
   const [list, setList] = useState(props.task.list)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const api = new Api()
 
   const onSave = async () => {
-    await api.updateTask(props.task._id, {content, dueDate, note, list})
+    await api.updateTask(props.task._id, {content, dueDate, note, list, doneAt})
     props.onDescribe(null)
     props.onUpdate()
   }
 
   const onDateChange = async (event, selectedDate) => {
     if (selectedDate) {
+      if (showDatePicker === 'dueDate') 
+        setDueDate(selectedDate)
+      if (showDatePicker === 'doneAt') 
+        setDoneAt(selectedDate)
       setShowDatePicker(false)
-      setDueDate(selectedDate)
     }
   }
   
@@ -54,7 +59,7 @@ function TaskDescription (props) {
       {showDatePicker && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={new Date(dueDate)}
+          value={showDatePicker === 'dueDate' ? new Date(dueDate): new Date(doneAt)}
           is24Hour={true}
           mode={'date'}
           display="default"
@@ -91,24 +96,48 @@ function TaskDescription (props) {
       <View>
         <View style={styles.dueContainer}>
           <View style={styles.dueContainer}>
-          <Text>Someday</Text>
-          <CheckBox 
-            value={dueDate ? false : true}
-            onChange={() => {
-            if (dueDate) 
-              setDueDate(null)
-            else
-              setDueDate(new Date())
-          }}/>
+            <Text>Someday</Text>
+            <CheckBox 
+              value={dueDate ? false : true}
+              onChange={() => {
+              if (dueDate) 
+                setDueDate(null)
+              else
+                setDueDate(new Date())
+            }}/>
           </View>
           {dueDate && (
             <View style={styles.dueContainer}>
             <Text>Due</Text>
             <TouchableOpacity
-              onPress={() => {setShowDatePicker(true)}}
+              onPress={() => {setShowDatePicker('dueDate')}}
               style={styles.dueDate}
             >
               <Text>{new Date(dueDate).toJSON().slice(0, 10)}</Text> 
+            </TouchableOpacity>
+            </View>
+          )}
+        </View>
+        <View style={styles.dueContainer}>
+          <View style={styles.dueContainer}>
+            <Text>Mark as done</Text>
+            <CheckBox 
+              value={doneAt ? true : false}
+              onChange={() => {
+              if (dueDate) 
+                setDoneAt(null)
+              else
+                setDoneAt(new Date())
+            }}/>
+          </View>
+          {doneAt && (
+            <View style={styles.dueContainer}>
+            <Text>Done at</Text>
+            <TouchableOpacity
+              onPress={() => {setShowDatePicker('doneAt')}}
+              style={styles.dueDate}
+            >
+              <Text>{new Date(doneAt).toJSON().slice(0, 10)}</Text> 
             </TouchableOpacity>
             </View>
           )}
