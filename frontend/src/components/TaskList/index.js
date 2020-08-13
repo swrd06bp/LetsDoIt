@@ -12,7 +12,7 @@ import { todayDate } from '../../utils'
 const grid = 2
 
 const getListStyle = (isDraggingOver, scale, isPast) => ({
-    background: isDraggingOver ? 'lightblue' : 'lightgrey',
+    background: isDraggingOver ? 'lightblue' : isPast ? 'repeating-linear-gradient(#BDBDBD, #A4A4A4)' : 'lightgrey',
     padding: grid,
     height: scale === 1 ? null : 400,
     overflow: scale === 1 ? null : 'auto',
@@ -25,7 +25,7 @@ const getItemStyle = (isDragging, draggableStyle, isPast) => ({
     margin: `0 0 ${grid}px 0`,
 
     // change background colour if dragging
-    background: isDragging ? 'lightgreen' : isPast ? '#e6e6ff' : 'white',
+    background: isDragging ? 'lightgreen' : isPast ? '#F2F2F2' : 'white',
     borderRadius: 10,
 
 

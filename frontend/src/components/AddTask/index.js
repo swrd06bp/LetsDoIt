@@ -6,8 +6,7 @@ import Api from '../../Api.js'
 function AddTask (props) {
   const [taskInput, setTaskInput] = useState('')
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
     const api = new Api() 
     if (taskInput) {
       await api.insertTask({
@@ -32,6 +31,10 @@ function AddTask (props) {
             placeholder="I want to.."
             value={taskInput}
             onChange={(event) => setTaskInput(event.target.value)}
+            onKeyUp={(event) => {
+              if (event.keyCode === 13)
+                onSubmit()
+            }}
           />
         <div style={styles.button} onClick={onSubmit}>
           Add

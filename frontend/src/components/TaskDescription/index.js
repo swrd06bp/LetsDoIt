@@ -44,14 +44,16 @@ function TaskDescription (props) {
 
   return (
     <div style={styles.wrapper}>
-      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-      <h3 style={styles.title}>Description</h3>
-        <button 
-          onClick={() => props.onDescribe({task: null, project: null, goal: null})}
-          style={styles.buttonBack}
-        > 
-          x
-        </button>
+      <div style={{display: 'flex', flexDirection: 'row',alignItems: 'center', justifyContent: 'space-between'}}>
+        <h3 style={styles.title}>Description</h3>
+        <div onClick={onDelete} style={styles.deleteButton}>
+          <img 
+            className='deleteTask' 
+            alt='delete' 
+            src='/trash.png'
+            width='15'
+            height='15'/>
+        </div>
       </div>
       <div style={styles.titleTaskContainer}>
           <textarea 
@@ -155,8 +157,10 @@ function TaskDescription (props) {
       </div>
 
       <div style={styles.footer}>
-        <button style={styles.buttonDelete} onClick={onDelete}>
-          Delete
+        <button style={styles.buttonCancel} onClick={() => props.onDescribe({
+          task: null, project: null, goal: null
+        })}>
+          Cancel
         </button>
         <button style={styles.buttonSave} onClick={onSave}>
           Save
@@ -242,7 +246,11 @@ const styles = {
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  buttonDelete: {
+  deleteButton: {
+    cursor: 'pointer',
+    marginRight: 5
+  },
+  buttonCancel: {
     background: '#F51111',
     height: 30,
     width: 60,
