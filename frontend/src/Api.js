@@ -38,6 +38,12 @@ class Api {
       return(false)
     }
   }
+  
+  async signup(name, username, password, captchaToken) {
+    const url = this.baseUrl + '/signup'
+    const body = {name, username, password, captchaToken}
+    return await this.post(url, body)
+  }
 
 
   async getTasks({from, until, unfinished, someday}) {

@@ -24,7 +24,8 @@ function wrapped(operation)  {
 // -----------------------------------------
 // tasks
 // -----------------------------------------
-async function getElems(client, {table, query}) {
+async function getElems(client, {table, query, userId}) {
+  const masterQuery = userId ? {'$and': [query, userId]} : query
   const db = client.db('toDoList')
   let collection = db.collection(table)
   return await collection.find(
@@ -33,25 +34,25 @@ async function getElems(client, {table, query}) {
   ).toArray()
 }
 
-async function writeElem(client, {table, task}) {
+async function writeElem(client, {table, elem, userId}) {
   const db = client.db('toDoList')
   let collection = db.collection(table)
-  return await collection.insertOne(task)
+  return await collection.insertOne({...elem, userId})
 }
 
-async function updateElem(client, {table, task, taskId}) {
+async function updateElem(client, {table, elem, elemId, userId}) {
   const db = client.db('toDoList')
   let collection = db.collection(table)
   return await collection.updateOne(
-    {"_id": new ObjectId(taskId)},
-    {$set: task}
+    {"_id": new ObjectId(elemId), userId},
+    {$set: elem}
   )
 }
 
-async function deleteElem(client, {table, taskId}) {
+async function deleteElem(client, {table, elemId, userId}) {
   const db = client.db('toDoList')
   let collection = db.collection(table)
-  return await collection.deleteOne({'_id': new ObjectId(taskId)})
+  return await collection.deleteOne({'_id': new ObjectId(elemId), userId})
 }
 
 

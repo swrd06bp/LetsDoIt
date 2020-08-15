@@ -20,6 +20,6 @@ module.exports = (req,res,next) => {
     return res.status(403).send({
         "error": true,
         "message": 'No token provided.'
-    });
+    })
   }
 }
