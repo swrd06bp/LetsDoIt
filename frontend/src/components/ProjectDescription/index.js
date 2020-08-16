@@ -16,6 +16,7 @@ function ProjectDescription (props) {
   const [dueDate, setDueDate] = useState(props.project.dueDate)
   const [doneAt, setDoneAt] = useState(props.project.doneAt)
   const [goalId, setGoalId] = useState(props.project.goalId)
+  const [list, setList] = useState(props.project.list)
   const [tasks, setTasks] = useState([])
   const api = new Api()
 
@@ -42,7 +43,10 @@ function ProjectDescription (props) {
   goalsOptions.unshift({value: null, label: 'none'})
 
   const onSave = async () => {
-    await api.updateProject(props.project._id, {content, dueDate, note, goalId, doneAt})
+    await api.updateProject(
+      props.project._id,
+      {content, dueDate, note, goalId, list, doneAt}
+    )
     props.onDescribe({project: null, project: null, goal: null})
   }
 
@@ -72,7 +76,12 @@ function ProjectDescription (props) {
           onChange={(event) => setContent(event.target.value)} 
           style={styles.titleTaskText}
         />
-          <ListButton item={props.project} scale={1.5} onUpdate={()=>{}} type={'project'}/>
+          <ListButton
+            item={props.project}
+            scale={1.5}
+            active={true}
+            onListChange={setList}
+          />
         </div>
 
      <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>

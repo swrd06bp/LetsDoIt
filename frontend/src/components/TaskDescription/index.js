@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Dropdown from 'react-dropdown'
 
 import ListButton from '../ListButton'
@@ -7,6 +7,8 @@ import ProjectShape from '../ProjectShape'
 
 import Api from '../../Api'
 
+
+
 function TaskDescription (props) {
   const [content, setContent] = useState(props.task.content)
   const [note, setNote] = useState(props.task.note)
@@ -14,8 +16,21 @@ function TaskDescription (props) {
   const [doneAt, setDoneAt] = useState(props.task.doneAt)
   const [projectId, setProjectId] = useState(props.task.projectId)
   const [goalId, setGoalId] = useState(props.task.goalId)
+  const [list, setList] = useState(props.task.list)
+  const wrappedRef = useRef(null)
+
   const api = new Api()
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (wrappedRef.current && !wrappedRef.current.contains(event.target)) {
+        props.onDescribe({task: null, project: null, goal: null})
+      }
+    } 
+    document.addEventListener("click", handleClickOutside)
+
+    return () => document.removeEventListener("click", handleClickOutside)
+  }, [wrappedRef])
 
   let projectsOptions = props.projects.map(x => ({value: x._id, label: x.content}))
   projectsOptions.unshift({value: null, label: 'none'})
@@ -31,7 +46,10 @@ function TaskDescription (props) {
   goalsOptions.unshift({value: null, label: 'none'})
 
   const onSave = async () => {
-    await api.updateTask(props.task.id, {content, dueDate, note, projectId, goalId, doneAt})
+    await api.updateTask(
+      props.task.id, 
+      {content, dueDate, note, projectId, goalId, list, doneAt}
+    )
     props.onDescribe({task: null, project: null, goal: null})
   }
 
@@ -43,7 +61,7 @@ function TaskDescription (props) {
 
 
   return (
-    <div style={styles.wrapper}>
+    <div ref={wrappedRef} style={styles.wrapper}>
       <div style={{display: 'flex', flexDirection: 'row',alignItems: 'center', justifyContent: 'space-between'}}>
         <h3 style={styles.title}>Description</h3>
         <div onClick={onDelete} style={styles.deleteButton}>
@@ -63,7 +81,12 @@ function TaskDescription (props) {
             onChange={(event) => setContent(event.target.value)} 
             style={styles.titleTaskText}
           />
-          <ListButton item={props.task} scale={1.5} onUpdate={()=>{}} />
+          <ListButton 
+            item={props.task}
+            scale={1.5}
+            active={true}
+            onListChange={setList}
+          />
       </div>
       <div>
        <h4 style={styles.noteTitle}>

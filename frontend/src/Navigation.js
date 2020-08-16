@@ -13,13 +13,9 @@ function TopNavigation() {
   
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="/">LetsDoIt</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
-        <Form inline>
-          <FormControl type="text" placeholder="Search" className="sm-2" />
-          <Button variant="outline-success">Search</Button>
-        </Form>
+      <Navbar.Brand href="/">LetsDoIt</Navbar.Brand>
         <Nav className="sm-2" align="right">
           <NavDropdown title="Settings" id="basic-nav-dropdown">
             <NavDropdown.Divider />

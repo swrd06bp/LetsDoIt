@@ -58,7 +58,16 @@ function SimpleTask (props) {
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
        <div>
           {!props.hideList && (
-          <ListButton scale={props.scale} item={props.item} onUpdate={props.onUpdate}/>
+            <ListButton
+              scale={props.scale}
+              active={true}
+              item={props.item}
+              onListChange={ (list) => {
+                const api = new Api()
+                api.updateTask(props.item.id, {list})
+                  .then(props.onUpdate())
+              }}
+            />
           )}
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <ProjectShape colorCode={projectColorCode} />

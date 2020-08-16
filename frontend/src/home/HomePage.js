@@ -82,14 +82,19 @@ function HomePage() {
         {isWeekly && (
           <WeeklyTaskList 
             task={describeElem.task} 
-            onDescribe={setDescribeElem}
+            onDescribe={(value) => {
+              setDescribeElem(value)
+              getData()
+            }}
             projects={allProjects}
             goals={allGoals}
           />
         )}
         {describeElem.task && (
           <TaskDescription
-            onDescribe={setDescribeElem}
+            onDescribe={(value) => {
+              setDescribeElem(value)
+            }}
             task={describeElem.task}
             projects={allProjects}
             goals={allGoals}
