@@ -29,13 +29,13 @@ router.post('/login', async (req, res) => {
     return
   }
   
-  const {userId, encryptedPass} = user[0]
+  const {_id, encryptedPass} = user[0]
 
 
   if (encryption.decrypt(encryptedPass) !== password) {
     res.status(401).send('Wrong username of password')
   } else {
-    const token = jwt.sign({userId}, jwtConfig.secret, { expiresIn: jwtConfig.sessionTokenLife})
+    const token = jwt.sign({userId: _id}, jwtConfig.secret, { expiresIn: jwtConfig.sessionTokenLife})
     const response = {
         "status": "Logged in",
         "token": token,
