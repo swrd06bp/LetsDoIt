@@ -78,6 +78,14 @@ router.get('/status', (req, res) => {
   res.end()
 })
 
+router.get('/user', async (req, res) => {
+  const userId = req.decoded
+  const user = await dbClient.getElems({table: 'users', query: {}, userId})
+  res.status(200)
+  res.json(user)
+  res.end()
+})
+
 
 router.post('/task', async (req, res) => {
   const task = req.body

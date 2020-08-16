@@ -45,6 +45,10 @@ class Api {
     return await this.post(url, body)
   }
 
+  async getName() {
+    const url = this.baseUrl + '/user'
+    return await this.get(url)
+  }
 
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 

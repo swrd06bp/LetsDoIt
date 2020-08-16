@@ -15,6 +15,7 @@ function HomePage() {
   const [isWeekly, setIsWeekly] = useState(false)
   const [allGoals, setAllGoals] = useState([])
   const [allProjects, setAllProjects] = useState([])
+  const [name, setName] = useState('')
   const api = new Api()
  
   useEffect(() => {
@@ -26,8 +27,11 @@ function HomePage() {
     const resultGoals = await respGoals.json()
     const respProjects = await api.getProjects()
     const resultProjects = await respProjects.json()
+    const respName = await api.getName()
+    const resultName = await respName.json()
     setAllGoals(resultGoals)
     setAllProjects(resultProjects)
+    setName(resultName[0].name)
   }
 
   return (
@@ -35,7 +39,7 @@ function HomePage() {
       <TopNavigation />
       <div style={styles.titleContainer}>
         <div style={styles.title}>
-          <h1>Let's do it, Boris!</h1>
+          <h1>Let's do it{name && ', ' + name}!</h1>
         </div>
         <div>
           Show weekly 
