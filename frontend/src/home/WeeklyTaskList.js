@@ -143,7 +143,7 @@ function WeeklyTaskList (props) {
 
 
   return (
-    <div style={{height: '100%'}}>
+    <div style={styles.wrapper}>
       <div style={{display: 'flex', flexDirection: 'row'}}>
         <button onClick={() => {getOtherWeek(0)}}>
           now
@@ -269,10 +269,16 @@ function WeeklyTaskList (props) {
 }
 
 const styles = {
+  wrapper: {
+    height: 600 * window.screen.availHeight / 1100,
+    background: 'white',
+    borderRadius: 20,
+    padding: 20,
+    boxShadow: '2px 4px #888888',
+  },
   calendarContainer: {
     display: 'flex',
     flexDirection: 'row',
-    height: '50%',
   }
 }
 
