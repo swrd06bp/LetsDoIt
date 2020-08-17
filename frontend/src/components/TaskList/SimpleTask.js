@@ -49,8 +49,8 @@ function SimpleTask (props) {
           onChange={() => onCheckboxChange(props.item.doneAt)}
         />
         <div
-          style={{display: 'flex', height: '100%', flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} 
-          onClick={() => props.onDescribe({task: props.task ? null : props.item, project: null, goal: null})}
+          style={{display: 'flex', height: '100%', marginLeft: 5, flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} 
+          onClick={() => {props.onDescribe({task: props.item, project: null, goal: null})}}
         >
           {props.item.content}
         </div>

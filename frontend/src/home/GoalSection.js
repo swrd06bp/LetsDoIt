@@ -20,6 +20,8 @@ function GoalSection (props) {
     setModalOpen(null)
   }
 
+  console.log(window.screen)
+
   return (
     <div>
       <Modal
@@ -78,12 +80,13 @@ function GoalSection (props) {
 const styles = {
   wrapper: {
     background: 'white',
-    width: 250,
+    width: 350 * window.screen.availWidth / 1900,
     display: 'flex',
     flexDirection: 'column',
-    height: '60%',
+    height: 550* window.screen.availHeight / 1100,
     borderRadius: 20,
     margin: 30,
+    boxShadow: '2px 4px grey',
   },
   content : {
     top: '50%',

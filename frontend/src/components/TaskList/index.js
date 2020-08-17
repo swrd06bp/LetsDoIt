@@ -60,11 +60,11 @@ function TaskList (props) {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              style={getItemStyle(
+                              style={{...getItemStyle(
                                   isSelected,
                                   provided.draggableProps.style,
                                   props.isPast
-                              )}
+                              ), boxShadow: !item.doneAt ? '1px 2px grey' : null}}
                             >
                               {!props.projectTask && (
                                 <SimpleTask 

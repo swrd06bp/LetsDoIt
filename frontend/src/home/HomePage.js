@@ -34,6 +34,7 @@ function HomePage() {
     setName(resultName[0].name)
   }
 
+
   return (
     <div className='HomePage' style={styles.HomePage}>
       <TopNavigation />
@@ -51,10 +52,10 @@ function HomePage() {
         </div>
       </div>
       
-      <div style={{display: 'flex'}}>
+      <div style={styles.mainCantainer}>
         
         {!isWeekly && (
-          <div style={styles.mainContainer}>
+          <div style={styles.toDoContainer}>
             <GoalSection 
               goals={allGoals}
               projects={allProjects}
@@ -112,25 +113,31 @@ function HomePage() {
 
 const styles = {
   HomePage: {
-    height: '100%',
-    width: '100%',
     background: 'rgba(196, 196, 196, 0.21)',
     display: 'flex',
     flexDirection: 'column',
+    top: 0,
+    height: window.screen.availHeight
   },
   titleContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-around',
+    margin: 50,
   },
   title: {
     display: 'flex',
-    width: '50%',
     marginLeft: 20,
   },
-  mainContainer: {
+  mainCantainer: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  toDoContainer: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'center',
   },
 }
 

@@ -205,12 +205,13 @@ const styles = {
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    width: 600,
-    height: '70%',
+    width: 700 * window.screen.availWidth / 1900,
+    height: 550* window.screen.availHeight / 1100,
     margin: 30,
     background: 'white',
     borderRadius: 20,
     justifyContent: 'center',
+    boxShadow: '2px 4px grey',
   },
   title: {
     fontSize: 25,

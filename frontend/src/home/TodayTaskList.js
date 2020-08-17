@@ -194,10 +194,11 @@ function TodayTaskList (props) {
 const styles = {
   wrapper: {
     background: 'white',
-    width: 600,
-    height: '60%',
+    width: 700 * window.screen.availWidth / 1900,
+    height: 550* window.screen.availHeight / 1100,
     margin: 30,
     borderRadius: 20,
+    boxShadow: '2px 4px #888888',
   },
   allTasksContainer: {
     overflow: 'scroll',

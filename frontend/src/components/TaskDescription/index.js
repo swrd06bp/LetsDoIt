@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Dropdown from 'react-dropdown'
+import Modal from 'react-modal'
 
 import ListButton from '../ListButton'
 import GoalShape from '../GoalShape'
@@ -17,20 +18,13 @@ function TaskDescription (props) {
   const [projectId, setProjectId] = useState(props.task.projectId)
   const [goalId, setGoalId] = useState(props.task.goalId)
   const [list, setList] = useState(props.task.list)
-  const wrappedRef = useRef(null)
 
   const api = new Api()
-
+  
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (wrappedRef.current && !wrappedRef.current.contains(event.target)) {
-        props.onDescribe({task: null, project: null, goal: null})
-      }
-    } 
-    document.addEventListener("click", handleClickOutside)
+    Modal.setAppElement('body')
+  }, [])
 
-    return () => document.removeEventListener("click", handleClickOutside)
-  }, [wrappedRef])
 
   let projectsOptions = props.projects.map(x => ({value: x._id, label: x.content}))
   projectsOptions.unshift({value: null, label: 'none'})
@@ -61,7 +55,13 @@ function TaskDescription (props) {
 
 
   return (
-    <div ref={wrappedRef} style={styles.wrapper}>
+      <Modal
+        isOpen={true}
+        onRequestClose={() => {props.onDescribe({task: null, project: null, goal: null})}}
+        style={styles}
+        contentLabel="Example Modal"
+      >
+    <div style={styles.wrapper}>
       <div style={{display: 'flex', flexDirection: 'row',alignItems: 'center', justifyContent: 'space-between'}}>
         <h3 style={styles.title}>Description</h3>
         <div onClick={onDelete} style={styles.deleteButton}>
@@ -190,6 +190,7 @@ function TaskDescription (props) {
         </button>
       </div>
     </div>
+    </Modal>
   )
 }
 
@@ -290,6 +291,15 @@ const styles = {
     fontWeight: 'bold',
     borderWidth: 0,
     borderRadius: 20,
+  },
+  content : {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    borderRadius: 20,
+    transform: 'translate(-50%, -50%)'
   },
 }
 
