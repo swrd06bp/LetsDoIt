@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import Api from '../Api.js'
 import TaskList from '../components/TaskList'
+import { getDimRatio } from '../DynamicSizing'
 import {
   weekDayDate,
   todayDate,
@@ -143,7 +144,7 @@ function WeeklyTaskList (props) {
 
 
   return (
-    <div style={styles.wrapper}>
+    <div style={styles().wrapper}>
       <div style={{display: 'flex', flexDirection: 'row'}}>
         <button onClick={() => {getOtherWeek(0)}}>
           now
@@ -156,8 +157,8 @@ function WeeklyTaskList (props) {
         </button>
       </div>
             <DragDropContext onDragEnd={onDragEnd}>
-              <div style={styles.calendarContainer}>
-                <div style={{textAlign: 'center', width: 150}}>
+              <div style={styles().calendarContainer}>
+                <div style={styles().dayContainer}>
                   <h2>Monday</h2>
                   <h5>{id2DueDate('monday').toLocaleDateString()}</h5>
                   <TaskList
@@ -172,7 +173,7 @@ function WeeklyTaskList (props) {
                     goals={props.goals}
                   />
                 </div>
-                <div style={{textAlign: 'center', width: 150}}>
+                <div style={styles().dayContainer}>
                   <h2>Tuesday</h2>
                   <h5>{id2DueDate('tuesday').toLocaleDateString()}</h5>
                   <TaskList
@@ -187,7 +188,7 @@ function WeeklyTaskList (props) {
                     goals={props.goals}
                   />
                 </div>
-                <div style={{textAlign: 'center', width: 150}}>
+                <div style={styles().dayContainer}>
                   <h2>Wednesday</h2>
                   <h5>{id2DueDate('wednesday').toLocaleDateString()}</h5>
                   <TaskList
@@ -202,7 +203,7 @@ function WeeklyTaskList (props) {
                     goals={props.goals}
                   />
                 </div>
-                <div style={{textAlign: 'center', width: 150}}>
+                <div style={styles().dayContainer}>
                   <h2>Thursday</h2>
                   <h5>{id2DueDate('thursday').toLocaleDateString()}</h5>
                   <TaskList
@@ -217,7 +218,7 @@ function WeeklyTaskList (props) {
                     goals={props.goals}
                   />
                 </div>
-                <div style={{textAlign: 'center', width: 150}}>
+                <div style={styles().dayContainer}>
                   <h2>Friday</h2>
                   <h5>{id2DueDate('friday').toLocaleDateString()}</h5>
                   <TaskList
@@ -232,7 +233,7 @@ function WeeklyTaskList (props) {
                     goals={props.goals}
                   />
                 </div>
-                <div style={{textAlign: 'center', width: 150}}>
+                <div style={styles().dayContainer}>
                   <h2>Saturday</h2>
                   <h5>{id2DueDate('saturday').toLocaleDateString()}</h5>
                   <TaskList
@@ -247,7 +248,7 @@ function WeeklyTaskList (props) {
                     goals={props.goals}
                   />
                 </div>
-                <div style={{textAlign: 'center', width: 150}}>
+                <div style={styles().dayContainer}>
                   <h2>Sunday</h2>
                   <h5>{id2DueDate('sunday').toLocaleDateString()}</h5>
                   <TaskList
@@ -268,19 +269,23 @@ function WeeklyTaskList (props) {
   )
 }
 
-const styles = {
+const styles = () => ({
   wrapper: {
-    height: 600 * window.screen.availHeight / 1100,
+    height: 600 * getDimRatio().Y,
     background: 'white',
     borderRadius: 20,
     padding: 20,
     boxShadow: '2px 4px #888888',
   },
+  dayContainer: {
+    textAlign: 'center', 
+    width: 150 * getDimRatio().X,
+  },
   calendarContainer: {
     display: 'flex',
     flexDirection: 'row',
   }
-}
+})
 
 
 

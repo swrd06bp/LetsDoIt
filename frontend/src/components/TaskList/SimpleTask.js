@@ -5,6 +5,7 @@ import ProjectShape from '../ProjectShape'
 import GoalShape from '../GoalShape'
 import ListButton from '../ListButton'
 import Api from '../../Api'
+import { getDimRatio } from '../../DynamicSizing'
 import { todayDate } from '../../utils'
 
 
@@ -49,7 +50,7 @@ function SimpleTask (props) {
           onChange={() => onCheckboxChange(props.item.doneAt)}
         />
         <div
-          style={{display: 'flex', height: '100%', marginLeft: 5, flexGrow: 1, fontSize:13 * props.scale, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} 
+          style={{display: 'flex', height: '100%', marginLeft: 5, flexGrow: 1, fontSize:15 * props.scale * getDimRatio().X, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} 
           onClick={() => {props.onDescribe({task: props.item, project: null, goal: null})}}
         >
           {props.item.content}

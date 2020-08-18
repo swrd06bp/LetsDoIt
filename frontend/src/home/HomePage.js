@@ -6,6 +6,7 @@ import WeeklyTaskList from './WeeklyTaskList'
 import TaskDescription from '../components/TaskDescription'
 import ProjectDescription from '../components/ProjectDescription'
 import TopNavigation from '../Navigation'
+import { getDimScreen, getDimRatio } from '../DynamicSizing'
 import './HomePage.css'
 import Api from '../Api'
 
@@ -36,13 +37,13 @@ function HomePage() {
 
 
   return (
-    <div className='HomePage' style={styles.HomePage}>
+    <div className='HomePage' style={styles().HomePage}>
       <TopNavigation />
-      <div style={styles.titleContainer}>
-        <div style={styles.title}>
-          <h1>Let's do it{name && ', ' + name}!</h1>
+      <div style={styles().titleContainer}>
+        <div style={styles().title}>
+          Let's do it{name && ', ' + name}!
         </div>
-        <div>
+        <div style={styles().weeklyToogle}>
           Show weekly 
           <input 
             type='checkbox'
@@ -52,10 +53,10 @@ function HomePage() {
         </div>
       </div>
       
-      <div style={styles.mainCantainer}>
+      <div style={styles().mainCantainer}>
         
         {!isWeekly && (
-          <div style={styles.toDoContainer}>
+          <div style={styles().toDoContainer}>
             <GoalSection 
               goals={allGoals}
               projects={allProjects}
@@ -111,13 +112,13 @@ function HomePage() {
 
 }
 
-const styles = {
+const styles = () => ({
   HomePage: {
     background: 'rgba(196, 196, 196, 0.21)',
     display: 'flex',
     flexDirection: 'column',
     top: 0,
-    height: window.screen.availHeight
+    height: getDimScreen().Y,
   },
   titleContainer: {
     display: 'flex',
@@ -129,6 +130,10 @@ const styles = {
   title: {
     display: 'flex',
     marginLeft: 20,
+    fontSize: 40 * getDimRatio().X,
+  },
+  weeklyToogle: {
+    fontSize: 14 * getDimRatio().X
   },
   mainCantainer: {
     display: 'flex',
@@ -139,6 +144,6 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'center',
   },
-}
+})
 
 export default HomePage

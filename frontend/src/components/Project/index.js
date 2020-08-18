@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ProjectShape from '../ProjectShape'
 import ListButton from '../ListButton'
 
+import { getDimRatio } from '../../DynamicSizing'
 import Api from '../../Api'
 
 function Project (props) {
@@ -9,7 +10,7 @@ function Project (props) {
   return (
     <div 
       style={{
-        ...styles.wrapper,
+        ...styles().wrapper,
         background: props.project && props.project._id === props.item._id ? 'lightgreen' : 'white'
       }}
       onClick={() => props.onDescribe({
@@ -18,20 +19,20 @@ function Project (props) {
         project: props.project ? null : props.item,
       })}
     >
-      <div style={styles.firstPartContainer}>
-        <div style={styles.frontContainer}>
+      <div style={styles().firstPartContainer}>
+        <div style={styles().frontContainer}>
           <ProjectShape colorCode={props.item.colorCode} />
         </div>
         {props.item.content}
       </div>
-      <div style={styles.backContainer}>
+      <div style={styles().backContainer}>
         <ListButton 
           item={props.item}
           type={'project'}
           scale={0.6}
           onUpdate={() => {}}
         />
-        <div style={styles.dueDate}>
+        <div style={styles().dueDate}>
           {props.item.dueDate ? props.item.dueDate.slice(0, 10) : 'Someday'}
         </div>
       </div>
@@ -40,7 +41,7 @@ function Project (props) {
 }
 
 
-const styles = {
+const styles = () => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'row',
@@ -51,6 +52,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    fontSize: 15 * getDimRatio().X,
   },
   frontContainer: {
     display: 'flex',
@@ -71,7 +73,7 @@ const styles = {
     borderRadius: 20,
     background: 'lightgrey'
   }
-}
+})
 
 export default Project
 

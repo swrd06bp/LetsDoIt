@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import GoalShape from '../GoalShape'
+import { getDimRatio } from '../../DynamicSizing'
 import Api from '../../Api'
 
 function Goal (props) {
@@ -24,7 +25,7 @@ function Goal (props) {
       })}
     >
     <GoalShape colorCode={props.item.colorCode} />
-    <div>
+    <div style={{fontSize: 15 * getDimRatio().X}}>
       {props.item.content}
     </div>
       <div style={{visibility: isOver ? 'visible': 'hidden', cursor: 'pointer'}} onClick={onDelete}>

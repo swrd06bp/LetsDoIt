@@ -5,6 +5,7 @@ import Goal from '../components/Goal'
 import Project from '../components/Project'
 import AddGoal from '../components/AddGoal'
 import AddProject from '../components/AddProject'
+import { getDimRatio } from '../DynamicSizing'
 import Api from '../Api'
 
 
@@ -16,11 +17,11 @@ function ToolSection (props) {
   }
 
   return (
-    <div style={styles.toolContainer}>
-      <div onClick={onChangeCompleted}  style={styles.toolButton}>
+    <div style={styles().toolContainer}>
+      <div onClick={onChangeCompleted}  style={styles().toolButton}>
        {props.showCompleted ? 'Show pending' : 'Show completed'}
       </div>
-      <div onClick={props.onNew} style={styles.toolButton}>
+      <div onClick={props.onNew} style={styles().toolButton}>
         New
       </div>
     </div>
@@ -49,7 +50,7 @@ function GoalSection (props) {
       <Modal
         isOpen={modalOpen ? true : false}
         onRequestClose={() => {setModalOpen(null)}}
-        style={styles}
+        style={styles()}
         contentLabel="Example Modal"
       >
         { modalOpen === 'goals' && (
@@ -59,10 +60,10 @@ function GoalSection (props) {
           <AddProject onUpdate={getData}/>
         )}
       </Modal>
-    <div style={styles.wrapper}>
-      <h3 style={styles.titleSection}>Goals +</h3>
+    <div style={styles().wrapper}>
+      <h3 style={styles().titleSection}>Goals +</h3>
       <ToolSection showCompleted={showCompletedGoals} onChange={setShowCompletedGoals} onNew={() => {setModalOpen('goals')}}/>
-      <div style={styles.goalSection}>
+      <div style={styles().goalSection}>
       {props.goals.map((item) => {
         if ((item.doneAt === null) === (!showCompletedGoals))
           return (
@@ -76,9 +77,9 @@ function GoalSection (props) {
           )
       })}
       </div>
-      <h3 style={styles.titleSection}>Projects +</h3>
+      <h3 style={styles().titleSection}>Projects +</h3>
       <ToolSection showCompleted={showCompletedProjects} onChange={setShowCompletedProjects} onNew={() => {setModalOpen('projects')}} />
-      <div style={styles.projectSection}>
+      <div style={styles().projectSection}>
         {props.projects.map((item) => {
         if ((item.doneAt === null) === (!showCompletedProjects))
           return (
@@ -99,13 +100,13 @@ function GoalSection (props) {
 }
 
 
-const styles = {
+const styles = () => ({
   wrapper: {
     background: 'white',
-    width: 350 * window.screen.availWidth / 1900,
+    width: 350 * getDimRatio().X,
     display: 'flex',
     flexDirection: 'column',
-    height: 550* window.screen.availHeight / 1100,
+    height: 550* getDimRatio().Y,
     borderRadius: 20,
     margin: 30,
     boxShadow: '2px 4px grey',
@@ -115,6 +116,7 @@ const styles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
+    borderRadius: 20,
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)'
   },
@@ -155,6 +157,6 @@ const styles = {
     marginLeft: 10,
     overflow: 'scroll',
   },
-}
+})
 
 export default GoalSection

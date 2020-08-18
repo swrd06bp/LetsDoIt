@@ -7,6 +7,7 @@ import ListButton from '../ListButton'
 import SimpleTask from './SimpleTask'
 import ProjectTask from './ProjectTask'
 import Api from '../../Api'
+import { getDimRatio } from '../../DynamicSizing'
 import { todayDate } from '../../utils'
 
 const grid = 2
@@ -14,7 +15,7 @@ const grid = 2
 const getListStyle = (isDraggingOver, scale, isPast) => ({
     background: isDraggingOver ? 'lightblue' : isPast ? 'repeating-linear-gradient(#BDBDBD, #A4A4A4)' : 'lightgrey',
     padding: grid,
-    height: scale === 1 ? null : 400,
+    height: scale === 1 ? null : 400 * getDimRatio().Y,
     overflow: scale === 1 ? null : 'auto',
 })
 

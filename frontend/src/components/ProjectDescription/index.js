@@ -7,6 +7,7 @@ import TaskList from '../TaskList'
 import ListButton from '../ListButton'
 import GoalShape from '../GoalShape'
 import Api from '../../Api'
+import { getDimScreen, getDimRatio } from '../../DynamicSizing'
 import { sortProjectTasks} from '../../utils'
 
 
@@ -55,10 +56,10 @@ function ProjectDescription (props) {
     props.onDescribe({project: null, project: null, goal: null})
   }
   return (
-    <div style={styles.wrapper}>
+    <div style={styles().wrapper}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-        <h3 style={styles.title}>Description</h3>
-        <div onClick={onDelete} style={styles.deleteButton}>
+        <h3 style={styles().title}>Description</h3>
+        <div onClick={onDelete} style={styles().deleteButton}>
           <img 
             className='deleteTask' 
             alt='delete' 
@@ -68,13 +69,13 @@ function ProjectDescription (props) {
         </div>
       </div>
 
-      <div style={styles.titleTaskContainer}>
+      <div style={styles().titleTaskContainer}>
         <input 
           type='text' 
           name='content'
           value={content} 
           onChange={(event) => setContent(event.target.value)} 
-          style={styles.titleTaskText}
+          style={styles().titleTaskText}
         />
           <ListButton
             item={props.project}
@@ -86,10 +87,10 @@ function ProjectDescription (props) {
 
      <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
       <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
-       <h4 style={styles.noteTitle}>
+       <h4 style={styles().noteTitle}>
         Status
        </h4>
-        <div style={styles.checkboxContainer}>
+        <div style={styles().checkboxContainer}>
           Someday
           <div>
             <input
@@ -104,7 +105,7 @@ function ProjectDescription (props) {
             />
             </div>
           {dueDate && (
-            <div style={styles.checkboxContainer}>
+            <div style={styles().checkboxContainer}>
           Due 
           <input 
             type='date' 
@@ -116,7 +117,7 @@ function ProjectDescription (props) {
         </div>
         
         <div>
-            <div style={styles.checkboxContainer}>
+            <div style={styles().checkboxContainer}>
             Mark as done
           <input
             type='checkbox'
@@ -129,7 +130,7 @@ function ProjectDescription (props) {
             }}
           />
           {doneAt && (
-            <div style={styles.checkboxContainer}>
+            <div style={styles().checkboxContainer}>
               Done at 
               <input 
                 type='date' 
@@ -141,7 +142,7 @@ function ProjectDescription (props) {
           </div>
         </div>
 
-       <div style={styles.linkContainer}>
+       <div style={styles().linkContainer}>
         <div>
         Link to:
         </div>
@@ -151,16 +152,16 @@ function ProjectDescription (props) {
        </div>
 
       <div>
-        <h4 style={styles.noteTitle}>
+        <h4 style={styles().noteTitle}>
           Note
         </h4>
-        <div style={styles.noteContainer}>
+        <div style={styles().noteContainer}>
           <textarea 
             type='text' 
             name='note'
             value={note ? note : ''} 
             onChange={(event) => setNote(event.target.value)} 
-            style={styles.noteText}
+            style={styles().noteText}
           />
        </div>
       </div>
@@ -168,11 +169,11 @@ function ProjectDescription (props) {
     </div>
       <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
         <DragDropContext onDragEnd={() => {}}>
-        <div style={styles.taskListTitle}>
-          <h4 style={styles.noteTitle}>Tasks</h4>
-          <h4 style={styles.noteTitle}>{tasks.filter(x => x.doneAt).length}/{tasks.length}</h4>
+        <div style={styles().taskListTitle}>
+          <h4 style={styles().noteTitle}>Tasks</h4>
+          <h4 style={styles().noteTitle}>{tasks.filter(x => x.doneAt).length}/{tasks.length}</h4>
         </div>
-        <div style={styles.taskList}>
+        <div style={styles().taskList}>
         <TaskList
           droppableId={"tasks"}
           items={tasks}
@@ -187,13 +188,13 @@ function ProjectDescription (props) {
       </div>
     </div>
 
-      <div style={styles.footer}>
-        <button style={styles.buttonCancel} onClick={() => props.onDescribe({
+      <div style={styles().footer}>
+        <button style={styles().buttonCancel} onClick={() => props.onDescribe({
           task: null, project: null, goal: null
         })}>
           Cancel
         </button>
-        <button style={styles.buttonSave} onClick={onSave}>
+        <button style={styles().buttonSave} onClick={onSave}>
           Save
         </button>
       </div>
@@ -201,12 +202,12 @@ function ProjectDescription (props) {
   )
 }
 
-const styles = {
+const styles = () => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    width: 700 * window.screen.availWidth / 1900,
-    height: 550* window.screen.availHeight / 1100,
+    width: 700 * getDimRatio().X,
+    height: 550* getDimRatio().Y,
     margin: 30,
     background: 'white',
     borderRadius: 20,
@@ -214,13 +215,13 @@ const styles = {
     boxShadow: '2px 4px grey',
   },
   title: {
-    fontSize: 25,
+    fontSize: 25 * getDimRatio().X,
     marginLeft: 10,
     fontWeight: 'normal',
   },
   buttonBack: {
-    height: 20,
-    width: 20,
+    height: 20 * getDimRatio().X,
+    width: 20 * getDimRatio().X,
   },
   titleTaskContainer: {
     background: 'rgba(196, 196, 196, 0.21)',
@@ -230,7 +231,7 @@ const styles = {
   },
   titleTaskText: {
     background: 'transparent',
-    fontSize: 20,
+    fontSize: 20 * getDimRatio().X,
     width: '100%',
     justifyContent: 'center',
     borderWidth: 0,
@@ -247,13 +248,13 @@ const styles = {
     height: '100%',
   },
   noteTitle: {
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 10* getDimRatio().X,
+    marginRight: 10 * getDimRatio().X,
     color: '#32A3BC',
   },
   noteText: {
     width: '90%',
-    height: 120,
+    height: 120 * getDimRatio().Y,
   },
   noteContainer: {
     display: 'flex',
@@ -262,7 +263,7 @@ const styles = {
   },
   checkboxContainer: {
     marginLeft: 10,
-    fontSize: 13,
+    fontSize: 13 * getDimRatio(),
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -271,7 +272,6 @@ const styles = {
     marginLeft: 10,
     marginTop: 10,
     display: 'flex',
-    fontSize: 13,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -298,8 +298,8 @@ const styles = {
   },
   buttonCancel: {
     background: '#F51111',
-    height: 30,
-    width: 60,
+    height: 30* getDimRatio().Y,
+    width: 60 * getDimRatio().X,
     color: 'white',
     fontWeight: 'bold',
     borderWidth: 0,
@@ -307,13 +307,13 @@ const styles = {
   },
   buttonSave: {
     background: '#32A3BC',
-    height: 30,
-    width: 60,
+    height: 30* getDimRatio().Y,
+    width: 60 * getDimRatio().X,
     color: 'white',
     fontWeight: 'bold',
     borderWidth: 0,
     borderRadius: 20,
   },
-}
+})
 
 export default ProjectDescription

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { loadReCaptcha } from 'react-recaptcha-google'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -7,14 +7,19 @@ import HomePage from './home/HomePage'
 import LoginPage from './login/LoginPage'
 import SignupPage from './signup/SignupPage'
 import { PrivateRoute } from './PrivateRoute'
+import { DynamicResize } from './DynamicSizing'
 
 
 function App() {
 
+  const [, forceUpdate] = useReducer(x => x + 1, 0)
+
   useEffect(() => {
     loadReCaptcha()
+    DynamicResize(forceUpdate)
   }, [])
 
+console.log('lskdfjlskd')
   return (
     <div>
       <Router>

@@ -1,43 +1,30 @@
 import React, { useState } from 'react'
 
-import Api from '../../Api.js'
+import SmarterForm from './SmarterForm'
+
 
 
 function AddGoal (props) {
-  const [goalInput, setGoalInput] = useState('')
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const api = new Api() 
-    if (goalInput) {
-      await api.insertGoal({
-        content: goalInput,
-        list: 'Work',
-        dueDate: new Date().toJSON(),
-      })
-    }
-    setGoalInput('')
-    props.onUpdate()
-  }
-
+  const [showBehaviorForm, setShowBehaviorForm] = useState(false)
 
   return (
-    <div>
-    <form onSubmit={onSubmit}>
-      <label>
-        <input 
-          type="text"
-          name="goal"
-          placeholder="I want to.."
-          value={goalInput}
-          onChange={(event) => setGoalInput(event.target.value)}
-        />
-      </label>
-      <input type="submit" value="Add" />
-    </form>
+    <div style={styles.wrapper}>
+      {!showBehaviorForm && (
+        <SmarterForm onNext={() => setShowBehaviorForm(true)}/>
+      )}
     </div>
   )
 }
+
+const styles = {
+  wrapper: {
+    display: 'flex',
+    width: 1000,
+    height: 800,
+  }
+}
+
 
 export default AddGoal
 
