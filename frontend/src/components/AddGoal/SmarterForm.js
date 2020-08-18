@@ -1,11 +1,32 @@
 import React, { useState } from 'react'
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
 
 import Api from '../../Api.js'
 
 
 function SmarterForm (props) {
   const [goalInput, setGoalInput] = useState('')
-  const [goalDueDate, setGoalDueDate] = useState(new Date())
+  const [dateSelectedOption, setDateSelectedOption] = useState('In 5 years')
+  const [goalDueDate, setGoalDueDate] = useState(new Date(new Date().getFullYear() + 5, new Date().getMonth(), new Date().getDay()))
+
+  const allDateOptions = [{
+    value: new Date(new Date().getFullYear() + 5, new Date().getMonth(), new Date().getDay()),
+    label: 'In 5 years'
+  },
+    {
+    value: new Date(new Date().getFullYear() + 1, new Date().getMonth(), new Date().getDay()),
+      label: 'Next year'
+    },
+    {
+      value: new Date(new Date().getFullYear(), new Date().getMonth() + 6, new Date().getDay()),
+      label: 'In 6 months'
+    },
+    {
+      value: goalDueDate,
+      label: 'Custom'
+    }
+  ]
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +42,12 @@ function SmarterForm (props) {
     props.onNext()
   }
 
+  const onChooseOption = (option) => {
+    setDateSelectedOption(option.label)
+    setGoalDueDate(option.value)
+  
+  }
+
   return (
     <div style={styles.wrapper}>
     <img style={styles.image} src='/goal_settings.png' alt=''/>
@@ -29,48 +56,56 @@ function SmarterForm (props) {
         Research showed that you are more likely to get what you want by setting yourself smarter goals.
       </div>
       <div style={styles.pointContainer}>
-        <div>S</div><div>pecific:</div><div>The more specific you are about your goals, the better and more able you’ll be to accomplish them no matter what method you use.</div>
+        <div style={styles.firstLetterPoint}>S</div><div style={styles.restLetterPoint}>pecific:</div><div style={styles.definePoint}>The more specific you are about your goals, the better and more able you’ll be to accomplish them no matter what method you use.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div>M</div><div>iningful:</div><div>When your goals have a deep enough meaning to you, you’ll do whatever it takes to achieve them.</div>
+        <div style={styles.firstLetterPoint}>M</div><div style={styles.restLetterPoint}>iningful:</div><div style={styles.definePoint}>When your goals have a deep enough meaning to you, you’ll do whatever it takes to achieve them.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div>A</div><div>chievable:</div><div>There are not unrealistic goals, only unrealistic deadlines.</div>
+        <div style={styles.firstLetterPoint}>A</div><div style={styles.restLetterPoint}>chievable:</div><div style={styles.definePoint}>There are not unrealistic goals, only unrealistic deadlines.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div>R</div><div>elevant:</div><div>Your goals should be inline with and in harmony with what you actually want out of life; they should match up with your core values.</div>
+        <div style={styles.firstLetterPoint}>R</div><div style={styles.restLetterPoint}>elevant:</div><div style={styles.definePoint}>Your goals should be inline with and in harmony with what you actually want out of life; they should match up with your core values.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div>T</div><div>ime-bound:</div><div>Your goals should be inline with and in harmony with what you actually want out of life; they should match up with your core values.</div>
+        <div style={styles.firstLetterPoint}>T</div><div style={styles.restLetterPoint}>ime&#8722;bound:</div><div style={styles.definePoint}>Your goals should be inline with and in harmony with what you actually want out of life; they should match up with your core values.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div>E</div><div>valuate:</div><div>By evaluating your goals every single day, you’ll be much more likely to achieve them.</div>
+        <div style={styles.firstLetterPoint}>E</div><div style={styles.restLetterPoint}>valuate:</div><div style={styles.definePoint}>By evaluating your goals every single day, you’ll be much more likely to achieve them.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div>R</div><div>eajust:</div><div>Constantly reajusting your approach to acheive your goals increases massively your chances of success.</div>
+        <div style={styles.firstLetterPoint}>R</div><div style={styles.restLetterPoint}>eajust:</div><div style={styles.definePoint}>Constantly reajusting your approach to acheive your goals increases massively your chances of success.</div>
       </div>
 
 
     </div>
     <form style={styles.formContainer} onSubmit={onSubmit}>
-      <label>
-        Goal: 
+      <label style={styles.labelContainer}>
+       <div style={styles.labelTitles}>Goal:</div> 
         <input 
+          style={styles.inputGoal}
           type="text"
           name="goalInput"
-          placeholder="Set a smarter goal"
+          placeholder="Set a positive goal.."
           value={goalInput}
           onChange={(event) => setGoalInput(event.target.value)}
         />
       </label>
-      <label>
-          Deadline: <input 
+      <div style={styles.labelContainer}>
+
+        <div style={styles.labelTitles}>Deadline:</div> 
+        <Dropdown options={allDateOptions} value={dateSelectedOption} onChange={onChooseOption}/>
+        {dateSelectedOption === 'Custom' && ( 
+          <label>
+          <input 
             type="date"
             name="goalDueDate"
             value={goalDueDate.toJSON().slice(0, 10)}
             onChange={(event) => setGoalDueDate(new Date(event.target.value))}
           />
       </label>
+      )}
+      </div>
       <input type="submit" value="Add" />
     </form>
     </div>
@@ -84,10 +119,9 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
-    
   },
   introText: {
-    textAlign: 'center',
+    marginLeft: 20, 
     marginBottom: 20,
   },
   image: {
@@ -96,12 +130,39 @@ const styles = {
   formContainer: {
     marginTop: 25,
     display: 'flex',
-    alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'column',
   },
   pointContainer: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginLeft: 20,
+  },
+  firstLetterPoint: {
+    color: 'red',
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
+  restLetterPoint: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  definePoint: {
+    fontSize: 14,
+  },
+  labelContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  labelTitles: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  inputGoal: {
+    width: 600,
+    marginLeft: 5,
   },
 }
 

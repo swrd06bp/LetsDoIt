@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import SmarterForm from './SmarterForm'
+import BehaviorForm from './BehaviorForm'
 
 
 
@@ -13,6 +14,9 @@ function AddGoal (props) {
       {!showBehaviorForm && (
         <SmarterForm onNext={() => setShowBehaviorForm(true)}/>
       )}
+      {showBehaviorForm && (
+        <BehaviorForm />
+      )}
     </div>
   )
 }
@@ -21,7 +25,7 @@ const styles = {
   wrapper: {
     display: 'flex',
     width: 1000,
-    height: 800,
+    height: 700,
   }
 }
 

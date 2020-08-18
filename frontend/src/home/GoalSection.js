@@ -61,7 +61,7 @@ function GoalSection (props) {
         )}
       </Modal>
     <div style={styles().wrapper}>
-      <h3 style={styles().titleSection}>Goals +</h3>
+      <h3 style={styles().titleSection}>Goals</h3>
       <ToolSection showCompleted={showCompletedGoals} onChange={setShowCompletedGoals} onNew={() => {setModalOpen('goals')}}/>
       <div style={styles().goalSection}>
       {props.goals.map((item) => {
@@ -77,7 +77,7 @@ function GoalSection (props) {
           )
       })}
       </div>
-      <h3 style={styles().titleSection}>Projects +</h3>
+      <h3 style={styles().titleSection}>Projects</h3>
       <ToolSection showCompleted={showCompletedProjects} onChange={setShowCompletedProjects} onNew={() => {setModalOpen('projects')}} />
       <div style={styles().projectSection}>
         {props.projects.map((item) => {
@@ -139,7 +139,7 @@ const styles = () => ({
     borderStyle: 'solid',
   },
   titleSection: {
-    fontSize: 25,
+    fontSize: 25 * getDimRatio().X,
     marginLeft: 10,
     fontWeight: 'normal',
   },
