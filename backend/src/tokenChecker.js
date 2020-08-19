@@ -9,7 +9,7 @@ module.exports = (req,res,next) => {
     // verifies secret and checks exp
     jwt.verify(token, jwtConfig.secret, function(err, decoded) {
         if (err) {
-            return res.status(401).json({"error": true, "message": 'Unauthorized access.' });
+            return res.status(401).json({"error": true, "message": 'Unauthorized access.' }).end();
         }
       req.decoded = decoded.userId;
       next();
@@ -17,9 +17,9 @@ module.exports = (req,res,next) => {
   } else {
     // if there is no token
     // return an error
-    return res.status(403).send({
+    return res.status(403).json({
         "error": true,
         "message": 'No token provided.'
-    })
+    }).end()
   }
 }
