@@ -66,14 +66,15 @@ class Api {
   }
 
   async createHeaders(headers) {
+    let newHeaders = headers
     try {
       const token = await AsyncStorage.getItem('@token')
       if (token)
-        headers['x-access-token'] = token
+        newHeaders['x-access-token'] = token
     } catch (e) {
       console.log(e)
     }
-    return headers
+    return newHeaders
   }
 
   async get(url) {
@@ -92,7 +93,7 @@ class Api {
   }
 
   async delete(url, body) {
-    const headers = this.createHeaders(this.headers)
+    const headers = await this.createHeaders(this.headers)
     return await fetch(url, {headers, method: 'delete'})
   }
 

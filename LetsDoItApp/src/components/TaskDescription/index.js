@@ -45,7 +45,7 @@ function TaskDescription (props) {
   }
   
   const onDelete = async () => {
-    await api.deleteTask(props.task._id)
+    const resp = await api.deleteTask(props.task._id)
     props.onDescribe(null)
     props.onUpdate()
   }
@@ -124,7 +124,7 @@ function TaskDescription (props) {
             <CheckBox 
               value={doneAt ? true : false}
               onChange={() => {
-              if (dueDate) 
+              if (doneAt) 
                 setDoneAt(null)
               else
                 setDoneAt(new Date())
@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
     alignSelf: 'center',
-    height: 362,
-    width: '70%',
+    height: 400,
+    width: '80%',
     borderRadius: 10,
     backgroundColor: 'white',
   },

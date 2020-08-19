@@ -44,6 +44,7 @@ function AddTask (props) {
           placeholder="I want to.."
           value={taskInput}
           style={styles.textInput}
+          onSubmitEditing={onSubmit}
           onChangeText={(text) => setTaskInput(text)}
         />
         <ActionButton onSubmit={onSubmit} text={'Add'}/>
