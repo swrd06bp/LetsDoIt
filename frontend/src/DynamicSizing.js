@@ -22,7 +22,7 @@ function getDimScreen () {
     X: window.screen.availWidth,
     Y: window.screen.availHeight,
   }
-  
 }
+
 
 export { DynamicResize, getDimRatio, getDimScreen }

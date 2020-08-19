@@ -86,15 +86,22 @@ router.get('/user', async (req, res) => {
   res.end()
 })
 
-
-router.post('/task', async (req, res) => {
-  const task = req.body
-  task.createdAt = new Date().toJSON()
-  task.updatedAt = new Date().toJSON()
-  task.doneAt = null
-  const taskId = await dbClient.writeElem({table: 'tasks', elem: task, userId: req.decoded})
+router.get('/happiness', async (req, res) => {
+  const userId = req.decoded
+  const gnh = await dbClient.getElems({table: 'happiness', query: {}, userId})
   res.status(200)
-  res.json({'taskId': taskId})
+  res.json(gnh)
+  res.end()
+})
+
+router.post('/happiness', async (req, res) => {
+  const gnh = req.body
+  gnh.createdAt = new Date().toJSON()
+  gnh.updatedAt = new Date().toJSON()
+  gnh.doneAt = null
+  const gnhId = await dbClient.writeElem({table: 'happiness', elem: gnh, userId: req.decoded})
+  res.status(200)
+  res.json({'happinessId': gnhId})
   res.end()
 })
 

@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import HomePage from './home/HomePage'
 import LoginPage from './login/LoginPage'
+import HappinessPage from './happiness'
 import SignupPage from './signup/SignupPage'
 import { PrivateRoute } from './PrivateRoute'
 import { DynamicResize } from './DynamicSizing'
@@ -25,6 +26,7 @@ console.log('lskdfjlskd')
       <Router>
         <div>
           <PrivateRoute exact path="/" component={HomePage} />
+          <PrivateRoute exact path="/happiness" component={HappinessPage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/signup" component={SignupPage} />
         </div>

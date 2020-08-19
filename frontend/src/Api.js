@@ -50,6 +50,18 @@ class Api {
     return await this.get(url)
   }
 
+
+  async getHappiness () {
+    const url = this.baseUrl + '/happiness'
+    return await this.get(url)
+  }
+  
+  async postHappiness (score, note) {
+    const url = this.baseUrl + '/happiness'
+    const body = { score, note }
+    return await this.post(url, body)
+  }
+
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 
       + `/tasks?unfinished=${unfinished ? 'true' : 'false'}`

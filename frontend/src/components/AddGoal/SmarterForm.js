@@ -53,7 +53,7 @@ function SmarterForm (props) {
     <img style={styles.image} src='/goal_settings.png' alt=''/>
     <div>
       <div style={styles.introText}>
-        Research showed that you are more likely to get what you want by setting yourself smarter goals.
+        Research showed that you are more likely to get what you want by setting yourself smarter goals. Your goals should be:
       </div>
       <div style={styles.pointContainer}>
         <div style={styles.firstLetterPoint}>S</div><div style={styles.restLetterPoint}>pecific:</div><div style={styles.definePoint}>The more specific you are about your goals, the better and more able you’ll be to accomplish them no matter what method you use.</div>
@@ -62,13 +62,13 @@ function SmarterForm (props) {
         <div style={styles.firstLetterPoint}>M</div><div style={styles.restLetterPoint}>iningful:</div><div style={styles.definePoint}>When your goals have a deep enough meaning to you, you’ll do whatever it takes to achieve them.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div style={styles.firstLetterPoint}>A</div><div style={styles.restLetterPoint}>chievable:</div><div style={styles.definePoint}>There are not unrealistic goals, only unrealistic deadlines.</div>
+        <div style={styles.firstLetterPoint}>A</div><div style={styles.restLetterPoint}>chievable:</div><div style={styles.definePoint}>There are no unrealistic goals, only unrealistic deadlines.</div>
       </div>
       <div style={styles.pointContainer}>
         <div style={styles.firstLetterPoint}>R</div><div style={styles.restLetterPoint}>elevant:</div><div style={styles.definePoint}>Your goals should be inline with and in harmony with what you actually want out of life; they should match up with your core values.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div style={styles.firstLetterPoint}>T</div><div style={styles.restLetterPoint}>ime&#8722;bound:</div><div style={styles.definePoint}>Your goals should be inline with and in harmony with what you actually want out of life; they should match up with your core values.</div>
+        <div style={styles.firstLetterPoint}>T</div><div style={styles.restLetterPoint}>ime&#8722;bound:</div><div style={styles.definePoint}>When your goals are time-bound, they’re measurable. Hold yourself accountable by measuring those goals on a daily, weekly, and monthly basis.</div>
       </div>
       <div style={styles.pointContainer}>
         <div style={styles.firstLetterPoint}>E</div><div style={styles.restLetterPoint}>valuate:</div><div style={styles.definePoint}>By evaluating your goals every single day, you’ll be much more likely to achieve them.</div>
