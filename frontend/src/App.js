@@ -20,7 +20,6 @@ function App() {
     DynamicResize(forceUpdate)
   }, [])
 
-console.log('lskdfjlskd')
   return (
     <div>
       <Router>

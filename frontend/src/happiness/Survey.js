@@ -74,7 +74,7 @@ const styles = () => ({
     borderWidth: 1,
     borderStyle: 'solid',
     width: 1000,
-    animation: `fade-in ${easings.easeOutQuad} 2000ms forwards`,
+    animation: `fade-in ${easings.easeOutQuad} 4000ms forwards`,
   },
   scoreContainer: {
     display: 'flex',

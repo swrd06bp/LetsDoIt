@@ -10,22 +10,25 @@ import Api from '../Api'
 
 
 function HappinessPage (props) {
+  const [score, setScore] = useState(null)
   const [showQuote, setShowQuote] = useState(false)
 
-  const onSubmit = async (score) => {
+  const onSubmit = async (note) => {
     const api = new Api()
-    await api.postHappiness(score, null)
-    document.location.href = '/'
-    //setShowQuote(true)
+    await api.postHappiness(score, note)
+    window.location.pathname = '/'
   }
 
   return (
     <div>
       {!showQuote && (
-        <Survey onSubmit={onSubmit} />
+        <Survey onSubmit={(value) => {
+          setScore(value)
+          setShowQuote(true)
+        }} />
       )}
       {showQuote && (
-        <Quote />
+        <Quote onSubmit={onSubmit} />
       )}
     </div>
   )

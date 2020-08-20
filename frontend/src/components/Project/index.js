@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ProjectShape from '../ProjectShape'
 import ListButton from '../ListButton'
 
 import { getDimRatio } from '../../DynamicSizing'
-import Api from '../../Api'
 
 function Project (props) {
   

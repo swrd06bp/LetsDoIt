@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
 
 function DynamicResize (forceUpdate) {
     function handleResize() {
-      console.log('done')
       forceUpdate()
     } 
     window.addEventListener('resize', handleResize)

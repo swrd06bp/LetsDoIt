@@ -43,8 +43,10 @@ function HomePage() {
         <div style={styles().title}>
           Let's do it{name && ', ' + name}!
         </div>
-        <div style={styles().weeklyToogle}>
-          Show weekly 
+        <div style={{display: 'flex',}}>
+          <div style={styles().weeklyToogle}>
+            Show weekly
+          </div> 
           <input 
             type='checkbox'
             checked={isWeekly}
