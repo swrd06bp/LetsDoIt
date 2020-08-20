@@ -7,7 +7,7 @@ import BehaviorForm from './BehaviorForm'
 
 function AddGoal (props) {
 
-  const [showBehaviorForm, setShowBehaviorForm] = useState(false)
+  const [showBehaviorForm, setShowBehaviorForm] = useState(true)
 
   return (
     <div style={styles.wrapper}>
