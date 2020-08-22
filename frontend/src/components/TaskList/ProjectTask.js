@@ -1,9 +1,5 @@
 import React, { useState } from 'react'
-import { Droppable, Draggable } from 'react-beautiful-dnd'
 
-import ProjectShape from '../ProjectShape'
-import GoalShape from '../GoalShape'
-import ListButton from '../ListButton'
 import Api from '../../Api'
 import { getDimRatio } from '../../DynamicSizing'
 import { todayDate } from '../../utils'

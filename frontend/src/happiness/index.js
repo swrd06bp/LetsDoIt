@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import { animations, easings } from 'react-animation'
-import { getDimScreen } from '../DynamicSizing'
 
 import Survey from './Survey'
 import Quote from './Quote'

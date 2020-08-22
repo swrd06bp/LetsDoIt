@@ -1,14 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 
-import ProjectShape from '../ProjectShape'
-import GoalShape from '../GoalShape'
-import ListButton from '../ListButton'
 import SimpleTask from './SimpleTask'
 import ProjectTask from './ProjectTask'
-import Api from '../../Api'
 import { getDimRatio } from '../../DynamicSizing'
-import { todayDate } from '../../utils'
 
 const grid = 2
 

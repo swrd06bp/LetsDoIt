@@ -18,10 +18,6 @@ function buildGetTasksQuery (params) {
   }
   if (until)
     doneAtQuery.doneAt['$lt'] = new Date(until).toJSON()
-
-
-
-
   const timeQuery = {'$or': [dueDateQuery, doneAtQuery]}
 
   let queryArr = [timeQuery]
@@ -48,8 +44,6 @@ function buildGetProjectsQuery (params) {
 
   if (!unfinished === 'true')
     query['doneAt'] = {$ne:null}
-
-
   return query
 }
 
@@ -62,6 +56,7 @@ function getRandomColor() {
         }
     return color
 }
+
 
 
 

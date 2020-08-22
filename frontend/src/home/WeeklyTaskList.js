@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import Api from '../Api.js'
 import TaskList from '../components/TaskList'
@@ -39,13 +39,7 @@ function WeeklyTaskList (props) {
   const [itemsSunday, setItemsSunday] = useState([])
   const api = new Api()
 
-
-  useEffect(() => {
-    getTasks() 
-  },[props.task, date]) 
-
-
-  const getTasks = async () => {
+  const getTasks = useCallback(async () => {
     const response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
     const allTasks = await response.json()
 
@@ -62,7 +56,13 @@ function WeeklyTaskList (props) {
       setItemsSaturday(weekDaysTasks[5])
       setItemsSunday(weekDaysTasks[6])
     }
-  }
+  }, [])
+
+
+  useEffect(() => {
+    getTasks() 
+  },[props.task, date]) 
+
 
 
   

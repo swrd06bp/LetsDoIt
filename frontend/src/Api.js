@@ -62,6 +62,21 @@ class Api {
     return await this.post(url, body)
   }
 
+  async getHabits (goalId) {
+    const url = this.baseUrl + `/goal/${goalId}/habits`
+    return await this.get(url)
+  }
+  
+  async insertHabit(habit) {
+    const url = this.baseUrl + '/habit'
+    return await this.post(url, habit)
+  }
+  
+  async deleteHabit(habitId) {
+    const url = this.baseUrl + `/habit/${habitId}`
+    return await this.delete(url)
+  }
+
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 
       + `/tasks?unfinished=${unfinished ? 'true' : 'false'}`
@@ -74,6 +89,11 @@ class Api {
 
   async getTasksProject(projectId) {
     let url = this.baseUrl + `/project/${projectId}/tasks`
+    return await this.get(url)
+  }
+  
+  async getTasksGoal(goalId) {
+    let url = this.baseUrl + `/goal/${goalId}/tasks`
     return await this.get(url)
   }
 

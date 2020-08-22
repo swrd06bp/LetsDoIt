@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
-import { animations, easings } from 'react-animation'
-import { getDimScreen } from '../DynamicSizing'
-
-import Api from '../Api'
+import {  easings } from 'react-animation'
 
 
 function ScoreBox(props) {

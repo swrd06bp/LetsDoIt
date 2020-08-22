@@ -5,6 +5,7 @@ import TodayTaskList from './TodayTaskList'
 import WeeklyTaskList from './WeeklyTaskList'
 import TaskDescription from '../components/TaskDescription'
 import ProjectDescription from '../components/ProjectDescription'
+import GoalDescription from '../components/GoalDescription'
 import TopNavigation from '../Navigation'
 import { getDimScreen, getDimRatio } from '../DynamicSizing'
 import './HomePage.css'
@@ -75,7 +76,7 @@ function HomePage() {
                 goals={allGoals}
               />
             )}
-            {describeElem.project && (
+            {describeElem.project && !describeElem.goal && (
               <ProjectDescription
                 onDescribe={(value) => {
                   setDescribeElem(value)
@@ -83,6 +84,15 @@ function HomePage() {
                 }}
                 project={describeElem.project}
                 goals={allGoals}
+              />
+            )}
+            {describeElem.goal && !describeElem.project && (
+              <GoalDescription
+                onDescribe={(value) => {
+                  setDescribeElem(value)
+                  getData()
+                }}
+                goal={describeElem.goal}
               />
             )}
           </div>

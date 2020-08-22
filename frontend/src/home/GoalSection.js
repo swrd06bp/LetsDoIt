@@ -6,7 +6,6 @@ import Project from '../components/Project'
 import AddGoal from '../components/AddGoal'
 import AddProject from '../components/AddProject'
 import { getDimRatio } from '../DynamicSizing'
-import Api from '../Api'
 
 
 function ToolSection (props) {
@@ -49,12 +48,12 @@ function GoalSection (props) {
     <div>
       <Modal
         isOpen={modalOpen ? true : false}
-        onRequestClose={() => {setModalOpen(null)}}
+        onRequestClose={getData}
         style={styles()}
         contentLabel="Example Modal"
       >
         { modalOpen === 'goals' && (
-          <AddGoal onUpdate={getData}/>
+          <AddGoal onUpdate={getData} />
         )}
         { modalOpen === 'projects' && (
           <AddProject onUpdate={getData}/>
@@ -75,6 +74,8 @@ function GoalSection (props) {
               onDescribe={props.onDescribe}
             />  
           )
+        else
+          return (null)
       })}
       </div>
       <h3 style={styles().titleSection}>Projects</h3>
@@ -91,6 +92,8 @@ function GoalSection (props) {
               onDescribe={props.onDescribe}
             />  
           )
+          else
+            return null
         })}
       </div>
     </div>

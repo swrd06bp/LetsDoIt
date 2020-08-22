@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 
+import ListButton from '../ListButton'
 import Api from '../../Api.js'
 
 
 function SmarterForm (props) {
   const [goalInput, setGoalInput] = useState('')
+  const [goalList, setGoalList] = useState('Work')
   const [dateSelectedOption, setDateSelectedOption] = useState('In 5 years')
   const [goalDueDate, setGoalDueDate] = useState(new Date(new Date().getFullYear() + 5, new Date().getMonth(), new Date().getDay()))
 
@@ -32,21 +34,22 @@ function SmarterForm (props) {
     e.preventDefault();
     const api = new Api() 
     if (goalInput) {
-      await api.insertGoal({
+      const resp = await api.insertGoal({
         content: goalInput,
-        list: 'Work',
+        list: goalList,
         dueDate: new Date().toJSON(),
       })
+      const {goalId} = await resp.json()
+      props.onNext(goalId.insertedId)
     }
     setGoalInput('')
-    props.onNext()
   }
 
   const onChooseOption = (option) => {
     setDateSelectedOption(option.label)
     setGoalDueDate(option.value)
-  
   }
+
 
   return (
     <div style={styles.wrapper}>
@@ -90,6 +93,7 @@ function SmarterForm (props) {
           value={goalInput}
           onChange={(event) => setGoalInput(event.target.value)}
         />
+        <ListButton active={true} onListChange={setGoalList} scale={1} item={{list: goalList}} />
       </label>
       <div style={styles.labelContainer}>
 
@@ -161,7 +165,7 @@ const styles = {
     fontWeight: 'bold',
   },
   inputGoal: {
-    width: 600,
+    width: 550,
     marginLeft: 5,
   },
 }

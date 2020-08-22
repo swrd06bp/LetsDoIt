@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import Api from '../Api.js'
 import TaskList from '../components/TaskList'
@@ -35,13 +35,7 @@ function TodayTaskList (props) {
   const [itemsSomeday, setItemsSomeday] = useState([])
   const api = new Api()
 
-
-  useEffect(() => {
-    getTasks() 
-  },[props.task]) 
-
-
-  const getTasks = async () => {
+  const getTasks = useCallback(async () => {
     const response = await api.getTasks({from: todayDate().toJSON(), someday: true, unfinished: true})
     const allTasks = await response.json()
 
@@ -54,7 +48,13 @@ function TodayTaskList (props) {
       setItemsUpcoming(upcomingTasks)
       setItemsSomeday(somedayTasks)
     }
-  }
+  }, [])
+
+
+  useEffect(() => {
+    getTasks() 
+  },[props.task]) 
+
 
   
   const id2List = {

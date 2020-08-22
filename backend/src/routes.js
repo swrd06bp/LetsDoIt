@@ -143,9 +143,53 @@ router.delete('/task/:taskId', async (req, res) => {
   res.end()
 })
 
+router.get('/goal/:goalId/habits', async (req, res) => {
+  const goalId = req.params.goalId
+  const query = {'goalId': goalId}
+  const habits = await dbClient.getElems({
+    table: 'habits',
+    query,
+    userId: req.decoded,
+  })
+  res.status(200)
+  res.json(habits)
+  res.end()
+})
+
+router.post('/habit', async (req, res) => {
+  const habit = req.body
+  habit.createdAt = new Date().toJSON()
+  habit.updatedAt = new Date().toJSON()
+  habit.doneAt = null
+  const habitId = await dbClient.writeElem({
+    table: 'habits',
+    elem: habit,
+    userId: req.decoded,
+  })
+  res.status(200)
+  res.json({'habitId': habitId})
+  res.end()
+})
+
+router.delete('/habit/:habitId', async (req, res) => {
+  const habitId = req.params.habitId
+  await dbClient.deleteElem({
+    table: 'habits',
+    elemId: habitId,
+    userId: req.decoded,
+  })
+  res.status(200)
+  res.json({'taskId': habitId})
+  res.end()
+})
+
 router.get('/goals', async (req, res) => {
   const query = {}
-  const goals = await dbClient.getElems({table: 'goals', query, userId: req.decoded})
+  const goals = await dbClient.getElems({
+    table: 'goals',
+    query,
+    userId: req.decoded,
+  })
   res.status(200)
   res.json(goals)
   res.end()
@@ -178,6 +222,15 @@ router.delete('/goal/:goalId', async (req, res) => {
   await dbClient.deleteElem({table: 'goals', elemId: goalId, userId: req.decoded})
   res.status(200)
   res.json({'goalId': goalId})
+  res.end()
+})
+
+router.get('/goal/:goalId/tasks', async (req, res) => {
+  const goalId = req.params.goalId
+  const query = {'goalId': goalId}
+  const tasks = await dbClient.getElems({table: 'tasks', query, userId: req.decoded})
+  res.status(200)
+  res.json(tasks)
   res.end()
 })
 
