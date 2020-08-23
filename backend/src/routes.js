@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 const userController = require('./controllers/userController')
 const happinessController = require('./controllers/happinessController')
 const taskController = require('./controllers/taskController')
@@ -7,8 +8,6 @@ const projectController = require('./controllers/projectController')
 const goalController = require('./controllers/goalController')
 const habitController = require('./controllers/habitController')
 
-
-const captchaSecret = '6LfWLL8ZAAAAAKMgAMlPf3iv2V1FD9mTr4QzRw2m'
 
 
 // users login
