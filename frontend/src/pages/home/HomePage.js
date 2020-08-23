@@ -79,8 +79,8 @@ function HomePage() {
             {describeElem.project && !describeElem.goal && (
               <ProjectDescription
                 onDescribe={(value) => {
-                  setDescribeElem(value)
                   getData()
+                  setDescribeElem(value)
                 }}
                 project={describeElem.project}
                 goals={allGoals}
@@ -89,8 +89,8 @@ function HomePage() {
             {describeElem.goal && !describeElem.project && (
               <GoalDescription
                 onDescribe={(value) => {
-                  setDescribeElem(value)
                   getData()
+                  setDescribeElem(value)
                 }}
                 goal={describeElem.goal}
               />

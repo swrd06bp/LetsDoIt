@@ -83,7 +83,8 @@ function GoalDescription (props) {
       </div>
 
 
-     <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
+    {showPage === 'Characteristics' && ( 
+    <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
       <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
        <h4 style={styles().noteTitle}>
         Status
@@ -160,7 +161,7 @@ function GoalDescription (props) {
         <AddTask goalId={props.goal._id} onUpdate={getGoalTasks} list={props.goal.list}/>
       </div>
     </div>
-
+    )}
       <div style={styles().footer}>
         <button style={styles().buttonCancel} onClick={() => props.onDescribe({
           task: null, project: null, goal: null

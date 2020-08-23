@@ -44,9 +44,7 @@ function WeeklyTaskList (props) {
     const allTasks = await response.json()
 
     if (allTasks) {
-
       const weekDaysTasks = decomposeTasksWeek(allTasks, date)
-
 
       setItemsMonday(weekDaysTasks[0])
       setItemsTuesday(weekDaysTasks[1])
