@@ -84,30 +84,13 @@ function GoalDescription (props) {
        <h4 style={styles().noteTitle}>
         Status
        </h4>
-        <div style={styles().checkboxContainer}>
-          Someday
-          <div>
-            <input
-              type='checkbox'
-              checked={dueDate ? false : true}
-              onChange={() => {
-                if (dueDate) 
-                  setDueDate(null)
-                else
-                  setDueDate(new Date())
-              }}
-            />
-            </div>
-          {dueDate && (
             <div style={styles().checkboxContainer}>
           Due 
           <input 
             type='date' 
             value={new Date(dueDate).toJSON().slice(0, 10)} 
-            onChange={(event) => {setDueDate(new Date(event.target.value))}}
+            onChange={(event) => { if (event.target.value) setDueDate(new Date(event.target.value))}}
           />
-          </div>
-          )}
         </div>
         
         <div>

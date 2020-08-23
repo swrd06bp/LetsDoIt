@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
 
-import Goal from '../components/Goal'
-import Project from '../components/Project'
-import AddGoal from '../components/AddGoal'
-import AddProject from '../components/AddProject'
-import { getDimRatio } from '../DynamicSizing'
+import Goal from '../../components/Goal'
+import Project from '../../components/Project'
+import AddGoal from '../../components/AddGoal'
+import AddProject from '../../components/AddProject'
+import { getDimRatio } from '../../DynamicSizing'
 
 
 function ToolSection (props) {

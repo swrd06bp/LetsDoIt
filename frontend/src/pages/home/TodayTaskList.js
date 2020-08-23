@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
-import Api from '../Api.js'
-import TaskList from '../components/TaskList'
-import AddTask from '../components/AddTask'
-import { getDimRatio } from '../DynamicSizing'
+import Api from '../../Api.js'
+import TaskList from '../../components/TaskList'
+import AddTask from '../../components/AddTask'
+import { getDimRatio } from '../../DynamicSizing'
 import {
   todayDate,
   decomposeTasksToday,
-} from '../utils'
+} from '../../utils'
 
 
 const move = (source, destination, droppableSource, droppableDestination) => {
