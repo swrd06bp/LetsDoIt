@@ -5,7 +5,7 @@ import Goal from '../../components/Goal'
 import Project from '../../components/Project'
 import AddGoal from '../../components/AddGoal'
 import AddProject from '../../components/AddProject'
-import { getDimRatio } from '../../DynamicSizing'
+import { getDimRatio } from '../../app/DynamicSizing'
 
 
 function ToolSection (props) {

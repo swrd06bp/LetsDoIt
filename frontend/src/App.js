@@ -7,8 +7,8 @@ import HomePage from './pages/home/HomePage'
 import LoginPage from './pages/login/LoginPage'
 import HappinessPage from './pages/happiness'
 import SignupPage from './pages/signup/SignupPage'
-import { PrivateRoute } from './PrivateRoute'
-import { DynamicResize } from './DynamicSizing'
+import { PrivateRoute } from './app/PrivateRoute'
+import { DynamicResize } from './app/DynamicSizing'
 
 
 function App() {

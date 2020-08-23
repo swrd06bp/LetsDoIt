@@ -3,7 +3,7 @@ import { ReCaptcha } from 'react-recaptcha-google'
 
 import './SignupPage.css'
 
-import Api from '../../Api'
+import Api from '../../app/Api'
 
 function SignupPage() {
   

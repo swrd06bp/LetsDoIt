@@ -4,7 +4,7 @@ import 'react-dropdown/style.css'
 import Select from 'react-select'
 
 
-import Api from '../../Api'
+import Api from '../../app/Api'
 
 
 function HabitItem (props) {

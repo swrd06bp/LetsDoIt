@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-import Api from '../../Api'
-import { getDimRatio } from '../../DynamicSizing'
-import { todayDate } from '../../utils'
+import Api from '../../app/Api'
+import { getDimRatio } from '../../app/DynamicSizing'
+import { todayDate } from '../../app/utils'
 
 
 function ProjectTask (props) {

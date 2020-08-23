@@ -6,10 +6,10 @@ import WeeklyTaskList from './WeeklyTaskList'
 import TaskDescription from '../../components/TaskDescription'
 import ProjectDescription from '../../components/ProjectDescription'
 import GoalDescription from '../../components/GoalDescription'
-import TopNavigation from '../../Navigation'
-import { getDimScreen, getDimRatio } from '../../DynamicSizing'
+import TopNavigation from '../../app/Navigation'
+import { getDimScreen, getDimRatio } from '../../app/DynamicSizing'
 import './HomePage.css'
-import Api from '../../Api'
+import Api from '../../app/Api'
 
 
 function HomePage() {

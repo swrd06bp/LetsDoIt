@@ -3,7 +3,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd'
 
 import SimpleTask from './SimpleTask'
 import ProjectTask from './ProjectTask'
-import { getDimRatio } from '../../DynamicSizing'
+import { getDimRatio } from '../../app/DynamicSizing'
 
 const grid = 2
 

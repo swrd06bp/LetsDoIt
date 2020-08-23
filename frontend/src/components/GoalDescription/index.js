@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 import { DragDropContext } from 'react-beautiful-dnd'
 
 import AddTask from '../AddTask'
 import TaskList from '../TaskList'
 import ListButton from '../ListButton'
-import GoalShape from '../GoalShape'
-import Api from '../../Api'
-import { getDimScreen, getDimRatio } from '../../DynamicSizing'
-import { sortProjectTasks} from '../../utils'
+import Api from '../../app/Api'
+import { getDimRatio } from '../../app/DynamicSizing'
+import { sortProjectTasks} from '../../app/utils'
 
 
 function GoalDescription (props) {
@@ -17,9 +15,9 @@ function GoalDescription (props) {
   const [note, setNote] = useState(props.goal.note)
   const [dueDate, setDueDate] = useState(props.goal.dueDate)
   const [doneAt, setDoneAt] = useState(props.goal.doneAt)
-  const [goalId, setGoalId] = useState(props.goal.goalId)
   const [list, setList] = useState(props.goal.list)
   const [tasks, setTasks] = useState([])
+  const [showPage, setShowPage] = useState('Characteristics')
   const api = new Api()
 
   useEffect(() => {
@@ -40,7 +38,7 @@ function GoalDescription (props) {
   const onSave = async () => {
     await api.updateGoal(
       props.goal._id,
-      {content, dueDate, note, goalId, list, doneAt}
+      {content, dueDate, note, goalId: props.goalId, list, doneAt}
     )
     props.onDescribe({goal: null, goal: null, goal: null})
   }
@@ -51,7 +49,7 @@ function GoalDescription (props) {
   }
   return (
     <div style={styles().wrapper}>
-      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+      <div style={styles().titleContainer}>
         <h3 style={styles().title}>Description</h3>
         <div onClick={onDelete} style={styles().deleteButton}>
           <img 
@@ -71,13 +69,19 @@ function GoalDescription (props) {
           onChange={(event) => setContent(event.target.value)} 
           style={styles().titleTaskText}
         />
-          <ListButton
-            item={props.goal}
-            scale={1.5}
-            active={true}
-            onListChange={setList}
-          />
-        </div>
+        <ListButton
+          item={props.goal}
+          scale={1.5}
+          active={true}
+          onListChange={setList}
+        />
+      </div>
+
+      <div style={styles().navbarContainer}>
+        <div style={styles().narbarOption} onClick={() => setShowPage('Characteristics')}>Characteristics</div>
+        <div style={styles().narbarOption} onClick={() => setShowPage('Habits')}>Habits</div>
+      </div>
+
 
      <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
       <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
@@ -118,7 +122,6 @@ function GoalDescription (props) {
           )}
           </div>
         </div>
-
 
       <div>
         <h4 style={styles().noteTitle}>
@@ -184,6 +187,12 @@ const styles = () => ({
     justifyContent: 'center',
     boxShadow: '2px 4px grey',
   },
+  titleContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   title: {
     fontSize: 25 * getDimRatio().X,
     marginLeft: 10,
@@ -193,9 +202,19 @@ const styles = () => ({
     height: 20 * getDimRatio().X,
     width: 20 * getDimRatio().X,
   },
+  navbarContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  narbarOption: {
+    marginLeft: 10,
+    color: 'blue',
+    cursor: 'pointer',
+  },
   titleTaskContainer: {
     background: 'rgba(196, 196, 196, 0.21)',
-    height: '100%',
+    height: 100 * getDimRatio().X,
     padding: 3,
     margin: 10,
   },
@@ -233,7 +252,7 @@ const styles = () => ({
   },
   checkboxContainer: {
     marginLeft: 10,
-    fontSize: 13 * getDimRatio(),
+    fontSize: 13 * getDimRatio().X,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

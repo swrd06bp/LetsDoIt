@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import './LoginPage.css'
 
-import Api from '../../Api'
+import Api from '../../app/Api'
 
 function LoginPage() {
   

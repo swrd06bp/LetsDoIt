@@ -2,7 +2,7 @@ import React from 'react'
 import GoalShape from '../GoalShape'
 import ListButton from '../ListButton'
 
-import { getDimRatio } from '../../DynamicSizing'
+import { getDimRatio } from '../../app/DynamicSizing'
 
 function Goal (props) {
   

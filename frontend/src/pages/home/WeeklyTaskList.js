@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
-import Api from '../../Api.js'
+import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
-import { getDimRatio } from '../../DynamicSizing'
+import { getDimRatio } from '../../app/DynamicSizing'
 import {
   weekDayDate,
   todayDate,
   decomposeTasksWeek,
-} from '../../utils'
+} from '../../app/utils'
 
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -39,7 +39,7 @@ function WeeklyTaskList (props) {
   const [itemsSunday, setItemsSunday] = useState([])
   const api = new Api()
 
-  const getTasks = useCallback(async () => {
+  const getTasks = async () => {
     const response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
     const allTasks = await response.json()
 
@@ -56,7 +56,7 @@ function WeeklyTaskList (props) {
       setItemsSaturday(weekDaysTasks[5])
       setItemsSunday(weekDaysTasks[6])
     }
-  }, [])
+  }
 
 
   useEffect(() => {

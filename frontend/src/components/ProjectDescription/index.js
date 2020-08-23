@@ -7,9 +7,9 @@ import AddTask from '../AddTask'
 import TaskList from '../TaskList'
 import ListButton from '../ListButton'
 import GoalShape from '../GoalShape'
-import Api from '../../Api'
-import { getDimScreen, getDimRatio } from '../../DynamicSizing'
-import { sortProjectTasks} from '../../utils'
+import Api from '../../app/Api'
+import { getDimScreen, getDimRatio } from '../../app/DynamicSizing'
+import { sortProjectTasks} from '../../app/utils'
 
 
 function ProjectDescription (props) {
@@ -264,7 +264,7 @@ const styles = () => ({
   },
   checkboxContainer: {
     marginLeft: 10,
-    fontSize: 13 * getDimRatio(),
+    fontSize: 13 * getDimRatio().X,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

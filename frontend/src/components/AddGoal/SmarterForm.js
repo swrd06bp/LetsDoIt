@@ -3,7 +3,7 @@ import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 
 import ListButton from '../ListButton'
-import Api from '../../Api.js'
+import Api from '../../app/Api.js'
 
 
 function SmarterForm (props) {
