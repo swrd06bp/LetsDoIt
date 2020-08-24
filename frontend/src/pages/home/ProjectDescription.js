@@ -3,10 +3,11 @@ import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 import { DragDropContext } from 'react-beautiful-dnd'
 
-import AddTask from '../AddTask'
-import TaskList from '../TaskList'
-import ListButton from '../ListButton'
-import GoalShape from '../GoalShape'
+import TitleElem from '../../components/CommonDescription/TitleElem'
+import AddTask from '../../components/AddTask'
+import TaskList from '../../components/TaskList'
+import ListButton from '../../components/ListButton'
+import GoalShape from '../../components/GoalShape'
 import Api from '../../app/Api'
 import { getDimScreen, getDimRatio } from '../../app/DynamicSizing'
 import { sortProjectTasks} from '../../app/utils'
@@ -70,21 +71,12 @@ function ProjectDescription (props) {
         </div>
       </div>
 
-      <div style={styles().titleTaskContainer}>
-        <input 
-          type='text' 
-          name='content'
-          value={content} 
-          onChange={(event) => setContent(event.target.value)} 
-          style={styles().titleTaskText}
-        />
-          <ListButton
-            item={props.project}
-            scale={1.5}
-            active={true}
-            onListChange={setList}
-          />
-        </div>
+      <TitleElem
+        item={props.project}
+        content={content}
+        setContent={setContent}
+        setList={setList}
+      />
 
      <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
       <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
@@ -223,20 +215,6 @@ const styles = () => ({
   buttonBack: {
     height: 20 * getDimRatio().X,
     width: 20 * getDimRatio().X,
-  },
-  titleTaskContainer: {
-    background: 'rgba(196, 196, 196, 0.21)',
-    height: '100%',
-    padding: 3,
-    margin: 10,
-  },
-  titleTaskText: {
-    background: 'transparent',
-    fontSize: 20 * getDimRatio().X,
-    width: '100%',
-    justifyContent: 'center',
-    borderWidth: 0,
-    fontWeight: 'bold',
   },
   taskListTitle: {
     display: 'flex',

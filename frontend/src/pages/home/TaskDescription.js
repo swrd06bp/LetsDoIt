@@ -3,9 +3,9 @@ import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 import Modal from 'react-modal'
 
-import ListButton from '../ListButton'
-import GoalShape from '../GoalShape'
-import ProjectShape from '../ProjectShape'
+import TitleElem from '../../components/CommonDescription/TitleElem'
+import GoalShape from '../../components/GoalShape'
+import ProjectShape from '../../components/ProjectShape'
 
 import Api from '../../app/Api'
 
@@ -74,21 +74,12 @@ function TaskDescription (props) {
             height='15'/>
         </div>
       </div>
-      <div style={styles.titleTaskContainer}>
-          <textarea 
-            type='text' 
-            name='content'
-            value={content} 
-            onChange={(event) => setContent(event.target.value)} 
-            style={styles.titleTaskText}
-          />
-          <ListButton 
-            item={props.task}
-            scale={1.5}
-            active={true}
-            onListChange={setList}
-          />
-      </div>
+      <TitleElem
+        item={props.task}
+        content={content}
+        setContent={setContent}
+        setList={setList}
+      />
       <div>
        <h4 style={styles.noteTitle}>
         Status
@@ -213,20 +204,6 @@ const styles = {
   buttonBack: {
     height: 20,
     width: 20,
-  },
-  titleTaskContainer: {
-    background: 'rgba(196, 196, 196, 0.21)',
-    height: '100%',
-    padding: 3,
-    margin: 10,
-  },
-  titleTaskText: {
-    background: 'transparent',
-    fontSize: 20,
-    width: '100%',
-    justifyContent: 'center',
-    borderWidth: 0,
-    fontWeight: 'bold',
   },
   noteTitle: {
     marginLeft: 10,
