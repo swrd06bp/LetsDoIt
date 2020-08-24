@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import 'react-dropdown/style.css'
 import { DragDropContext } from 'react-beautiful-dnd'
 
+import ListHabit from '../../components/AddGoal/ListHabit'
 import AddTask from '../../components/AddTask'
 import TaskList from '../../components/TaskList'
 import ListButton from '../../components/ListButton'
@@ -162,6 +163,9 @@ function GoalDescription (props) {
       </div>
     </div>
     )}
+    {showPage === 'Habits' && (
+      <ListHabit goalId={props.goal._id} />
+    )} 
       <div style={styles().footer}>
         <button style={styles().buttonCancel} onClick={() => props.onDescribe({
           task: null, project: null, goal: null
