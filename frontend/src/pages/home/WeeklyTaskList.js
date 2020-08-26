@@ -6,7 +6,7 @@ import { getDimRatio } from '../../app/DynamicSizing'
 import {
   weekDayDate,
   todayDate,
-  decomposeTasksWeek,
+  decomposeItemsWeek,
 } from '../../app/utils'
 
 
@@ -44,15 +44,17 @@ function WeeklyTaskList (props) {
     const allTasks = await response.json()
 
     if (allTasks) {
-      const weekDaysTasks = decomposeTasksWeek(allTasks, date)
+      const weekDaysTasks = decomposeItemsWeek(allTasks, date, 'task')
+      const weekDaysProjects = decomposeItemsWeek(props.projects, date, 'project')
+      const weekDaysGoals = decomposeItemsWeek(props.goals, date, 'goal')
 
-      setItemsMonday(weekDaysTasks[0])
-      setItemsTuesday(weekDaysTasks[1])
-      setItemsWednesday(weekDaysTasks[2])
-      setItemsThursday(weekDaysTasks[3])
-      setItemsFriday(weekDaysTasks[4])
-      setItemsSaturday(weekDaysTasks[5])
-      setItemsSunday(weekDaysTasks[6])
+      setItemsMonday([weekDaysGoals[0], ...weekDaysProjects[0], ...weekDaysTasks[0]])
+      setItemsTuesday([...weekDaysGoals[1], ...weekDaysProjects[1], ...weekDaysTasks[1]])
+      setItemsWednesday([...weekDaysGoals[2], ...weekDaysProjects[2], ...weekDaysTasks[2]])
+      setItemsThursday([...weekDaysGoals[3], ...weekDaysProjects[3], ...weekDaysTasks[3]])
+      setItemsFriday([...weekDaysGoals[4], ...weekDaysProjects[4], ...weekDaysTasks[4]])
+      setItemsSaturday([...weekDaysGoals[5], ...weekDaysProjects[5], ...weekDaysTasks[5]])
+      setItemsSunday([...weekDaysGoals[6], ...weekDaysProjects[6], ...weekDaysTasks[6]])
     }
   }
 

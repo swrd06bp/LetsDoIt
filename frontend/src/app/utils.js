@@ -42,6 +42,7 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
     const todayTasks = sortTasks(allTasks.filter( x => {
@@ -49,6 +50,7 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
     const tomorrowTasks = sortTasks(allTasks.filter( x => {
@@ -64,6 +66,7 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
     const upcomingTasks = sortTasks(allTasks.filter( x => {
@@ -77,6 +80,7 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
     const somedayTasks = sortTasks(allTasks.filter( x => {
@@ -84,16 +88,17 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
 
   return { unfinishedTasks, todayTasks, tomorrowTasks, upcomingTasks, somedayTasks }
 }
 
-const decomposeTasksWeek = (allTasks, date) => {
-  let weekDaysTasks = []
+const decomposeItemsWeek = (allItems, date, type) => {
+  let weekDaysItems = []
   for (let i = 0; i < 7; i++) { 
-    const dayTasks = sortTasks(allTasks.filter( x => {
+    const dayItems = sortTasks(allItems.filter( x => {
       return (
         (!x.doneAt 
         && x.dueDate
@@ -105,14 +110,15 @@ const decomposeTasksWeek = (allTasks, date) => {
         && new Date(x.doneAt) < weekDayDate(date, i+1))
       )
     }).map(x => {
-      let task = x
-      task.id = task._id
-      return task
+      let item = x
+      item.id = item._id
+      item.type = type
+      return item
     }))
-    weekDaysTasks.push(dayTasks)
+    weekDaysItems.push(dayItems)
   }
 
-  return weekDaysTasks
+  return weekDaysItems
 }
 
 export {
@@ -122,5 +128,5 @@ export {
   sortProjectTasks,
   sortTasks,
   decomposeTasksToday,
-  decomposeTasksWeek,
+  decomposeItemsWeek,
 }

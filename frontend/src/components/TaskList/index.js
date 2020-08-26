@@ -1,6 +1,8 @@
 import React from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 
+import Goal from '../../components/Goal'
+import Project from '../../components/Project'
 import SimpleTask from './SimpleTask'
 import ProjectTask from './ProjectTask'
 import { getDimRatio } from '../../app/DynamicSizing'
@@ -48,6 +50,7 @@ function TaskList (props) {
                     <Draggable
                         key={item.id}
                         draggableId={item.id}
+                        isDragDisabled={props.projectTask}
                         index={index}>
                         {(provided, snapshot) => {
                           const isSelected = snapshot.isDragging || (props.task && props.task.id === item.id)
@@ -62,7 +65,7 @@ function TaskList (props) {
                                   props.isPast
                               ), boxShadow: !item.doneAt ? '1px 2px grey' : null}}
                             >
-                              {!props.projectTask && (
+                              {!props.projectTask && item.type === 'task' && (
                                 <SimpleTask 
                                   item={item}
                                   onDescribe={props.onDescribe}
@@ -71,6 +74,22 @@ function TaskList (props) {
                                   onUpdate={props.onUpdate}
                                   goals={props.goals}
                                   projects={props.projects}
+                                />
+                              )}  
+                              {!props.projectTask && item.type === 'project' && (
+                                <Project 
+                                  item={item}
+                                  onDescribe={() => {}}
+                                  project={props.project}
+                                  onUpdate={props.onUpdate}
+                                />
+                              )}  
+                              {!props.projectTask && item.type === 'goal' && (
+                                <Goal 
+                                  item={item}
+                                  onDescribe={() => {}}
+                                  goal={props.project}
+                                  onUpdate={props.onUpdate}
                                 />
                               )}  
                               {props.projectTask && (
