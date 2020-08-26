@@ -9,53 +9,49 @@ import Api from '../../app/Api'
 export default function AddHabit (props) {
   const [content, setContent] = useState('')
   const [frequecyOption, setFrequencyOption] = useState('every day')
-  const [cronFrequency, setCronFrequency] = useState('0 0 * * *')
+  const [chosenFrequency, setChosenFrequency] = useState({day: 1})
 
   const api = new Api()
 
   
   const allFrequencyOptions = [
-    'every day',
-    'every week',
-    'every month',
+    {label: 'every day', value: 0},
+    {label: 'every week', value: 1},
+    {label: 'every month', value: 2},
   ]
 
-  const weeklyFrequencyOptions = [{
-    label:'Monday', value: 1
-  },{
-    label:'Tuesday', value: 2
-  },{
-    label:'Wednesday', value: 3
-  },{
-    label:'Thursday', value: 4
-  },{
-    label:'Friday', value: 5
-  },{
-    label:'Saturday', value: 6
-  },{
-    label:'Sunday', value: 0
-  }]
+  const weeklyFrequencyOptions = [...Array(7).keys()].slice(1).map(x => {
+    const s = ' time per week'
+    const ss= ' times per week'
+    if (x === 1) return {label: x + s, value: x}
+    else return {label: x + ss, value: x}
+  })  
 
-  const monthlyFrequencyOptions = [...Array(31).keys()].map(x => {
-    if (x === 0) return {label: `${x + 1}st`, value: x + 1}
-    else if (x === 1) return {label: `${x + 1}nd`, value: x + 1}
-    else if (x === 2) return {label: `${x + 1}rd`, value: x + 1}
-    return {label: `${x + 1}th`, value: x + 1}
+  const monthlyFrequencyOptions = [...Array(27).keys()].slice(1).map(x => {
+    const s = ' time per month'
+    const ss= ' times per month'
+    if (x === 1) return {label: x + s, value: x}
+    else return {label: x + ss, value: x}
   })
+
+  const onOptionChange = ({value}) => {
+    setFrequencyOption(value)
+    if (value === 0) setChosenFrequency({day: 1})
+    if (value === 1) setChosenFrequency({week: 1})
+    if (value === 2) setChosenFrequency({month: 1})
+  }
   
-  const onOptionWeeklyChange = (value) => {
-    const weeks = value.map(x => x.value).join()
-    setCronFrequency(`0 0 * * ${weeks}`)
+  const onOptionWeeklyChange = ({value}) => {
+    setChosenFrequency({week: value})
   }
 
-  const onOptionMonthlyChange = (value) => {
-    const months = value.map(x => x.value).join()
-    setCronFrequency(`0 0 ${months} * *`)
+  const onOptionMonthlyChange = ({value}) => {
+    setChosenFrequency({month: value})
   }
 
   const onSubmit = async () => {
     if(content) {
-      const habit = { content, frequency: cronFrequency, goalId: props.goalId }
+      const habit = { content, frequency: chosenFrequency, goalId: props.goalId }
       await api.insertHabit(habit) 
       await props.getAllHabits() 
       setContent('')
@@ -80,25 +76,20 @@ export default function AddHabit (props) {
             <div style={styles().titleFrequency}>Set the frequency of that new habit: </div>
               <Dropdown
                 options={allFrequencyOptions} 
-                value={frequecyOption} 
-                onChange={({value}) => setFrequencyOption(value)}
+                onChange={onOptionChange}
               />
-              {frequecyOption === 'every week' && (
+              {frequecyOption === 1 && (
                 <div style={styles().weeklySelect}>
-                <Select
-                  isMulti
+                <Dropdown
                   options={weeklyFrequencyOptions}
                   onChange={onOptionWeeklyChange}
-                  closeMenuOnSelect={false}
                 />
                 </div>
               )}
-              {frequecyOption === 'every month' && (
+              {frequecyOption === 2 && (
               <div style={styles().monthlySelect}>
-                <Select 
-                  isMulti 
+                <Dropdown 
                   options={monthlyFrequencyOptions}
-                  closeMenuOnSelect={false}
                   onChange={onOptionMonthlyChange}
                 />
               </div>

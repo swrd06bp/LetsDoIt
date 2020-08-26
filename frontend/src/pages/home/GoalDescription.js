@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import 'react-dropdown/style.css'
 import { DragDropContext } from 'react-beautiful-dnd'
 
 import ListHabit from '../../components/AddGoal/ListHabit'
+import AddHabit from '../../components/AddGoal/AddHabit' 
 import AddTask from '../../components/AddTask'
 import TaskList from '../../components/TaskList'
 import ListButton from '../../components/ListButton'
@@ -12,6 +13,7 @@ import { sortProjectTasks} from '../../app/utils'
 
 
 function GoalDescription (props) {
+  const [update, forceUpdate] = useReducer(x => x + 1, 0)
   const [content, setContent] = useState(props.goal.content)
   const [note, setNote] = useState(props.goal.note)
   const [dueDate, setDueDate] = useState(props.goal.dueDate)
@@ -164,7 +166,10 @@ function GoalDescription (props) {
     </div>
     )}
     {showPage === 'Habits' && (
-      <ListHabit goalId={props.goal._id} />
+      <div>
+        <AddHabit goalId={props.goal._id} getAllHabits={forceUpdate} />
+        <ListHabit goalId={props.goal._id} update={update} />
+      </div>
     )} 
       <div style={styles().footer}>
         <button style={styles().buttonCancel} onClick={() => props.onDescribe({

@@ -10,10 +10,19 @@ function HabitItem (props) {
     props.onUpdate()
   }
 
+  let frequency
+
+  if (props.item.frequency.day) frequency = 'Every day'
+  if (props.item.frequency.week) frequency = `${props.item.frequency.week} times a week`
+  if (props.item.frequency.month) frequency = `${props.item.frequency.month} times a month`
+
   return (
     <div style={styles().habitWrapper}>
       <div>
         <div>{props.item.content}</div> 
+      </div>
+      <div>
+        <div>{frequency}</div>
       </div>
       <img style={{cursor: 'pointer'}} src={'./trash.png'} alt='delete' onClick={onDelete} width='20' height='20' />
     </div>
