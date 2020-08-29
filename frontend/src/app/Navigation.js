@@ -13,7 +13,7 @@ function TopNavigation() {
 
   const getHappiness = async () => {
     const api = new Api()
-    const resp = await api.getHappiness()
+    const resp = await api.getHappiness(1)
     const json = await resp.json()
     if (!json.length || new Date(json[0].createdAt) < todayDate()) 
       setShowLink(true) 

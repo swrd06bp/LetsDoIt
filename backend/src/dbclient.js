@@ -24,14 +24,15 @@ function wrapped(operation)  {
 // -----------------------------------------
 // tasks
 // -----------------------------------------
-async function getElems(client, {table, query, userId}) {
+async function getElems(client, {table, query, userId, maxNum}) {
+  const maxLim = maxNum ? maxNum : 999999
   const masterQuery = userId ? {'$and': [query, userId]} : query
   const db = client.db('toDoList')
   let collection = db.collection(table)
   return await collection.find(
     query,
     {"sort": [['createdAt', 'desc']]}
-  ).toArray()
+  ).limit(maxLim).toArray()
 }
 
 async function writeElem(client, {table, elem, userId}) {

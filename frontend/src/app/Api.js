@@ -51,8 +51,8 @@ class Api {
   }
 
 
-  async getHappiness () {
-    const url = this.baseUrl + '/happiness'
+  async getHappiness (limit) {
+    const url = this.baseUrl + `/happiness?limit=${limit}`
     return await this.get(url)
   }
   

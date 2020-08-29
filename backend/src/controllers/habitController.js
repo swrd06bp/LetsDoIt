@@ -6,7 +6,13 @@ const {
 
 exports.habitGoalGet = async (req, res) => {
   const goalId = req.params.goalId
-  const query = {'goalId': goalId}
+  const { doneAt } = req.params
+  let query
+  if (!doneAt)
+    query = {'goalId': goalId, doneAt: null}
+  else {
+    query = {'goalId': goalId, doneAt: {'&gte': new Date(doneAt).toJSON()}}
+  }
   const habits = await dbClient.getElems({
     table: 'habits',
     query,

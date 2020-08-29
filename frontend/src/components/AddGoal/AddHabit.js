@@ -51,7 +51,7 @@ export default function AddHabit (props) {
 
   const onSubmit = async () => {
     if(content) {
-      const habit = { content, frequency: chosenFrequency, goalId: props.goalId }
+      const habit = { content, frequency: chosenFrequency, goalId: props.goalId, doneAt: null }
       await api.insertHabit(habit) 
       await props.getAllHabits() 
       setContent('')
