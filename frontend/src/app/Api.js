@@ -62,7 +62,13 @@ class Api {
     return await this.post(url, body)
   }
 
-  async getHabits (goalId) {
+  async getHabits({unfinished}) {
+    const url = this.baseUrl + `/habits`
+      + `?unfinished=${unfinished ? 'true' : 'false'}`
+    return await this.get(url)
+  }
+
+  async getHabitsGoal (goalId) {
     const url = this.baseUrl + `/goal/${goalId}/habits`
     return await this.get(url)
   }
@@ -76,6 +82,18 @@ class Api {
     const url = this.baseUrl + `/habit/${habitId}`
     return await this.delete(url)
   }
+  
+  async getRoutinesHabit ({habitId, isDone, since, limit}) {
+    const url = this.baseUrl + `/habit/${habitId}/routines`
+      + `?isDone=${isDone}&since=${since}&limit=${limit}`
+    return await this.get(url)
+  }
+  
+  async insertRoutine(routine) {
+    const url = this.baseUrl + '/routine'
+    return await this.post(url, routine)
+  }
+
 
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 

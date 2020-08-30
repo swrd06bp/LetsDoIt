@@ -7,6 +7,7 @@ const taskController = require('./controllers/taskController')
 const projectController = require('./controllers/projectController')
 const goalController = require('./controllers/goalController')
 const habitController = require('./controllers/habitController')
+const routineController = require('./controllers/routineController')
 
 
 
@@ -57,9 +58,13 @@ router.delete('/goal/:goalId', goalController.goalDelete)
 
 
 // habits
+router.get('/habits', habitController.habitGet)
 router.get('/goal/:goalId/habits', habitController.habitGoalGet)
 router.post('/habit', habitController.habitPost)
 router.delete('/habit/:habitId', habitController.habitDelete)
 
+// routines
+router.get('/habit/:habitId/routines', routineController.routineHabitGet)
+router.post('/routine', routineController.routinePost)
 
 exports.router = router

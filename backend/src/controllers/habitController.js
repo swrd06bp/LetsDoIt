@@ -4,6 +4,21 @@ const {
 } = require('../utils')
 
 
+exports.habitGet = async (req, res) => {
+  const { unfinished } = req.query
+
+  let query = {}
+  if (unfinished === 'true')
+    query['doneAt'] = null
+  else
+    query['doneAt'] = {$ne: null}
+
+  const habits = await dbClient.getElems({table: 'habits', query, userId: req.decoded})
+  res.status(200)
+  res.json(habits)
+  res.end()
+}
+
 exports.habitGoalGet = async (req, res) => {
   const goalId = req.params.goalId
   const { doneAt } = req.params

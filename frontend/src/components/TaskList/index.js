@@ -5,6 +5,7 @@ import Goal from '../../components/Goal'
 import Project from '../../components/Project'
 import SimpleTask from './SimpleTask'
 import ProjectTask from './ProjectTask'
+import RoutineTask from './RoutineTask'
 import { getDimRatio } from '../../app/DynamicSizing'
 
 const grid = 2
@@ -50,7 +51,7 @@ function TaskList (props) {
                     <Draggable
                         key={item.id}
                         draggableId={item.id}
-                        isDragDisabled={props.projectTask}
+                        isDragDisabled={props.projectTask || item.type === 'routine'}
                         index={index}>
                         {(provided, snapshot) => {
                           const isSelected = snapshot.isDragging || (props.task && props.task.id === item.id)
@@ -74,6 +75,16 @@ function TaskList (props) {
                                   onUpdate={props.onUpdate}
                                   goals={props.goals}
                                   projects={props.projects}
+                                />
+                              )}  
+                              {!props.projectTask && item.type === 'routine' && (
+                                <RoutineTask 
+                                  item={item}
+                                  onDescribe={() => {}}
+                                  scale={props.scale}
+                                  task={props.task}
+                                  onUpdate={props.onUpdate}
+                                  goals={props.goals}
                                 />
                               )}  
                               {!props.projectTask && item.type === 'project' && (

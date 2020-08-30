@@ -9,7 +9,7 @@ import Api from '../../app/Api'
 export default function AddHabit (props) {
   const [content, setContent] = useState('')
   const [frequecyOption, setFrequencyOption] = useState('every day')
-  const [chosenFrequency, setChosenFrequency] = useState({day: 1})
+  const [chosenFrequency, setChosenFrequency] = useState({type: 'day', number:1})
 
   const api = new Api()
 
@@ -36,22 +36,27 @@ export default function AddHabit (props) {
 
   const onOptionChange = ({value}) => {
     setFrequencyOption(value)
-    if (value === 0) setChosenFrequency({day: 1})
-    if (value === 1) setChosenFrequency({week: 1})
-    if (value === 2) setChosenFrequency({month: 1})
+    if (value === 0) setChosenFrequency({type: 'day', number: 1})
+    if (value === 1) setChosenFrequency({type: 'week', number: 1})
+    if (value === 2) setChosenFrequency({type: 'month', number: 1})
   }
   
   const onOptionWeeklyChange = ({value}) => {
-    setChosenFrequency({week: value})
+    setChosenFrequency({type: 'week', number: value})
   }
 
   const onOptionMonthlyChange = ({value}) => {
-    setChosenFrequency({month: value})
+    setChosenFrequency({type: 'month', number: value})
   }
 
   const onSubmit = async () => {
     if(content) {
-      const habit = { content, frequency: chosenFrequency, goalId: props.goalId, doneAt: null }
+      const habit = { 
+        content, 
+        frequency: chosenFrequency, 
+        goalId: props.goalId, 
+        doneAt: null
+      }
       await api.insertHabit(habit) 
       await props.getAllHabits() 
       setContent('')

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
@@ -6,7 +6,10 @@ import AddTask from '../../components/AddTask'
 import { getDimRatio } from '../../app/DynamicSizing'
 import {
   todayDate,
+  lastWeekDate,
+  lastMonthDate,
   decomposeTasksToday,
+  generateRoutineTask,
 } from '../../app/utils'
 
 
@@ -35,24 +38,86 @@ function TodayTaskList (props) {
   const [itemsSomeday, setItemsSomeday] = useState([])
   const api = new Api()
 
-  const getTasks = useCallback(async () => {
-    const response = await api.getTasks({from: todayDate().toJSON(), someday: true, unfinished: true})
+
+  const getAllTasks = async () => {
+    const response = await api.getTasks({
+      from: todayDate().toJSON(),
+      someday: true,
+      unfinished: true,
+    })
     const allTasks = await response.json()
+  
+    if (allTasks)
+      return  decomposeTasksToday(allTasks)
+    else 
+      return {
+        unfinishedTasks: [],
+        todayTasks: [],
+        tomorrowTasks: [],
+        upcomingTasks: [],
+        somedayTasks: []
+      }
+  
+  }
 
-    if (allTasks) {
-      const { unfinishedTasks, todayTasks, tomorrowTasks, upcomingTasks, somedayTasks } = decomposeTasksToday(allTasks)
+  const getAllRoutines = async () => {
+    const response = await api.getHabits({unfinished: true})
+    const allHabits = await response.json()
 
-      setItemsUnifinished(unfinishedTasks)
-      setItemsToday(todayTasks)
-      setItemsTomorrow(tomorrowTasks)
-      setItemsUpcoming(upcomingTasks)
-      setItemsSomeday(somedayTasks)
+    let allRoutineTasks = []
+    for (let habit of allHabits) {
+      // get the doneRoutines
+      const since = habit.frequency.type === 'day' ? todayDate() 
+        : (habit.frequency.type === 'week' ? lastWeekDate() : lastMonthDate())
+      const response = await api.getRoutinesHabit({
+        habitId: habit._id,
+        isDone: true,
+        since,
+        limit: habit.frequency.number,
+      })
+      const doneRoutines = await response.json()
+
+      // get the unDoneRoutines
+      const resp = await api.getRoutinesHabit({
+        habitId: habit._id,
+        isDone: false,
+        since,
+        limit: 1,
+      })
+      const unDoneRoutines = await resp.json()
+      
+      const routineTask = generateRoutineTask({habit, doneRoutines, unDoneRoutines})
+      if (routineTask)
+        allRoutineTasks.push(routineTask)
     }
-  }, [])
+
+    return allRoutineTasks
+  }
+
+  const getAllItems = async () => {
+    // get all routines
+    const allRoutineTasks = await getAllRoutines()
+      
+    // get all tasks
+    const { 
+      unfinishedTasks,
+      todayTasks,
+      tomorrowTasks,
+      upcomingTasks,
+      somedayTasks
+    } = await getAllTasks()
+
+
+    setItemsUnifinished(unfinishedTasks)
+    setItemsToday([...allRoutineTasks, ...todayTasks])
+    setItemsTomorrow(tomorrowTasks)
+    setItemsUpcoming(upcomingTasks)
+    setItemsSomeday(somedayTasks)
+  }
 
 
   useEffect(() => {
-    getTasks() 
+    getAllItems() 
   },[props.task]) 
 
 
@@ -107,7 +172,7 @@ function TodayTaskList (props) {
 
            
           api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
-            .then(getTasks())
+            .then(getAllItems())
         }
     }
 
@@ -124,7 +189,7 @@ function TodayTaskList (props) {
                   <TaskList
                     droppableId={"unfinished"}
                     items={itemsUnfinished}
-                    onUpdate={getTasks}
+                    onUpdate={getAllItems}
                     onDescribe={props.onDescribe}
                     task={props.task}
                     projects={props.projects}
@@ -138,7 +203,7 @@ function TodayTaskList (props) {
                 <TaskList
                   droppableId={"today"}
                   items={itemsToday}
-                  onUpdate={getTasks}
+                  onUpdate={getAllItems}
                   onDescribe={props.onDescribe}
                   projects={props.projects}
                   goals={props.goals}
@@ -151,7 +216,7 @@ function TodayTaskList (props) {
                 <TaskList
                   droppableId={"tomorrow"}
                   items={itemsTomorrow}
-                  onUpdate={getTasks}
+                  onUpdate={getAllItems}
                   onDescribe={props.onDescribe}
                   projects={props.projects}
                   goals={props.goals}
@@ -164,7 +229,7 @@ function TodayTaskList (props) {
                 <TaskList
                   droppableId={"upcoming"}
                   items={itemsUpcoming}
-                  onUpdate={getTasks}
+                  onUpdate={getAllItems}
                   onDescribe={props.onDescribe}
                   projects={props.projects}
                   goals={props.goals}
@@ -177,7 +242,7 @@ function TodayTaskList (props) {
                 <TaskList
                   droppableId={"someday"}
                   items={itemsSomeday}
-                  onUpdate={getTasks}
+                  onUpdate={getAllItems}
                   onDescribe={props.onDescribe}
                   goals={props.goals}
                   projects={props.projects}
@@ -187,7 +252,7 @@ function TodayTaskList (props) {
               </div>
             </DragDropContext>
        </div>
-      <AddTask onUpdate={getTasks}/>
+      <AddTask onUpdate={getAllItems}/>
     </div>
   )
 }

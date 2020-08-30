@@ -12,9 +12,9 @@ function HabitItem (props) {
 
   let frequency
 
-  if (props.item.frequency.day) frequency = 'Every day'
-  if (props.item.frequency.week) frequency = `${props.item.frequency.week} times a week`
-  if (props.item.frequency.month) frequency = `${props.item.frequency.month} times a month`
+  if (props.item.frequency.type === 'day') frequency = 'Every day'
+  if (props.item.frequency.type === 'week') frequency = `${props.item.frequency.number} times a week`
+  if (props.item.frequency.type === 'month') frequency = `${props.item.frequency.number} times a month`
 
   return (
     <div style={styles().habitWrapper}>
@@ -35,7 +35,7 @@ export default function ListHabit (props) {
   
   const getAllHabits = async () => {
     const api = new Api()
-    const resp = await api.getHabits(props.goalId)
+    const resp = await api.getHabitsGoal(props.goalId)
     const json = await resp.json()
     setAllHabits(json)
   }
