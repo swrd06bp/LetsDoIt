@@ -48,7 +48,8 @@ function WeeklyTaskList (props) {
       const weekDaysProjects = decomposeItemsWeek(props.projects, date, 'project')
       const weekDaysGoals = decomposeItemsWeek(props.goals, date, 'goal')
 
-      setItemsMonday([weekDaysGoals[0], ...weekDaysProjects[0], ...weekDaysTasks[0]])
+
+      setItemsMonday([...weekDaysGoals[0], ...weekDaysProjects[0], ...weekDaysTasks[0]])
       setItemsTuesday([...weekDaysGoals[1], ...weekDaysProjects[1], ...weekDaysTasks[1]])
       setItemsWednesday([...weekDaysGoals[2], ...weekDaysProjects[2], ...weekDaysTasks[2]])
       setItemsThursday([...weekDaysGoals[3], ...weekDaysProjects[3], ...weekDaysTasks[3]])
@@ -57,6 +58,7 @@ function WeeklyTaskList (props) {
       setItemsSunday([...weekDaysGoals[6], ...weekDaysProjects[6], ...weekDaysTasks[6]])
     }
   }
+
 
 
   useEffect(() => {
