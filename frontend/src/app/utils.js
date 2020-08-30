@@ -143,10 +143,12 @@ const generateRoutineTask = ({habit, doneRoutines, unDoneRoutines}) => {
   }
 
 
-  if (
+  if (doneRoutines.length === 0)
+    return routineTask
+
+  else if (
     (
-      !doneRoutines || 
-      (doneRoutines && doneRoutines.length < habit.frequency.number
+      (doneRoutines.length && doneRoutines.length < habit.frequency.number
       && doneRoutines[0].createAt >= todayDate())
     ) && (
       !(unDoneRoutines && new Date(unDoneRoutines[0].postponeUntil) >= tomorrowDate())
