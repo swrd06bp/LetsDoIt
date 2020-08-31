@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
-import Api from '../Api.js'
-import TaskList from '../components/TaskList'
-import { getDimRatio } from '../DynamicSizing'
+import Api from '../../app/Api'
+import TaskList from '../../components/TaskList'
+import { getDimRatio } from '../../app/DynamicSizing'
 import {
   weekDayDate,
   todayDate,
-  decomposeTasksWeek,
-} from '../utils'
+  decomposeItemsWeek,
+} from '../../app/utils'
 
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -39,30 +39,32 @@ function WeeklyTaskList (props) {
   const [itemsSunday, setItemsSunday] = useState([])
   const api = new Api()
 
-
-  useEffect(() => {
-    getTasks() 
-  },[props.task, date]) 
-
-
   const getTasks = async () => {
     const response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
     const allTasks = await response.json()
 
     if (allTasks) {
+      const weekDaysTasks = decomposeItemsWeek(allTasks, date, 'task')
+      const weekDaysProjects = decomposeItemsWeek(props.projects, date, 'project')
+      const weekDaysGoals = decomposeItemsWeek(props.goals, date, 'goal')
 
-      const weekDaysTasks = decomposeTasksWeek(allTasks, date)
 
-
-      setItemsMonday(weekDaysTasks[0])
-      setItemsTuesday(weekDaysTasks[1])
-      setItemsWednesday(weekDaysTasks[2])
-      setItemsThursday(weekDaysTasks[3])
-      setItemsFriday(weekDaysTasks[4])
-      setItemsSaturday(weekDaysTasks[5])
-      setItemsSunday(weekDaysTasks[6])
+      setItemsMonday([...weekDaysGoals[0], ...weekDaysProjects[0], ...weekDaysTasks[0]])
+      setItemsTuesday([...weekDaysGoals[1], ...weekDaysProjects[1], ...weekDaysTasks[1]])
+      setItemsWednesday([...weekDaysGoals[2], ...weekDaysProjects[2], ...weekDaysTasks[2]])
+      setItemsThursday([...weekDaysGoals[3], ...weekDaysProjects[3], ...weekDaysTasks[3]])
+      setItemsFriday([...weekDaysGoals[4], ...weekDaysProjects[4], ...weekDaysTasks[4]])
+      setItemsSaturday([...weekDaysGoals[5], ...weekDaysProjects[5], ...weekDaysTasks[5]])
+      setItemsSunday([...weekDaysGoals[6], ...weekDaysProjects[6], ...weekDaysTasks[6]])
     }
   }
+
+
+
+  useEffect(() => {
+    getTasks() 
+  },[props.task, date]) 
+
 
 
   
@@ -155,12 +157,13 @@ function WeeklyTaskList (props) {
         <button onClick={() => {getOtherWeek(1)}}>
           &gt;
         </button>
+        <div style={styles().monthTitle}>{id2DueDate('monday').toLocaleString('default', { month: 'long' }) + ' ' + id2DueDate('monday').getFullYear()}</div>
       </div>
             <DragDropContext onDragEnd={onDragEnd}>
               <div style={styles().calendarContainer}>
                 <div style={styles().dayContainer}>
-                  <h2>Monday</h2>
-                  <h5>{id2DueDate('monday').toLocaleDateString()}</h5>
+                  <div style={styles().dayTitle}>Monday</div>
+                  <div style={styles().dayNumberTitle}>{id2DueDate('monday').getDate()}</div>
                   <TaskList
                     droppableId={"monday"}
                     items={itemsMonday}
@@ -174,8 +177,8 @@ function WeeklyTaskList (props) {
                   />
                 </div>
                 <div style={styles().dayContainer}>
-                  <h2>Tuesday</h2>
-                  <h5>{id2DueDate('tuesday').toLocaleDateString()}</h5>
+                  <div style={styles().dayTitle}>Tuesday</div>
+                  <div style={styles().dayNumberTitle}>{id2DueDate('tuesday').getDate()}</div>
                   <TaskList
                     droppableId={"tuesday"}
                     items={itemsTuesday}
@@ -189,8 +192,8 @@ function WeeklyTaskList (props) {
                   />
                 </div>
                 <div style={styles().dayContainer}>
-                  <h2>Wednesday</h2>
-                  <h5>{id2DueDate('wednesday').toLocaleDateString()}</h5>
+                  <div style={styles().dayTitle}>Wednesday</div>
+                  <div style={styles().dayNumberTitle}>{id2DueDate('wednesday').getDate()}</div>
                   <TaskList
                     droppableId={"wednesday"}
                     items={itemsWednesday}
@@ -204,8 +207,8 @@ function WeeklyTaskList (props) {
                   />
                 </div>
                 <div style={styles().dayContainer}>
-                  <h2>Thursday</h2>
-                  <h5>{id2DueDate('thursday').toLocaleDateString()}</h5>
+                  <div style={styles().dayTitle}>Thursday</div>
+                  <div style={styles().dayNumberTitle}>{id2DueDate('thursday').getDate()}</div>
                   <TaskList
                     droppableId={"thursday"}
                     items={itemsThursday}
@@ -219,8 +222,8 @@ function WeeklyTaskList (props) {
                   />
                 </div>
                 <div style={styles().dayContainer}>
-                  <h2>Friday</h2>
-                  <h5>{id2DueDate('friday').toLocaleDateString()}</h5>
+                  <div style={styles().dayTitle}>Friday</div>
+                  <div style={styles().dayNumberTitle}>{id2DueDate('friday').getDate()}</div>
                   <TaskList
                     droppableId={"friday"}
                     items={itemsFriday}
@@ -234,8 +237,8 @@ function WeeklyTaskList (props) {
                   />
                 </div>
                 <div style={styles().dayContainer}>
-                  <h2>Saturday</h2>
-                  <h5>{id2DueDate('saturday').toLocaleDateString()}</h5>
+                  <div style={styles().dayTitle}>Saturday</div>
+                  <div style={styles().dayNumberTitle}>{id2DueDate('saturday').getDate()}</div>
                   <TaskList
                     droppableId={"saturday"}
                     items={itemsSaturday}
@@ -249,8 +252,8 @@ function WeeklyTaskList (props) {
                   />
                 </div>
                 <div style={styles().dayContainer}>
-                  <h2>Sunday</h2>
-                  <h5>{id2DueDate('sunday').toLocaleDateString()}</h5>
+                  <div style={styles().dayTitle}>Sunday</div>
+                  <div style={styles().dayNumberTitle}>{id2DueDate('sunday').getDate()}</div>
                   <TaskList
                     droppableId={"sunday"}
                     items={itemsSunday}
@@ -280,6 +283,16 @@ const styles = () => ({
   dayContainer: {
     textAlign: 'center', 
     width: 150 * getDimRatio().X,
+  },
+  dayTitle: {
+    fontSize: 25 * getDimRatio().X
+  },
+  dayNumberTitle: {
+    fontSize: 20 * getDimRatio().X
+  },
+  monthTitle: {
+    fontSize: 20 * getDimRatio().X,
+    marginLeft: 10,
   },
   calendarContainer: {
     display: 'flex',

@@ -7,15 +7,15 @@ import BehaviorForm from './BehaviorForm'
 
 function AddGoal (props) {
 
-  const [showBehaviorForm, setShowBehaviorForm] = useState(false)
+  const [goalId, setGoalId] = useState(null)
 
   return (
     <div style={styles.wrapper}>
-      {!showBehaviorForm && (
-        <SmarterForm onNext={() => setShowBehaviorForm(true)}/>
+      {!goalId && (
+        <SmarterForm onNext={setGoalId} />
       )}
-      {showBehaviorForm && (
-        <BehaviorForm />
+      {goalId && (
+        <BehaviorForm goalId={goalId} onClose={props.onUpdate}/>
       )}
     </div>
   )

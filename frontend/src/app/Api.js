@@ -50,6 +50,51 @@ class Api {
     return await this.get(url)
   }
 
+
+  async getHappiness (limit) {
+    const url = this.baseUrl + `/happiness?limit=${limit}`
+    return await this.get(url)
+  }
+  
+  async postHappiness (score, note) {
+    const url = this.baseUrl + '/happiness'
+    const body = { score, note }
+    return await this.post(url, body)
+  }
+
+  async getHabits({unfinished}) {
+    const url = this.baseUrl + `/habits`
+      + `?unfinished=${unfinished ? 'true' : 'false'}`
+    return await this.get(url)
+  }
+
+  async getHabitsGoal (goalId) {
+    const url = this.baseUrl + `/goal/${goalId}/habits`
+    return await this.get(url)
+  }
+  
+  async insertHabit(habit) {
+    const url = this.baseUrl + '/habit'
+    return await this.post(url, habit)
+  }
+  
+  async deleteHabit(habitId) {
+    const url = this.baseUrl + `/habit/${habitId}`
+    return await this.delete(url)
+  }
+  
+  async getRoutinesHabit ({habitId, isDone, since, limit}) {
+    const url = this.baseUrl + `/habit/${habitId}/routines`
+      + `?isDone=${isDone}&since=${since}&limit=${limit}`
+    return await this.get(url)
+  }
+  
+  async insertRoutine(routine) {
+    const url = this.baseUrl + '/routine'
+    return await this.post(url, routine)
+  }
+
+
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 
       + `/tasks?unfinished=${unfinished ? 'true' : 'false'}`
@@ -62,6 +107,11 @@ class Api {
 
   async getTasksProject(projectId) {
     let url = this.baseUrl + `/project/${projectId}/tasks`
+    return await this.get(url)
+  }
+  
+  async getTasksGoal(goalId) {
+    let url = this.baseUrl + `/goal/${goalId}/tasks`
     return await this.get(url)
   }
 

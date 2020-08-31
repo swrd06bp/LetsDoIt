@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 
-import ProjectShape from '../ProjectShape'
-import GoalShape from '../GoalShape'
-import ListButton from '../ListButton'
+import Goal from '../../components/Goal'
+import Project from '../../components/Project'
 import SimpleTask from './SimpleTask'
 import ProjectTask from './ProjectTask'
-import Api from '../../Api'
-import { getDimRatio } from '../../DynamicSizing'
-import { todayDate } from '../../utils'
+import RoutineTask from './RoutineTask'
+import { getDimRatio } from '../../app/DynamicSizing'
 
 const grid = 2
 
@@ -53,6 +51,7 @@ function TaskList (props) {
                     <Draggable
                         key={item.id}
                         draggableId={item.id}
+                        isDragDisabled={props.projectTask || item.type === 'routine'}
                         index={index}>
                         {(provided, snapshot) => {
                           const isSelected = snapshot.isDragging || (props.task && props.task.id === item.id)
@@ -67,7 +66,7 @@ function TaskList (props) {
                                   props.isPast
                               ), boxShadow: !item.doneAt ? '1px 2px grey' : null}}
                             >
-                              {!props.projectTask && (
+                              {!props.projectTask && item.type === 'task' && (
                                 <SimpleTask 
                                   item={item}
                                   onDescribe={props.onDescribe}
@@ -76,6 +75,32 @@ function TaskList (props) {
                                   onUpdate={props.onUpdate}
                                   goals={props.goals}
                                   projects={props.projects}
+                                />
+                              )}  
+                              {!props.projectTask && item.type === 'routine' && (
+                                <RoutineTask 
+                                  item={item}
+                                  onDescribe={() => {}}
+                                  scale={props.scale}
+                                  task={props.task}
+                                  onUpdate={props.onUpdate}
+                                  goals={props.goals}
+                                />
+                              )}  
+                              {!props.projectTask && item.type === 'project' && (
+                                <Project 
+                                  item={item}
+                                  onDescribe={() => {}}
+                                  project={props.project}
+                                  onUpdate={props.onUpdate}
+                                />
+                              )}  
+                              {!props.projectTask && item.type === 'goal' && (
+                                <Goal 
+                                  item={item}
+                                  onDescribe={() => {}}
+                                  goal={props.project}
+                                  onUpdate={props.onUpdate}
                                 />
                               )}  
                               {props.projectTask && (

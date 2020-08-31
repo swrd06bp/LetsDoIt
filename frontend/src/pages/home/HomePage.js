@@ -3,12 +3,13 @@ import React, { useState, useEffect } from 'react'
 import GoalSection from './GoalSection'
 import TodayTaskList from './TodayTaskList'
 import WeeklyTaskList from './WeeklyTaskList'
-import TaskDescription from '../components/TaskDescription'
-import ProjectDescription from '../components/ProjectDescription'
-import TopNavigation from '../Navigation'
-import { getDimScreen, getDimRatio } from '../DynamicSizing'
+import TaskDescription from './TaskDescription'
+import ProjectDescription from './ProjectDescription'
+import GoalDescription from './GoalDescription'
+import TopNavigation from '../../app/Navigation'
+import { getDimScreen, getDimRatio } from '../../app/DynamicSizing'
 import './HomePage.css'
-import Api from '../Api'
+import Api from '../../app/Api'
 
 
 function HomePage() {
@@ -43,8 +44,10 @@ function HomePage() {
         <div style={styles().title}>
           Let's do it{name && ', ' + name}!
         </div>
-        <div style={styles().weeklyToogle}>
-          Show weekly 
+        <div style={{display: 'flex',}}>
+          <div style={styles().weeklyToogle}>
+            Show weekly
+          </div> 
           <input 
             type='checkbox'
             checked={isWeekly}
@@ -73,14 +76,23 @@ function HomePage() {
                 goals={allGoals}
               />
             )}
-            {describeElem.project && (
+            {describeElem.project && !describeElem.goal && (
               <ProjectDescription
                 onDescribe={(value) => {
-                  setDescribeElem(value)
                   getData()
+                  setDescribeElem(value)
                 }}
                 project={describeElem.project}
                 goals={allGoals}
+              />
+            )}
+            {describeElem.goal && !describeElem.project && (
+              <GoalDescription
+                onDescribe={(value) => {
+                  getData()
+                  setDescribeElem(value)
+                }}
+                goal={describeElem.goal}
               />
             )}
           </div>

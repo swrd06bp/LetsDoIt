@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import { getDimRatio } from '../../DynamicSizing'
-import Api from '../../Api.js'
+import { getDimRatio } from '../../app/DynamicSizing'
+import Api from '../../app/Api.js'
 
 
 function AddTask (props) {

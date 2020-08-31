@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
 
 function DynamicResize (forceUpdate) {
     function handleResize() {
-      console.log('done')
       forceUpdate()
     } 
     window.addEventListener('resize', handleResize)
@@ -22,7 +20,7 @@ function getDimScreen () {
     X: window.screen.availWidth,
     Y: window.screen.availHeight,
   }
-  
 }
+
 
 export { DynamicResize, getDimRatio, getDimScreen }

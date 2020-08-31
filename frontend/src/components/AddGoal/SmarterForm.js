@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 
-import Api from '../../Api.js'
+import ListButton from '../ListButton'
+import Api from '../../app/Api.js'
 
 
 function SmarterForm (props) {
   const [goalInput, setGoalInput] = useState('')
+  const [goalList, setGoalList] = useState('Work')
   const [dateSelectedOption, setDateSelectedOption] = useState('In 5 years')
   const [goalDueDate, setGoalDueDate] = useState(new Date(new Date().getFullYear() + 5, new Date().getMonth(), new Date().getDay()))
 
@@ -32,28 +34,29 @@ function SmarterForm (props) {
     e.preventDefault();
     const api = new Api() 
     if (goalInput) {
-      await api.insertGoal({
+      const resp = await api.insertGoal({
         content: goalInput,
-        list: 'Work',
+        list: goalList,
         dueDate: new Date().toJSON(),
       })
+      const {goalId} = await resp.json()
+      props.onNext(goalId.insertedId)
     }
     setGoalInput('')
-    props.onNext()
   }
 
   const onChooseOption = (option) => {
     setDateSelectedOption(option.label)
     setGoalDueDate(option.value)
-  
   }
+
 
   return (
     <div style={styles.wrapper}>
     <img style={styles.image} src='/goal_settings.png' alt=''/>
     <div>
       <div style={styles.introText}>
-        Research showed that you are more likely to get what you want by setting yourself smarter goals.
+        Research showed that you are more likely to get what you want by setting yourself smarter goals. Your goals should be:
       </div>
       <div style={styles.pointContainer}>
         <div style={styles.firstLetterPoint}>S</div><div style={styles.restLetterPoint}>pecific:</div><div style={styles.definePoint}>The more specific you are about your goals, the better and more able you’ll be to accomplish them no matter what method you use.</div>
@@ -62,13 +65,13 @@ function SmarterForm (props) {
         <div style={styles.firstLetterPoint}>M</div><div style={styles.restLetterPoint}>iningful:</div><div style={styles.definePoint}>When your goals have a deep enough meaning to you, you’ll do whatever it takes to achieve them.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div style={styles.firstLetterPoint}>A</div><div style={styles.restLetterPoint}>chievable:</div><div style={styles.definePoint}>There are not unrealistic goals, only unrealistic deadlines.</div>
+        <div style={styles.firstLetterPoint}>A</div><div style={styles.restLetterPoint}>chievable:</div><div style={styles.definePoint}>There are no unrealistic goals, only unrealistic deadlines.</div>
       </div>
       <div style={styles.pointContainer}>
         <div style={styles.firstLetterPoint}>R</div><div style={styles.restLetterPoint}>elevant:</div><div style={styles.definePoint}>Your goals should be inline with and in harmony with what you actually want out of life; they should match up with your core values.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div style={styles.firstLetterPoint}>T</div><div style={styles.restLetterPoint}>ime&#8722;bound:</div><div style={styles.definePoint}>Your goals should be inline with and in harmony with what you actually want out of life; they should match up with your core values.</div>
+        <div style={styles.firstLetterPoint}>T</div><div style={styles.restLetterPoint}>ime&#8722;bound:</div><div style={styles.definePoint}>When your goals are time-bound, they’re measurable. Hold yourself accountable by measuring those goals on a daily, weekly, and monthly basis.</div>
       </div>
       <div style={styles.pointContainer}>
         <div style={styles.firstLetterPoint}>E</div><div style={styles.restLetterPoint}>valuate:</div><div style={styles.definePoint}>By evaluating your goals every single day, you’ll be much more likely to achieve them.</div>
@@ -90,6 +93,7 @@ function SmarterForm (props) {
           value={goalInput}
           onChange={(event) => setGoalInput(event.target.value)}
         />
+        <ListButton active={true} onListChange={setGoalList} scale={1} item={{list: goalList}} />
       </label>
       <div style={styles.labelContainer}>
 
@@ -161,7 +165,7 @@ const styles = {
     fontWeight: 'bold',
   },
   inputGoal: {
-    width: 600,
+    width: 550,
     marginLeft: 5,
   },
 }
