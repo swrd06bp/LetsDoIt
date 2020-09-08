@@ -5,7 +5,7 @@ const {
 
 
 exports.goalGet = async (req, res) => {
-  const query = {}
+  const query = req.params.goalId ? { _id: req.params.goalId } : {}
   const goals = await dbClient.getElems({
     table: 'goals',
     query,

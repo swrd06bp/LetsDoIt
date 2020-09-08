@@ -52,6 +52,7 @@ router.delete('/project/:projectId', projectController.projectDelete)
 
 // goals
 router.get('/goals', goalController.goalGet)
+router.get('/goal/:goalId', goalController.goalGet)
 router.post('/goal', goalController.goalPost)
 router.put('/goal/:goalId', goalController.goalPut)
 router.delete('/goal/:goalId', goalController.goalDelete)
