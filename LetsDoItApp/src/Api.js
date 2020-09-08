@@ -40,6 +40,56 @@ class Api {
     }
   }
   
+  async getName() {
+    const url = this.baseUrl + '/user'
+    return await this.get(url)
+  }
+
+
+  async getHappiness (limit) {
+    const url = this.baseUrl + `/happiness?limit=${limit}`
+    return await this.get(url)
+  }
+  
+  async postHappiness (score, note) {
+    const url = this.baseUrl + '/happiness'
+    const body = { score, note }
+    return await this.post(url, body)
+  }
+
+  async getHabits({unfinished}) {
+    const url = this.baseUrl + `/habits`
+      + `?unfinished=${unfinished ? 'true' : 'false'}`
+    return await this.get(url)
+  }
+
+  async getHabitsGoal (goalId) {
+    const url = this.baseUrl + `/goal/${goalId}/habits`
+    return await this.get(url)
+  }
+  
+  async insertHabit(habit) {
+    const url = this.baseUrl + '/habit'
+    return await this.post(url, habit)
+  }
+  
+  async deleteHabit(habitId) {
+    const url = this.baseUrl + `/habit/${habitId}`
+    return await this.delete(url)
+  }
+  
+  async getRoutinesHabit ({habitId, isDone, since, limit}) {
+    const url = this.baseUrl + `/habit/${habitId}/routines`
+      + `?isDone=${isDone}&since=${since}&limit=${limit}`
+    return await this.get(url)
+  }
+  
+  async insertRoutine(routine) {
+    const url = this.baseUrl + '/routine'
+    return await this.post(url, routine)
+  }
+
+
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 
       + `/tasks?unfinished=${unfinished ? 'true' : 'false'}`
@@ -47,6 +97,16 @@ class Api {
       + `&from=${from}` 
     if (until)
       url += `&until=${until}`
+    return await this.get(url)
+  }
+
+  async getTasksProject(projectId) {
+    let url = this.baseUrl + `/project/${projectId}/tasks`
+    return await this.get(url)
+  }
+  
+  async getTasksGoal(goalId) {
+    let url = this.baseUrl + `/goal/${goalId}/tasks`
     return await this.get(url)
   }
 
@@ -62,6 +122,54 @@ class Api {
   
   async deleteTask(taskId) {
     const url = this.baseUrl + `/task/${taskId}`
+    return await this.delete(url)
+  }
+
+  async getGoals() {
+    let url = this.baseUrl + `/goals`
+    return await this.get(url)
+  }
+
+  async getGoal(goalId) {
+    console.log('gol', goalId)
+    const url = this.baseUrl + `/goal/${goalId}`
+    return await this.get(url)
+  }
+
+  
+  async insertGoal(goal) {
+    const url = this.baseUrl + '/goal'
+    return await this.post(url, goal)
+  }
+
+  async updateGoal(goalId, goal) {
+    const url = this.baseUrl + `/goal/${goalId}`
+    return await this.put(url, goal)
+  }
+  
+  async deleteGoal(goalId) {
+    const url = this.baseUrl + `/goal/${goalId}`
+    return await this.delete(url)
+  }
+  
+  async getProjects() {
+    let url = this.baseUrl + `/projects`
+    return await this.get(url)
+  }
+
+  
+  async insertProject(project) {
+    const url = this.baseUrl + '/project'
+    return await this.post(url, project)
+  }
+
+  async updateProject(projectId, project) {
+    const url = this.baseUrl + `/project/${projectId}`
+    return await this.put(url, project)
+  }
+  
+  async deleteProject(projectId) {
+    const url = this.baseUrl + `/project/${projectId}`
     return await this.delete(url)
   }
 

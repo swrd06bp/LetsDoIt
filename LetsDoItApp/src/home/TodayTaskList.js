@@ -12,11 +12,15 @@ import { DraxProvider, DraxView } from 'react-native-drax'
 import Api from '../Api.js'
 import AddTask from '../components/AddTask'
 import TaskDescription from '../components/TaskDescription'
-import Task from '../components/Task'
+import SimpleTask from '../components/Task/SimpleTask'
+import RoutineTask from '../components/Task/RoutineTask'
 
 import {
   todayDate,
+  lastWeekDate,
+  lastMonthDate,
   decomposeTasksToday,
+  generateRoutineTask,
 } from '../utils'
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -49,25 +53,86 @@ function TodayTaskList (props) {
 
 
   useEffect(() => {
-    getTasks() 
+    getAllItems() 
   },[props.task]) 
   
-
-  const getTasks = async () => {
-    const response = await api.getTasks({from: todayDate().toJSON(), someday: true, unfinished: true})
+  const getAllTasks = async () => {
+    const response = await api.getTasks({
+      from: todayDate().toJSON(),
+      someday: true,
+      unfinished: true,
+    })
     const allTasks = await response.json()
+  
+    if (allTasks)
+      return  decomposeTasksToday(allTasks)
+    else 
+      return {
+        unfinishedTasks: [],
+        todayTasks: [],
+        tomorrowTasks: [],
+        upcomingTasks: [],
+        somedayTasks: []
+      }
+  }
+  
+  const getAllRoutines = async () => {
+    const response = await api.getHabits({unfinished: true})
+    const allHabits = await response.json()
 
-    if (allTasks) {
-      const { unfinishedTasks, todayTasks, tomorrowTasks, upcomingTasks, somedayTasks } = decomposeTasksToday(allTasks)
+    let allRoutineTasks = []
+    for (let habit of allHabits) {
+      // get the doneRoutines
+      const since = habit.frequency.type === 'day' ? todayDate() 
+        : (habit.frequency.type === 'week' ? lastWeekDate() : lastMonthDate())
+      const response = await api.getRoutinesHabit({
+        habitId: habit._id,
+        isDone: true,
+        since,
+        limit: habit.frequency.number,
+      })
+      const doneRoutines = await response.json()
 
-      setItemsUnifinished(unfinishedTasks)
-      setItemsToday(todayTasks)
-      setItemsTomorrow(tomorrowTasks)
-      setItemsUpcoming(upcomingTasks)
-      setItemsSomeday(somedayTasks)
+      // get the unDoneRoutines
+      const resp = await api.getRoutinesHabit({
+        habitId: habit._id,
+        isDone: false,
+        since,
+        limit: 1,
+      })
+      const unDoneRoutines = await resp.json()
+      
+      const routineTask = generateRoutineTask({habit, doneRoutines, unDoneRoutines})
+      if (routineTask)
+        allRoutineTasks.push(routineTask)
     }
+
+    return allRoutineTasks
+  }
+  
+  const getAllItems = async () => {
+    // get all routines
+    const allRoutineTasks = await getAllRoutines()
+      
+    // get all tasks
+    const { 
+      unfinishedTasks,
+      todayTasks,
+      tomorrowTasks,
+      upcomingTasks,
+      somedayTasks
+    } = await getAllTasks()
+
+
+    setItemsUnifinished(unfinishedTasks)
+    setItemsToday([...allRoutineTasks, ...todayTasks])
+    setItemsTomorrow(tomorrowTasks)
+    setItemsUpcoming(upcomingTasks)
+    setItemsSomeday(somedayTasks)
+    
     setIsRefreshing(false)
   }
+
   
   const id2List = {
     Unfinished: itemsUnfinished,
@@ -142,7 +207,7 @@ function TodayTaskList (props) {
 
            
           api.updateTask(source.id, {dueDate: id2DueDate(destination.droppableId)})
-            .then(getTasks)
+            .then(getAllItems)
         }
     }
 
@@ -154,7 +219,7 @@ function TodayTaskList (props) {
         task={describeTask}
         isVisible={describeTask ? true : false} 
         onDescribe={setDescribeTask}
-        onUpdate={getTasks}
+        onUpdate={getAllItems}
       />)}
       <View style={styles.wrapper}>
         <DraxProvider>
@@ -163,7 +228,7 @@ function TodayTaskList (props) {
               refreshing={isRefreshing}
               onRefresh={() => {
                 setIsRefreshing(true)
-                getTasks()
+                getAllItems()
               }}
               sections={DATA}
               keyExtractor={(item) => item.id}
@@ -172,15 +237,25 @@ function TodayTaskList (props) {
                   style={styles.backgroundItem}
                   receivingStyle={styles.backgroundReceivingItem}
                   renderContent={({ viewState }) => {
-                    return (
-                      <TouchableOpacity onPress={() => setDescribeTask(item)}>
-                      <Task 
-                        item={item}
-                        onUpdate={getTasks}
-                        isSelected={draggedTask && draggedTask.id === item.id} 
-                      />
-                      </TouchableOpacity>
-                    )
+                    if (item.type === 'task')
+                      return (
+                        <TouchableOpacity onPress={() => setDescribeTask(item)}>
+                        <SimpleTask 
+                          item={item}
+                          onUpdate={getAllItems}
+                          isSelected={draggedTask && draggedTask.id === item.id} 
+                        />
+                        </TouchableOpacity>
+                      )
+                    else if (item.type === 'routine')
+                      return (
+                        <RoutineTask
+                          item={item}
+                          onDescribe={() => {}}
+                          onUpdate={getAllItems}
+                        />
+                      )
+
                   }}
                   longPressDelay={1000}
                   animateSnapback={false}
@@ -225,7 +300,7 @@ function TodayTaskList (props) {
             </View>
             <View style={[styles.addTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
               {!draggedTask && (
-                <AddTask onUpdate={getTasks}/>
+                <AddTask onUpdate={getAllItems}/>
               )}
               {draggedTask && (
                   <DraxView
@@ -245,7 +320,7 @@ function TodayTaskList (props) {
                     onReceiveDragDrop={(event) => {
                       api.deleteTask(draggedTask.id)
                         .then(() => {
-                          getTasks()
+                          getAllItems()
                           setDraggedTask(null)
                           setShowDeletion(false)
                         })

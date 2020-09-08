@@ -9,6 +9,17 @@ const dayAfterDate = () => {
     date.setDate(date.getDate() + 2)
     return date
 } 
+const lastWeekDate = () => {
+    let date = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
+    date.setDate(date.getDate() - 7)
+    return date
+}
+
+const lastMonthDate = () => {
+    let date = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
+    date.setMonth(date.getMonth() - 1)
+    return date
+}
 
 const weekDayDate = (date, day) => {
   const d = new Date(new Date(date).getFullYear(), new Date(date).getMonth(), new Date(date).getDate())
@@ -34,6 +45,7 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
     const todayTasks = sortTasks(allTasks.filter( x => {
@@ -49,6 +61,7 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
     const tomorrowTasks = sortTasks(allTasks.filter( x => {
@@ -64,6 +77,7 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
     const upcomingTasks = sortTasks(allTasks.filter( x => {
@@ -77,6 +91,7 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
     const somedayTasks = sortTasks(allTasks.filter( x => {
@@ -84,32 +99,43 @@ const decomposeTasksToday = allTasks => {
     }).map(x => {
       let task = x
       task.id = task._id
+      task.type = 'task'
       return task
     }))
 
   return { unfinishedTasks, todayTasks, tomorrowTasks, upcomingTasks, somedayTasks }
 }
 
-const decomposeTasksWeek = (allTasks, date) => {
-  let weekDaysTasks = []
-  for (let i = 0; i < 7; i++) { 
-    const dayTasks = sortTasks(allTasks.filter( x => {
-      return x.dueDate && new Date(x.dueDate) >= weekDayDate(date, i) && new Date(x.dueDate) < weekDayDate(date, i+1)
-    }).map(x => {
-      let task = x
-      task.id = task._id
-      return task
-    }))
-    weekDaysTasks.push(dayTasks)
+const generateRoutineTask = ({habit, doneRoutines, unDoneRoutines}) => {
+  const routineTask = {
+    id: habit._id,
+    type: 'routine',
+    content: habit.content,
+    goalId: habit.goalId
   }
-
-  return weekDaysTasks
+  if (doneRoutines.length === 0)
+    return routineTask
+  else if (
+    (
+      (doneRoutines.length 
+        && doneRoutines.length < habit.frequency.number
+        && doneRoutines[0].createAt >= todayDate())
+    ) && (
+      !(unDoneRoutines 
+        && new Date(unDoneRoutines[0].postponeUntil) >= tomorrowDate())
+    )
+  )
+    return routineTask
+  else
+    return null
 }
 
 export {
   todayDate,
   tomorrowDate,
   weekDayDate,
+  lastWeekDate,
+  lastMonthDate,
   decomposeTasksToday,
-  decomposeTasksWeek,
+  generateRoutineTask,
 }
