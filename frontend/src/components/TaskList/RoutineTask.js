@@ -27,13 +27,14 @@ function FailureScreen (props) {
       >
       <div style={styles().failureWrapper}>
         <div>
+          <div>Not today?</div>
           <div>Note</div>
           <textarea 
             type='text' 
             name='note'
             value={note ? note : ''} 
             onChange={(event) => setNote(event.target.value)} 
-            style={styles().noteText}
+            style={styles().failureNoteText}
           />
 
 
@@ -43,7 +44,7 @@ function FailureScreen (props) {
         <div>Postpone until:</div>
         <input type='date' onChange={(event) => setPostponeUntil(new Date(event.target.value))}/>
         </div>
-        <div style={styles().button} onClick={() => onFailure()}>Done</div>
+        <div style={styles().failureButton} onClick={() => onFailure()}>Done</div>
       </div>
     </Modal>
   )
@@ -104,6 +105,7 @@ const styles = () => ({
   },
   titleContainer: {
     marginLeft: 5,
+    fontSize: 15 * getDimRatio().X,
   },
   frontContainer: {
     display: 'flex',
@@ -115,9 +117,10 @@ const styles = () => ({
     justifyContent: 'center',
     fontWeight: 'bold',
     marginRight: 5,
-    width: 75,
+    width: 75 * getDimRatio().X,
     background: 'lightgrey',
     borderRadius: 20,
+    fontSize: 15 * getDimRatio().X,
   },
   buttonContainer: {
     display: 'flex',
@@ -133,11 +136,17 @@ const styles = () => ({
     transform: 'translate(-50%, -50%)'
   },
   failureWrapper: {
-    height: 300,
-    width: 200,
+    height: 300 * getDimRatio().Y,
     
   },
-  button: {
+  failureNoteTitle: {
+     
+   },
+  failureNoteText: {
+    height: 150* getDimRatio().Y,
+    width: 150 * getDimRatio().X
+  },
+  failureButton: {
     cursor: 'pointer'
   },
 })
