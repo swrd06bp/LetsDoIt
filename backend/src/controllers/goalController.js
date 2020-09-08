@@ -1,11 +1,12 @@
 const dbClient = require('../dbclient')
+const { ObjectID } require('mongodb')
 const { 
   getRandomColor,
 } = require('../utils')
 
 
 exports.goalGet = async (req, res) => {
-  const query = req.params.goalId ? { _id: req.params.goalId } : {}
+  const query = req.params.goalId ? { _id: ObjectID(req.params.goalId) } : {}
   const goals = await dbClient.getElems({
     table: 'goals',
     query,
