@@ -1,5 +1,5 @@
 const dbClient = require('../dbclient')
-const { ObjectID } require('mongodb')
+const { ObjectID } = require('mongodb')
 const { 
   getRandomColor,
 } = require('../utils')
