@@ -57,7 +57,6 @@ function TodayTaskList (props) {
         upcomingTasks: [],
         somedayTasks: []
       }
-  
   }
 
   const getAllRoutines = async () => {

@@ -59,7 +59,12 @@ function RoutineTask (props) {
   }, [])
 
   const onAcheive = async () => {
-    await api.insertRoutine({habitId: props.item.id, note: null, postponeUntil: null, isDone: true}) 
+    await api.insertRoutine({
+      habitId: props.item.id,
+      note: null,
+      postponeUntil: null,
+      isDone: true
+    }) 
     props.onUpdate()
   }
 
