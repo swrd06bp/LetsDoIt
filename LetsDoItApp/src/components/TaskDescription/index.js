@@ -216,7 +216,6 @@ const styles = StyleSheet.create({
   noteTitle: {
     fontWeight: 'bold',
     marginHorizontal: 10,
-
   },
   noteText: {
     borderColor: 'lightgrey',

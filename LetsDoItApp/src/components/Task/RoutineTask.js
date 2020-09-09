@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Modal from 'react-native-modal'
-import { View, TextInput, Text, TouchableOpacity, StyleSheet  } from 'react-native'
+import { 
+  View, 
+  TextInput, 
+  Text, 
+  TouchableOpacity,
+  StyleSheet
+} from 'react-native'
+import ActionButton from '../ActionButton'
 import Api from '../../Api'
 
 function FailureScreen (props) {
   const [note, setNote] = useState(null)
-  const [postponeUntil, setPostponeUntil] = useState(null)
+  const [postponeUntil, setPostponeUntil] = useState(new Date(new Date().setDate(new Date().getDate() + 1)))  
   const [showDatePicker, setShowDatePicker] = useState(false)
   const api = new Api()
 
@@ -19,38 +26,43 @@ function FailureScreen (props) {
       <Modal
         isVisible={props.showModal}
         onBackdropPress={() => props.onClose()}
-        style={styles}
       >
       <View style={styles.failureWrapper}>
         <View>
-          <Text>Note</Text>
-          <TextInput 
-            multiline={true}
-            value={note ? note : ''} 
-            onChangeText={(text) => setNote(text)} 
-            style={styles.noteText}
-          />
+          <Text style={styles.failureTitleText}>Not today?</Text>
         
         </View>
-        <View>
+        <View style={styles.failurePostponeContainer}>
         <Text>Postpone until:</Text>
           <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Text>{postponeUntil ? postponeUntil : 'tomorrow'}</Text>
+            <Text style={styles.failureDate}>{postponeUntil.toJSON().slice(0, 10)}</Text>
           </TouchableOpacity>
           {showDatePicker && (
             <DateTimePicker
               testID="dateTimePicker"
+              value={postponeUntil}
               is24Hour={true}
               mode={'date'}
               display="default"
-              onChange={(date) => {
-                setPostponeUntil(new Date(date))
+              onChange={(event, date) => {
+                console.log(date)
+                if (date)
+                  setPostponeUntil(date)
                 setShowDatePicker(false)
               }}
             />
           )}
         </View>
-        <TouchableOpacity style={styles.button} onClick={() => onFailure()}><Text>Done</Text></TouchableOpacity>
+        <View>
+          <Text style={styles.failureNoteTitle}>Note</Text>
+          <TextInput 
+            multiline={true}
+            value={note ? note : ''} 
+            onChangeText={(text) => setNote(text)} 
+            style={styles.failureNoteText}
+          />
+        </View>
+        <ActionButton onSubmit={onFailure} text={'Done'} />
       </View>
     </Modal>
   )
@@ -66,10 +78,9 @@ function RoutineTask (props) {
   useEffect(() => {
     const getColorCode = async () => {
       const resp = await api.getGoal(props.item.goalId)
-      console.log(resp, props.item)
-      //const goal = await resp.json()
-      ////setColorCode(goal.colorCode)
-      //alert(goal.colorCode)
+      const goal = await resp.json()
+      if (goal.length)
+        setColorCode(goal[0].colorCode)
     }
     getColorCode()
   }, [])
@@ -153,9 +164,39 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   failureWrapper: {
+    position: 'absolute',
+    alignSelf: 'center',
+    borderRadius: 10,
     height: 300,
-    width: 200,
-    
+    width: 250,
+    backgroundColor: 'white',
+  },
+  failureTitleText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#32A3BC',
+    margin: 10,
+  },
+  failureDate: {
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+  },
+  failureNoteTitle: {
+    fontWeight: 'bold',
+    marginHorizontal: 10,
+  },
+  failureNoteText: {
+    borderColor: 'lightgrey',
+    borderWidth: 1,
+    marginHorizontal: 10,
+    height: 100,
+  },
+  failurePostponeContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 10,
+    marginVertical: 15,
+
   },
 })
 

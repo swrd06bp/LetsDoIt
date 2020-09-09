@@ -131,7 +131,6 @@ class Api {
   }
 
   async getGoal(goalId) {
-    console.log('gol', goalId)
     const url = this.baseUrl + `/goal/${goalId}`
     return await this.get(url)
   }
