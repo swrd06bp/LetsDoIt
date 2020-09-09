@@ -10,6 +10,7 @@ export default function AddHabit (props) {
   const [content, setContent] = useState('')
   const [frequecyOption, setFrequencyOption] = useState('every day')
   const [chosenFrequency, setChosenFrequency] = useState({type: 'day', number:1})
+  const [startTime, setStartTime] = useState('00:00')
 
   const api = new Api()
 
@@ -55,7 +56,8 @@ export default function AddHabit (props) {
         content, 
         frequency: chosenFrequency, 
         goalId: props.goalId, 
-        doneAt: null
+        doneAt: null,
+        startTime,
       }
       await api.insertHabit(habit) 
       await props.getAllHabits() 
@@ -100,6 +102,10 @@ export default function AddHabit (props) {
               </div>
               )}
             </div>
+          <div style={styles().frequencyContainer}>
+            <div style={styles().titleFrequency}>Start time: </div>
+            <input type='time' value={startTime} onChange={x => setStartTime(x.target.value)} />
+          </div>
           </div>
           <div style={styles().addButton} onClick={onSubmit}>Add</div>
         </div>

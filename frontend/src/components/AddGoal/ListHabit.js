@@ -24,6 +24,9 @@ function HabitItem (props) {
       <div>
         <div>{frequency}</div>
       </div>
+      <div>
+        <div>{props.item.startTime}</div> 
+      </div>
       <img style={{cursor: 'pointer'}} src={'./trash.png'} alt='delete' onClick={onDelete} width='20' height='20' />
     </div>
   )

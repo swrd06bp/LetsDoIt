@@ -113,8 +113,12 @@ const generateRoutineTask = ({habit, doneRoutines, unDoneRoutines}) => {
     content: habit.content,
     goalId: habit.goalId
   }
+  
+  const [startHour, startMinute] = habit.startTime.split(':')
 
-  if (doneRoutines.length === 0 && unDoneRoutines.length === 0)
+  if (parseInt(startHour) > new Date().getHours() || (parseInt(startHour) === new Date().getHours() && parseInt(startMinute) > new Date().getMinutes()))
+    return null
+  else if (doneRoutines.length === 0 && unDoneRoutines.length === 0)
     return routineTask
   else if (doneRoutines.length === 0 && new Date(unDoneRoutines[0].postponeUntil) < tomorrowDate())
     return routineTask
