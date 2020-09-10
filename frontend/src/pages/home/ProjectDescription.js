@@ -80,9 +80,9 @@ function ProjectDescription (props) {
 
      <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
       <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
-       <h4 style={styles().noteTitle}>
+       <div style={styles().noteTitle}>
         Status
-       </h4>
+       </div>
         <div style={styles().checkboxContainer}>
           Someday
           <div>
@@ -145,9 +145,9 @@ function ProjectDescription (props) {
        </div>
 
       <div>
-        <h4 style={styles().noteTitle}>
+        <div style={styles().noteTitle}>
           Note
-        </h4>
+        </div>
         <div style={styles().noteContainer}>
           <textarea 
             type='text' 
@@ -163,8 +163,8 @@ function ProjectDescription (props) {
       <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
         <DragDropContext onDragEnd={() => {}}>
         <div style={styles().taskListTitle}>
-          <h4 style={styles().noteTitle}>Tasks</h4>
-          <h4 style={styles().noteTitle}>{tasks.filter(x => x.doneAt).length}/{tasks.length}</h4>
+          <div style={styles().noteTitle}>Tasks</div>
+          <div style={styles().noteTitle}>{tasks.filter(x => x.doneAt).length}/{tasks.length}</div>
         </div>
         <div style={styles().taskList}>
         <TaskList
@@ -229,6 +229,7 @@ const styles = () => ({
   noteTitle: {
     marginLeft: 10* getDimRatio().X,
     marginRight: 10 * getDimRatio().X,
+    fontSize: 20 * getDimRatio().X,
     color: '#32A3BC',
   },
   noteText: {

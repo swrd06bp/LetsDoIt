@@ -64,104 +64,115 @@ function GoalDescription (props) {
         </div>
       </div>
 
-      <div style={styles().titleTaskContainer}>
-        <input 
-          type='text' 
-          name='content'
-          value={content} 
-          onChange={(event) => setContent(event.target.value)} 
-          style={styles().titleTaskText}
-        />
-        <ListButton
-          item={props.goal}
-          scale={1.5}
-          active={true}
-          onListChange={setList}
-        />
-      </div>
-
       <div style={styles().navbarContainer}>
-        <div style={styles().narbarOption} onClick={() => setShowPage('Characteristics')}>Characteristics</div>
-        <div style={styles().narbarOption} onClick={() => setShowPage('Habits')}>Habits</div>
+        <div 
+          style={showPage === 'Characteristics' ? styles().narbarOptionActive : styles().narbarOption}
+          onClick={() => setShowPage('Characteristics')}
+        >
+          Characteristics
+        </div>
+        <div 
+          style={showPage === 'Habits' ? styles().narbarOptionActive : styles().narbarOption}
+          onClick={() => setShowPage('Habits')}
+        >
+          Habits
+        </div>
       </div>
-
-
     {showPage === 'Characteristics' && ( 
-    <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
-      <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
-       <h4 style={styles().noteTitle}>
-        Status
-       </h4>
-            <div style={styles().checkboxContainer}>
-          Due 
-          <input 
-            type='date' 
-            value={new Date(dueDate).toJSON().slice(0, 10)} 
-            onChange={(event) => { if (event.target.value) setDueDate(new Date(event.target.value))}}
-          />
-        </div>
-        
-        <div>
-            <div style={styles().checkboxContainer}>
-            Mark as done
-          <input
-            type='checkbox'
-            checked={doneAt ? true : false}
-            onChange={() => {
-              if (doneAt) 
-                setDoneAt(null)
-              else
-                setDoneAt(new Date())
-            }}
-          />
-          {doneAt && (
-            <div style={styles().checkboxContainer}>
-              Done at 
-              <input 
-                type='date' 
-                value={new Date(doneAt).toJSON().slice(0, 10)} 
-                onChange={(event) => {setDoneAt(new Date(event.target.value))}}
-              />
-            </div>
-          )}
-          </div>
-        </div>
-
       <div>
-        <h4 style={styles().noteTitle}>
-          Note
-        </h4>
-        <div style={styles().noteContainer}>
-          <textarea 
+        <div style={styles().titleTaskContainer}>
+          <input 
             type='text' 
-            name='note'
-            value={note ? note : ''} 
-            onChange={(event) => setNote(event.target.value)} 
-            style={styles().noteText}
+            name='content'
+            value={content} 
+            onChange={(event) => setContent(event.target.value)} 
+            style={styles().titleTaskText}
           />
-       </div>
-      </div>
+          <ListButton
+            item={props.goal}
+            scale={1.5}
+            active={true}
+            onListChange={setList}
+          />
+        </div>
 
-    </div>
-      <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
-        <DragDropContext onDragEnd={() => {}}>
-        <div style={styles().taskListTitle}>
-          <h4 style={styles().noteTitle}>Tasks</h4>
-          <h4 style={styles().noteTitle}>{tasks.filter(x => x.doneAt).length}/{tasks.length}</h4>
-        </div>
-        <div style={styles().taskList}>
-        <TaskList
-          droppableId={"tasks"}
-          items={tasks}
-          onUpdate={getGoalTasks}
-          onDescribe={() => {}}
-          scale={1}
-          projectTask={true}
+
+      <div style={{display: 'flex', flexDirection: 'row', height: '60%'}}>
+        <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
+         <div style={styles().noteTitle}>
+          Status
+         </div>
+              <div style={styles().checkboxContainer}>
+            Due 
+            <input 
+              type='date' 
+              value={new Date(dueDate).toJSON().slice(0, 10)} 
+              onChange={(event) => { if (event.target.value) setDueDate(new Date(event.target.value))}}
+            />
+          </div>
           
-        />
+          <div>
+              <div style={styles().checkboxContainer}>
+              Mark as done
+            <input
+              type='checkbox'
+              checked={doneAt ? true : false}
+              onChange={() => {
+                if (doneAt) 
+                  setDoneAt(null)
+                else
+                  setDoneAt(new Date())
+              }}
+            />
+            {doneAt && (
+              <div style={styles().checkboxContainer}>
+                Done at 
+                <input 
+                  type='date' 
+                  value={new Date(doneAt).toJSON().slice(0, 10)} 
+                  onChange={(event) => {setDoneAt(new Date(event.target.value))}}
+                />
+              </div>
+            )}
+            </div>
+          </div>
+
+        <div>
+          <div style={styles().noteTitle}>
+            Note
+          </div>
+          <div style={styles().noteContainer}>
+            <textarea 
+              type='text' 
+              name='note'
+              value={note ? note : ''} 
+              onChange={(event) => setNote(event.target.value)} 
+              style={styles().noteText}
+            />
+         </div>
         </div>
-        </DragDropContext>
-        <AddTask goalId={props.goal._id} onUpdate={getGoalTasks} list={props.goal.list}/>
+
+      </div>
+        <div style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column'}}>
+          <DragDropContext onDragEnd={() => {}}>
+          <div style={styles().taskListTitle}>
+            <div style={styles().noteTitle}>Tasks</div>
+            <div style={styles().noteTitle}>{tasks.filter(x => x.doneAt).length}/{tasks.length}</div>
+          </div>
+          <div style={styles().taskList}>
+          <TaskList
+            droppableId={"tasks"}
+            items={tasks}
+            onUpdate={getGoalTasks}
+            onDescribe={() => {}}
+            scale={1}
+            projectTask={true}
+            
+          />
+          </div>
+          </DragDropContext>
+          <AddTask goalId={props.goal._id} onUpdate={getGoalTasks} list={props.goal.list}/>
+        </div>
       </div>
     </div>
     )}
@@ -217,6 +228,12 @@ const styles = () => ({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  narbarOptionActive: {
+    background: 'lightblue',
+    marginLeft: 10,
+    color: 'blue',
+    cursor: 'pointer',
+  },
   narbarOption: {
     marginLeft: 10,
     color: 'blue',
@@ -250,6 +267,7 @@ const styles = () => ({
     marginLeft: 10* getDimRatio().X,
     marginRight: 10 * getDimRatio().X,
     color: '#32A3BC',
+    fontSize: 20 * getDimRatio().X,
   },
   noteText: {
     width: '90%',
