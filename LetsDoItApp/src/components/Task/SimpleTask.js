@@ -3,6 +3,7 @@ import {
   View,
   Text,
   SectionList,
+  Vibration,
   Image,
   TouchableOpacity,
   StyleSheet,
@@ -20,6 +21,7 @@ function Task (props) {
   const onCheckboxChange = async () => {
     const api = new Api()
     await api.updateTask(props.item.id, {doneAt: !props.item.doneAt ? new Date() : null})
+    Vibration.vibrate(100)
     props.onUpdate()
   }
 

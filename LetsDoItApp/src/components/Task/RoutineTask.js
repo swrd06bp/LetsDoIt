@@ -4,6 +4,7 @@ import Modal from 'react-native-modal'
 import { 
   View, 
   TextInput, 
+  Vibration,
   Text, 
   TouchableOpacity,
   StyleSheet
@@ -19,6 +20,7 @@ function FailureScreen (props) {
 
   const onFailure = async () => {
     await api.insertRoutine({habitId: props.item.id, note, postponeUntil, isDone: false}) 
+    Vibration.vibrate(100)
     await props.onUpdate()
     props.onClose()
   }
@@ -92,6 +94,7 @@ function RoutineTask (props) {
       postponeUntil: null,
       isDone: true
     }) 
+    Vibration.vibrate(100)
     props.onUpdate()
   }
 

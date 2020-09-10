@@ -261,7 +261,7 @@ function TodayTaskList (props) {
                   animateSnapback={false}
                   onDragStart={(event)=> {
                     setDraggedTask({id: item.id, droppableId: section.title})
-                    Vibration.vibrate()
+                    Vibration.vibrate(200)
                   }}
                   onReceiveDragDrop={(event) => {
                     const destination = {droppableId: section.title}
@@ -320,6 +320,7 @@ function TodayTaskList (props) {
                     onReceiveDragDrop={(event) => {
                       api.deleteTask(draggedTask.id)
                         .then(() => {
+                          Vibration.vibrate(400)
                           getAllItems()
                           setDraggedTask(null)
                           setShowDeletion(false)
