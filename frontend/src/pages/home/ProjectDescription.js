@@ -7,6 +7,7 @@ import TitleElem from '../../components/CommonDescription/TitleElem'
 import AddTask from '../../components/AddTask'
 import TaskList from '../../components/TaskList'
 import ListButton from '../../components/ListButton'
+import DeleteButton from '../../components/DeleteButton'
 import GoalShape from '../../components/GoalShape'
 import Api from '../../app/Api'
 import { getDimScreen, getDimRatio } from '../../app/DynamicSizing'
@@ -61,17 +62,7 @@ function ProjectDescription (props) {
     <div style={styles().wrapper}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <h3 style={styles().title}>Description</h3>
-        <div 
-          onClick={onDelete} 
-          style={styles().deleteButton}
-        >
-          <img 
-            className='deleteTask' 
-            alt='delete' 
-            src='/trash.png'
-            width='15'
-            height='15'/>
-        </div>
+        <DeleteButton confirm={true} width='15' height='15' onDelete={onDelete} />
       </div>
 
       <TitleElem
@@ -292,10 +283,6 @@ const styles = () => ({
     margin: 20,
     justifyContent: 'space-around',
     alignItems: 'center',
-  },
-  deleteButton: {
-    cursor: 'pointer',
-    marginRight: 5,
   },
   buttonCancel: {
     display: 'flex',

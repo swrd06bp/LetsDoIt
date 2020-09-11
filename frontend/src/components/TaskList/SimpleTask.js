@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import ProjectShape from '../ProjectShape'
 import GoalShape from '../GoalShape'
 import ListButton from '../ListButton'
+import DeleteButton from '../DeleteButton'
 import Api from '../../app/Api'
 import { getDimRatio } from '../../app/DynamicSizing'
 import { todayDate } from '../../app/utils'
@@ -76,10 +77,9 @@ function SimpleTask (props) {
         </div>
       
         <div 
-          style={{visibility: props.item.doneAt && isOver ? 'visible': 'hidden', cursor: 'pointer'}} 
-          onClick={onDelete}
+          style={{visibility: props.item.doneAt && isOver ? 'visible': 'hidden'}} 
         >
-          <img className='deleteTask' alt='delete' src='/trash.png' width='10' height='10'/>
+          <DeleteButton width='13' height='13' onDelete={onDelete} />
         </div>
       </div>
     </div>

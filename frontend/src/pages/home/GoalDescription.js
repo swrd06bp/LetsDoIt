@@ -6,6 +6,7 @@ import ListHabit from '../../components/AddGoal/ListHabit'
 import AddHabit from '../../components/AddGoal/AddHabit' 
 import AddTask from '../../components/AddTask'
 import TaskList from '../../components/TaskList'
+import DeleteButton from '../../components/DeleteButton'
 import ListButton from '../../components/ListButton'
 import Api from '../../app/Api'
 import { getDimRatio } from '../../app/DynamicSizing'
@@ -54,14 +55,7 @@ function GoalDescription (props) {
     <div style={styles().wrapper}>
       <div style={styles().titleContainer}>
         <h3 style={styles().title}>Description</h3>
-        <div onClick={onDelete} style={styles().deleteButton}>
-          <img 
-            className='deleteTask' 
-            alt='delete' 
-            src='/trash.png'
-            width='15'
-            height='15'/>
-        </div>
+        <DeleteButton width='15' height='15' onDelete={onDelete} />
       </div>
 
       <div style={styles().navbarContainer}>
@@ -326,10 +320,6 @@ const styles = () => ({
     margin: 20,
     justifyContent: 'space-around',
     alignItems: 'center',
-  },
-  deleteButton: {
-    cursor: 'pointer',
-    marginRight: 5
   },
   buttonCancel: {
     display: 'flex',

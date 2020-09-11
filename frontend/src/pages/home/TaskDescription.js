@@ -6,6 +6,7 @@ import Modal from 'react-modal'
 import TitleElem from '../../components/CommonDescription/TitleElem'
 import GoalShape from '../../components/GoalShape'
 import ProjectShape from '../../components/ProjectShape'
+import DeleteButton from '../../components/DeleteButton'
 
 import Api from '../../app/Api'
 
@@ -65,14 +66,7 @@ function TaskDescription (props) {
     <div style={styles.wrapper}>
       <div style={{display: 'flex', flexDirection: 'row',alignItems: 'center', justifyContent: 'space-between'}}>
         <h3 style={styles.title}>Description</h3>
-        <div onClick={onDelete} style={styles.deleteButton}>
-          <img 
-            className='deleteTask' 
-            alt='delete' 
-            src='/trash.png'
-            width='15'
-            height='15'/>
-        </div>
+        <DeleteButton width='15' height='15' onDelete={onDelete} />
       </div>
       <TitleElem
         item={props.task}
@@ -265,10 +259,6 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-  },
-  deleteButton: {
-    cursor: 'pointer',
-    marginRight: 5
   },
   buttonCancel: {
     display: 'flex',
