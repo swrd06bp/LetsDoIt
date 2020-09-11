@@ -9,16 +9,11 @@ function ListButton (props) {
       setList(newList)
       props.onListChange(newList)
     }
-    //const api = new Api()
-    //if (!props.type || props.type === 'task')
-      //await api.updateTask(props.item.id, {list: props.item.list === 'Personal' ? 'Work' : 'Personal'})
-    //if (props.type === 'project')
-      //await api.updateProject(props.item._id, {list: props.item.list === 'Personal' ? 'Work' : 'Personal'})
-    //props.onUpdate()
   }
 
   return (
     <div 
+      name="list"
       style={{fontSize: 9*props.scale, background: list === 'Personal' ? 'blue' : 'brown', cursor: 'pointer', fontWeight: 'bold',  color: 'white',  borderRadius: 60, width:45*props.scale, alignItems: 'center', justifyContent: 'center' }}
       onClick={onListChange}
     >

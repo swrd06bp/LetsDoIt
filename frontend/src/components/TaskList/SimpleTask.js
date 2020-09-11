@@ -39,7 +39,7 @@ function SimpleTask (props) {
       onMouseOver={() => setIsOver(true)} 
       onMouseLeave={() => setIsOver(false)} 
       className='taskWrapper'
-      style={styles.wrapper}
+      style={{...styles.wrapper, background: isOver ? '#FAFAFA' : 'white' }}
     >
       <div style={styles.infoContainer}> 
         <input 
@@ -49,7 +49,7 @@ function SimpleTask (props) {
           onChange={() => onCheckboxChange(props.item.doneAt)}
         />
         <div
-          style={{display: 'flex', height: '100%', marginLeft: 5, flexGrow: 1, fontSize:15 * props.scale * getDimRatio().X, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}} 
+          style={{display: 'flex', height: '100%', marginLeft: 5, flexGrow: 1, fontSize:15 * props.scale * getDimRatio().X, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black', }} 
           onClick={() => {props.onDescribe({task: props.item, project: null, goal: null})}}
         >
           {props.item.content}
@@ -75,7 +75,10 @@ function SimpleTask (props) {
           </div>
         </div>
       
-        <div style={{visibility: props.item.doneAt && isOver ? 'visible': 'hidden', cursor: 'pointer'}} onClick={onDelete}>
+        <div 
+          style={{visibility: props.item.doneAt && isOver ? 'visible': 'hidden', cursor: 'pointer'}} 
+          onClick={onDelete}
+        >
           <img className='deleteTask' alt='delete' src='/trash.png' width='10' height='10'/>
         </div>
       </div>

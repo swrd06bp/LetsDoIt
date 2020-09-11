@@ -83,6 +83,7 @@ function SmarterForm (props) {
 
     </div>
     <form style={styles.formContainer} onSubmit={onSubmit}>
+      <div style={styles.elemsContainer}>
       <label style={styles.labelContainer}>
        <div style={styles.labelTitles}>Goal:</div> 
         <input 
@@ -110,7 +111,19 @@ function SmarterForm (props) {
       </label>
       )}
       </div>
-      <input type="submit" value="Add" />
+      </div>
+      <input 
+        type="submit"
+        value="Add"
+        style={styles.submitButton}
+        onMouseOver={(event) => {
+          event.target.style.background = '#58FAD0'
+        }}
+        onMouseLeave={(event) => {
+          event.target.style.background = '#32A3BC'
+        }}
+      />
+
     </form>
     </div>
   
@@ -133,6 +146,12 @@ const styles = {
   },
   formContainer: {
     marginTop: 25,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  elemsContainer: {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
@@ -167,6 +186,17 @@ const styles = {
   inputGoal: {
     width: 550,
     marginLeft: 5,
+  },
+  submitButton: {
+    background: 'lightblue',
+    cursor: 'pointer',
+    marginLeft: 10,
+    height: 40,
+    width: 60,
+    borderRadius: 20,
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 }
 

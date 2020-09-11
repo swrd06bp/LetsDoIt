@@ -37,7 +37,16 @@ function AddTask (props) {
                 onSubmit()
             }}
           />
-        <div style={styles().button} onClick={onSubmit}>
+        <div 
+          style={styles().button}
+          onClick={onSubmit}
+          onMouseOver={(event) => {
+            event.target.style.background = '#58FAD0'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#32A3BC'
+          }}
+        >
           Add
         </div>
     </div>
@@ -64,7 +73,8 @@ const styles = () => ({
     display: 'flex',
     height: 30*getDimRatio().Y,
     width: 40* getDimRatio().X,
-    backgroundColor: 'lightblue',
+    cursor: 'pointer',
+    backgroundColor: '#32A3BC',
     borderRadius: 40,
     fontSize: 14* getDimRatio().X,
     alignItems: 'center',

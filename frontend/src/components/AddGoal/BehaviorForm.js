@@ -18,8 +18,17 @@ function BehaviorForm (props) {
 
       <ListHabit goalId={props.goalId} update={update}/>
 
-      <div style={styles().doneButton} onClick={props.onClose}>
-        Done
+      <div
+        style={styles().doneButton}
+        onClick={props.onClose}
+        onMouseOver={(event) => {
+          event.target.style.background = '#58FAD0'
+        }}
+        onMouseLeave={(event) => {
+          event.target.style.background = '#32A3BC'
+        }}
+      >
+      Done
       </div>
     </div>
   )
@@ -29,6 +38,7 @@ const styles = () => ({
   wrapper: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'column',
     flexGrow: 1,
   },

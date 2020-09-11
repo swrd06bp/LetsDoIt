@@ -33,7 +33,7 @@ function ProjectTask (props) {
 
   return (
     <div
-      style={{display: 'flex', alignItems: 'center',}}
+      style={{display: 'flex', alignItems: 'center', background: isOver ? '#FAFAFA' : 'white'}}
       onMouseOver={() => setIsOver(true)} 
       onMouseLeave={() => setIsOver(false)} 
     >

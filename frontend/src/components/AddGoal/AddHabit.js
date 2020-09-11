@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 import Select from 'react-select'
+import { getDimRatio } from '../../app/DynamicSizing'
 
 import Api from '../../app/Api'
 
@@ -107,25 +108,37 @@ export default function AddHabit (props) {
             <input type='time' value={startTime} onChange={x => setStartTime(x.target.value)} />
           </div>
           </div>
-          <div style={styles().addButton} onClick={onSubmit}>Add</div>
+          <div
+            style={styles().addButton}
+            onClick={onSubmit}
+            onMouseOver={(event) => {
+              event.target.style.background = '#58FAD0'
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.background = '#32A3BC'
+            }}
+          >
+            Add
+          </div>
         </div>
   )
 }
 
 const styles = () => ({
   newHabitContainer: {
-    borderStyle: 'solid',
-    borderRadius: 20,
-    borderWidth: 0.5,
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 0.5,
     padding: 20,
-    width: 900,
+    width: '90%',
     display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
   },
   allInputContainer: {
     flexDirection: 'column',
     display: 'flex',
-    width: 850,
+    width: '85%'
   },
   setGoalContainer: {
     display: 'flex',
@@ -135,31 +148,35 @@ const styles = () => ({
   frequencyContainer: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'flex-start',
+    fontSize: 16 * getDimRatio().X,
   },
   titleFrequency: {
     fontWeight: 'bold',
     marginRight: 10,
+    fontSize: 16 * getDimRatio().X,
   },
   titleInput: {
     fontWeight: 'bold',
+    fontSize: 16 * getDimRatio().X,
   },
   inputEntry: {
-    width: 615,
+    width: '90%',
     marginLeft: 20,
+    fontSize: 16 * getDimRatio().X,
   },
   weeklySelect: {
     paddingTop: 10,
     marginLeft: 10,
-    width: 300,
     height: 50,
+    fontSize: 16 * getDimRatio().X,
   },
   monthlySelect: {
     paddingTop: 10,
     marginLeft: 10,
-    width: 300,
     height: 50,
+    fontSize: 16 * getDimRatio().X,
   },
   addButton: {
     display: 'flex',
@@ -167,10 +184,12 @@ const styles = () => ({
     justifyContent: 'center',
     background: 'lightblue',
     cursor: 'pointer',
+    marginLeft: 10,
+    height: 50,
     borderRadius: 20,
     color: 'white',
     textAlign: 'center',
-    width: 50,
+    witdh: '15%',
     fontWeight: 'bold',
   },
 })

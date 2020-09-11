@@ -17,10 +17,28 @@ function ToolSection (props) {
 
   return (
     <div style={styles().toolContainer}>
-      <div onClick={onChangeCompleted}  style={styles().toolButton}>
+      <div 
+        onClick={onChangeCompleted}
+        style={styles().toolButton}
+        onMouseOver={(event) => {
+          event.target.style.background = '#58FAD0'
+        }}
+        onMouseLeave={(event) => {
+          event.target.style.background = '#32A3BC'
+        }}
+      >
        {props.showCompleted ? 'Show pending' : 'Show completed'}
       </div>
-      <div onClick={props.onNew} style={styles().toolButton}>
+      <div 
+        onClick={props.onNew}
+        style={styles().toolButton}
+        onMouseOver={(event) => {
+          event.target.style.background = '#58FAD0'
+        }}
+        onMouseLeave={(event) => {
+          event.target.style.background = '#32A3BC'
+        }}
+      >
         New
       </div>
     </div>
@@ -131,13 +149,14 @@ const styles = () => ({
   },
   toolButton: {
     cursor: 'pointer',
-    background: 'lightblue',
+    background: '#32A3BC',
     borderColor: 'white',
     fontWeight: 'bold',
     paddingLeft: 10,
     paddingRight: 10,
     borderWidth: 1,
     borderRadius: 20,
+    fontSize: 16 * getDimRatio().X,
     color: 'white',
     borderStyle: 'solid',
   },

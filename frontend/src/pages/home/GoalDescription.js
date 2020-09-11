@@ -174,24 +174,42 @@ function GoalDescription (props) {
           <AddTask goalId={props.goal._id} onUpdate={getGoalTasks} list={props.goal.list}/>
         </div>
       </div>
+      <div style={styles().footer}>
+        <div 
+          style={styles().buttonCancel} 
+          onClick={() => props.onDescribe({
+            task: null, project: null, goal: null
+          })}
+          onMouseOver={(event) => {
+            event.target.style.background = '#F5A9A9'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#F51111'
+          }}
+        >
+          Cancel
+        </div>
+        <div
+          style={styles().buttonSave}
+          onClick={onSave}
+          onMouseOver={(event) => {
+            event.target.style.background = '#58FAD0'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#32A3BC'
+          }}
+        >
+          Save
+        </div>
+      </div>
     </div>
     )}
     {showPage === 'Habits' && (
-      <div>
+      <div style={styles().habitsWrapper}>
         <AddHabit goalId={props.goal._id} getAllHabits={forceUpdate} />
         <ListHabit goalId={props.goal._id} update={update} />
       </div>
     )} 
-      <div style={styles().footer}>
-        <button style={styles().buttonCancel} onClick={() => props.onDescribe({
-          task: null, project: null, goal: null
-        })}>
-          Cancel
-        </button>
-        <button style={styles().buttonSave} onClick={onSave}>
-          Save
-        </button>
-      </div>
     </div>
   )
 }
@@ -314,18 +332,30 @@ const styles = () => ({
     marginRight: 5
   },
   buttonCancel: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     background: '#F51111',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,
+    fontSize: 15 * getDimRatio().X,
     color: 'white',
+    cursor: 'pointer',
     fontWeight: 'bold',
     borderWidth: 0,
     borderRadius: 20,
   },
   buttonSave: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    alignItems: 'center',
     background: '#32A3BC',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,
+    fontSize: 15 * getDimRatio().X,
+    cursor: 'pointer',
     color: 'white',
     fontWeight: 'bold',
     borderWidth: 0,

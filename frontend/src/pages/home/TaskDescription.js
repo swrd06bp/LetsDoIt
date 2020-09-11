@@ -172,14 +172,32 @@ function TaskDescription (props) {
       </div>
 
       <div style={styles.footer}>
-        <button style={styles.buttonCancel} onClick={() => props.onDescribe({
-          task: null, project: null, goal: null
-        })}>
+        <div
+          style={styles.buttonCancel}
+          onClick={() => props.onDescribe({
+            task: null, project: null, goal: null
+          })}
+          onMouseOver={(event) => {
+            event.target.style.background = '#F5A9A9'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#F51111'
+          }}
+        >
           Cancel
-        </button>
-        <button style={styles.buttonSave} onClick={onSave}>
+        </div>
+        <div
+          style={styles.buttonSave} 
+          onClick={onSave}
+          onMouseOver={(event) => {
+            event.target.style.background = '#58FAD0'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#32A3BC'
+          }}
+        >
           Save
-        </button>
+        </div>
       </div>
     </div>
     </Modal>
@@ -253,6 +271,9 @@ const styles = {
     marginRight: 5
   },
   buttonCancel: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     background: '#F51111',
     height: 30,
     width: 60,
@@ -260,13 +281,18 @@ const styles = {
     fontWeight: 'bold',
     borderWidth: 0,
     borderRadius: 20,
+    cursor: 'pointer',
   },
   buttonSave: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     background: '#32A3BC',
     height: 30,
     width: 60,
     color: 'white',
     fontWeight: 'bold',
+    cursor: 'pointer',
     borderWidth: 0,
     borderRadius: 20,
   },

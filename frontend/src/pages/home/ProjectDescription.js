@@ -61,7 +61,10 @@ function ProjectDescription (props) {
     <div style={styles().wrapper}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <h3 style={styles().title}>Description</h3>
-        <div onClick={onDelete} style={styles().deleteButton}>
+        <div 
+          onClick={onDelete} 
+          style={styles().deleteButton}
+        >
           <img 
             className='deleteTask' 
             alt='delete' 
@@ -182,14 +185,32 @@ function ProjectDescription (props) {
     </div>
 
       <div style={styles().footer}>
-        <button style={styles().buttonCancel} onClick={() => props.onDescribe({
-          task: null, project: null, goal: null
-        })}>
+        <div 
+          style={styles().buttonCancel} 
+          onClick={() => props.onDescribe({
+            task: null, project: null, goal: null
+          })}
+          onMouseOver={(event) => {
+            event.target.style.background = '#F5A9A9'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#F51111'
+          }}
+        >
           Cancel
-        </button>
-        <button style={styles().buttonSave} onClick={onSave}>
+        </div>
+        <div 
+          style={styles().buttonSave}
+          onClick={onSave}
+          onMouseOver={(event) => {
+            event.target.style.background = '#58FAD0'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#32A3BC'
+          }}
+        >
           Save
-        </button>
+        </div>
       </div>
     </div>
   )
@@ -274,21 +295,33 @@ const styles = () => ({
   },
   deleteButton: {
     cursor: 'pointer',
-    marginRight: 5
+    marginRight: 5,
   },
   buttonCancel: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
     background: '#F51111',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,
+    fontSize: 15 * getDimRatio().X,
+    cursor: 'pointer',
     color: 'white',
     fontWeight: 'bold',
     borderWidth: 0,
     borderRadius: 20,
   },
   buttonSave: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
     background: '#32A3BC',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,
+    fontSize: 15 * getDimRatio().X,
+    cursor: 'pointer',
     color: 'white',
     fontWeight: 'bold',
     borderWidth: 0,

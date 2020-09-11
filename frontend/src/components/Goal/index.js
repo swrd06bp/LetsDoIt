@@ -8,6 +8,7 @@ function Goal (props) {
   
   return (
     <div 
+      className='task'
       style={{
         ...styles().wrapper,
         background: props.goal && props.goal._id === props.item._id ? 'lightgreen' : 'white'
@@ -17,6 +18,14 @@ function Goal (props) {
         project: null,
         goal: props.goal ? null : props.item,
       })}
+      onMouseOver={(event) => {
+        if (!props.project && event.target.className === 'task')
+          event.target.style.background = '#FAFAFA'
+      }}
+      onMouseLeave={(event) => {
+        if (!props.project && event.target.className === 'task')
+          event.target.style.background = 'white'
+      }}
     >
       <div style={styles().firstPartContainer}>
         <div style={styles().frontContainer}>
@@ -45,7 +54,8 @@ const styles = () => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    cursor: 'pointer',
   }, 
   firstPartContainer: {
     display: 'flex',
