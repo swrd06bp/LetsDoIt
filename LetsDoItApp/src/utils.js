@@ -9,6 +9,11 @@ const dayAfterDate = () => {
     date.setDate(date.getDate() + 2)
     return date
 } 
+const nextMondayDate = () => {
+    let date = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
+    date.setDate(date.getDate() + (1 + 7 - date.getDay()) % 7)
+    return date
+}
 const lastWeekDate = () => {
     let date = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
     date.setDate(date.getDate() - 7)
@@ -82,11 +87,11 @@ const decomposeTasksToday = allTasks => {
     }))
     const upcomingTasks = sortTasks(allTasks.filter( x => {
       return ((x.dueDate 
-        && new Date(x.dueDate) > dayAfterDate() 
+        && new Date(x.dueDate) >= dayAfterDate() 
         && !x.doneAt)
         ||
         (x.doneAt 
-        && new Date(x.doneAt) > dayAfterDate() 
+        && new Date(x.doneAt) >= dayAfterDate() 
         ))
     }).map(x => {
       let task = x
@@ -144,6 +149,7 @@ export {
   weekDayDate,
   lastWeekDate,
   lastMonthDate,
+  nextMondayDate,
   decomposeTasksToday,
   generateRoutineTask,
 }

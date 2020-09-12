@@ -20,7 +20,6 @@ function FailureScreen (props) {
 
   const onFailure = async () => {
     await api.insertRoutine({habitId: props.item.id, note, postponeUntil, isDone: false}) 
-    Vibration.vibrate(100)
     await props.onUpdate()
     props.onClose()
   }

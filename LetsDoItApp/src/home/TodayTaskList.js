@@ -3,6 +3,7 @@ import {
   View,
   Text,
   SectionList,
+  Keyboard,
   Vibration,
   StyleSheet,
   Image,
@@ -11,6 +12,7 @@ import {
 import { DraxProvider, DraxView } from 'react-native-drax'
 import Api from '../Api.js'
 import AddTask from '../components/AddTask'
+import AddButton from '../components/AddButton'
 import TaskDescription from '../components/TaskDescription'
 import SimpleTask from '../components/Task/SimpleTask'
 import RoutineTask from '../components/Task/RoutineTask'
@@ -41,6 +43,7 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
 function TodayTaskList (props) {
   const [isRefreshing, setIsRefreshing] = useState(true)
+  const [isAddingTask, setIsAddingTask] = useState(false)
   const [describeTask, setDescribeTask] = useState(null)
   const [draggedTask, setDraggedTask] = useState(null)
   const [showDeletion, setShowDeletion] =useState(false)
@@ -53,7 +56,9 @@ function TodayTaskList (props) {
 
 
   useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', () => setIsAddingTask(false))
     getAllItems() 
+    return () => Keyboard.removeAllListeners('keyboardDidHide')
   },[props.task]) 
   
   const getAllTasks = async () => {
@@ -223,7 +228,7 @@ function TodayTaskList (props) {
       />)}
       <View style={styles.wrapper}>
         <DraxProvider>
-          <View style={styles.listContainer}>
+          <View style={draggedTask || isAddingTask ? styles.listContainerDragged : styles.listContainer}>
             <SectionList
               refreshing={isRefreshing}
               onRefresh={() => {
@@ -298,11 +303,16 @@ function TodayTaskList (props) {
               }}
             />     
             </View>
-            <View style={[styles.addTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
-              {!draggedTask && (
-                <AddTask onUpdate={getAllItems}/>
+              {!draggedTask && !isAddingTask && (
+                <AddButton style={styles.addButton} onClick={() => setIsAddingTask(true)} />
+              )}
+              {!draggedTask && isAddingTask && (
+                <View style={[styles.addTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
+                  <AddTask onUpdate={getAllItems}/>
+                </View>
               )}
               {draggedTask && (
+                <View style={[styles.removeTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
                   <DraxView
                     noHover={true}
                     onReceiveDragEnter={() => setShowDeletion(true)}
@@ -329,8 +339,8 @@ function TodayTaskList (props) {
                     }}
                     onDragEnd={() => setDraggedTask(null)}
                   />
+                </View>
               )}
-            </View>
           </DraxProvider>
         </View>
     </View>
@@ -342,9 +352,16 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   listContainer: {
+    height: '100%'
+  },
+  listContainerDragged: {
     height: '88%'
   },
   addTaskContainer: {
+    height: '22%',
+    justifyContent: 'center',
+  },
+  removeTaskContainer: {
     height: '12%',
     justifyContent: 'center',
   },
@@ -376,6 +393,11 @@ const styles = StyleSheet.create({
   trashImage: {
     height: 52,
     width: 50
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
   },
 })
 
