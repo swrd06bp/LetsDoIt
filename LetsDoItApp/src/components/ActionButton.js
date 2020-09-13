@@ -14,7 +14,7 @@ function ActionButton (props) {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'lightblue',
+    backgroundColor: '#32A3BC',
     margin: 10,
     borderRadius: 40,
     alignItems: 'center',

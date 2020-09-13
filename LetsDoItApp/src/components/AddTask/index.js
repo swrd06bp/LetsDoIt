@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     width: '80%',
     borderWidth: 1,
-    borderColor: 'lightgrey',
+    borderColor: 'lightblue',
     borderRadius: 10,
   },
 })

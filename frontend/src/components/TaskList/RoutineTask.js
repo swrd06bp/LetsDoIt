@@ -89,8 +89,8 @@ function RoutineTask (props) {
         <div style={styles().titleContainer}>{props.item.content}</div>
       </div>
       <div style={styles().buttonContainer}>
-        <div style={styles().buttonText} onClick={onAcheive}>done</div>
-        <div style={styles().buttonText} onClick={() => setShowModal(true)}>not today</div>
+        <div style={styles().buttonText} onClick={onAcheive}>Done</div>
+        <div style={styles().buttonText} onClick={() => setShowModal(true)}>Not today</div>
       </div>
     </div>
   )

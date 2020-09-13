@@ -114,10 +114,10 @@ function RoutineTask (props) {
       </View>
       <View style={styles.buttonWrapper}>
         <TouchableOpacity style={styles.buttonContainer} onPress={onAcheive}>
-          <Text style={styles.buttonText}>done</Text>
+          <Text style={styles.buttonText}>Done</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => setShowModal(true)}>
-          <Text style={styles.buttonText}>not today</Text>
+          <Text style={styles.buttonText}>Not today</Text>
         </TouchableOpacity>
       </View>
     </View>
