@@ -55,7 +55,7 @@ function GoalDescription (props) {
     <div style={styles().wrapper}>
       <div style={styles().titleContainer}>
         <h3 style={styles().title}>Description</h3>
-        <DeleteButton width='15' height='15' onDelete={onDelete} />
+        <DeleteButton confirm={true} width='15' height='15' onDelete={onDelete} />
       </div>
 
       <div style={styles().navbarContainer}>
@@ -217,7 +217,6 @@ const styles = () => ({
     margin: 30,
     background: 'white',
     borderRadius: 20,
-    justifyContent: 'center',
     boxShadow: '2px 4px grey',
   },
   titleContainer: {
@@ -350,6 +349,11 @@ const styles = () => ({
     fontWeight: 'bold',
     borderWidth: 0,
     borderRadius: 20,
+  },
+  habitsWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 })
 
