@@ -19,11 +19,11 @@ function Project (props) {
         project: props.project ? null : props.item,
       })}
       onMouseOver={(event) => {
-        if (!props.project && event.target.className === 'task')
+        if (!props.project || (props.project && props.project._id !== props.item._id))
           event.target.style.background = '#FAFAFA'
       }}
       onMouseLeave={(event) => {
-        if (!props.project && event.target.className === 'task')
+        if (!props.project || (props.project && props.project._id !== props.item._id))
           event.target.style.background = 'white'
       }}
     >
