@@ -43,6 +43,7 @@ exports.projectPut = async (req, res) => {
 
 exports.projectDelete = async (req, res) => {
   const projectId = req.params.projectId
+  await dbClient.deleteManyElems({table: 'tasks', query: {projectId}, userId: req.decoded})
   await dbClient.deleteElem({table: 'projects', elemId: projectId, userId: req.decoded})
   res.status(200)
   res.json({'projectId': projectId})
