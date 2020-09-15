@@ -39,9 +39,6 @@ export default function Home (props) {
           <Image source={require('../../static/options.png')} style={styles.optionImage} />
         </MenuTrigger>
         <MenuOptions>
-          <MenuOption onSelect={() => props.navigation.navigate('ListGroceries')}>
-            <Text>Grocery</Text>
-          </MenuOption>
           <MenuOption onSelect={() => {
             const api = new Api()
             api.logout()

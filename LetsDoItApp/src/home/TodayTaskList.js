@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import { DraxProvider, DraxView } from 'react-native-drax'
 import Api from '../Api.js'
-import AddTask from '../components/AddTask'
+import AddTask from '../components/AddElem/AddTask'
 import AddButton from '../components/AddButton'
 import TaskDescription from '../components/TaskDescription'
 import SimpleTask from '../components/Task/SimpleTask'

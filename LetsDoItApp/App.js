@@ -7,7 +7,6 @@ import { MenuProvider } from 'react-native-popup-menu'
 import Home from './src/home'
 import LandingPage from './src/landing'
 import LoginPage from './src/login'
-import ListGroceries from './src/listgroceries'
 
 const Stack = createStackNavigator()
 
@@ -45,11 +44,6 @@ const App: () => React$Node = () => {
               headerTitle: () => null,
               headerLeft: () => <Text style={styles.title}>LetsDoIt</Text>,
             })} 
-          >
-          </Stack.Screen>
-          <Stack.Screen
-            name="ListGroceries"
-            component={ListGroceries}
           >
           </Stack.Screen>
         </Stack.Navigator>
