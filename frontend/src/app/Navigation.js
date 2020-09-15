@@ -19,7 +19,7 @@ function TopNavigation() {
       setShowLink(true) 
   }
 
-  const clickLogoug = () => {
+  const clickLogout = () => {
     const api = new Api()
     api.logout()
     window.location.assign('/login')
@@ -34,7 +34,7 @@ function TopNavigation() {
         <Nav className="sm-2" align="right">
           <NavDropdown title="Settings" id="basic-nav-dropdown">
             <NavDropdown.Divider />
-            <NavDropdown.Item onClick={clickLogoug}>Logout</NavDropdown.Item>
+            <NavDropdown.Item onClick={clickLogout}>Logout</NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>

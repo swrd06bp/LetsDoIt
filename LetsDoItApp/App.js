@@ -6,6 +6,7 @@ import { MenuProvider } from 'react-native-popup-menu'
 
 import Home from './src/home'
 import LandingPage from './src/landing'
+import HappinessInput from './src/happiness/HappinessInput'
 import LoginPage from './src/login'
 
 const Stack = createStackNavigator()
@@ -41,8 +42,15 @@ const App: () => React$Node = () => {
             name="HomePage"
             component={Home}
             options={() => ({
-              headerTitle: () => null,
               headerLeft: () => <Text style={styles.title}>LetsDoIt</Text>,
+            })} 
+          >
+          </Stack.Screen>
+          <Stack.Screen
+            name="HappinessInput"
+            component={HappinessInput}
+            options={() => ({
+              headerTitle: () => null,
             })} 
           >
           </Stack.Screen>

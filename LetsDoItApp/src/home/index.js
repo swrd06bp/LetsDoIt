@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { CommonActions } from '@react-navigation/native'
 import {
   SafeAreaView,
@@ -16,6 +16,7 @@ import {
 } from 'react-native-popup-menu'
 
 import TodayTaskList from './TodayTaskList'
+import { todayDate } from '../utils'
 import Api from '../Api'
 
 function homeAction(routeName) {
@@ -27,11 +28,38 @@ function homeAction(routeName) {
   })
 }
 
+function CheckYourself (props) {
+  const [showLink, setShowLink] = useState(false)
+
+  useEffect(() => {
+    getHappiness() 
+  }, [])
+
+  const getHappiness = async () => {
+    const api = new Api()
+    const resp = await api.getHappiness(1)
+    const json = await resp.json()
+    if (!json.length || new Date(json[0].createdAt) < todayDate()) 
+      setShowLink(true) 
+  }
+
+  if (!showLink) return null
+
+  return (
+    <TouchableOpacity
+      onPress={() => {props.navigation.navigate('HappinessInput')}}
+    >
+      <Text style={styles.headerTitle}>Check yourself</Text>
+    </TouchableOpacity>
+  )
+}
+
 export default function Home (props) {
   const [task, setTask] = useState(null)
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
+      headerTitle: () => <CheckYourself navigation={props.navigation} />,
       headerRight: () => (
         <View>
         <Menu>
@@ -63,6 +91,12 @@ export default function Home (props) {
 }
 
 const styles = StyleSheet.create({
+  headerTitle: {
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    color: 'blue',
+
+  },
   todayTaskList: {
     height: '100%',
   },
