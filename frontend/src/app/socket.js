@@ -13,6 +13,9 @@ function updateSocketTasks(cb) {
   socket.on('tasks', data => cb(null, data))
 }
 
+function updateSocketRoutines(cb) {
+  socket.on('routines', data => cb(null, data))
+}
 
 function updateSocketHappiness(cb) {
   socket.on('happiness', data => cb(null, data))
@@ -25,6 +28,7 @@ function removeSocketListener(eventName) {
 export { 
   createSocketConnection,
   updateSocketTasks,
+  updateSocketRoutines,
   updateSocketHappiness,
   removeSocketListener,
 }

@@ -32,5 +32,7 @@ exports.routinePost = async (req, res) => {
   res.status(200)
   res.json({'routineId': routineId})
   res.end()
+  const token = req.body.token || req.query.token || req.headers['x-access-token']
+  req.app.get("socketService").emiter('routines', 'update', token, req.decoded)
 }
 
