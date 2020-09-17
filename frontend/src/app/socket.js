@@ -13,13 +13,18 @@ function updateSocketTasks(cb) {
   socket.on('tasks', data => cb(null, data))
 }
 
+
 function updateSocketHappiness(cb) {
   socket.on('happiness', data => cb(null, data))
+}
+
+function removeSocketListener(eventName) {
+  socket.off(eventName)
 }
 
 export { 
   createSocketConnection,
   updateSocketTasks,
   updateSocketHappiness,
-
+  removeSocketListener,
 }

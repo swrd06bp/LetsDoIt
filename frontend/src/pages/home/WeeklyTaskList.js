@@ -3,6 +3,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
 import { getDimRatio } from '../../app/DynamicSizing'
+import { updateSocketTasks, removeSocketListener } from '../../app/socket'
 import {
   weekDayDate,
   todayDate,
@@ -62,7 +63,9 @@ function WeeklyTaskList (props) {
 
 
   useEffect(() => {
+    updateSocketTasks((err, data) => getTasks())
     getTasks() 
+    return () => removeSocketListener('tasks')
   },[props.task, date]) 
 
 
