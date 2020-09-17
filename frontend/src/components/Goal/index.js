@@ -19,11 +19,11 @@ function Goal (props) {
         goal: props.goal ? null : props.item,
       })}
       onMouseOver={(event) => {
-        if (!props.goal || (props.goal && props.goal._id !== props.item._id) && props.item.className === 'task')
+        if ((!props.goal || (props.goal && props.goal._id !== props.item._id)) && event.target.className === 'task')
           event.target.style.background = '#FAFAFA'
       }}
       onMouseLeave={(event) => {
-        if (!props.goal || (props.goal && props.goal._id !== props.item._id) && props.item.className === 'task')
+        if ((!props.goal || (props.goal && props.goal._id !== props.item._id)) && event.target.className === 'task')
           event.target.style.background = 'white'
       }}
     >

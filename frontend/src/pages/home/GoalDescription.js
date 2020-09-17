@@ -44,12 +44,12 @@ function GoalDescription (props) {
       props.goal._id,
       {content, dueDate, note, goalId: props.goalId, list, doneAt}
     )
-    props.onDescribe({goal: null, goal: null, goal: null})
+    props.onDescribe({task: null, project: null, goal: null})
   }
 
   const onDelete = async () => {
     await api.deleteGoal(props.goal._id)
-    props.onDescribe({goal: null, goal: null, goal: null})
+    props.onDescribe({task: null, project: null, goal: null})
   }
   return (
     <div style={styles().wrapper}>
@@ -339,12 +339,10 @@ const styles = () => ({
     display: 'flex',
     justifyContent: 'center',
     cursor: 'pointer',
-    alignItems: 'center',
     background: '#32A3BC',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,
     fontSize: 15 * getDimRatio().X,
-    cursor: 'pointer',
     color: 'white',
     fontWeight: 'bold',
     borderWidth: 0,
