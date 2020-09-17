@@ -61,7 +61,13 @@ function ProjectDescription (props) {
   return (
     <div style={styles().wrapper}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-        <h3 style={styles().title}>Description</h3>
+        <div 
+          onClick={() => props.onDescribe({task: null, project: null, goal: null})}
+          style={styles().containerToDo}
+        >
+          <img style={styles().imgToDo} src={'./left-arrow.png'} alt='' />
+          <div style={styles().title}>Description</div>
+        </div>
         <DeleteButton confirm={true} width='15' height='15' onDelete={onDelete} />
       </div>
 
@@ -171,7 +177,11 @@ function ProjectDescription (props) {
         />
         </div>
         </DragDropContext>
-        <AddTask projectId={props.project._id} onUpdate={getProjectTasks} list={props.project.list}/>
+        <AddTask
+          projectId={props.project._id} 
+          onCreate={(task) => setTasks(sortProjectTasks([task, ...tasks]))}
+          list={props.project.list}
+        />
       </div>
     </div>
 
@@ -313,6 +323,16 @@ const styles = () => ({
     fontWeight: 'bold',
     borderWidth: 0,
     borderRadius: 20,
+  },
+  imgToDo: {
+    height: 25,
+    width: 25,
+  },
+  containerToDo: {
+    marginLeft: 10,
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
   },
 })
 

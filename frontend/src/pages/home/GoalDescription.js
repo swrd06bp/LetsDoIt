@@ -54,7 +54,13 @@ function GoalDescription (props) {
   return (
     <div style={styles().wrapper}>
       <div style={styles().titleContainer}>
-        <h3 style={styles().title}>Description</h3>
+        <div
+          onClick={() => props.onDescribe({task: null, project: null, goal: null})}
+          style={styles().containerToDo}
+        >
+          <img style={styles().imgToDo} src={'./left-arrow.png'} alt='' />
+          <div style={styles().title}>Description</div>
+        </div>
         <DeleteButton confirm={true} width='15' height='15' onDelete={onDelete} />
       </div>
 
@@ -165,7 +171,11 @@ function GoalDescription (props) {
           />
           </div>
           </DragDropContext>
-          <AddTask goalId={props.goal._id} onUpdate={getGoalTasks} list={props.goal.list}/>
+          <AddTask 
+            goalId={props.goal._id}
+            onCreate={(task) => setTasks(sortProjectTasks([task, ...tasks]))}
+            list={props.goal.list}
+          />
         </div>
       </div>
       <div style={styles().footer}>
@@ -351,6 +361,16 @@ const styles = () => ({
   habitsWrapper: {
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
+  },
+  imgToDo: {
+    height: 25,
+    width: 25,
+  },
+  containerToDo: {
+    cursor: 'pointer',
+    marginLeft: 10,
+    display: 'flex',
     alignItems: 'center',
   },
 })

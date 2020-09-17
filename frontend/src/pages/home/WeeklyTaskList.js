@@ -5,6 +5,7 @@ import TaskList from '../../components/TaskList'
 import { getDimRatio } from '../../app/DynamicSizing'
 import { updateSocketTasks, removeSocketListener } from '../../app/socket'
 import {
+  sortTasks,
   weekDayDate,
   todayDate,
   decomposeItemsWeek,
@@ -114,23 +115,25 @@ function WeeklyTaskList (props) {
               destination
           )
 
-        if (result.monday)
-          setItemsMonday(result.monday)
-        if (result.tuesday)
-          setItemsTuesday(result.tuesday)
-        if (result.wednesday)
-          setItemsWednesday(result.wednesday)
-        if (result.thursday)
-          setItemsThursday(result.thursday)
-        if (result.friday)
-          setItemsFriday(result.friday)
-        if (result.saturday)
-          setItemsSaturday(result.saturday)
-        if (result.sunday)
-          setItemsSunday(result.sunday)
-
-           
-          api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
+          if (result.monday)
+            setItemsMonday(sortTasks(result.monday))
+          if (result.tuesday)
+            setItemsTuesday(sortTasks(result.tuesday))
+          if (result.wednesday)
+            setItemsWednesday(sortTasks(result.wednesday))
+          if (result.thursday)
+            setItemsThursday(sortTasks(result.thursday))
+          if (result.friday)
+            setItemsFriday(sortTasks(result.friday))
+          if (result.saturday)
+            setItemsSaturday(sortTasks(result.saturday))
+          if (result.sunday)
+            setItemsSunday(sortTasks(result.sunday))
+        api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
+          .then(resp => {
+            if (resp.status !== 200)
+              getTasks()
+          })
         }
     }
 

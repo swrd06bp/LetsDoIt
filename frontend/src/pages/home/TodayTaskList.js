@@ -5,6 +5,7 @@ import TaskList from '../../components/TaskList'
 import AddTask from '../../components/AddTask'
 import { getDimRatio } from '../../app/DynamicSizing'
 import {
+  sortTasks,
   todayDate,
   lastWeekDate,
   lastMonthDate,
@@ -153,36 +154,43 @@ function TodayTaskList (props) {
           return
       }
 
-      if (source.droppableId !== destination.droppableId && destination.droppableId !== 'unfinished') {
+      if (source.droppableId !== destination.droppableId 
+        && destination.droppableId !== 'unfinished') {
           const result = move(
               getList(source.droppableId),
               getList(destination.droppableId),
               source,
               destination
           )
-
+        
         if (result.unfinished)
-          setItemsUnifinished(result.unfinished)
+          setItemsUnifinished(sortTasks(result.unfinished))
         if (result.today)
-          setItemsToday(result.today)
+          setItemsToday(sortTasks(result.today))
         if (result.tomorrow)
-          setItemsTomorrow(result.tomorrow)
+          setItemsTomorrow(sortTasks(result.tomorrow))
         if (result.upcoming)
-          setItemsUpcoming(result.upcoming)
+          setItemsUpcoming(sortTasks(result.upcoming))
         if (result.someday)
-          setItemsSomeday(result.someday)
+          setItemsSomeday(sortTasks(result.someday))
 
-           
-          api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
-            .then(getAllItems())
+        api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
+          .then((resp) => {
+            if (resp.status !== 200)
+              getAllItems()
+          })
         }
     }
 
 
+  const onCreate = (task) => {
+    setItemsToday(sortTasks([task, ...itemsToday]))
+  }
+
 
   return (
     <div style={styles().wrapper}>
-      <h3 style={styles().titleDoTo}>To Do</h3>
+      <div style={styles().titleDoTo}>To Do</div>
       <div style={styles().allTasksContainer}>
             <DragDropContext onDragEnd={onDragEnd}>
               {itemsUnfinished.length > 0 && (
@@ -254,7 +262,7 @@ function TodayTaskList (props) {
               </div>
             </DragDropContext>
        </div>
-      <AddTask onUpdate={getAllItems}/>
+      <AddTask onCreate={getAllItems}/>
     </div>
   )
 }
@@ -279,8 +287,8 @@ const styles =  () => ({
     fontSize: 20 * getDimRatio().X,
   },
   titleDoTo: {
-    fontSize: 25 * getDimRatio().X,
     marginLeft: 10,
+    fontSize: 25 * getDimRatio().X,
     fontWeight: 'normal',
     height: '5%',
   },

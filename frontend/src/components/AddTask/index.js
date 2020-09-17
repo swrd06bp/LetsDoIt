@@ -10,18 +10,20 @@ function AddTask (props) {
 
   const onSubmit = async () => {
     const api = new Api() 
+    let newTask = {
+      content: taskInput,
+      list: props.list ? props.list : 'Work',
+      dueDate: new Date().toJSON(),
+      note: null,
+      projectId: props.projectId ? props.projectId : null,
+      goalId: props.goalId ? props.goalId : null,
+    }
     if (taskInput) {
-      await api.insertTask({
-        content: taskInput,
-        list: props.list ? props.list : 'Work',
-        dueDate: new Date().toJSON(),
-        note: null,
-        projectId: props.projectId ? props.projectId : null,
-        goalId: props.goalId ? props.goalId : null,
-      })
+      newTask.type = 'task'
+      props.onCreate(newTask)
+      await api.insertTask(newTask)
     }
     setTaskInput('')
-    props.onUpdate()
   }
 
 
