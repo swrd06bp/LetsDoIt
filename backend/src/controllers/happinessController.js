@@ -23,4 +23,6 @@ exports.happinessPost = async (req, res) => {
   res.status(200)
   res.json({'happinessId': gnhId})
   res.end()
+  const token = req.body.token || req.query.token || req.headers['x-access-token']
+  req.app.get("socketService").emiter('update', 'update', token, req.decoded)
 }

@@ -1,16 +1,13 @@
 import openSocket from 'socket.io-client'
 
-const host = window.location.href.split(':3998')[0]
-const baseUrl = host + ':3999'
+const host = window.location.href.split(':4002')[0]
+const baseUrl = host + ':4001'
 const socket = openSocket(baseUrl)
 
 
-function getNewEntry(cb) {
-  socket.on('newData', data => cb(null, JSON.parse(data)))
+function updateSocket(cb) {
+  socket.emit('new', localStorage.getItem('user'))
+  socket.on('update', data => cb(null, data))
 }
 
-function getUpdateEntry(cb) {
-  socket.on('updateData', data => cb(null, JSON.parse(data)))
-}
-
-export { getNewEntry, getUpdateEntry }
+export { updateSocket }
