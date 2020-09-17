@@ -115,7 +115,7 @@ function HomePage() {
             onDescribe={(value) => {
               setDescribeElem(value)
             }}
-            task={describeElem.task}
+            describeElem={describeElem}
             projects={allProjects}
             goals={allGoals}
           />

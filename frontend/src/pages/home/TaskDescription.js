@@ -13,13 +13,13 @@ import Api from '../../app/Api'
 
 
 function TaskDescription (props) {
-  const [content, setContent] = useState(props.task.content)
-  const [note, setNote] = useState(props.task.note)
-  const [dueDate, setDueDate] = useState(props.task.dueDate)
-  const [doneAt, setDoneAt] = useState(props.task.doneAt)
-  const [projectId, setProjectId] = useState(props.task.projectId)
-  const [goalId, setGoalId] = useState(props.task.goalId)
-  const [list, setList] = useState(props.task.list)
+  const [content, setContent] = useState(props.describeElem.task.content)
+  const [note, setNote] = useState(props.describeElem.task.note)
+  const [dueDate, setDueDate] = useState(props.describeElem.task.dueDate)
+  const [doneAt, setDoneAt] = useState(props.describeElem.task.doneAt)
+  const [projectId, setProjectId] = useState(props.describeElem.task.projectId)
+  const [goalId, setGoalId] = useState(props.describeElem.task.goalId)
+  const [list, setList] = useState(props.describeElem.task.list)
 
   const api = new Api()
   
@@ -43,15 +43,15 @@ function TaskDescription (props) {
 
   const onSave = async () => {
     await api.updateTask(
-      props.task.id, 
+      props.describeElem.task.id, 
       {content, dueDate, note, projectId, goalId, list, doneAt}
     )
-    props.onDescribe({task: null, project: null, goal: null})
+    props.onDescribe({task: null, project: props.describeElem.project, goal: props.describeElem.goal})
   }
 
   const onDelete = async () => {
-    await api.deleteTask(props.task.id)
-    props.onDescribe({task: null, project: null, goal: null})
+    await api.deleteTask(props.describeElem.task.id)
+    props.onDescribe({task: null, project: props.describeElem.project, goal: props.describeElem.goal})
   }
 
 
@@ -59,7 +59,7 @@ function TaskDescription (props) {
   return (
       <Modal
         isOpen={true}
-        onRequestClose={() => {props.onDescribe({task: null, project: null, goal: null})}}
+        onRequestClose={() => {props.onDescribe({task: null, project: props.describeElem.project, goal: props.describeElem.goal})}}
         style={styles}
         contentLabel="Example Modal"
       >
@@ -69,7 +69,7 @@ function TaskDescription (props) {
         <DeleteButton width='15' height='15' onDelete={onDelete} />
       </div>
       <TitleElem
-        item={props.task}
+        item={props.describeElem.task}
         content={content}
         setContent={setContent}
         setList={setList}
@@ -169,7 +169,9 @@ function TaskDescription (props) {
         <div
           style={styles.buttonCancel}
           onClick={() => props.onDescribe({
-            task: null, project: null, goal: null
+            task: null,
+            project: props.describeElem.project,
+            goal: props.describeElem.goal
           })}
           onMouseOver={(event) => {
             event.target.style.background = '#F5A9A9'
