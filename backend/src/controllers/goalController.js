@@ -43,6 +43,8 @@ exports.goalPut = async (req, res) => {
 
 exports.goalDelete = async (req, res) => {
   const goalId = req.params.goalId
+  await dbClient.deleteManyElems({table: 'tasks', query: {goalId}, userId: req.decoded})
+  await dbClient.deleteManyElems({table: 'habits', query: {goalId}, userId: req.decoded})
   await dbClient.deleteElem({table: 'goals', elemId: goalId, userId: req.decoded})
   res.status(200)
   res.json({'goalId': goalId})

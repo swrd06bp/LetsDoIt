@@ -12,7 +12,8 @@ function Confirmation (props) {
       style={styles()}
     >
       <div style={styles().confirmationWrapper}>
-        <div style={styles().titleConfirmation}>Are you sure?</div>
+        <div style={styles().titleConfirmation}>All elements will be permanently deleted.</div>
+        <div style={styles().titleConfirmation}>Are you sure you want to continue?</div>
         <div style={styles().choiceContainerConfirmation}>
           <div 
             style={styles().buttonCancelConfirmation}
@@ -113,14 +114,15 @@ const styles = () => ({
     alignItems: 'center',
     flexDirection: 'column',
     background: 'white',
-    width: 200 * getDimRatio().X,
-    height: 100 * getDimRatio().X,
+    width: 500 * getDimRatio().X,
+    height: 200 * getDimRatio().X,
   },
   titleConfirmation: {
     fontSize: 25 * getDimRatio().X,
     fontWeight: 'bold',
   },
   choiceContainerConfirmation: {
+    marginTop: 30,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -131,6 +133,8 @@ const styles = () => ({
     justifyContent: 'center',
     alignItems: 'center',
     cursor: 'pointer',
+    marginLeft: 20,
+    marginRight: 20,
     background: '#F51111',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,

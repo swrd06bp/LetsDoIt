@@ -56,9 +56,16 @@ async function deleteElem(client, {table, elemId, userId}) {
   return await collection.deleteOne({'_id': new ObjectId(elemId), userId})
 }
 
+async function deleteManyElems(client, {table, query, userId}) {
+  const db = client.db('toDoList')
+  let collection = db.collection(table)
+  return await collection.deleteMany({...query, userId})
+}
+
 
 exports.getElems = wrapped(getElems)
 exports.deleteElem = wrapped(deleteElem)
+exports.deleteManyElems = wrapped(deleteManyElems)
 exports.updateElem = wrapped(updateElem)
 exports.writeElem = wrapped(writeElem)
 

@@ -7,6 +7,7 @@ import Api from '../../app/Api.js'
 function AddTask (props) {
   const [taskInput, setTaskInput] = useState('')
 
+
   const onSubmit = async () => {
     const api = new Api() 
     if (taskInput) {
@@ -15,7 +16,8 @@ function AddTask (props) {
         list: props.list ? props.list : 'Work',
         dueDate: new Date().toJSON(),
         note: null,
-        projectId: props.projectId,
+        projectId: props.projectId ? props.projectId : null,
+        goalId: props.goalId ? props.goalId : null,
       })
     }
     setTaskInput('')
