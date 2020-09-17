@@ -163,8 +163,9 @@ function GoalDescription (props) {
           <TaskList
             droppableId={"tasks"}
             items={tasks}
+            goal={props.goal}
             onUpdate={getGoalTasks}
-            onDescribe={() => {}}
+            onDescribe={props.onDescribe}
             scale={1}
             projectTask={true}
             

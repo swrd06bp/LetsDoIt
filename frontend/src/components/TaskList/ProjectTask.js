@@ -54,7 +54,11 @@ function ProjectTask (props) {
           <div 
             style={{display: 'flex', height: '100%', marginLeft: 5, flexGrow: 1, fontSize:15 * props.scale * getDimRatio().X, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}}
             onClick={() => {
-              props.onDescribe({task: props.item, project: null, goal: null})
+              props.onDescribe({
+                task: props.item,
+                project: props.project ? props.project : null,
+                goal: props.goal ? props.goal : null,
+              })
             }}>
             {props.item.content}
           </div>
