@@ -56,6 +56,11 @@ exports.habitPost = async (req, res) => {
 
 exports.habitDelete = async (req, res) => {
   const habitId = req.params.habitId
+  await dbClient.deleteManyElems({
+    table: 'routines',
+    query: {habitId},
+    userId: req.decoded,
+  })
   await dbClient.deleteElem({
     table: 'habits',
     elemId: habitId,
