@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
+import AddTask from '../../components/AddTask'
 import { getDimRatio } from '../../app/DynamicSizing'
 import { updateSocketTasks, removeSocketListener } from '../../app/socket'
 import {
@@ -149,7 +150,29 @@ function WeeklyTaskList (props) {
     setWeekDates([weekDayDate(newDate, 0), weekDayDate(newDate, 7)])
   }
 
+  const getNewDueDate = () => {
+    let nowDate = new Date()
+    if ((weekDates[0] <= nowDate && weekDates[1] > nowDate) || weekDates[0] <= nowDate)
+      return nowDate
+    else
+      return weekDates[0]
+  }
 
+  const onCreateTask = (task) => {
+    const newDate = new Date()
+    if ((weekDates[0] <= newDate && weekDates[1] > newDate) || weekDates[0] <= newDate) {
+      const newDateDay = newDate.getDay()
+      if (newDateDay === 1) setItemsMonday([...itemsMonday, task])
+      else if (newDateDay === 2) setItemsTuesday([...itemsTuesday, task])
+      else if (newDateDay === 3) setItemsWednesday([...itemsWednesday, task])
+      else if (newDateDay === 4) setItemsThursday([...itemsThursday, task])
+      else if (newDateDay === 5) setItemsFriday([...itemsFriday, task])
+      else if (newDateDay === 6) setItemsSaturday([...itemsSaturday, task])
+      else if (newDateDay === 7) setItemsSunday([...itemsSunday, task])
+    }
+    else
+      setItemsMonday([...itemsMonday, task])
+  }
 
   return (
     <div style={styles().wrapper}>
@@ -165,115 +188,117 @@ function WeeklyTaskList (props) {
         </button>
         <div style={styles().monthTitle}>{id2DueDate('monday').toLocaleString('default', { month: 'long' }) + ' ' + id2DueDate('monday').getFullYear()}</div>
       </div>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <div style={styles().calendarContainer}>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Monday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('monday').getDate()}</div>
-                  <TaskList
-                    droppableId={"monday"}
-                    items={itemsMonday}
-                    onUpdate={getTasks}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    isPast={id2DueDate('monday') < todayDate()}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Tuesday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('tuesday').getDate()}</div>
-                  <TaskList
-                    droppableId={"tuesday"}
-                    items={itemsTuesday}
-                    onUpdate={getTasks}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    isPast={id2DueDate('tuesday') < todayDate()}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Wednesday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('wednesday').getDate()}</div>
-                  <TaskList
-                    droppableId={"wednesday"}
-                    items={itemsWednesday}
-                    onUpdate={getTasks}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    scale={0.7}
-                    isPast={id2DueDate('wednesday') < todayDate()}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Thursday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('thursday').getDate()}</div>
-                  <TaskList
-                    droppableId={"thursday"}
-                    items={itemsThursday}
-                    onUpdate={getTasks}
-                    onDescribe={props.onDescribe}
-                    isPast={id2DueDate('thursday') < todayDate()}
-                    task={props.task}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Friday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('friday').getDate()}</div>
-                  <TaskList
-                    droppableId={"friday"}
-                    items={itemsFriday}
-                    onUpdate={getTasks}
-                    isPast={id2DueDate('friday') < todayDate()}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Saturday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('saturday').getDate()}</div>
-                  <TaskList
-                    droppableId={"saturday"}
-                    items={itemsSaturday}
-                    onUpdate={getTasks}
-                    isPast={id2DueDate('saturday') < todayDate()}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Sunday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('sunday').getDate()}</div>
-                  <TaskList
-                    droppableId={"sunday"}
-                    items={itemsSunday}
-                    onUpdate={getTasks}
-                    isPast={id2DueDate('sunday') < todayDate()}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-              </div>
-            </DragDropContext>
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div style={styles().calendarContainer}>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Monday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('monday').getDate()}</div>
+            <TaskList
+              droppableId={"monday"}
+              items={itemsMonday}
+              onUpdate={getTasks}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              isPast={id2DueDate('monday') < todayDate()}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Tuesday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('tuesday').getDate()}</div>
+            <TaskList
+              droppableId={"tuesday"}
+              items={itemsTuesday}
+              onUpdate={getTasks}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              isPast={id2DueDate('tuesday') < todayDate()}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Wednesday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('wednesday').getDate()}</div>
+            <TaskList
+              droppableId={"wednesday"}
+              items={itemsWednesday}
+              onUpdate={getTasks}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              scale={0.7}
+              isPast={id2DueDate('wednesday') < todayDate()}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Thursday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('thursday').getDate()}</div>
+            <TaskList
+              droppableId={"thursday"}
+              items={itemsThursday}
+              onUpdate={getTasks}
+              onDescribe={props.onDescribe}
+              isPast={id2DueDate('thursday') < todayDate()}
+              task={props.task}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Friday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('friday').getDate()}</div>
+            <TaskList
+              droppableId={"friday"}
+              items={itemsFriday}
+              onUpdate={getTasks}
+              isPast={id2DueDate('friday') < todayDate()}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Saturday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('saturday').getDate()}</div>
+            <TaskList
+              droppableId={"saturday"}
+              items={itemsSaturday}
+              onUpdate={getTasks}
+              isPast={id2DueDate('saturday') < todayDate()}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Sunday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('sunday').getDate()}</div>
+            <TaskList
+              droppableId={"sunday"}
+              items={itemsSunday}
+              onUpdate={getTasks}
+              isPast={id2DueDate('sunday') < todayDate()}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+        </div>
+      </DragDropContext>
+      <div style={styles().footer}><AddTask dueDate={getNewDueDate()} onCreate={onCreateTask} /></div>
     </div>
   )
 }
@@ -303,7 +328,9 @@ const styles = () => ({
   calendarContainer: {
     display: 'flex',
     flexDirection: 'row',
-  }
+  },
+  footer: {
+  },
 })
 
 

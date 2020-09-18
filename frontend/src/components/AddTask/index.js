@@ -13,7 +13,7 @@ function AddTask (props) {
     let newTask = {
       content: taskInput,
       list: props.list ? props.list : 'Work',
-      dueDate: new Date().toJSON(),
+      dueDate: props.dueDate ? props.dueDate.toJSON() : new Date().toJSON(),
       note: null,
       projectId: props.projectId ? props.projectId : null,
       goalId: props.goalId ? props.goalId : null,
