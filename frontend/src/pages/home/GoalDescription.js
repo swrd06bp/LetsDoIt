@@ -27,6 +27,10 @@ function GoalDescription (props) {
   useEffect(() => {
     getGoalTasks()
   }, [])
+  
+  useEffect(() => {
+    getGoalTasks() 
+  }, [props.describeElem.task])
 
   const getGoalTasks = async () => {
     const resp = await api.getTasksGoal(props.goal._id) 

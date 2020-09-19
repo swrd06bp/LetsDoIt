@@ -28,6 +28,10 @@ function ProjectDescription (props) {
     getProjectTasks()
   }, [])
 
+  useEffect(() => {
+    getProjectTasks() 
+  }, [props.describeElem.task])
+
   const getProjectTasks = async () => {
     const resp = await api.getTasksProject(props.project._id) 
     const results = await resp.json()
