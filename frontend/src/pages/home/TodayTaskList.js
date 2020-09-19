@@ -110,7 +110,7 @@ function TodayTaskList (props) {
 
 
     setItemsUnifinished(unfinishedTasks)
-    setItemsToday([...allRoutineTasks, ...todayTasks])
+    setItemsToday(sortTasks([...allRoutineTasks, ...todayTasks]))
     setItemsTomorrow(tomorrowTasks)
     setItemsUpcoming(upcomingTasks)
     setItemsSomeday(somedayTasks)
@@ -123,7 +123,7 @@ function TodayTaskList (props) {
     getAllItems() 
     return () => {
       removeSocketListener('tasks')
-      removeSocketListener('routiens')
+      removeSocketListener('routines')
     }
   },[props.task]) 
 
@@ -266,7 +266,7 @@ function TodayTaskList (props) {
               </div>
             </DragDropContext>
        </div>
-      <AddTask onCreate={getAllItems}/>
+      <AddTask onCreate={(task) => setItemsToday(sortTasks([task, ...itemsToday]))}/>
     </div>
   )
 }

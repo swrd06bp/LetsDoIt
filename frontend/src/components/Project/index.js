@@ -1,5 +1,5 @@
 import React from 'react'
-import ProjectShape from '../ProjectShape'
+import ProjectShape from '../Project/ProjectShape'
 import ListButton from '../ListButton'
 
 import { getDimRatio } from '../../app/DynamicSizing'

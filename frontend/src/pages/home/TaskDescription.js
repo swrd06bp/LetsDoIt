@@ -4,8 +4,8 @@ import 'react-dropdown/style.css'
 import Modal from 'react-modal'
 
 import TitleElem from '../../components/CommonDescription/TitleElem'
-import GoalShape from '../../components/GoalShape'
-import ProjectShape from '../../components/ProjectShape'
+import GoalShape from '../../components/Goal/GoalShape'
+import ProjectShape from '../../components/Project/ProjectShape'
 import DeleteButton from '../../components/DeleteButton'
 
 import Api from '../../app/Api'

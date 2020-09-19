@@ -1,5 +1,5 @@
 import React from 'react'
-import GoalShape from '../GoalShape'
+import GoalShape from './GoalShape'
 import ListButton from '../ListButton'
 
 import { getDimRatio } from '../../app/DynamicSizing'

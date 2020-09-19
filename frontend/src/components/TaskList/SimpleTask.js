@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import ProjectShape from '../ProjectShape'
-import GoalShape from '../GoalShape'
+import ProjectShape from '../Project/ProjectShape'
+import GoalShape from '../Goal/GoalShape'
 import ListButton from '../ListButton'
 import DeleteButton from '../DeleteButton'
 import Api from '../../app/Api'
