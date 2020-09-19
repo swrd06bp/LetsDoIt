@@ -19,9 +19,12 @@ function AddTask (props) {
       goalId: props.goalId ? props.goalId : null,
     }
     if (taskInput) {
+      const resp = await api.insertTask(newTask)
+      const json = await resp.json()
       newTask.type = 'task'
+      newTask.id = json.taskId.insertedId
+      newTask._id = json.taskId.insertedId
       props.onCreate(newTask)
-      await api.insertTask(newTask)
     }
     setTaskInput('')
   }
