@@ -89,8 +89,26 @@ function RoutineTask (props) {
         <div style={styles().titleContainer}>{props.item.content}</div>
       </div>
       <div style={styles().buttonContainer}>
-        <div style={styles().buttonText} onClick={onAcheive}>Done</div>
-        <div style={styles().buttonText} onClick={() => setShowModal(true)}>Not today</div>
+        <div 
+          style={styles().buttonText} 
+          onClick={onAcheive}
+          onMouseOver={(event) => {
+            event.target.style.background = '#d9d9d9'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#b3b3b3'
+          }}
+        >Done</div>
+        <div
+          style={styles().buttonText} 
+          onClick={() => setShowModal(true)}
+          onMouseOver={(event) => {
+            event.target.style.background ='#d9d9d9'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#b3b3b3'
+          }}
+        >Not today</div>
       </div>
     </div>
   )
@@ -118,7 +136,7 @@ const styles = () => ({
     fontWeight: 'bold',
     marginRight: 5,
     width: 75 * getDimRatio().X,
-    background: 'lightgrey',
+    background: '#b3b3b3',
     borderRadius: 20,
     fontSize: 15 * getDimRatio().X,
   },

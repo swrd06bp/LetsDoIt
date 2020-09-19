@@ -65,6 +65,12 @@ function WeekGoal (props) {
         <div 
           onClick={() => setModalOpen(true)}
           style={styles().goalContainer}
+          onMouseOver={(event) => {
+            event.target.style.background = '#d9d9d9'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#b3b3b3'
+          }}
         >
           {focusGoal.content}
         </div>
@@ -89,7 +95,7 @@ const styles = () => ({
     borderStyle: 'solid',
   },
   goalContainer: {
-    background: 'lightgrey',
+    background: '#b3b3b3',
     cursor: 'pointer',
     fontSize: 16 * getDimRatio().X,
     borderRadius: 20,

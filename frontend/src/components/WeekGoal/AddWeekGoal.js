@@ -14,18 +14,20 @@ function AddWeekGoal(props) {
 
 
   const onConfirm = async () => {
-    const focus = {
-      type: 'week',
-      number: props.weekNumber,
-      content,
-    } 
+    if (content !== '') {
+      const focus = {
+        type: 'week',
+        number: props.weekNumber,
+        content,
+      } 
 
-    if (!props.focusGoal)
-      await api.postFocus(focus)
-    else 
-      await api.putFocus(props.focusGoal._id, focus)
-    
-    props.onClose() 
+      if (!props.focusGoal)
+        await api.postFocus(focus)
+      else 
+        await api.putFocus(props.focusGoal._id, focus)
+      
+      props.onClose() 
+    }
   }
 
 
@@ -47,16 +49,21 @@ function AddWeekGoal(props) {
         />
         <div style={styles().choiceContainerAddWeekGoal}>
           <div 
-            style={styles().buttonDoneAddWeekGoal}
+            style={{
+              ...styles().buttonDoneAddWeekGoal,
+              cursor: content ? 'pointer' : 'not-allowed'
+            }}
             onClick={onConfirm}
             onMouseOver={(event) => {
-              event.target.style.background = '#58FAD0'
+              if (content)
+                event.target.style.background = '#58FAD0'
             }}
             onMouseLeave={(event) => {
-              event.target.style.background = '#32A3BC'
+              if(content)
+                event.target.style.background = '#32A3BC'
             }}
           >
-            Done
+            { props.focusGoal ? 'Edit' : 'Done' }
           </div>
         </div>
       </div>
@@ -103,7 +110,6 @@ const styles = () => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    cursor: 'pointer',
     background: '#32A3BC',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,
