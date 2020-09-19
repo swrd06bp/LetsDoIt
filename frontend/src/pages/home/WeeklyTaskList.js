@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
+import moment from 'moment'
 import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
 import AddTask from '../../components/AddTask'
+import WeekGoal from '../../components/WeekGoal'
 import { getDimRatio } from '../../app/DynamicSizing'
 import { updateSocketTasks, removeSocketListener } from '../../app/socket'
 import {
@@ -174,19 +176,23 @@ function WeeklyTaskList (props) {
       setItemsMonday([...itemsMonday, task])
   }
 
+
   return (
     <div style={styles().wrapper}>
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-        <button onClick={() => {getOtherWeek(0)}}>
-          now
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          <button onClick={() => {getOtherWeek(0)}}>
+            now
+          </button>
+          <button onClick={() => {getOtherWeek(-1)}}>
+            &lt;
         </button>
-        <button onClick={() => {getOtherWeek(-1)}}>
-          &lt;
-      </button>
-        <button onClick={() => {getOtherWeek(1)}}>
-          &gt;
-        </button>
-        <div style={styles().monthTitle}>{id2DueDate('monday').toLocaleString('default', { month: 'long' }) + ' ' + id2DueDate('monday').getFullYear()}</div>
+          <button onClick={() => {getOtherWeek(1)}}>
+            &gt;
+          </button>
+          <div style={styles().monthTitle}>{id2DueDate('monday').toLocaleString('default', { month: 'long' }) + ' ' + id2DueDate('monday').getFullYear()}</div>
+        </div>
+        <WeekGoal weekNumber={moment(date).week()} />
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
