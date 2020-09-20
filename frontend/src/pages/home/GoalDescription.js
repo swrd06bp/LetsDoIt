@@ -27,6 +27,10 @@ function GoalDescription (props) {
   useEffect(() => {
     getGoalTasks()
   }, [])
+  
+  useEffect(() => {
+    getGoalTasks() 
+  }, [props.describeElem.task])
 
   const getGoalTasks = async () => {
     const resp = await api.getTasksGoal(props.goal._id) 
@@ -44,17 +48,23 @@ function GoalDescription (props) {
       props.goal._id,
       {content, dueDate, note, goalId: props.goalId, list, doneAt}
     )
-    props.onDescribe({goal: null, goal: null, goal: null})
+    props.onDescribe({task: null, project: null, goal: null})
   }
 
   const onDelete = async () => {
     await api.deleteGoal(props.goal._id)
-    props.onDescribe({goal: null, goal: null, goal: null})
+    props.onDescribe({task: null, project: null, goal: null})
   }
   return (
     <div style={styles().wrapper}>
       <div style={styles().titleContainer}>
-        <h3 style={styles().title}>Description</h3>
+        <div
+          onClick={() => props.onDescribe({task: null, project: null, goal: null})}
+          style={styles().containerToDo}
+        >
+          <img style={styles().imgToDo} src={'./left-arrow.png'} alt='' />
+          <div style={styles().title}>Description</div>
+        </div>
         <DeleteButton confirm={true} width='15' height='15' onDelete={onDelete} />
       </div>
 
@@ -157,15 +167,20 @@ function GoalDescription (props) {
           <TaskList
             droppableId={"tasks"}
             items={tasks}
+            goal={props.goal}
             onUpdate={getGoalTasks}
-            onDescribe={() => {}}
+            onDescribe={props.onDescribe}
             scale={1}
             projectTask={true}
             
           />
           </div>
           </DragDropContext>
-          <AddTask goalId={props.goal._id} onUpdate={getGoalTasks} list={props.goal.list}/>
+          <AddTask 
+            goalId={props.goal._id}
+            onCreate={(task) => setTasks(sortProjectTasks([task, ...tasks]))}
+            list={props.goal.list}
+          />
         </div>
       </div>
       <div style={styles().footer}>
@@ -339,12 +354,10 @@ const styles = () => ({
     display: 'flex',
     justifyContent: 'center',
     cursor: 'pointer',
-    alignItems: 'center',
     background: '#32A3BC',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,
     fontSize: 15 * getDimRatio().X,
-    cursor: 'pointer',
     color: 'white',
     fontWeight: 'bold',
     borderWidth: 0,
@@ -353,6 +366,16 @@ const styles = () => ({
   habitsWrapper: {
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
+  },
+  imgToDo: {
+    height: 25,
+    width: 25,
+  },
+  containerToDo: {
+    cursor: 'pointer',
+    marginLeft: 10,
+    display: 'flex',
     alignItems: 'center',
   },
 })

@@ -32,17 +32,19 @@ function SmarterForm (props) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const api = new Api() 
     if (goalInput) {
-      const resp = await api.insertGoal({
-        content: goalInput,
-        list: goalList,
-        dueDate: new Date().toJSON(),
-      })
-      const {goalId} = await resp.json()
-      props.onNext(goalId.insertedId)
+      const api = new Api() 
+      if (goalInput) {
+        const resp = await api.insertGoal({
+          content: goalInput,
+          list: goalList,
+          dueDate: new Date().toJSON(),
+        })
+        const {goalId} = await resp.json()
+        props.onNext(goalId.insertedId)
+      }
+      setGoalInput('')
     }
-    setGoalInput('')
   }
 
   const onChooseOption = (option) => {
@@ -115,12 +117,14 @@ function SmarterForm (props) {
       <input 
         type="submit"
         value="Add"
-        style={styles.submitButton}
+        style={{...styles.submitButton, cursor: goalInput ? 'pointer' : 'not-allowed'}}
         onMouseOver={(event) => {
-          event.target.style.background = '#58FAD0'
+          if(goalInput)
+            event.target.style.background = '#58FAD0'
         }}
         onMouseLeave={(event) => {
-          event.target.style.background = '#32A3BC'
+          if(goalInput)
+            event.target.style.background = '#32A3BC'
         }}
       />
 
@@ -189,7 +193,6 @@ const styles = {
   },
   submitButton: {
     background: 'lightblue',
-    cursor: 'pointer',
     marginLeft: 10,
     height: 40,
     width: 60,

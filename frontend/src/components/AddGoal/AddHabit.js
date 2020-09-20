@@ -109,13 +109,15 @@ export default function AddHabit (props) {
           </div>
           </div>
           <div
-            style={styles().addButton}
+            style={{...styles().addButton, cursor: content ? 'pointer' : 'not-allowed'}}
             onClick={onSubmit}
             onMouseOver={(event) => {
-              event.target.style.background = '#58FAD0'
+              if (content)
+                event.target.style.background = '#58FAD0'
             }}
             onMouseLeave={(event) => {
-              event.target.style.background = '#32A3BC'
+              if (content)
+                event.target .style.background = '#32A3BC'
             }}
           >
             Add
@@ -183,7 +185,6 @@ const styles = () => ({
     alignItems: 'center',
     justifyContent: 'center',
     background: 'lightblue',
-    cursor: 'pointer',
     marginLeft: 10,
     height: 50,
     borderRadius: 20,

@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
+import moment from 'moment'
+
 import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
 import AddTask from '../../components/AddTask'
+import WeekGoal from '../../components/WeekGoal'
 import { getDimRatio } from '../../app/DynamicSizing'
 import {
+  sortTasks,
   todayDate,
   lastWeekDate,
   lastMonthDate,
   decomposeTasksToday,
   generateRoutineTask,
 } from '../../app/utils'
+import { updateSocketTasks,updateSocketRoutines, removeSocketListener } from '../../app/socket'
 
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -108,7 +113,7 @@ function TodayTaskList (props) {
 
 
     setItemsUnifinished(unfinishedTasks)
-    setItemsToday([...allRoutineTasks, ...todayTasks])
+    setItemsToday(sortTasks([...allRoutineTasks, ...todayTasks]))
     setItemsTomorrow(tomorrowTasks)
     setItemsUpcoming(upcomingTasks)
     setItemsSomeday(somedayTasks)
@@ -116,7 +121,13 @@ function TodayTaskList (props) {
 
 
   useEffect(() => {
+    updateSocketTasks((err, data) => getAllItems())
+    updateSocketRoutines((err, data) => getAllItems())
     getAllItems() 
+    return () => {
+      removeSocketListener('tasks')
+      removeSocketListener('routines')
+    }
   },[props.task]) 
 
 
@@ -150,36 +161,66 @@ function TodayTaskList (props) {
           return
       }
 
-      if (source.droppableId !== destination.droppableId && destination.droppableId !== 'unfinished') {
+      if (source.droppableId !== destination.droppableId 
+        && destination.droppableId !== 'unfinished') {
           const result = move(
               getList(source.droppableId),
               getList(destination.droppableId),
               source,
               destination
           )
-
+        
         if (result.unfinished)
-          setItemsUnifinished(result.unfinished)
+          setItemsUnifinished(sortTasks(result.unfinished))
         if (result.today)
-          setItemsToday(result.today)
+          setItemsToday(sortTasks(result.today))
         if (result.tomorrow)
-          setItemsTomorrow(result.tomorrow)
+          setItemsTomorrow(sortTasks(result.tomorrow))
         if (result.upcoming)
-          setItemsUpcoming(result.upcoming)
+          setItemsUpcoming(sortTasks(result.upcoming))
         if (result.someday)
-          setItemsSomeday(result.someday)
+          setItemsSomeday(sortTasks(result.someday))
 
-           
-          api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
-            .then(getAllItems())
+        api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
+          .then((resp) => {
+            if (resp.status !== 200)
+              getAllItems()
+          })
         }
     }
 
 
+  const onCreate = (task) => {
+    setItemsToday(sortTasks([task, ...itemsToday]))
+  }
+
+  const getDeletedList = (taskId, listTasks, setListFunction) => {
+    const index = listTasks.map(x => x._id).indexOf(taskId)
+    listTasks.splice(index, 1)
+    setListFunction([...listTasks])
+  }
+
+  const getDoneList = (taskId, listTasks) => {
+
+    return listTasks.map(x => {
+      if(x._id === taskId) {
+        x.doneAt = x.doneAt ? null : new Date()
+        return x
+      }
+      else
+        return x
+    })
+  }
 
   return (
     <div style={styles().wrapper}>
-      <h3 style={styles().titleDoTo}>To Do</h3>
+      <div style={styles().titleContainer}>
+        <div style={styles().titleDoTo}>To Do</div>
+        <WeekGoal
+          day={true}
+          weekNumber={new Date().getFullYear()*1000 + moment(new Date()).dayOfYear()}
+        />
+      </div>
       <div style={styles().allTasksContainer}>
             <DragDropContext onDragEnd={onDragEnd}>
               {itemsUnfinished.length > 0 && (
@@ -189,6 +230,14 @@ function TodayTaskList (props) {
                     droppableId={"unfinished"}
                     items={itemsUnfinished}
                     onUpdate={getAllItems}
+                    onDelete={(taskId) => {
+                      getDeletedList(taskId, itemsUnfinished, setItemsUnifinished)
+                    }}
+                    onDoneChange={(taskId) => {
+                      const listTasks = getDoneList(taskId, itemsUnfinished)
+                      setItemsUnifinished([...listTasks])
+                      getAllItems()
+                    }}
                     onDescribe={props.onDescribe}
                     task={props.task}
                     projects={props.projects}
@@ -203,6 +252,14 @@ function TodayTaskList (props) {
                   droppableId={"today"}
                   items={itemsToday}
                   onUpdate={getAllItems}
+                  onDelete={(taskId) => {
+                    getDeletedList(taskId, itemsToday, setItemsToday)
+                  }}
+                  onDoneChange={(taskId) => {
+                    const listTasks = getDoneList(taskId, itemsToday)
+                    setItemsToday([...listTasks])
+                    getAllItems()
+                  }}
                   onDescribe={props.onDescribe}
                   projects={props.projects}
                   goals={props.goals}
@@ -216,6 +273,14 @@ function TodayTaskList (props) {
                   droppableId={"tomorrow"}
                   items={itemsTomorrow}
                   onUpdate={getAllItems}
+                  onDelete={(taskId) => {
+                    getDeletedList(taskId, itemsTomorrow, setItemsTomorrow)
+                  }}
+                  onDoneChange={(taskId) => {
+                    const listTasks = getDoneList(taskId, itemsTomorrow)
+                    setItemsTomorrow([...listTasks])
+                    getAllItems()
+                  }}
                   onDescribe={props.onDescribe}
                   projects={props.projects}
                   goals={props.goals}
@@ -229,6 +294,14 @@ function TodayTaskList (props) {
                   droppableId={"upcoming"}
                   items={itemsUpcoming}
                   onUpdate={getAllItems}
+                  onDelete={(taskId) => {
+                    getDeletedList(taskId, itemsUpcoming, setItemsUpcoming)
+                  }}
+                  onDoneChange={(taskId) => {
+                    const listTasks = getDoneList(taskId, itemsUpcoming)
+                    setItemsUpcoming([...listTasks])
+                    getAllItems()
+                  }}
                   onDescribe={props.onDescribe}
                   projects={props.projects}
                   goals={props.goals}
@@ -242,6 +315,14 @@ function TodayTaskList (props) {
                   droppableId={"someday"}
                   items={itemsSomeday}
                   onUpdate={getAllItems}
+                  onDelete={(taskId) => {
+                    getDeletedList(taskId, itemsSomeday, setItemsSomeday)
+                  }}
+                  onDoneChange={(taskId) => {
+                    const listTasks = getDoneList(taskId, itemsSomeday)
+                    setItemsSomeday([...listTasks])
+                    getAllItems()
+                  }}
                   onDescribe={props.onDescribe}
                   goals={props.goals}
                   projects={props.projects}
@@ -251,7 +332,7 @@ function TodayTaskList (props) {
               </div>
             </DragDropContext>
        </div>
-      <AddTask onUpdate={getAllItems}/>
+      <AddTask onCreate={(task) => setItemsToday(sortTasks([task, ...itemsToday]))}/>
     </div>
   )
 }
@@ -275,9 +356,15 @@ const styles =  () => ({
     fontWeight: 'bold',
     fontSize: 20 * getDimRatio().X,
   },
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginRight: 20,
+  },
   titleDoTo: {
-    fontSize: 25 * getDimRatio().X,
     marginLeft: 10,
+    fontSize: 25 * getDimRatio().X,
     fontWeight: 'normal',
     height: '5%',
   },

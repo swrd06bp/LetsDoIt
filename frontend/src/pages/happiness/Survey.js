@@ -41,7 +41,7 @@ function Survey (props) {
        <ScoreBox onSubmit={() => props.onSubmit(5)} title={'So-so'} background={'#ffff66'}/>
        <ScoreBox onSubmit={() => props.onSubmit(6)} title={'Okay'} background={'#ccff66'}/>
        <ScoreBox onSubmit={() => props.onSubmit(7)} title={'Good'} background={'#66ff33'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(8)} title={'Very good'} background={'#009900'}/>
+       <ScoreBox onSubmit={() => props.onSubmit(8)} title={'Very good'} background={'#33cc33'}/>
        <ScoreBox onSubmit={() => props.onSubmit(9)} title={'Great'} background={'#009933'}/>
        <ScoreBox onSubmit={() => props.onSubmit(10)} title={'Really great'} background={'#006600'}/>
       </div>

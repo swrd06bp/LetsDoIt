@@ -3,6 +3,7 @@ const router = express.Router()
 
 const userController = require('./controllers/userController')
 const happinessController = require('./controllers/happinessController')
+const focusController = require('./controllers/focusController')
 const taskController = require('./controllers/taskController')
 const projectController = require('./controllers/projectController')
 const goalController = require('./controllers/goalController')
@@ -32,6 +33,11 @@ router.get('/user', userController.userGet)
 // happiness
 router.get('/happiness', happinessController.happinessGet)
 router.post('/happiness', happinessController.happinessPost)
+
+// focus
+router.get('/focus', focusController.focusGet)
+router.post('/focus', focusController.focusPost)
+router.put('/focus/:focusId', focusController.focusPut)
 
 
 // tasks

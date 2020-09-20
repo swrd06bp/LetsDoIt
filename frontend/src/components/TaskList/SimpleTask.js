@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import ProjectShape from '../ProjectShape'
-import GoalShape from '../GoalShape'
+import ProjectShape from '../Project/ProjectShape'
+import GoalShape from '../Goal/GoalShape'
 import ListButton from '../ListButton'
 import DeleteButton from '../DeleteButton'
 import Api from '../../app/Api'
@@ -17,14 +17,14 @@ function SimpleTask (props) {
     if (new Date(doneAt) >= todayDate() || !doneAt) {
       const api = new Api()
       await api.updateTask(props.item.id, {doneAt: props.item.doneAt ? null : new Date()})
-      props.onUpdate()
+      props.onDoneChange(props.item.id)
     }
   }
   
   const onDelete = async () => {
     const api = new Api()
     await api.deleteTask(props.item.id)
-    props.onUpdate()
+    props.onDelete(props.item.id)
   }
 
   
@@ -77,7 +77,7 @@ function SimpleTask (props) {
         </div>
       
         <div 
-          style={{visibility: props.item.doneAt && isOver ? 'visible': 'hidden'}} 
+          style={{visibility: isOver ? 'visible': 'hidden'}} 
         >
           <DeleteButton width='13' height='13' onDelete={onDelete} />
         </div>

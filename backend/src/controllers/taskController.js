@@ -23,7 +23,7 @@ exports.taskPost = async (req, res) => {
   res.json({'taskId': taskId})
   res.end()
   const token = req.body.token || req.query.token || req.headers['x-access-token']
-  req.app.get("socketService").emiter('update', 'update', token, req.decoded)
+  req.app.get("socketService").emiter('tasks', 'update', token, req.decoded)
 }
 
 exports.taskPut = async (req, res) => {
@@ -35,7 +35,7 @@ exports.taskPut = async (req, res) => {
   res.json({'taskId': taskId})
   res.end()
   const token = req.body.token || req.query.token || req.headers['x-access-token']
-  req.app.get("socketService").emiter('update', 'update', token, req.decoded)
+  req.app.get("socketService").emiter('tasks', 'update', token, req.decoded)
 }
 
 
@@ -46,7 +46,7 @@ exports.taskDelete = async (req, res) => {
   res.json({'taskId': taskId})
   res.end()
   const token = req.body.token || req.query.token || req.headers['x-access-token']
-  req.app.get("socketService").emiter('update', 'update', token, req.decoded)
+  req.app.get("socketService").emiter('tasks', 'update', token, req.decoded)
 }
 
 

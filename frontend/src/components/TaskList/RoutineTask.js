@@ -3,7 +3,7 @@ import Modal from 'react-modal'
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 
-import GoalShape from '../GoalShape'
+import GoalShape from '../Goal/GoalShape'
 import Api from '../../app/Api'
 import { getDimRatio } from '../../app/DynamicSizing'
 import {tomorrowDate} from '../../app/utils'
@@ -89,8 +89,26 @@ function RoutineTask (props) {
         <div style={styles().titleContainer}>{props.item.content}</div>
       </div>
       <div style={styles().buttonContainer}>
-        <div style={styles().buttonText} onClick={onAcheive}>Done</div>
-        <div style={styles().buttonText} onClick={() => setShowModal(true)}>Not today</div>
+        <div 
+          style={styles().buttonText} 
+          onClick={onAcheive}
+          onMouseOver={(event) => {
+            event.target.style.background = '#33cc33'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#009933'
+          }}
+        >Done</div>
+        <div
+          style={styles().buttonText} 
+          onClick={() => setShowModal(true)}
+          onMouseOver={(event) => {
+            event.target.style.background = '#33cc33'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#009933'
+          }}
+        >Not today</div>
       </div>
     </div>
   )
@@ -118,7 +136,8 @@ const styles = () => ({
     fontWeight: 'bold',
     marginRight: 5,
     width: 75 * getDimRatio().X,
-    background: 'lightgrey',
+    background: '#009933',
+    color: 'white',
     borderRadius: 20,
     fontSize: 15 * getDimRatio().X,
   },

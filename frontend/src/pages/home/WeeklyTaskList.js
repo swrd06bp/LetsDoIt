@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
+import moment from 'moment'
 import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
+import AddTask from '../../components/AddTask'
+import WeekGoal from '../../components/WeekGoal'
 import { getDimRatio } from '../../app/DynamicSizing'
+import { updateSocketTasks, removeSocketListener } from '../../app/socket'
 import {
+  sortTasks,
   weekDayDate,
   todayDate,
   decomposeItemsWeek,
@@ -62,7 +67,9 @@ function WeeklyTaskList (props) {
 
 
   useEffect(() => {
+    updateSocketTasks((err, data) => getTasks())
     getTasks() 
+    return () => removeSocketListener('tasks')
   },[props.task, date]) 
 
 
@@ -111,23 +118,25 @@ function WeeklyTaskList (props) {
               destination
           )
 
-        if (result.monday)
-          setItemsMonday(result.monday)
-        if (result.tuesday)
-          setItemsTuesday(result.tuesday)
-        if (result.wednesday)
-          setItemsWednesday(result.wednesday)
-        if (result.thursday)
-          setItemsThursday(result.thursday)
-        if (result.friday)
-          setItemsFriday(result.friday)
-        if (result.saturday)
-          setItemsSaturday(result.saturday)
-        if (result.sunday)
-          setItemsSunday(result.sunday)
-
-           
-          api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
+          if (result.monday)
+            setItemsMonday(sortTasks(result.monday))
+          if (result.tuesday)
+            setItemsTuesday(sortTasks(result.tuesday))
+          if (result.wednesday)
+            setItemsWednesday(sortTasks(result.wednesday))
+          if (result.thursday)
+            setItemsThursday(sortTasks(result.thursday))
+          if (result.friday)
+            setItemsFriday(sortTasks(result.friday))
+          if (result.saturday)
+            setItemsSaturday(sortTasks(result.saturday))
+          if (result.sunday)
+            setItemsSunday(sortTasks(result.sunday))
+        api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
+          .then(resp => {
+            if (resp.status !== 200)
+              getTasks()
+          })
         }
     }
 
@@ -143,131 +152,259 @@ function WeeklyTaskList (props) {
     setWeekDates([weekDayDate(newDate, 0), weekDayDate(newDate, 7)])
   }
 
+  const getNewDueDate = () => {
+    let nowDate = new Date()
+    if ((weekDates[0] <= nowDate && weekDates[1] > nowDate) || weekDates[0] <= nowDate)
+      return nowDate
+    else
+      return weekDates[0]
+  }
 
+  const onCreateTask = (task) => {
+    const newDate = new Date()
+    if ((weekDates[0] <= newDate && weekDates[1] > newDate) || weekDates[0] <= newDate) {
+      const newDateDay = newDate.getDay()
+      if (newDateDay === 1) setItemsMonday(sortTasks([...itemsMonday, task]))
+      else if (newDateDay === 2) setItemsTuesday(sortTasks([...itemsTuesday, task]))
+      else if (newDateDay === 3) setItemsWednesday(sortTasks([...itemsWednesday, task]))
+      else if (newDateDay === 4) setItemsThursday(sortTasks([...itemsThursday, task]))
+      else if (newDateDay === 5) setItemsFriday(sortTasks([...itemsFriday, task]))
+      else if (newDateDay === 6) setItemsSaturday(sortTasks([...itemsSaturday, task]))
+      else if (newDateDay === 0) setItemsSunday(sortTasks([...itemsSunday, task]))
+    }
+    else
+      setItemsMonday(sortTasks([...itemsMonday, task]))
+  }
+
+  const getDeletedList = (taskId, listTasks, setListFunction) => {
+    const index = listTasks.map(x => x._id).indexOf(taskId)
+    listTasks.splice(index, 1)
+    setListFunction([...listTasks])
+  }
+
+  const getDoneList = (taskId, listTasks) => {
+
+    return listTasks.map(x => {
+      if(x._id === taskId) {
+        x.doneAt = x.doneAt ? null : new Date()
+        return x
+      }
+      else
+        return x
+    })
+  }
 
   return (
     <div style={styles().wrapper}>
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-        <button onClick={() => {getOtherWeek(0)}}>
-          now
-        </button>
-        <button onClick={() => {getOtherWeek(-1)}}>
-          &lt;
-      </button>
-        <button onClick={() => {getOtherWeek(1)}}>
-          &gt;
-        </button>
-        <div style={styles().monthTitle}>{id2DueDate('monday').toLocaleString('default', { month: 'long' }) + ' ' + id2DueDate('monday').getFullYear()}</div>
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          <div
+            style={styles().toolButton}
+            onMouseOver={(event) => {
+              event.target.style.background = '#58FAD0'
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.background = '#32A3BC'
+            }}
+            onClick={() => {getOtherWeek(0)}}
+          >
+            now
+          </div>
+          <div
+            style={styles().toolButton}
+            onMouseOver={(event) => {
+              event.target.style.background = '#58FAD0'
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.background = '#32A3BC'
+            }}
+            onClick={() => {getOtherWeek(-1)}}
+          >
+            &lt;
+        </div>
+          <div
+            style={styles().toolButton}
+            onMouseOver={(event) => {
+              event.target.style.background = '#58FAD0'
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.background = '#32A3BC'
+            }}
+            onClick={() => {getOtherWeek(1)}}
+          >
+            &gt;
+          </div>
+          <div style={styles().monthTitle}>{id2DueDate('monday').toLocaleString('default', { month: 'long' }) + ' ' + id2DueDate('monday').getFullYear()}</div>
+        </div>
+        <WeekGoal weekNumber={date.getFullYear()*100 + parseInt(moment(date).isoWeek())} />
       </div>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <div style={styles().calendarContainer}>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Monday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('monday').getDate()}</div>
-                  <TaskList
-                    droppableId={"monday"}
-                    items={itemsMonday}
-                    onUpdate={getTasks}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    isPast={id2DueDate('monday') < todayDate()}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Tuesday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('tuesday').getDate()}</div>
-                  <TaskList
-                    droppableId={"tuesday"}
-                    items={itemsTuesday}
-                    onUpdate={getTasks}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    isPast={id2DueDate('tuesday') < todayDate()}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Wednesday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('wednesday').getDate()}</div>
-                  <TaskList
-                    droppableId={"wednesday"}
-                    items={itemsWednesday}
-                    onUpdate={getTasks}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    scale={0.7}
-                    isPast={id2DueDate('wednesday') < todayDate()}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Thursday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('thursday').getDate()}</div>
-                  <TaskList
-                    droppableId={"thursday"}
-                    items={itemsThursday}
-                    onUpdate={getTasks}
-                    onDescribe={props.onDescribe}
-                    isPast={id2DueDate('thursday') < todayDate()}
-                    task={props.task}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Friday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('friday').getDate()}</div>
-                  <TaskList
-                    droppableId={"friday"}
-                    items={itemsFriday}
-                    onUpdate={getTasks}
-                    isPast={id2DueDate('friday') < todayDate()}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Saturday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('saturday').getDate()}</div>
-                  <TaskList
-                    droppableId={"saturday"}
-                    items={itemsSaturday}
-                    onUpdate={getTasks}
-                    isPast={id2DueDate('saturday') < todayDate()}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-                <div style={styles().dayContainer}>
-                  <div style={styles().dayTitle}>Sunday</div>
-                  <div style={styles().dayNumberTitle}>{id2DueDate('sunday').getDate()}</div>
-                  <TaskList
-                    droppableId={"sunday"}
-                    items={itemsSunday}
-                    onUpdate={getTasks}
-                    isPast={id2DueDate('sunday') < todayDate()}
-                    onDescribe={props.onDescribe}
-                    task={props.task}
-                    scale={0.7}
-                    projects={props.projects}
-                    goals={props.goals}
-                  />
-                </div>
-              </div>
-            </DragDropContext>
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div style={styles().calendarContainer}>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Monday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('monday').getDate()}</div>
+            <TaskList
+              droppableId={"monday"}
+              items={itemsMonday}
+              onUpdate={getTasks}
+              onDescribe={props.onDescribe}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsMonday, setItemsMonday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsMonday)
+                setItemsMonday([...listTasks])
+                getTasks()
+              }}
+              task={props.task}
+              isPast={id2DueDate('monday') < todayDate()}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Tuesday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('tuesday').getDate()}</div>
+            <TaskList
+              droppableId={"tuesday"}
+              items={itemsTuesday}
+              onUpdate={getTasks}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsTuesday, setItemsTuesday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsTuesday)
+                setItemsTuesday([...listTasks])
+                getTasks()
+              }}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              isPast={id2DueDate('tuesday') < todayDate()}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Wednesday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('wednesday').getDate()}</div>
+            <TaskList
+              droppableId={"wednesday"}
+              items={itemsWednesday}
+              onUpdate={getTasks}
+              onDescribe={props.onDescribe}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsWednesday, setItemsWednesday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsWednesday)
+                setItemsWednesday([...listTasks])
+                getTasks()
+              }}
+              task={props.task}
+              scale={0.7}
+              isPast={id2DueDate('wednesday') < todayDate()}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Thursday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('thursday').getDate()}</div>
+            <TaskList
+              droppableId={"thursday"}
+              items={itemsThursday}
+              onUpdate={getTasks}
+              onDescribe={props.onDescribe}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsThursday, setItemsThursday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsThursday)
+                setItemsThursday([...listTasks])
+                getTasks()
+              }}
+              isPast={id2DueDate('thursday') < todayDate()}
+              task={props.task}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Friday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('friday').getDate()}</div>
+            <TaskList
+              droppableId={"friday"}
+              items={itemsFriday}
+              onUpdate={getTasks}
+              isPast={id2DueDate('friday') < todayDate()}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsFriday, setItemsFriday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsFriday)
+                setItemsFriday([...listTasks])
+                getTasks()
+              }}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Saturday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('saturday').getDate()}</div>
+            <TaskList
+              droppableId={"saturday"}
+              items={itemsSaturday}
+              onUpdate={getTasks}
+              isPast={id2DueDate('saturday') < todayDate()}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsSaturday, setItemsSaturday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsSaturday)
+                setItemsSaturday([...listTasks])
+                getTasks()
+              }}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+          <div style={styles().dayContainer}>
+            <div style={styles().dayTitle}>Sunday</div>
+            <div style={styles().dayNumberTitle}>{id2DueDate('sunday').getDate()}</div>
+            <TaskList
+              droppableId={"sunday"}
+              items={itemsSunday}
+              onUpdate={getTasks}
+              isPast={id2DueDate('sunday') < todayDate()}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsSunday, setItemsSunday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsSunday)
+                setItemsSunday([...listTasks])
+                getTasks()
+              }}
+              onDescribe={props.onDescribe}
+              task={props.task}
+              scale={0.7}
+              projects={props.projects}
+              goals={props.goals}
+            />
+          </div>
+        </div>
+      </DragDropContext>
+      <div style={styles().footer}><AddTask dueDate={getNewDueDate()} onCreate={onCreateTask} /></div>
     </div>
   )
 }
@@ -285,10 +422,13 @@ const styles = () => ({
     width: 150 * getDimRatio().X,
   },
   dayTitle: {
-    fontSize: 25 * getDimRatio().X
+    color: '#32A3BC',
+    fontWeight: 'bold',
+    fontSize: 20 * getDimRatio().X
   },
   dayNumberTitle: {
-    fontSize: 20 * getDimRatio().X
+    color: '#32A3BC',
+    fontSize: 18 * getDimRatio().X
   },
   monthTitle: {
     fontSize: 20 * getDimRatio().X,
@@ -297,7 +437,25 @@ const styles = () => ({
   calendarContainer: {
     display: 'flex',
     flexDirection: 'row',
-  }
+  },
+  footer: {
+  },
+  toolButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    background: '#32A3BC',
+    borderColor: 'white',
+    fontWeight: 'bold',
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    fontSize: 16 * getDimRatio().X,
+    color: 'white',
+    borderStyle: 'solid',
+  },
 })
 
 

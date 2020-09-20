@@ -7,10 +7,10 @@ import TaskDescription from './TaskDescription'
 import ProjectDescription from './ProjectDescription'
 import GoalDescription from './GoalDescription'
 import TopNavigation from '../../app/Navigation'
-import { updateSocket } from '../../socket.js'
 import { getDimScreen, getDimRatio } from '../../app/DynamicSizing'
 import './HomePage.css'
 import Api from '../../app/Api'
+import { createSocketConnection } from '../../app/socket'
 
 
 function HomePage() {
@@ -22,7 +22,7 @@ function HomePage() {
   const api = new Api()
  
   useEffect(() => {
-    updateSocket((err, data) => console.log('ok'))
+    createSocketConnection()
     getData() 
   }, [])
   
@@ -80,6 +80,7 @@ function HomePage() {
             )}
             {describeElem.project && !describeElem.goal && (
               <ProjectDescription
+                describeElem={describeElem}
                 onDescribe={(value) => {
                   getData()
                   setDescribeElem(value)
@@ -90,6 +91,7 @@ function HomePage() {
             )}
             {describeElem.goal && !describeElem.project && (
               <GoalDescription
+                describeElem={describeElem}
                 onDescribe={(value) => {
                   getData()
                   setDescribeElem(value)
@@ -115,7 +117,7 @@ function HomePage() {
             onDescribe={(value) => {
               setDescribeElem(value)
             }}
-            task={describeElem.task}
+            describeElem={describeElem}
             projects={allProjects}
             goals={allGoals}
           />
