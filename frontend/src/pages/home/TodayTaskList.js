@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
+import moment from 'moment'
+
 import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
 import AddTask from '../../components/AddTask'
+import WeekGoal from '../../components/WeekGoal'
 import { getDimRatio } from '../../app/DynamicSizing'
 import {
   sortTasks,
@@ -211,7 +214,13 @@ function TodayTaskList (props) {
 
   return (
     <div style={styles().wrapper}>
-      <div style={styles().titleDoTo}>To Do</div>
+      <div style={styles().titleContainer}>
+        <div style={styles().titleDoTo}>To Do</div>
+        <WeekGoal
+          day={true}
+          weekNumber={new Date().getFullYear()*1000 + moment(new Date()).dayOfYear()}
+        />
+      </div>
       <div style={styles().allTasksContainer}>
             <DragDropContext onDragEnd={onDragEnd}>
               {itemsUnfinished.length > 0 && (
@@ -346,6 +355,12 @@ const styles =  () => ({
     color: '#32A3BC',
     fontWeight: 'bold',
     fontSize: 20 * getDimRatio().X,
+  },
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginRight: 20,
   },
   titleDoTo: {
     marginLeft: 10,

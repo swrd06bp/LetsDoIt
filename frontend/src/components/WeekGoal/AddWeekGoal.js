@@ -16,7 +16,7 @@ function AddWeekGoal(props) {
   const onConfirm = async () => {
     if (content !== '') {
       const focus = {
-        type: 'week',
+        type: props.day ? 'day' : 'week',
         number: props.weekNumber,
         content,
       } 
@@ -39,7 +39,9 @@ function AddWeekGoal(props) {
       contentLabel="AddWeekGoal"
     >
       <div style={styles().addWeekGoalWrapper}>
-        <div style={styles().titleAddWeekGoal}>What is the main goal for this week?</div>
+        <div style={styles().titleAddWeekGoal}>
+          {props.day ? 'What is your main focus today?' : 'What is the main goal for this week?'}
+        </div>
         <input
           style={styles().inputAddWeekGoal}
           type='text'

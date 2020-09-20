@@ -11,7 +11,8 @@ function WeekGoal (props) {
   const [modalOpen, setModalOpen] = useState(false)
   const [focusGoal, setFocusGoal] = useState(null)
   const api = new Api()
-  const isShowing = props.weekNumber <= moment(new Date()).isoWeek()
+  const isShowing = (props.day && props.weekNumber <= new Date().getFullYear()*1000 + moment(new Date()).dayOfYear())
+    || (!props.day && props.weekNumber <= new Date().getFullYear()*100 + moment(new Date()).isoWeek())
 
 
   useEffect(() => {
@@ -21,7 +22,7 @@ function WeekGoal (props) {
   const getFocus = async () => {
     if (isShowing) {
       const resp = await api.getFocus({
-        type: 'week',
+        type: props.day ? 'day' : 'week',
         number: props.weekNumber,
         limit: 1
       })
@@ -42,6 +43,7 @@ function WeekGoal (props) {
         modalOpen={modalOpen}
         weekNumber={props.weekNumber}
         focusGoal={focusGoal}
+        day={props.day}
         onClose={() => {
           setModalOpen(false)
           getFocus()
@@ -58,7 +60,7 @@ function WeekGoal (props) {
           event.target.style.background = '#32A3BC'
         }}
       >
-        Set a goal for this week
+        {props.day ? 'Set your main focus for today' : 'Set a goal for this week'}
       </div>
       )}
       {focusGoal && (

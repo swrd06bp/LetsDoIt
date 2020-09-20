@@ -236,7 +236,7 @@ function WeeklyTaskList (props) {
           </div>
           <div style={styles().monthTitle}>{id2DueDate('monday').toLocaleString('default', { month: 'long' }) + ' ' + id2DueDate('monday').getFullYear()}</div>
         </div>
-        <WeekGoal weekNumber={moment(date).isoWeek()} />
+        <WeekGoal weekNumber={date.getFullYear()*100 + parseInt(moment(date).isoWeek())} />
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
