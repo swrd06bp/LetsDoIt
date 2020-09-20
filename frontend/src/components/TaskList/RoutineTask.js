@@ -93,20 +93,20 @@ function RoutineTask (props) {
           style={styles().buttonText} 
           onClick={onAcheive}
           onMouseOver={(event) => {
-            event.target.style.background = '#d9d9d9'
+            event.target.style.background = '#33cc33'
           }}
           onMouseLeave={(event) => {
-            event.target.style.background = '#b3b3b3'
+            event.target.style.background = '#009933'
           }}
         >Done</div>
         <div
           style={styles().buttonText} 
           onClick={() => setShowModal(true)}
           onMouseOver={(event) => {
-            event.target.style.background ='#d9d9d9'
+            event.target.style.background = '#33cc33'
           }}
           onMouseLeave={(event) => {
-            event.target.style.background = '#b3b3b3'
+            event.target.style.background = '#009933'
           }}
         >Not today</div>
       </div>
@@ -136,7 +136,8 @@ const styles = () => ({
     fontWeight: 'bold',
     marginRight: 5,
     width: 75 * getDimRatio().X,
-    background: '#b3b3b3',
+    background: '#009933',
+    color: 'white',
     borderRadius: 20,
     fontSize: 15 * getDimRatio().X,
   },

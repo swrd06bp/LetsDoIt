@@ -191,6 +191,23 @@ function TodayTaskList (props) {
     setItemsToday(sortTasks([task, ...itemsToday]))
   }
 
+  const getDeletedList = (taskId, listTasks, setListFunction) => {
+    const index = listTasks.map(x => x._id).indexOf(taskId)
+    listTasks.splice(index, 1)
+    setListFunction([...listTasks])
+  }
+
+  const getDoneList = (taskId, listTasks) => {
+
+    return listTasks.map(x => {
+      if(x._id === taskId) {
+        x.doneAt = x.doneAt ? null : new Date()
+        return x
+      }
+      else
+        return x
+    })
+  }
 
   return (
     <div style={styles().wrapper}>
@@ -204,6 +221,14 @@ function TodayTaskList (props) {
                     droppableId={"unfinished"}
                     items={itemsUnfinished}
                     onUpdate={getAllItems}
+                    onDelete={(taskId) => {
+                      getDeletedList(taskId, itemsUnfinished, setItemsUnifinished)
+                    }}
+                    onDoneChange={(taskId) => {
+                      const listTasks = getDoneList(taskId, itemsUnfinished)
+                      setItemsUnifinished([...listTasks])
+                      getAllItems()
+                    }}
                     onDescribe={props.onDescribe}
                     task={props.task}
                     projects={props.projects}
@@ -218,6 +243,14 @@ function TodayTaskList (props) {
                   droppableId={"today"}
                   items={itemsToday}
                   onUpdate={getAllItems}
+                  onDelete={(taskId) => {
+                    getDeletedList(taskId, itemsToday, setItemsToday)
+                  }}
+                  onDoneChange={(taskId) => {
+                    const listTasks = getDoneList(taskId, itemsToday)
+                    setItemsToday([...listTasks])
+                    getAllItems()
+                  }}
                   onDescribe={props.onDescribe}
                   projects={props.projects}
                   goals={props.goals}
@@ -231,6 +264,14 @@ function TodayTaskList (props) {
                   droppableId={"tomorrow"}
                   items={itemsTomorrow}
                   onUpdate={getAllItems}
+                  onDelete={(taskId) => {
+                    getDeletedList(taskId, itemsTomorrow, setItemsTomorrow)
+                  }}
+                  onDoneChange={(taskId) => {
+                    const listTasks = getDoneList(taskId, itemsTomorrow)
+                    setItemsTomorrow([...listTasks])
+                    getAllItems()
+                  }}
                   onDescribe={props.onDescribe}
                   projects={props.projects}
                   goals={props.goals}
@@ -244,6 +285,14 @@ function TodayTaskList (props) {
                   droppableId={"upcoming"}
                   items={itemsUpcoming}
                   onUpdate={getAllItems}
+                  onDelete={(taskId) => {
+                    getDeletedList(taskId, itemsUpcoming, setItemsUpcoming)
+                  }}
+                  onDoneChange={(taskId) => {
+                    const listTasks = getDoneList(taskId, itemsUpcoming)
+                    setItemsUpcoming([...listTasks])
+                    getAllItems()
+                  }}
                   onDescribe={props.onDescribe}
                   projects={props.projects}
                   goals={props.goals}
@@ -257,6 +306,14 @@ function TodayTaskList (props) {
                   droppableId={"someday"}
                   items={itemsSomeday}
                   onUpdate={getAllItems}
+                  onDelete={(taskId) => {
+                    getDeletedList(taskId, itemsSomeday, setItemsSomeday)
+                  }}
+                  onDoneChange={(taskId) => {
+                    const listTasks = getDoneList(taskId, itemsSomeday)
+                    setItemsSomeday([...listTasks])
+                    getAllItems()
+                  }}
                   onDescribe={props.onDescribe}
                   goals={props.goals}
                   projects={props.projects}

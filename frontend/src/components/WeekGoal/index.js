@@ -11,7 +11,7 @@ function WeekGoal (props) {
   const [modalOpen, setModalOpen] = useState(false)
   const [focusGoal, setFocusGoal] = useState(null)
   const api = new Api()
-  const isShowing = props.weekNumber <= moment(new Date()).week()
+  const isShowing = props.weekNumber <= moment(new Date()).isoWeek()
 
 
   useEffect(() => {
@@ -66,10 +66,10 @@ function WeekGoal (props) {
           onClick={() => setModalOpen(true)}
           style={styles().goalContainer}
           onMouseOver={(event) => {
-            event.target.style.background = '#d9d9d9'
+            event.target.style.background = '#33cc33'
           }}
           onMouseLeave={(event) => {
-            event.target.style.background = '#b3b3b3'
+            event.target.style.background = '#009933'
           }}
         >
           {focusGoal.content}
@@ -82,8 +82,8 @@ function WeekGoal (props) {
 
 const styles = () => ({
   toolButton: {
-    cursor: 'pointer',
     background: '#32A3BC',
+    cursor: 'pointer',
     borderColor: 'white',
     fontWeight: 'bold',
     paddingLeft: 10,
@@ -95,7 +95,8 @@ const styles = () => ({
     borderStyle: 'solid',
   },
   goalContainer: {
-    background: '#b3b3b3',
+    background: '#009933',
+    color: 'white',
     cursor: 'pointer',
     fontSize: 16 * getDimRatio().X,
     borderRadius: 20,

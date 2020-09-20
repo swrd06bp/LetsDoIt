@@ -164,35 +164,79 @@ function WeeklyTaskList (props) {
     const newDate = new Date()
     if ((weekDates[0] <= newDate && weekDates[1] > newDate) || weekDates[0] <= newDate) {
       const newDateDay = newDate.getDay()
-      if (newDateDay === 1) setItemsMonday([...itemsMonday, task])
-      else if (newDateDay === 2) setItemsTuesday([...itemsTuesday, task])
-      else if (newDateDay === 3) setItemsWednesday([...itemsWednesday, task])
-      else if (newDateDay === 4) setItemsThursday([...itemsThursday, task])
-      else if (newDateDay === 5) setItemsFriday([...itemsFriday, task])
-      else if (newDateDay === 6) setItemsSaturday([...itemsSaturday, task])
-      else if (newDateDay === 7) setItemsSunday([...itemsSunday, task])
+      if (newDateDay === 1) setItemsMonday(sortTasks([...itemsMonday, task]))
+      else if (newDateDay === 2) setItemsTuesday(sortTasks([...itemsTuesday, task]))
+      else if (newDateDay === 3) setItemsWednesday(sortTasks([...itemsWednesday, task]))
+      else if (newDateDay === 4) setItemsThursday(sortTasks([...itemsThursday, task]))
+      else if (newDateDay === 5) setItemsFriday(sortTasks([...itemsFriday, task]))
+      else if (newDateDay === 6) setItemsSaturday(sortTasks([...itemsSaturday, task]))
+      else if (newDateDay === 0) setItemsSunday(sortTasks([...itemsSunday, task]))
     }
     else
-      setItemsMonday([...itemsMonday, task])
+      setItemsMonday(sortTasks([...itemsMonday, task]))
   }
 
+  const getDeletedList = (taskId, listTasks, setListFunction) => {
+    const index = listTasks.map(x => x._id).indexOf(taskId)
+    listTasks.splice(index, 1)
+    setListFunction([...listTasks])
+  }
+
+  const getDoneList = (taskId, listTasks) => {
+
+    return listTasks.map(x => {
+      if(x._id === taskId) {
+        x.doneAt = x.doneAt ? null : new Date()
+        return x
+      }
+      else
+        return x
+    })
+  }
 
   return (
     <div style={styles().wrapper}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
         <div style={{display: 'flex', flexDirection: 'row'}}>
-          <button onClick={() => {getOtherWeek(0)}}>
+          <div
+            style={styles().toolButton}
+            onMouseOver={(event) => {
+              event.target.style.background = '#58FAD0'
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.background = '#32A3BC'
+            }}
+            onClick={() => {getOtherWeek(0)}}
+          >
             now
-          </button>
-          <button onClick={() => {getOtherWeek(-1)}}>
+          </div>
+          <div
+            style={styles().toolButton}
+            onMouseOver={(event) => {
+              event.target.style.background = '#58FAD0'
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.background = '#32A3BC'
+            }}
+            onClick={() => {getOtherWeek(-1)}}
+          >
             &lt;
-        </button>
-          <button onClick={() => {getOtherWeek(1)}}>
+        </div>
+          <div
+            style={styles().toolButton}
+            onMouseOver={(event) => {
+              event.target.style.background = '#58FAD0'
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.background = '#32A3BC'
+            }}
+            onClick={() => {getOtherWeek(1)}}
+          >
             &gt;
-          </button>
+          </div>
           <div style={styles().monthTitle}>{id2DueDate('monday').toLocaleString('default', { month: 'long' }) + ' ' + id2DueDate('monday').getFullYear()}</div>
         </div>
-        <WeekGoal weekNumber={moment(date).week()} />
+        <WeekGoal weekNumber={moment(date).isoWeek()} />
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
@@ -205,6 +249,14 @@ function WeeklyTaskList (props) {
               items={itemsMonday}
               onUpdate={getTasks}
               onDescribe={props.onDescribe}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsMonday, setItemsMonday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsMonday)
+                setItemsMonday([...listTasks])
+                getTasks()
+              }}
               task={props.task}
               isPast={id2DueDate('monday') < todayDate()}
               scale={0.7}
@@ -219,6 +271,14 @@ function WeeklyTaskList (props) {
               droppableId={"tuesday"}
               items={itemsTuesday}
               onUpdate={getTasks}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsTuesday, setItemsTuesday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsTuesday)
+                setItemsTuesday([...listTasks])
+                getTasks()
+              }}
               onDescribe={props.onDescribe}
               task={props.task}
               isPast={id2DueDate('tuesday') < todayDate()}
@@ -235,6 +295,14 @@ function WeeklyTaskList (props) {
               items={itemsWednesday}
               onUpdate={getTasks}
               onDescribe={props.onDescribe}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsWednesday, setItemsWednesday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsWednesday)
+                setItemsWednesday([...listTasks])
+                getTasks()
+              }}
               task={props.task}
               scale={0.7}
               isPast={id2DueDate('wednesday') < todayDate()}
@@ -250,6 +318,14 @@ function WeeklyTaskList (props) {
               items={itemsThursday}
               onUpdate={getTasks}
               onDescribe={props.onDescribe}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsThursday, setItemsThursday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsThursday)
+                setItemsThursday([...listTasks])
+                getTasks()
+              }}
               isPast={id2DueDate('thursday') < todayDate()}
               task={props.task}
               scale={0.7}
@@ -265,6 +341,14 @@ function WeeklyTaskList (props) {
               items={itemsFriday}
               onUpdate={getTasks}
               isPast={id2DueDate('friday') < todayDate()}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsFriday, setItemsFriday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsFriday)
+                setItemsFriday([...listTasks])
+                getTasks()
+              }}
               onDescribe={props.onDescribe}
               task={props.task}
               scale={0.7}
@@ -280,6 +364,14 @@ function WeeklyTaskList (props) {
               items={itemsSaturday}
               onUpdate={getTasks}
               isPast={id2DueDate('saturday') < todayDate()}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsSaturday, setItemsSaturday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsSaturday)
+                setItemsSaturday([...listTasks])
+                getTasks()
+              }}
               onDescribe={props.onDescribe}
               task={props.task}
               scale={0.7}
@@ -295,6 +387,14 @@ function WeeklyTaskList (props) {
               items={itemsSunday}
               onUpdate={getTasks}
               isPast={id2DueDate('sunday') < todayDate()}
+              onDelete={(taskId) => {
+                getDeletedList(taskId, itemsSunday, setItemsSunday)
+              }}
+              onDoneChange={(taskId) => {
+                const listTasks = getDoneList(taskId, itemsSunday)
+                setItemsSunday([...listTasks])
+                getTasks()
+              }}
               onDescribe={props.onDescribe}
               task={props.task}
               scale={0.7}
@@ -322,10 +422,13 @@ const styles = () => ({
     width: 150 * getDimRatio().X,
   },
   dayTitle: {
-    fontSize: 25 * getDimRatio().X
+    color: '#32A3BC',
+    fontWeight: 'bold',
+    fontSize: 20 * getDimRatio().X
   },
   dayNumberTitle: {
-    fontSize: 20 * getDimRatio().X
+    color: '#32A3BC',
+    fontSize: 18 * getDimRatio().X
   },
   monthTitle: {
     fontSize: 20 * getDimRatio().X,
@@ -336,6 +439,22 @@ const styles = () => ({
     flexDirection: 'row',
   },
   footer: {
+  },
+  toolButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    background: '#32A3BC',
+    borderColor: 'white',
+    fontWeight: 'bold',
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    fontSize: 16 * getDimRatio().X,
+    color: 'white',
+    borderStyle: 'solid',
   },
 })
 

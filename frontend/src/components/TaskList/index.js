@@ -73,6 +73,8 @@ function TaskList (props) {
                                   scale={props.scale}
                                   task={props.task}
                                   onUpdate={props.onUpdate}
+                                  onDelete={props.onDelete}
+                                  onDoneChange={props.onDoneChange}
                                   goals={props.goals}
                                   projects={props.projects}
                                 />
