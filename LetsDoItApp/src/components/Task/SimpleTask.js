@@ -20,9 +20,9 @@ function Task (props) {
 
   const onCheckboxChange = async () => {
     const api = new Api()
-    await api.updateTask(props.item.id, {doneAt: !props.item.doneAt ? new Date() : null})
     Vibration.vibrate(100)
-    props.onUpdate()
+    await api.updateTask(props.item.id, {doneAt: !props.item.doneAt ? new Date() : null})
+    props.onDoneChange(props.item.id)
   }
 
   const onListChange = async () => {

@@ -11,7 +11,7 @@ const dayAfterDate = () => {
 } 
 const nextMondayDate = () => {
     let date = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
-    date.setDate(date.getDate() + (1 + 7 - date.getDay()) % 7)
+    date.setDate(date.getDate() + 8 - date.getDay()) % 7
     return date
 }
 const lastWeekDate = () => {
@@ -36,10 +36,12 @@ const weekDayDate = (date, day) => {
 
 const sortTasks = tasks => {
   let sortedTasks = JSON.parse(JSON.stringify(tasks))
-  sortedTasks.sort((a, b) => {return a.list < b.list})
+  sortedTasks.sort((a, b) => {return(a.createdAt > b.createdAt)})
+  sortedTasks.sort((a, b) => {return (a.list === 'Personal' && b.list === 'Work')})
   sortedTasks.sort((a, b) => {return(a.dueDate > b.dueDate)})
   sortedTasks.sort((a, b) => {return(a.doneAt > b.doneAt)})
   sortedTasks.sort((a, b) => {return(a.doneAt && !b.doneAt)})
+  sortedTasks.sort((a, b) => {return(a.type === 'task' && b.type === 'routine')})
   return sortedTasks
 }
 
@@ -144,6 +146,7 @@ const generateRoutineTask = ({habit, doneRoutines, unDoneRoutines}) => {
 }
 
 export {
+  sortTasks,
   todayDate,
   tomorrowDate,
   weekDayDate,

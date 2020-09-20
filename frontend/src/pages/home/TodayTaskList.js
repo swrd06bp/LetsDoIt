@@ -201,7 +201,6 @@ function TodayTaskList (props) {
   }
 
   const getDoneList = (taskId, listTasks) => {
-
     return listTasks.map(x => {
       if(x._id === taskId) {
         x.doneAt = x.doneAt ? null : new Date()
@@ -332,7 +331,9 @@ function TodayTaskList (props) {
               </div>
             </DragDropContext>
        </div>
-      <AddTask onCreate={(task) => setItemsToday(sortTasks([task, ...itemsToday]))}/>
+      <AddTask
+        onCreate={(task) => setItemsToday(sortTasks([task, ...itemsToday]))}
+      />
     </div>
   )
 }
