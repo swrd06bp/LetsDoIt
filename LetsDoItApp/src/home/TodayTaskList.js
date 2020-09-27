@@ -387,7 +387,7 @@ function TodayTaskList (props) {
                       api.deleteTask(draggedTask.id)
                         .then(() => {
                           Vibration.vibrate(400)
-                          getDeletedList(draggedTask.id, droppableId)
+                          getDeletedList(draggedTask.id, draggedTask.droppableId)
                           setDraggedTask(null)
                           setShowDeletion(false)
                         })
