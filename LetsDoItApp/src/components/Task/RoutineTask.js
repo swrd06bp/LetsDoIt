@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     height: 37,
     borderRadius: 40,
     marginHorizontal: 5,
@@ -147,6 +146,7 @@ const styles = StyleSheet.create({
   frontContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '60%',
   },
   buttonText: {
     justifyContent: 'center',
@@ -198,7 +198,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 10,
     marginVertical: 15,
-
   },
 })
 

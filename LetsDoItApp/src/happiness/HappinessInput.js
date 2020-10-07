@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity} from 'react-native'
+import { CommonActions} from '@react-navigation/native'
 
 import Survey from './Survey'
 import Quote from './Quote'
@@ -12,7 +13,13 @@ function HappinessInput (props) {
   const onSubmit = async (note) => {
     const api = new Api()
     await api.postHappiness(score, note)
-    props.navigation.goBack()
+    props.navigation.dispatch(CommonActions.reset({
+      index: 0,
+      routes: [
+        {name: 'HomePage'},
+      ],
+    })
+)
   }
 
   return (

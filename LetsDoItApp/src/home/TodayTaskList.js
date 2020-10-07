@@ -18,6 +18,7 @@ import SimpleTask from '../components/Task/SimpleTask'
 import RoutineTask from '../components/Task/RoutineTask'
 
 import {
+  sortTasks,
   todayDate,
   lastWeekDate,
   lastMonthDate,
@@ -216,6 +217,43 @@ function TodayTaskList (props) {
         }
     }
 
+  const onCreate = (task) => {
+    setItemsToday(sortTasks([task, ...itemsToday]))
+  }
+
+  const getFunctions = (title) => {
+    if (title === 'Today')
+      return [itemsToday, setItemsToday]
+    else if (title === 'Tomorrow')
+      return [itemsTomorrow, setItemsTomorrow]
+    else if (title === 'Upcoming')
+      return [itemsUpcoming, setItemsUpcoming]
+    else if (title === 'Someday')
+      return [itemsSomeday, setItemsSomeday]
+    else if (title === 'Unfinished')
+      return [itemsUnfinished, setItemsUnifinished]
+  }
+
+  const getDeletedList = (taskId, title) => {
+    const [listTasks, setListFunction] = getFunctions(title)
+    const index = listTasks.map(x => x._id).indexOf(taskId)
+    listTasks.splice(index, 1)
+    setListFunction([...listTasks])
+  }
+
+  const getDoneList = (taskId, title) => {
+    const [listTasks, setListFunction] = getFunctions(title)
+    listTasks.map(x => {
+      if(x._id === taskId) {
+        x.doneAt = x.doneAt ? null : new Date()
+        return x
+      }
+      else
+        return x
+    })
+    setListFunction([...listTasks])
+    getAllItems()
+  }
   
 
   return (
@@ -249,6 +287,9 @@ function TodayTaskList (props) {
                           item={item}
                           onUpdate={getAllItems}
                           isSelected={draggedTask && draggedTask.id === item.id} 
+                          onDoneChange={(taskId) => {
+                            getDoneList(taskId, section.title)
+                          }}
                         />
                         </TouchableOpacity>
                       )
@@ -304,11 +345,26 @@ function TodayTaskList (props) {
             />     
             </View>
               {!draggedTask && !isAddingTask && (
-                <AddButton style={styles.addButton} onClick={() => setIsAddingTask(true)} />
+                <AddButton 
+                  style={styles.addButton}
+                  onClick={() => setIsAddingTask(true)} 
+                />
               )}
               {!draggedTask && isAddingTask && (
                 <View style={[styles.addTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
-                  <AddTask onUpdate={getAllItems}/>
+                  <AddTask 
+                    onCreate={(task, chosenDateOption) => {
+                      if (chosenDateOption === 'Today')
+                        setItemsToday(sortTasks([task, ...itemsToday]))
+                      else if (chosenDateOption === 'Tomorrow')
+                        setItemsTomorrow(sortTasks([task, ...itemsTomorrow]))
+                      else if (chosenDateOption === 'Next Monday')
+                        setItemsUpcoming(sortTasks([task, ...itemsUpcoming]))
+                      else if (chosenDateOption === 'Someday')
+                        setItemsSomeday(sortTasks([task, ...itemsSomeday]))
+                    }}
+                    onUpdate={getAllItems}
+                  />
                 </View>
               )}
               {draggedTask && (
@@ -331,7 +387,7 @@ function TodayTaskList (props) {
                       api.deleteTask(draggedTask.id)
                         .then(() => {
                           Vibration.vibrate(400)
-                          getAllItems()
+                          getDeletedList(draggedTask.id, draggedTask.droppableId)
                           setDraggedTask(null)
                           setShowDeletion(false)
                         })

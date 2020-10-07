@@ -45,21 +45,26 @@ function AddTask (props) {
     let dueDate
     if (chosenDateOption === 'Today') dueDate = todayDate()
     else if(chosenDateOption === 'Tomorrow') dueDate = tomorrowDate()
-    else if(chosenDateOption === 'Next monday') dueDate = nextMondayDate()
+    else if(chosenDateOption === 'Next Monday') dueDate = nextMondayDate()
     else if(chosenDateOption === 'Someday') dueDate = null
 
     
     const api = new Api() 
-    if (taskInput) {
-      await api.insertTask({
+      const newTask = {
         content: taskInput,
         list: 'Personal',
         dueDate,
         note: null,
-      })
+      }
+    if (taskInput) {
+      const resp = await api.insertTask(newTask)
+      const json = await resp.json()
+      newTask.type = 'task'
+      newTask.id = json.taskId.insertedId
+      newTask._id = json.taskId.insertedId
+      props.onCreate(newTask, chosenDateOption)
     }
     setTaskInput('')
-    props.onUpdate()
   }
 
   return (
@@ -79,7 +84,7 @@ function AddTask (props) {
           onChange={setChosenDateOption}
         />
         <Helper
-          content={'Next monday'}
+          content={'Next Monday'}
           chosenDateOption={chosenDateOption}
           onChange={setChosenDateOption}
         />
