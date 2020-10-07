@@ -263,6 +263,12 @@ function WeeklyTaskList (props) {
               projects={props.projects}
               goals={props.goals}
             />
+              {id2DueDate('monday') <= todayDate() && ( <WeekGoal
+                day={true}
+                weekNumber={id2DueDate('monday').getFullYear()*1000 + moment(id2DueDate('monday')).dayOfYear()}
+                scale={0.7}
+              />
+              )}   
           </div>
           <div style={styles().dayContainer}>
             <div style={styles().dayTitle}>Tuesday</div>
@@ -286,6 +292,12 @@ function WeeklyTaskList (props) {
               projects={props.projects}
               goals={props.goals}
             />
+              {id2DueDate('tuesday') <= todayDate() && ( <WeekGoal
+                day={true}
+                weekNumber={id2DueDate('tuesday').getFullYear()*1000 + moment(id2DueDate('tuesday')).dayOfYear()}
+                scale={0.7}
+              />
+              )}   
           </div>
           <div style={styles().dayContainer}>
             <div style={styles().dayTitle}>Wednesday</div>
@@ -309,6 +321,12 @@ function WeeklyTaskList (props) {
               projects={props.projects}
               goals={props.goals}
             />
+              {id2DueDate('wednesday') <= todayDate() && ( <WeekGoal
+                day={true}
+                weekNumber={id2DueDate('wednesday').getFullYear()*1000 + moment(id2DueDate('wednesday')).dayOfYear()}
+                scale={0.7}
+              />
+              )}   
           </div>
           <div style={styles().dayContainer}>
             <div style={styles().dayTitle}>Thursday</div>
@@ -332,6 +350,12 @@ function WeeklyTaskList (props) {
               projects={props.projects}
               goals={props.goals}
             />
+              {id2DueDate('thursday') <= todayDate() && ( <WeekGoal
+                day={true}
+                weekNumber={id2DueDate('thursday').getFullYear()*1000 + moment(id2DueDate('thursday')).dayOfYear()}
+                scale={0.7}
+              />
+              )}   
           </div>
           <div style={styles().dayContainer}>
             <div style={styles().dayTitle}>Friday</div>
@@ -355,6 +379,12 @@ function WeeklyTaskList (props) {
               projects={props.projects}
               goals={props.goals}
             />
+              {id2DueDate('friday') <= todayDate() && ( <WeekGoal
+                day={true}
+                weekNumber={id2DueDate('friday').getFullYear()*1000 + moment(id2DueDate('friday')).dayOfYear()}
+                scale={0.7}
+              />
+              )}   
           </div>
           <div style={styles().dayContainer}>
             <div style={styles().dayTitle}>Saturday</div>
@@ -378,6 +408,12 @@ function WeeklyTaskList (props) {
               projects={props.projects}
               goals={props.goals}
             />
+              {id2DueDate('saturday') <= todayDate() && ( <WeekGoal
+                day={true}
+                weekNumber={id2DueDate('saturday').getFullYear()*1000 + moment(id2DueDate('saturday')).dayOfYear()}
+                scale={0.7}
+              />
+              )}   
           </div>
           <div style={styles().dayContainer}>
             <div style={styles().dayTitle}>Sunday</div>
@@ -401,6 +437,12 @@ function WeeklyTaskList (props) {
               projects={props.projects}
               goals={props.goals}
             />
+              {id2DueDate('sunday') <= todayDate() && ( <WeekGoal
+                day={true}
+                weekNumber={id2DueDate('sunday').getFullYear()*1000 + moment(id2DueDate('sunday')).dayOfYear()}
+                scale={0.7}
+              />
+              )}   
           </div>
         </div>
       </DragDropContext>
@@ -411,7 +453,7 @@ function WeeklyTaskList (props) {
 
 const styles = () => ({
   wrapper: {
-    height: 600 * getDimRatio().Y,
+    height: 620 * getDimRatio().Y,
     background: 'white',
     borderRadius: 20,
     padding: 20,

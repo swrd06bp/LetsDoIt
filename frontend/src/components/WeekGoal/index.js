@@ -35,6 +35,8 @@ function WeekGoal (props) {
   }
 
 
+  const scale = props.scale ? props.scale : 1
+
   if (isLoading || !isShowing) return null
 
   return (
@@ -51,7 +53,7 @@ function WeekGoal (props) {
       />
       {!focusGoal && (
       <div 
-        style={styles().toolButton}
+        style={styles(scale).toolButton}
         onClick={() => setModalOpen(true)}
         onMouseOver={(event) => {
           event.target.style.background = '#58FAD0'
@@ -66,7 +68,7 @@ function WeekGoal (props) {
       {focusGoal && (
         <div 
           onClick={() => setModalOpen(true)}
-          style={styles().goalContainer}
+          style={styles(scale).goalContainer}
           onMouseOver={(event) => {
             event.target.style.background = '#33cc33'
           }}
@@ -82,7 +84,7 @@ function WeekGoal (props) {
 }
 
 
-const styles = () => ({
+const styles = (scale) => ({
   toolButton: {
     background: '#32A3BC',
     cursor: 'pointer',
@@ -92,7 +94,7 @@ const styles = () => ({
     paddingRight: 10,
     borderWidth: 1,
     borderRadius: 20,
-    fontSize: 16 * getDimRatio().X,
+    fontSize: scale * 16 * getDimRatio().X,
     color: 'white',
     borderStyle: 'solid',
   },
@@ -100,7 +102,7 @@ const styles = () => ({
     background: '#009933',
     color: 'white',
     cursor: 'pointer',
-    fontSize: 16 * getDimRatio().X,
+    fontSize: scale * 16 * getDimRatio().X,
     borderRadius: 20,
     paddingRight: 10,
     paddingLeft: 10,
