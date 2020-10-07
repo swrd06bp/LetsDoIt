@@ -58,6 +58,7 @@ export default function AddHabit (props) {
         frequency: chosenFrequency, 
         goalId: props.goalId, 
         doneAt: null,
+        acheived: null,
         startTime,
       }
       await api.insertHabit(habit) 

@@ -85,14 +85,21 @@ class Api {
     return await this.get(url)
   }
 
-  async getHabitsGoal (goalId) {
-    const url = this.baseUrl + `/goal/${goalId}/habits`
+  async getHabitsGoal (goalId, all) {
+    let url = this.baseUrl + `/goal/${goalId}/habits`
+    if (all)
+      url += `?all=true`
     return await this.get(url)
   }
   
   async insertHabit(habit) {
     const url = this.baseUrl + '/habit'
     return await this.post(url, habit)
+  }
+  
+  async updateHabit(habitId, habit) {
+    const url = this.baseUrl + `/habit/${habitId}`
+    return await this.put(url, habit)
   }
   
   async deleteHabit(habitId) {

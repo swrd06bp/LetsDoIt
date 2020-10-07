@@ -21,13 +21,17 @@ exports.habitGet = async (req, res) => {
 
 exports.habitGoalGet = async (req, res) => {
   const goalId = req.params.goalId
-  const { doneAt } = req.params
+  const { doneAt, all } = req.query
   let query
-  if (!doneAt)
+  if (!doneAt && !all)
     query = {'goalId': goalId, doneAt: null}
-  else {
+  else if (doneAt && !all) {
     query = {'goalId': goalId, doneAt: {'&gte': new Date(doneAt).toJSON()}}
   }
+  else {
+    query = {'goalId': goalId}
+  }
+
   const habits = await dbClient.getElems({
     table: 'habits',
     query,
@@ -37,6 +41,17 @@ exports.habitGoalGet = async (req, res) => {
   res.json(habits)
   res.end()
 }
+
+exports.habitPut = async (req, res) => {
+  const habitId = req.params.habitId
+  const habit = req.body
+  habit.updatedAt = new Date().toJSON()
+  await dbClient.updateElem({table: 'habits', elem: habit, elemId: habitId, userId: req.decoded})
+  res.status(200)
+  res.json({'habitId': habitId})
+  res.end()
+}
+
 
 
 exports.habitPost = async (req, res) => {

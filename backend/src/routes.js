@@ -68,6 +68,7 @@ router.delete('/goal/:goalId', goalController.goalDelete)
 router.get('/habits', habitController.habitGet)
 router.get('/goal/:goalId/habits', habitController.habitGoalGet)
 router.post('/habit', habitController.habitPost)
+router.put('/habit/:habitId', habitController.habitPut)
 router.delete('/habit/:habitId', habitController.habitDelete)
 
 // routines
