@@ -5,12 +5,16 @@ import Api from '../../app/Api'
 import { getDimRatio } from '../../app/DynamicSizing'
 
 function AddWeekGoal(props) {
-  const [content, setContent] = useState(props.focusGoal ? props.focusGoal.content : '')
+  const [content, setContent] = useState(null)
   const api = new Api()
   
   useEffect(() => {
     Modal.setAppElement('body')
   }, [])
+
+  useEffect(() => {
+    setContent(props.focusGoal ? props.focusGoal.content : '')
+  }, [props.focusGoal])
 
 
   const onConfirm = async () => {
