@@ -9,6 +9,7 @@ const projectController = require('./controllers/projectController')
 const goalController = require('./controllers/goalController')
 const habitController = require('./controllers/habitController')
 const routineController = require('./controllers/routineController')
+const photoController = require('./controllers/photoController')
 
 
 
@@ -25,6 +26,9 @@ router.get('/status', (req, res) => {
   res.json({'status':'ok'})
   res.end()
 })
+
+// get random photo
+router.get('photo', photoController.photoGet)
 
 // get user info
 router.get('/user', userController.userGet)
