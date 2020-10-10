@@ -45,6 +45,27 @@ class Api {
     return await this.get(url)
   }
 
+  async getRandomPhoto() {
+    const url = this.baseUrl + '/photo'
+    return await this.get(url)
+  }
+  
+  async getFocus ({type, number, limit}) {
+    const url = this.baseUrl + `/focus?type=${type}&number=${number}&limit=${limit}`
+    return await this.get(url)
+  }
+  
+  async postFocus (focus) {
+    const url = this.baseUrl + '/focus'
+    const body = { ...focus }
+    return await this.post(url, body)
+  }
+  
+  async putFocus (focusId, focus) {
+    const url = this.baseUrl + `/focus/${focusId}`
+    const body = { ...focus }
+    return await this.put(url, body)
+  }
 
   async getHappiness (limit) {
     const url = this.baseUrl + `/happiness?limit=${limit}`

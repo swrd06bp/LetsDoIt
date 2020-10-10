@@ -68,6 +68,11 @@ export default function Home (props) {
         </MenuTrigger>
         <MenuOptions>
           <MenuOption onSelect={() => {
+            props.navigation.navigate('DayFocus')
+          }} >
+            <Text>Set a focus for your day</Text>
+          </MenuOption>
+          <MenuOption onSelect={() => {
             const api = new Api()
             api.logout()
             props.navigation.dispatch(homeAction('LoginPage'))

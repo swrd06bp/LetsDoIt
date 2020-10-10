@@ -8,6 +8,7 @@ import Home from './src/home'
 import LandingPage from './src/landing'
 import HappinessInput from './src/happiness/HappinessInput'
 import LoginPage from './src/login'
+import DayFocus from './src/dayfocus'
 
 const Stack = createStackNavigator()
 
@@ -43,6 +44,14 @@ const App: () => React$Node = () => {
             component={Home}
             options={() => ({
               headerLeft: () => <Text style={styles.title}>LetsDoIt</Text>,
+            })} 
+          >
+          </Stack.Screen>
+          <Stack.Screen
+            name="DayFocus"
+            component={DayFocus}
+            options={() => ({
+              headerTitle: () => null,
             })} 
           >
           </Stack.Screen>
