@@ -28,7 +28,7 @@ router.get('/status', (req, res) => {
 })
 
 // get random photo
-router.get('photo', photoController.photoGet)
+router.get('/photo', photoController.photoGet)
 
 // get user info
 router.get('/user', userController.userGet)
