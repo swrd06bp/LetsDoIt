@@ -3,11 +3,12 @@ const dbClient = require('../dbclient')
 
 exports.happinessGet = async (req, res) => {
   const userId = req.decoded
+  const { limit } = req.query
   const gnh = await dbClient.getElems({
     table: 'happiness',
     query: {},
     userId,
-    maxNum: 1,
+    maxNum: limit ? parseInt(limit) : 1,
   })
   res.status(200)
   res.json(gnh)

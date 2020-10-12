@@ -53,12 +53,12 @@ function HabitItem (props) {
         <div>{props.item.startTime}</div> 
       </div>
       {props.item.doneAt && ( <div style={styles().actionColumnContainer}>
-        <img style={styles().icon} src={'./cancel.png'} alt='Go back to this habit' onClick={() => onCancel()} width='20' height='20' />
+        <img style={styles().icon} src={'./cancel.png'} alt='Go back to this habit' title='Go back to this habit' onClick={() => onCancel()} width='20' height='20' />
       </div>
       )}
       {!props.item.doneAt && ( <div style={styles().actionColumnContainer}>
-        <img style={styles().icon} src={'./done.png'} alt='Mark habit as done' onClick={() => onSuccess(true)} width='20' height='20' />
-        <img style={styles().icon} src={'./fail.png'} alt='Mark habit as too ambitious for now' onClick={() => onSuccess(false)} width='20' height='20' />
+        <img style={styles().icon} src={'./done.png'} alt='Mark habit as done' title='Mark habit as done' onClick={() => onSuccess(true)} width='20' height='20' />
+        <img style={styles().icon} src={'./fail.png'} alt='Mark habit as too ambitious for now' title='Mark habit as too ambitious for now' onClick={() => onSuccess(false)} width='20' height='20' />
       </div>
       )}
       <div style={styles().deleteColumnContainer}>

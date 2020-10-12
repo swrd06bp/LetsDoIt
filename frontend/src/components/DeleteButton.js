@@ -79,6 +79,7 @@ function DeleteButton(props) {
         className='deleteTask' 
         alt='delete' 
         src='/trash.png'
+        title='Delete'
         width={props.width}
         height={props.height} />
     </div>

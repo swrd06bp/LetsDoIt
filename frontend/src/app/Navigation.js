@@ -33,8 +33,14 @@ function TopNavigation() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
       <Navbar.Brand href="/">LetsDoIt</Navbar.Brand>
-      {showLink && ( <Navbar.Brand href='/happiness' style={styles.linkHappiness}>Check yourself</Navbar.Brand>)} 
+      {showLink && ( <Navbar.Brand href='/happinesscreate' style={styles.linkHappiness}>Check yourself</Navbar.Brand>)} 
         <Nav className="sm-2" align="right">
+          <Nav.Item>
+            <Nav.Link href='/'>Home</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href='/happiness'>Happiness</Nav.Link>
+          </Nav.Item>
           <NavDropdown title="Settings" id="basic-nav-dropdown">
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={clickLogout}>Logout</NavDropdown.Item>
