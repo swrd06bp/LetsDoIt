@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb')
 const dbClient = require('../dbclient')
 const jwt = require('jsonwebtoken')
 const jwtConfig = require('../jwtConfig')
@@ -47,7 +48,7 @@ exports.userSignup = async (req, res) => {
   const json = await resp.json()
   if (json.success && name && username && password) {
     const encryptedPass = encryption.encrypt(password)
-    const userId = await dbClient.writeElem({table: 'users', task: {name, username, encryptedPass}})
+    const userId = await dbClient.writeElem({table: 'users', elem: {name, username, encryptedPass}})
     res.status(200)
     res.json({'userId': userId})
     res.end()
@@ -60,7 +61,7 @@ exports.userSignup = async (req, res) => {
 
 exports.userGet = async (req, res) => {
   const userId = req.decoded
-  const user = await dbClient.getElems({table: 'users', query: {}, userId})
+  const user = await dbClient.getElems({table: 'users', query: {'_id': new ObjectId(userId)}})
   res.status(200)
   res.json(user)
   res.end()

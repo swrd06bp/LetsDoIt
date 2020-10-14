@@ -35,7 +35,8 @@ function HomePage() {
     const resultName = await respName.json()
     setAllGoals(resultGoals)
     setAllProjects(resultProjects)
-    setName(resultName[0].name)
+    if (resultName.length)
+      setName(resultName[0].name)
   }
 
 

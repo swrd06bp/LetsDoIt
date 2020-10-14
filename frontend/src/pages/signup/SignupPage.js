@@ -20,7 +20,6 @@ function SignupPage() {
   
   const handleSubmit = async () => {
     const isSignup = await new Api().signup(name, username, password, captchaToken)
-    console.log(isSignup)
     if (isSignup.status === 200) window.location.assign('/login')
   }
 

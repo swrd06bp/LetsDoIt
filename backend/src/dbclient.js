@@ -26,11 +26,11 @@ function wrapped(operation)  {
 // -----------------------------------------
 async function getElems(client, {table, query, userId, maxNum}) {
   const maxLim = maxNum ? maxNum : 999999
-  const masterQuery = userId ? {'$and': [query, userId]} : query
+  const masterQuery = userId ? {...query, userId} : query
   const db = client.db('toDoList')
   let collection = db.collection(table)
   return await collection.find(
-    query,
+    masterQuery,
     {"sort": [['createdAt', 'desc']]}
   ).limit(maxLim).toArray()
 }
@@ -38,7 +38,10 @@ async function getElems(client, {table, query, userId, maxNum}) {
 async function writeElem(client, {table, elem, userId}) {
   const db = client.db('toDoList')
   let collection = db.collection(table)
-  return await collection.insertOne({...elem, userId})
+  if (userId)
+    return await collection.insertOne({...elem, userId})
+  else
+    return await collection.insertOne({...elem})
 }
 
 async function updateElem(client, {table, elem, elemId, userId}) {
