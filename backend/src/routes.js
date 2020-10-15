@@ -32,7 +32,8 @@ router.get('/photo', photoController.photoGet)
 
 // get user info
 router.get('/user', userController.userGet)
-
+router.put('/user', userController.userPut)
+router.put('/newpassword', userController.userChangePassword)
 
 // happiness
 router.get('/happiness', happinessController.happinessGet)

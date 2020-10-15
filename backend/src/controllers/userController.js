@@ -58,11 +58,49 @@ exports.userSignup = async (req, res) => {
   }
 }
 
+exports.userChangePassword = async (req, res) => {
+  const userId = req.decoded
+  const {username, oldPassword, newPassword} = req.body
+  const user = await dbClient.getElems({table: 'users', query: { username }})
+
+  if (!user.length) {
+    res.status(200)
+    res.json({'success': false, 'message': 'User does not exist'})
+    res.end()
+    return
+  }
+  let {encryptedPass} = user[0]
+  if (encryption.decrypt(encryptedPass) !== oldPassword) {
+    res.status(200)
+    res.json({'success': false, 'message': 'Wrong password'})
+    res.end()
+  }
+
+  encryptedPass = encryption.encrypt(newPassword)
+  await dbClient.updateElem({
+    table: 'users',
+    elem: { encryptedPass },
+    elemId: userId,
+  })
+  res.status(200)
+  res.json({'userId': userId})
+  res.end()
+}
+
 
 exports.userGet = async (req, res) => {
   const userId = req.decoded
   const user = await dbClient.getElems({table: 'users', query: {'_id': new ObjectId(userId)}})
   res.status(200)
   res.json(user)
+  res.end()
+}
+
+exports.userPut = async (req, res) => {
+  const userId = req.decoded
+  const user = req.body
+  await dbClient.updateElem({table: 'users', elem: user, elemId: userId})
+  res.status(200)
+  res.json({'userId': userId})
   res.end()
 }

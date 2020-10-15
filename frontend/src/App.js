@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import HomePage from './pages/home/HomePage'
 import LoginPage from './pages/login/LoginPage'
+import AccountPage from './pages/account'
 import HappinessPage from './pages/happiness'
 import HappinessCreatePage from './pages/happiness/Create'
 import SignupPage from './pages/signup/SignupPage'
@@ -28,6 +29,7 @@ function App() {
           <PrivateRoute exact path="/" component={HomePage} />
           <PrivateRoute exact path="/happinessCreate" component={HappinessCreatePage} />
           <PrivateRoute exact path="/happiness" component={HappinessPage} />
+          <PrivateRoute exact path="/account" component={AccountPage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/signup" component={SignupPage} />
         </div>

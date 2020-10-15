@@ -38,6 +38,17 @@ class Api {
       return(false)
     }
   }
+
+  async changePassword({username, oldPassword, newPassword}) {
+    const url = this.baseUrl + '/newpassword' 
+    const body = {username, oldPassword, newPassword}
+    const resp = await this.put(url, body)
+    if (resp.status  === 200) {
+      return(true)
+    } else {
+      return(false)
+    }
+  }
   
   async signup(name, username, password, captchaToken) {
     const url = this.baseUrl + '/signup'
@@ -48,6 +59,12 @@ class Api {
   async getName() {
     const url = this.baseUrl + '/user'
     return await this.get(url)
+  }
+
+  async setName(name) {
+    const url = this.baseUrl + '/user'
+    const body = {name}
+    return await this.put(url, body)
   }
 
 

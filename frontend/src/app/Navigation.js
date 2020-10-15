@@ -27,6 +27,10 @@ function TopNavigation() {
     api.logout()
     window.location.assign('/login')
   } 
+
+  const goAccountPage = () => {
+    window.location.assign('/account')
+  }
   
   return (
     <Navbar bg="light" expand="lg">
@@ -42,6 +46,8 @@ function TopNavigation() {
             <Nav.Link href='/happiness'>Happiness</Nav.Link>
           </Nav.Item>
           <NavDropdown title="Settings" id="basic-nav-dropdown">
+            <NavDropdown.Item onClick={goAccountPage}>Account</NavDropdown.Item>
+            <NavDropdown.Divider />
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={clickLogout}>Logout</NavDropdown.Item>
           </NavDropdown>
