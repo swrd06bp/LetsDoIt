@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import socketIO from 'react-native-socketio'
 
 
-const host = 'https://mstaging.calipsa.io'
+const host = 'https://lets-do-it.me'
 const baseUrl = host + ':4001'
 const socket = new socketIO(baseUrl)
 

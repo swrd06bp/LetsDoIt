@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 class Api {
 
   constructor() {
-    this.host = 'https://mstaging.calipsa.io' 
+    this.host = 'https://lets-do-it.me' 
     this.baseUrl = this.host + ':4001/api'
     this.headers = {
       'Content-Type': 'application/json',

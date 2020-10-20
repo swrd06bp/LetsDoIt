@@ -1,7 +1,7 @@
 class Api {
 
   constructor() {
-    this.host = window.location.href.split(':4002')[0]
+    this.host = "https://lets-do-it.me"
     this.baseUrl = this.host + ':4001/api'
     this.headers = {
       'Content-Type': 'application/json',

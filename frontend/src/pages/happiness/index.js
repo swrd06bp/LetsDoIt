@@ -36,6 +36,7 @@ function HappinessPage (props) {
       {showGraph && (
         <div>
           <TopNavigation />
+          <div style={{textAlign: 'center', fontSize: 28, fontWeight: 'bold'}}>Happiness over time</div>
           <div>
             <Chart
               width={'100%'}
