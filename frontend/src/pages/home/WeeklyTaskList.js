@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import moment from 'moment'
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
+
 import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
 import AddTask from '../../components/AddTask'
@@ -33,6 +36,34 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
 
 function WeeklyTaskList (props) {
+  const getInitialDropdownOptions = () => {
+    let initialDropdownOptions = [
+      {value: 'All', label: 'All'},
+      {type: 'group', name: 'Lists', items: [
+        {value: 'Work', label: 'Work'},
+        {value: 'Personal', label: 'Personal'}
+      ]}
+    ]
+  
+    let projectItems = []
+    for (let project of props.projects) {
+      projectItems.push({value: project._id, label: project.content})
+    }
+    if (props.projects.length)
+      initialDropdownOptions.push({type: 'group', name: 'Projects', items: projectItems})
+
+    let goalItems = []
+    for (let goal of props.goals) {
+      goalItems.push({value: goal._id, label: goal.content})
+    }
+
+    if (props.goals.length)
+      initialDropdownOptions.push({type: 'group', name: 'Goals', items: goalItems})
+
+    
+    return initialDropdownOptions
+  }
+
   const [date, setDate] = useState(new Date())
   const [weekDates, setWeekDates] = useState([weekDayDate(new Date(), 0), weekDayDate(new Date(), 7)])
   const [itemsMonday, setItemsMonday] = useState([])
@@ -42,11 +73,27 @@ function WeeklyTaskList (props) {
   const [itemsFriday, setItemsFriday] = useState([])
   const [itemsSaturday, setItemsSaturday] = useState([])
   const [itemsSunday, setItemsSunday] = useState([])
+  const [selectedDropdownOption, setSelectedDropdownOption] = useState({value: 'All', label: 'All'})
+  const [dropdownOptions, setDropdownOptions] = useState(getInitialDropdownOptions())
+  
   const api = new Api()
 
+
+
   const getTasks = async () => {
-    const response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
-    const allTasks = await response.json()
+    let response
+    if (props.projects.map(x => x._id).includes(selectedDropdownOption.value))
+      response = await api.getTasksProject(selectedDropdownOption.value)
+    if (props.goals.map(x => x._id).includes(selectedDropdownOption.value))
+      response = await api.getTasksGoal(selectedDropdownOption.value)
+    else
+      response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
+    let allTasks = await response.json()
+
+   
+    //filter on the list
+    if (selectedList)
+      allTasks = allTasks.filter(x => x.list === selectedList)
 
     if (allTasks) {
       const weekDaysTasks = decomposeItemsWeek(allTasks, date, 'task')
@@ -72,7 +119,19 @@ function WeeklyTaskList (props) {
     return () => removeSocketListener('tasks')
   },[props.task, date]) 
 
+  useEffect(() => {
+    getTasks() 
+  }, [selectedDropdownOption.value])
 
+
+  // choose the selectedList for the filter
+  let selectedList = null
+  if (['Work', 'Personal'].includes(selectedDropdownOption.value))
+    selectedList = selectedDropdownOption.value
+  else if (props.projects.map(x => x._id).includes(selectedDropdownOption.value))
+    selectedList = props.projects.filter(x => x._id === selectedDropdownOption.value)[0].list
+  else if (props.goals.map(x => x._id).includes(selectedDropdownOption.value))
+    selectedList = props.goals.filter(x => x._id === selectedDropdownOption.value)[0].list
 
   
   const id2List = {
@@ -193,6 +252,7 @@ function WeeklyTaskList (props) {
         return x
     })
   }
+
 
   return (
     <div style={styles().wrapper}>
@@ -460,7 +520,25 @@ function WeeklyTaskList (props) {
           </div>
         </div>
       </DragDropContext>
-      <div style={styles().footer}><AddTask dueDate={getNewDueDate()} onCreate={onCreateTask} /></div>
+      <div style={styles().footer}>
+        <div style={styles().filters}>
+          <div>Filter</div>
+          <Dropdown
+            options={dropdownOptions}
+            value={selectedDropdownOption.value}
+            onChange={setSelectedDropdownOption}
+          />
+        </div>
+        <AddTask
+          dueDate={getNewDueDate()}
+          onCreate={onCreateTask}
+          list={selectedList}
+          projectId={props.projects.map(x => x._id).includes(selectedDropdownOption.value) ? 
+            selectedDropdownOption.value : null}
+          goalId={props.goals.map(x => x._id).includes(selectedDropdownOption.value) ? 
+            selectedDropdownOption.value : null}
+        />
+      </div>
     </div>
   )
 }
@@ -494,7 +572,15 @@ const styles = () => ({
     display: 'flex',
     flexDirection: 'row',
   },
+  filters: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   footer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   toolButton: {
     display: 'flex',
