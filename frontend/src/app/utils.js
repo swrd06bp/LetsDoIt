@@ -60,7 +60,15 @@ const decomposeTasksToday = allTasks => {
       return task
     }))
     const todayTasks = sortTasks(allTasks.filter( x => {
-      return x.dueDate && new Date(x.dueDate) >= todayDate() && new Date(x.dueDate) < tomorrowDate()
+      return ((x.dueDate 
+        && new Date(x.dueDate) >= todayDate() 
+        && new Date(x.dueDate) < tomorrowDate() 
+        && !x.doneAt) 
+        ||
+        (x.doneAt 
+          && new Date(x.doneAt) >= todayDate() 
+          && new Date(x.doneAt) < tomorrowDate()
+        )) 
     }).map(x => {
       let task = x
       task.id = task._id
