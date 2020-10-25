@@ -64,16 +64,17 @@ exports.userChangePassword = async (req, res) => {
   const user = await dbClient.getElems({table: 'users', query: { username }})
 
   if (!user.length) {
-    res.status(200)
+    res.status(403)
     res.json({'success': false, 'message': 'User does not exist'})
     res.end()
     return
   }
   let {encryptedPass} = user[0]
   if (encryption.decrypt(encryptedPass) !== oldPassword) {
-    res.status(200)
+    res.status(403)
     res.json({'success': false, 'message': 'Wrong password'})
     res.end()
+    return
   }
 
   encryptedPass = encryption.encrypt(newPassword)

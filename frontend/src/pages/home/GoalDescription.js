@@ -81,6 +81,12 @@ function GoalDescription (props) {
         >
           Habits
         </div>
+        <div 
+          style={showPage === 'Progress' ? styles().narbarOptionActive : styles().narbarOption}
+          onClick={() => setShowPage('Progress')}
+        >
+          Progress
+        </div>
       </div>
     {showPage === 'Characteristics' && ( 
       <div>
@@ -257,8 +263,11 @@ const styles = () => ({
   narbarOptionActive: {
     background: 'lightblue',
     marginLeft: 10,
+    paddingLeft: 4,
+    paddingRight: 4,
     color: 'blue',
     cursor: 'pointer',
+    borderRadius: 10,
   },
   narbarOption: {
     marginLeft: 10,

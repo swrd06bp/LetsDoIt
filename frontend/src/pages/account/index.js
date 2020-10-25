@@ -32,8 +32,12 @@ function AccountPage (props) {
 
 
   const changeName = async () => {
-    await api.setName(name) 
-  } 
+    const resp = await api.setName(name) 
+    if (resp.status === 200) {
+      setShowSuccess(true)
+      setTimeout(() => setShowSuccess(false), 2000)
+    }
+  }
   
   const changePassword = async () => {
     if (newPassword1 !== newPassword2) setShowDifferentError(true)
@@ -47,9 +51,11 @@ function AccountPage (props) {
       })
       if (!isChanged) setShowAuthError(true)
       else {
+        setShowSuccess(true)
         setOldPassword('')
         setNewPassword1('')
         setNewPassword2('')
+        setTimeout(() => setShowSuccess(false), 2000)
       }
     }
   }
@@ -100,6 +106,7 @@ function AccountPage (props) {
           <button onClick={() => changePassword()}>Save</button>
         </div>
       </div>
+      {showSuccess && (<div style={styles().feedback}>Success</div>)}
     </div>
   )
 }
@@ -110,6 +117,20 @@ const styles = () => ({
     fontSize: 28,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  feedback: {
+    position: 'absolute',
+    top: 0,
+    right: '50%',
+    background: 'lightgreen',
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingRight: 40,
+    paddingLeft: 40,
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    
   },
  
 })
