@@ -40,7 +40,10 @@ function SimpleTask (props) {
       onMouseOver={() => setIsOver(true)} 
       onMouseLeave={() => setIsOver(false)} 
       className='taskWrapper'
-      style={{...styles.wrapper, background: isOver ? '#FAFAFA' : 'white' }}
+      style={{
+        ...styles.wrapper,
+        background: isOver && !props.isSelected
+          ? '#FAFAFA' : null }}
     >
       <div style={styles.infoContainer}> 
         <input 
@@ -50,7 +53,15 @@ function SimpleTask (props) {
           onChange={() => onCheckboxChange(props.item.doneAt)}
         />
         <div
-          style={{display: 'flex', height: '100%', marginLeft: 5, flexGrow: 1, fontSize:15 * props.scale * getDimRatio().X, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black', }} 
+          style={{
+            display: 'flex',
+            height: '100%',
+            marginLeft: 5,
+            flexGrow: 1,
+            fontSize:15 * props.scale * getDimRatio().X,
+            textDecoration: props.item.doneAt ? 'line-through': null,
+            color: props.item.doneAt ? 'grey': 'black',
+          }} 
           onClick={() => {props.onDescribe({task: props.item, project: null, goal: null})}}
         >
           {props.item.content}

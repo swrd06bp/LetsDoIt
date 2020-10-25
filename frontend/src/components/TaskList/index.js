@@ -77,6 +77,7 @@ function TaskList (props) {
                                   onDoneChange={props.onDoneChange}
                                   goals={props.goals}
                                   projects={props.projects}
+                                  isSelected={isSelected}
                                 />
                               )}  
                               {!props.projectTask && item.type === 'routine' && (
