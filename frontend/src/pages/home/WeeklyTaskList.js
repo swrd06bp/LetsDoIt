@@ -84,7 +84,7 @@ function WeeklyTaskList (props) {
     let response
     if (props.projects.map(x => x._id).includes(selectedDropdownOption.value))
       response = await api.getTasksProject(selectedDropdownOption.value)
-    if (props.goals.map(x => x._id).includes(selectedDropdownOption.value))
+    else if (props.goals.map(x => x._id).includes(selectedDropdownOption.value))
       response = await api.getTasksGoal(selectedDropdownOption.value)
     else
       response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
@@ -521,13 +521,15 @@ function WeeklyTaskList (props) {
         </div>
       </DragDropContext>
       <div style={styles().footer}>
-        <div style={styles().filters}>
+        <div style={styles().filtersContainer}>
           <div>Filter</div>
+          <div style={styles().filtersDropdown}>
           <Dropdown
             options={dropdownOptions}
             value={selectedDropdownOption.value}
             onChange={setSelectedDropdownOption}
           />
+          </div>
         </div>
         <AddTask
           dueDate={getNewDueDate()}
@@ -572,10 +574,19 @@ const styles = () => ({
     display: 'flex',
     flexDirection: 'row',
   },
-  filters: {
+  filtersContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    fontSize: 14 * getDimRatio().X
+  },
+  filtersDropdown: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: 200* getDimRatio().X,
+    marginLeft: 10,
+    fontSize: 14 * getDimRatio().X
   },
   footer: {
     display: 'flex',
