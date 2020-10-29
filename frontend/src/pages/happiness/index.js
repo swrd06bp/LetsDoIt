@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import Chart from 'react-google-charts'
+import { Bar, Line } from '@reactchartjs/react-chart.js'
+import moment from 'moment'
 
+import YearChart from './YearChart'
 import TopNavigation from '../../app/Navigation'
+import { scoreToColor } from './utils'
 import { todayDate } from './../../app/utils'
 import Api from './../../app/Api'
 
 function HappinessPage (props) {
   const [showGraph, setShowGraph] = useState(false)
-  const [data, setData] = useState([])
+  const [allData, setAllData] = useState([])
+  const [shortData, setShortData] = useState([])
+  const [month, setMonth] = useState([])
+  const [notes, setNotes] = useState([])
    
 
   useEffect(() => {
@@ -21,61 +27,84 @@ function HappinessPage (props) {
     if (!json.length || new Date(json[0].createdAt) < todayDate()) 
       window.location.assign('/happinesscreate')
     else {
-      let formatedData = [['Date', 'Score']] 
-      for (let x of json)
-        formatedData.push([new Date(x.createdAt), x.score])    
-      setData(formatedData) 
+      setAllData(json)
+      drawGraph(json.slice(0, 7).reverse())
       setShowGraph(true)
     }
     
   }
 
 
+  const drawGraph = (rawData) => {
+      let formatedData = {
+        labels: rawData.map(x => moment(new Date(x.createdAt)).format('dddd, Do')),
+        datasets: [
+          {
+            label: 'Happiness score',
+            data: rawData.map(x => x.score),
+            backgroundColor: rawData.map(x => scoreToColor(x.score)),
+            borderColor: rawData.map(x => scoreToColor(x.score)),
+            borderWidth: 1,
+          }
+        ]
+      }
+      setShortData(formatedData) 
+      setMonth(moment(new Date(rawData.slice(-1)[0].createdAt)).format('MMMM YYYY'))
+      setNotes(rawData.map(x => x.note))
+  
+  }
+
+  const options = {
+    scales: {
+      yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+          suggestedMax: 10,
+        },
+      }],
+    },
+    legend: {
+      display: false
+    },
+    tooltips: {
+      callbacks: {
+        label: function(tooltipItem, elem) {
+          let label = elem.datasets[tooltipItem.datasetIndex].label
+          label += ": " + shortData.datasets[0].data[tooltipItem.index]
+          return label
+        },
+        afterLabel: function(tooltipItem, elem) {
+          const label = "\nNote:\n" + notes[tooltipItem.index]
+          return label
+        }
+      }
+    }
+  }
+
   return (
     <div>
       {showGraph && (
         <div>
           <TopNavigation />
-          <div style={{textAlign: 'center', fontSize: 28, fontWeight: 'bold'}}>Happiness over time</div>
-          <div>
-            <Chart
-              width={'100%'}
-              height={400} 
-              chartType="LineChart"
-              loader={<div>Loading Chart</div>}
-              data={data}
-              options={{
-                chartArea: { height: '80%', width: '90%' },
-                hAxis: { slantedText: false },
-                vAxis: { viewWindow: { min: 0, max: 10 } },
-                legend: { position: 'none' },
-              }}
-              rootProps={{ 'data-testid': '3' }}
-              chartPackages={['corechart', 'controls']}
-              controls={[
-              {
-                controlType: 'ChartRangeFilter',
-                options: {
-                  filterColumnIndex: 0,
-                  ui: {
-                    chartType: 'LineChart',
-                    chartOptions: {
-                      chartArea: { width: '90%', height: '50%' },
-                      vAxis: { viewWindow: { min: 0, max: 10 } },
-                      hAxis: { baselineColor: 'none' },
-                    },
-                  },
-                },
-                  controlPosition: 'bottom',
-                  controlWrapperParams: {
-                    state: {
-                      range: { start: new Date(new Date().setDate(new Date().getDate() - 7)), end: new Date() },
-                    },
-                  },
-                },
-              ]}
+          <div style={styles().title}>Happiness over time</div>
+          <div style={styles().graphContainer}>
+            <div style={{width: '50%'}}>
+             <YearChart
+              data={allData} 
             />
-
+            </div>
+            <div style={{width: '50%'}}>
+              <div>{month}</div>
+              <div>
+                <Bar
+                  data={shortData}
+                  options={options}
+                  legend={null}
+                  height={150}
+                />
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -83,5 +112,18 @@ function HappinessPage (props) {
   )
 }
 
+
+const styles = () => ({
+  title: {
+    textAlign: 'center',
+    fontSize: 28,
+    fontWeight: 'bold', 
+  },
+  graphContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+
+  },
+})
 
 export default HappinessPage

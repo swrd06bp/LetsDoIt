@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import {  easings } from 'react-animation'
 
+import { scoreToColor } from './utils'
+
 
 function ScoreBox(props) {
   const [hover, setHover] = useState(false)
@@ -34,16 +36,16 @@ function Survey (props) {
         How do you feel?
       </div>
       <div style={styles().sliderContainer}>
-       <ScoreBox onSubmit={() => props.onSubmit(1)} title={'Couldnt be worse'} background={'#cc0000'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(2)} title={'Very bad'} background={'#ff0000'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(3)} title={'Bad'} background={'#ff3300'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(4)} title={'Meh'} background={'#ff9933'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(5)} title={'So-so'} background={'#ffff66'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(6)} title={'Okay'} background={'#ccff66'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(7)} title={'Good'} background={'#66ff33'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(8)} title={'Very good'} background={'#33cc33'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(9)} title={'Great'} background={'#009933'}/>
-       <ScoreBox onSubmit={() => props.onSubmit(10)} title={'Really great'} background={'#006600'}/>
+       <ScoreBox onSubmit={() => props.onSubmit(1)} title={'Couldnt be worse'} background={scoreToColor(1)}/>
+       <ScoreBox onSubmit={() => props.onSubmit(2)} title={'Very bad'} background={scoreToColor(2)}/>
+       <ScoreBox onSubmit={() => props.onSubmit(3)} title={'Bad'} background={scoreToColor(3)}/>
+       <ScoreBox onSubmit={() => props.onSubmit(4)} title={'Meh'} background={scoreToColor(4)}/>
+       <ScoreBox onSubmit={() => props.onSubmit(5)} title={'So-so'} background={scoreToColor(5)}/>
+       <ScoreBox onSubmit={() => props.onSubmit(6)} title={'Okay'} background={scoreToColor(6)}/>
+       <ScoreBox onSubmit={() => props.onSubmit(7)} title={'Good'} background={scoreToColor(7)}/>
+       <ScoreBox onSubmit={() => props.onSubmit(8)} title={'Very good'} background={scoreToColor(8)}/>
+       <ScoreBox onSubmit={() => props.onSubmit(9)} title={'Great'} background={scoreToColor(9)}/>
+       <ScoreBox onSubmit={() => props.onSubmit(10)} title={'Really great'} background={scoreToColor(10)}/>
       </div>
     </div>
   )
