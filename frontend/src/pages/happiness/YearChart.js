@@ -43,6 +43,7 @@ function MonthChart (props) {
         else
           return (
               <div 
+                onClick={() => props.onChoose(x._id)}
                 key={x._id}
                 role='img text'
                 title={moment(new Date(x.createdAt)).format('dddd Do MMMM') + '\nHappiness score: ' + x.score}
@@ -74,6 +75,7 @@ function YearChart (props) {
           index={index + 1}
           data={props.data}
           month={month}
+          onChoose={props.onChoose}
         />
       ))}
     </div>

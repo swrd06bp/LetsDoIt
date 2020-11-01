@@ -28,8 +28,10 @@ function HappinessPage (props) {
     if (!json.length || new Date(json[0].createdAt) < todayDate()) 
       window.location.assign('/happinesscreate')
     else {
+      const indexInf = 0
+      const indexSup = Math.min(7, json.length)
       setAllData(json)
-      drawGraph(json.slice(0, 7).reverse())
+      drawGraph(json.slice(indexInf, indexSup).reverse())
       setShowGraph(true)
     }
     
@@ -53,6 +55,14 @@ function HappinessPage (props) {
       setMonth(moment(new Date(rawData.slice(-1)[0].createdAt)).format('MMMM YYYY'))
       setNotes(rawData.map(x => x.note))
   
+  }
+
+  const onChooseData = (uniqueId) => {
+    const indexSup = allData.map(x => x._id).indexOf(uniqueId)
+    const indexInf = Math.max(indexSup - 7, 0)
+    if (indexSup > indexInf)
+      drawGraph(allData.slice(indexInf, indexSup).reverse())
+
   }
 
   const options = {
@@ -94,6 +104,7 @@ function HappinessPage (props) {
              <YearChart
               year={year}
               data={allData} 
+              onChoose={onChooseData}
             />
             </div>
             <div style={{width: '50%'}}>
