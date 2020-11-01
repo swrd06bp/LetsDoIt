@@ -12,7 +12,8 @@ function HappinessPage (props) {
   const [showGraph, setShowGraph] = useState(false)
   const [allData, setAllData] = useState([])
   const [shortData, setShortData] = useState([])
-  const [month, setMonth] = useState([])
+  const [month, setMonth] = useState('')
+  const [year, setYear] = useState(moment(new Date()).format('YYYY'))
   const [notes, setNotes] = useState([])
    
 
@@ -91,11 +92,12 @@ function HappinessPage (props) {
           <div style={styles().graphContainer}>
             <div style={{width: '50%'}}>
              <YearChart
+              year={year}
               data={allData} 
             />
             </div>
             <div style={{width: '50%'}}>
-              <div>{month}</div>
+              <div style={styles().titleMonth}>{month}</div>
               <div>
                 <Bar
                   data={shortData}
@@ -116,8 +118,16 @@ function HappinessPage (props) {
 const styles = () => ({
   title: {
     textAlign: 'center',
-    fontSize: 28,
+    fontSize: 38,
     fontWeight: 'bold', 
+    marginBottom: 25,
+  },
+  titleMonth: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   graphContainer: {
     display: 'flex',

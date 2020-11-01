@@ -45,7 +45,7 @@ function MonthChart (props) {
               <div 
                 key={x._id}
                 role='img text'
-                title={moment(new Date(x.createdAt)).format('LL') + '\nHappiness score: ' + x.score}
+                title={moment(new Date(x.createdAt)).format('dddd Do MMMM') + '\nHappiness score: ' + x.score}
                 style={{
                   ...styles().dayContainer,
                   background: scoreToColor(x.score)
@@ -66,6 +66,7 @@ function YearChart (props) {
 
   return (
     <div>
+      <div style={styles().titleYear}>{props.year}</div>
       {allMonths.map((month, index) => (
         <MonthChart 
           key={month}
@@ -85,6 +86,13 @@ function YearChart (props) {
 
 
 const styles = () => ({
+  titleYear: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
   monthWrapper: {
     display: 'flex',
     flexDirection: 'row',

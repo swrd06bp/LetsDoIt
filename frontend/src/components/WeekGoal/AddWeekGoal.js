@@ -52,6 +52,10 @@ function AddWeekGoal(props) {
           placeholder= 'I am going to acheive..'
           value={content}
           onChange={(event) => setContent(event.target.value)}
+          onKeyUp={(event) => {
+            if (event.keyCode === 13)
+              onConfirm()
+          }}
         />
         <div style={styles().choiceContainerAddWeekGoal}>
           <div 
