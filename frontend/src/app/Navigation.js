@@ -36,7 +36,7 @@ function TopNavigation() {
     <Navbar bg="light" expand="lg">
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
-      <Navbar.Brand href="/">LetsDoIt</Navbar.Brand>
+      <Navbar.Brand href="/"><img src='/logo.png' style={styles.logoImage} alt='' /></Navbar.Brand>
       {showLink && ( <Navbar.Brand href='/happinesscreate' style={styles.linkHappiness}>Check yourself</Navbar.Brand>)} 
         <Nav className="sm-2" align="right">
           <Nav.Item>
@@ -63,6 +63,10 @@ const styles = {
     color:'blue',
     textAlign: 'center',
     textDecoration: 'underline blue',
+  },
+  logoImage: {
+    height: 50,
+    width: 100.
   },
 }
 
