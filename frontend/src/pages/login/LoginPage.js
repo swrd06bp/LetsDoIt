@@ -35,6 +35,7 @@ function LoginPage() {
             }}
           />
           <button onClick={() => handleSubmit()}>login</button>
+          <p class="message">Not registered? <a href="/signup">Create an account</a></p>
         </div>
       </div>
     </div>

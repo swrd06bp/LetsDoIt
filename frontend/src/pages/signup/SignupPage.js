@@ -50,6 +50,7 @@ function SignupPage() {
             verifyCallback={setCaptchaToken}
           />
           <button onClick={() => handleSubmit()}>signup</button>
+          <p class="message">Already registered? <a href="/login">Sign In</a></p>
         </div>
       </div>
     </div>
