@@ -6,7 +6,7 @@ import { scoreToColor } from './utils'
 
 function MonthChart (props) {
 
-  const filteredData = props.data.filter(x => (
+  const filteredData = props.allData.filter(x => (
     moment(new Date(x.createdAt)).format('MMMM') === props.month)
   )
 
@@ -24,6 +24,12 @@ function MonthChart (props) {
       monthData.push(filteredData[index])
   }
 
+  
+  const firstShortDataId = props.shortData.length ? props.shortData[0]._id : null
+  const lastShortDataId = props.shortData.length ? props.shortData[props.shortData.length - 1]._id : null
+  const shortDataId = props.shortData.length ? props.shortData.map(x => x._id) : []
+
+
   return (
     <div style={styles().monthWrapper}>
       <div style={styles().monthTitle}>{props.month}</div>
@@ -36,7 +42,7 @@ function MonthChart (props) {
                 title={'No entry data'}
                 style={{
                   ...styles().dayContainer,
-                  background: 'lightgrey'
+                  background: 'lightgrey',
                 }}
             />
           )
@@ -49,7 +55,16 @@ function MonthChart (props) {
                 title={moment(new Date(x.createdAt)).format('dddd Do MMMM') + '\nHappiness score: ' + x.score}
                 style={{
                   ...styles().dayContainer,
-                  background: scoreToColor(x.score)
+                  background: scoreToColor(x.score),
+                  borderTopColor: shortDataId.includes(x._id) ? 'blue': 'grey',
+                  borderTopWidth: shortDataId.includes(x._id) ? 4 : 0.5,
+                  borderBottomColor: shortDataId.includes(x._id) ? 'blue' : 'grey',
+                  borderBottomWidth: shortDataId.includes(x._id) ? 4 : 0.5,
+                  borderRightWidth: x._id === lastShortDataId ? 4 : 0.5,
+                  borderRightColor: x._id === lastShortDataId ? 'blue' : 'grey',
+                  borderLeftWidth: x._id === firstShortDataId ? 4 : 0.5,
+                  borderLeftColor: x._id === firstShortDataId ? 'blue' : 'grey',
+
                 }}
             />
             )
@@ -73,7 +88,8 @@ function YearChart (props) {
           key={month}
           year={'2020'}
           index={index + 1}
-          data={props.data}
+          allData={props.allData}
+          shortData={props.shortData}
           month={month}
           onChoose={props.onChoose}
         />
@@ -110,7 +126,15 @@ const styles = () => ({
     borderColor: 'grey',
     borderWidth: 0.5,
     borderStyle: 'solid',
-  }
+  },
+  firstActiveDayContainer: {
+  
+  },
+  lastActiveDayContainer: {
+  
+  },
+  activeDayContainer: {
+  },
 })
 
 export default YearChart

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { easings } from 'react-animation'
 
 function Quote (props) {
-  const [note, setNote] = useState(null)
+  const [note, setNote] = useState('')
 
  
    

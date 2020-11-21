@@ -11,6 +11,7 @@ import Api from './../../app/Api'
 function HappinessPage (props) {
   const [showGraph, setShowGraph] = useState(false)
   const [allData, setAllData] = useState([])
+  const [graphData, setGraphData] = useState([])
   const [shortData, setShortData] = useState([])
   const [month, setMonth] = useState('')
   const [year, setYear] = useState(moment(new Date()).format('YYYY'))
@@ -51,14 +52,15 @@ function HappinessPage (props) {
           }
         ]
       }
-      setShortData(formatedData) 
+      setShortData(rawData)
+      setGraphData(formatedData) 
       setMonth(moment(new Date(rawData.slice(-1)[0].createdAt)).format('MMMM YYYY'))
       setNotes(rawData.map(x => x.note))
   
   }
 
   const onChooseData = (uniqueId) => {
-    const indexSup = allData.map(x => x._id).indexOf(uniqueId)
+    const indexSup = allData.map(x => x._id).indexOf(uniqueId) + 1
     const indexInf = Math.max(indexSup - 7, 0)
     if (indexSup > indexInf)
       drawGraph(allData.slice(indexInf, indexSup).reverse())
@@ -82,7 +84,7 @@ function HappinessPage (props) {
       callbacks: {
         label: function(tooltipItem, elem) {
           let label = elem.datasets[tooltipItem.datasetIndex].label
-          label += ": " + shortData.datasets[0].data[tooltipItem.index]
+          label += ": " + graphData.datasets[0].data[tooltipItem.index]
           return label
         },
         afterLabel: function(tooltipItem, elem) {
@@ -103,7 +105,8 @@ function HappinessPage (props) {
             <div style={{width: '50%'}}>
              <YearChart
               year={year}
-              data={allData} 
+              allData={allData} 
+              shortData={shortData}
               onChoose={onChooseData}
             />
             </div>
@@ -111,7 +114,7 @@ function HappinessPage (props) {
               <div style={styles().titleMonth}>{month}</div>
               <div>
                 <Bar
-                  data={shortData}
+                  data={graphData}
                   options={options}
                   legend={null}
                   height={150}
