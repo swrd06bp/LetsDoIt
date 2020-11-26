@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Hacker Tab",
+  "author": "Hu Chen",
+  "version": "1.0.1",
+  "description": "Replace new tab screen with GitHub trending projects.",
+  "icons": {
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_title": "Weather Widget"
+  },
+  "permissions": ["storage"]
+}
