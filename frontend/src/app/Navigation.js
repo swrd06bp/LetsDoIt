@@ -18,7 +18,7 @@ function TopNavigation() {
     const api = new Api()
     const resp = await api.getHappiness(1)
     const json = await resp.json()
-    if (!json.length || new Date(json[0].createdAt) < todayDate()) 
+    if (!json.length || new Date(json[0].dueDate) < todayDate()) 
       setShowLink(true) 
   }
 
@@ -31,13 +31,14 @@ function TopNavigation() {
   const goAccountPage = () => {
     window.location.assign('/account')
   }
+
   
   return (
     <Navbar bg="light" expand="lg">
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
       <Navbar.Brand href="/"><img src='/logo.png' style={styles.logoImage} alt='' /></Navbar.Brand>
-      {showLink && ( <Navbar.Brand href='/happinesscreate' style={styles.linkHappiness}>Check yourself</Navbar.Brand>)} 
+      {showLink && ( <Navbar.Brand href={'/happinesscreate/' + new Date().toJSON()} style={styles.linkHappiness}>Check yourself</Navbar.Brand>)} 
         <Nav className="sm-2" align="right">
           <Nav.Item>
             <Nav.Link href='/'>Home</Nav.Link>

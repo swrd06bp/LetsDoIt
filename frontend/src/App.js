@@ -27,7 +27,8 @@ function App() {
       <Router>
         <div>
           <PrivateRoute exact path="/" component={HomePage} />
-          <PrivateRoute exact path="/happinessCreate" component={HappinessCreatePage} />
+          <PrivateRoute exact path="/happinessCreate/:dueDate" component={HappinessCreatePage} />
+          <PrivateRoute exact path="/happinessEdit/:happinessId/:dueDate" component={HappinessCreatePage} />
           <PrivateRoute exact path="/happiness" component={HappinessPage} />
           <PrivateRoute exact path="/account" component={AccountPage} />
           <Route path="/login" component={LoginPage} />

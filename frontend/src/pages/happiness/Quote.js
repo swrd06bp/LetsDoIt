@@ -3,8 +3,6 @@ import { easings } from 'react-animation'
 
 function Quote (props) {
   const [note, setNote] = useState('')
-
- 
    
 
   return (

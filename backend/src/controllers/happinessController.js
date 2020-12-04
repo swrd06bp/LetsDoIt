@@ -8,6 +8,7 @@ exports.happinessGet = async (req, res) => {
     table: 'happiness',
     query: {},
     userId,
+    sortedTable: 'dueDate',
     maxNum: limit ? parseInt(limit) : 1,
   })
   res.status(200)
@@ -15,6 +16,20 @@ exports.happinessGet = async (req, res) => {
   res.end()
 }
 
+exports.happinessPut = async (req, res) => {
+  const happinessId = req.params.happinessId
+  const gnh = req.body
+  gnh.updatedAt = new Date().toJSON()
+  await dbClient.updateElem({
+    table: 'happiness',
+    elem: gnh,
+    elemId: happinessId,
+    userId: req.decoded
+  })
+  res.status(200)
+  res.json({'happinessId': happinessId})
+  res.end()
+}
 
 exports.happinessPost = async (req, res) => {
   const gnh = req.body

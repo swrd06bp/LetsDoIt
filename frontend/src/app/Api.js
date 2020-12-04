@@ -73,10 +73,16 @@ class Api {
     return await this.get(url)
   }
   
-  async postHappiness (score, note) {
+  async postHappiness ({dueDate, score, note}) {
     const url = this.baseUrl + '/happiness'
-    const body = { score, note }
+    const body = { dueDate, score, note }
     return await this.post(url, body)
+  }
+  
+  async putHappiness (happinessId, {dueDate, score, note}) {
+    const url = this.baseUrl + `/happiness/${happinessId}`
+    const body = { dueDate, score, note }
+    return await this.put(url, body)
   }
 
   async getFocus ({type, number, limit}) {

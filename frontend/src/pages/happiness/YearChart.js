@@ -1,23 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import moment from 'moment'
 
 import { getDimRatio } from '../../app/DynamicSizing'
 import { scoreToColor } from './utils'
+import { todayDate } from '../../app/utils'
 
 function MonthChart (props) {
+  const [editId, setEditId] = useState(null)
 
   const filteredData = props.allData.filter(x => (
-    moment(new Date(x.createdAt)).format('MMMM') === props.month)
+    moment(new Date(x.dueDate)).format('MMMM') === props.month)
   )
 
   let monthData = []
 
 
   for (let i = 1; i <= moment(new Date(`${props.index}/1/${props.year}`)).daysInMonth(); i++) {
-    const index = filteredData.map(x => parseInt(moment(new Date(x.createdAt)).format('D'))).indexOf(i)
+    const index = filteredData.map(x => parseInt(moment(new Date(x.dueDate)).format('D'))).indexOf(i)
     if (index === -1)
       monthData.push({
-        _id: i,
+        _id: new Date(props.year, props.index - 1, i).toJSON(),
         score: -1  
       })
     else
@@ -44,15 +46,22 @@ function MonthChart (props) {
                   ...styles().dayContainer,
                   background: 'lightgrey',
                 }}
-            />
+                onMouseOver={() => setEditId(x._id)}
+                onMouseLeave={() => setEditId(null)}
+            >
+              { editId === x._id && new Date(x._id) <= todayDate() && (
+                <a href={'/happinessCreate/' + x._id}>
+                  <img src='/edit.png' title='Provide happiness data' style={styles().editIcon}/>
+                </a>
+              )}
+            </div>
           )
         else
           return (
               <div 
-                onClick={() => props.onChoose(x._id)}
                 key={x._id}
                 role='img text'
-                title={moment(new Date(x.createdAt)).format('dddd Do MMMM') + '\nHappiness score: ' + x.score}
+                title={moment(new Date(x.dueDate)).format('dddd Do MMMM') + '\nHappiness score: ' + x.score}
                 style={{
                   ...styles().dayContainer,
                   background: scoreToColor(x.score),
@@ -66,7 +75,18 @@ function MonthChart (props) {
                   borderLeftColor: x._id === firstShortDataId ? 'blue' : 'grey',
 
                 }}
-            />
+                onClick={() => {
+                  props.onChoose(x._id)
+                  setEditId(x._id)
+                }}
+                onMouseLeave={() => setEditId(null)}
+            >
+              { editId === x._id && (
+                <a href={'/happinessEdit/' + x._id + '/' + x.dueDate}>
+                  <img src='/edit.png' title='Provide happiness data' style={styles().editIcon}/>
+                </a>
+              )}
+            </div>
             )
         })
       }
@@ -121,11 +141,18 @@ const styles = () => ({
     fontSize: 18 * getDimRatio().X,
   },
   dayContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 25 * getDimRatio().X,
     height: 40 * getDimRatio().X,
     borderColor: 'grey',
     borderWidth: 0.5,
     borderStyle: 'solid',
+  },
+  editIcon: {
+    height: 20,
+    width: 15,
   },
   firstActiveDayContainer: {
   

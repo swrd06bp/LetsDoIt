@@ -37,6 +37,7 @@ router.put('/newpassword', userController.userChangePassword)
 
 // happiness
 router.get('/happiness', happinessController.happinessGet)
+router.put('/happiness/:happinessId', happinessController.happinessPut)
 router.post('/happiness', happinessController.happinessPost)
 
 // focus

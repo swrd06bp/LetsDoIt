@@ -24,10 +24,10 @@ function HappinessPage (props) {
   
   const getHappiness = async () => {
     const api = new Api()
-    const resp = await api.getHappiness(90)
+    const resp = await api.getHappiness(365)
     const json = await resp.json()
-    if (!json.length || new Date(json[0].createdAt) < todayDate()) 
-      window.location.assign('/happinesscreate')
+    if (!json.length || new Date(json[0].dueDate) < todayDate()) 
+      window.location.assign('/happinesscreate/' + new Date().toJSON())
     else {
       const indexInf = 0
       const indexSup = Math.min(7, json.length)
@@ -41,7 +41,7 @@ function HappinessPage (props) {
 
   const drawGraph = (rawData) => {
       let formatedData = {
-        labels: rawData.map(x => moment(new Date(x.createdAt)).format('dddd, Do')),
+        labels: rawData.map(x => moment(new Date(x.dueDate)).format('dddd, Do')),
         datasets: [
           {
             label: 'Happiness score',
@@ -54,7 +54,7 @@ function HappinessPage (props) {
       }
       setShortData(rawData)
       setGraphData(formatedData) 
-      setMonth(moment(new Date(rawData.slice(-1)[0].createdAt)).format('MMMM YYYY'))
+      setMonth(moment(new Date(rawData.slice(-1)[0].dueDate)).format('MMMM YYYY'))
       setNotes(rawData.map(x => x.note))
   
   }
