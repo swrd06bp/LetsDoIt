@@ -11,7 +11,7 @@ import {tomorrowDate} from '../../app/utils'
 
 function FailureScreen (props) {
   const [note, setNote] = useState(null)
-  const [postponeUntil, setPostponeUntil] = useState(null)
+  const [postponeUntil, setPostponeUntil] = useState(new Date().setDate(new Date().getDate() + 1))
   const api = new Api()
 
   const onFailure = async () => {
@@ -27,8 +27,8 @@ function FailureScreen (props) {
       >
       <div style={styles().failureWrapper}>
         <div>
-          <div>Not today?</div>
-          <div>Note</div>
+          <div style={styles().failureTitle}>Not today?</div>
+          <div style={styles().failureNoteTitle}>Note</div>
           <textarea 
             type='text' 
             name='note'
@@ -36,15 +36,27 @@ function FailureScreen (props) {
             onChange={(event) => setNote(event.target.value)} 
             style={styles().failureNoteText}
           />
-
-
-        
         </div>
         <div>
-        <div>Postpone until:</div>
-        <input type='date' onChange={(event) => setPostponeUntil(new Date(event.target.value))}/>
+        <div style={styles().failureNoteTitle}>Postpone until:</div>
+        <input 
+          type='date'
+          onChange={(event) => setPostponeUntil(new Date(event.target.value))}
+          value={new Date(postponeUntil).toJSON().slice(0, 10)} 
+        />
         </div>
-        <div style={styles().failureButton} onClick={() => onFailure()}>Done</div>
+        <div style={styles().failureButtonContainer}>
+          <div 
+            style={styles().failureButton}
+            onClick={() => onFailure()}
+            onMouseOver={(event) => {
+              event.target.style.background = '#58FAD0'
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.background = '#32A3BC'
+            }}
+          >Done</div>
+        </div>
       </div>
     </Modal>
   )
@@ -158,15 +170,38 @@ const styles = () => ({
     height: 300 * getDimRatio().Y,
     
   },
+  failureTitle: {
+    fontSize: 25,
+    marginLeft: 10,
+    fontWeight: 'normal',
+  },
   failureNoteTitle: {
-     
-   },
+    marginLeft: 10,
+    color: '#32A3BC',
+    marginRight: 10,
+  },
   failureNoteText: {
     height: 150* getDimRatio().Y,
     width: 150 * getDimRatio().X
   },
+  failureButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
   failureButton: {
-    cursor: 'pointer'
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: '#32A3BC',
+    height: 30,
+    width: 60,
+    color: 'white',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    borderWidth: 0,
+    borderRadius: 20,
   },
 })
 
