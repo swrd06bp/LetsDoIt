@@ -1,6 +1,5 @@
 import React from 'react'
 import GoalShape from './GoalShape'
-import ListButton from '../ListButton'
 
 import { getDimRatio } from '../../app/DynamicSizing'
 
@@ -34,12 +33,6 @@ function Goal (props) {
         {props.item.content}
       </div>
       <div style={styles().backContainer}>
-        <ListButton 
-          item={props.item}
-          type={'goal'}
-          scale={0.6}
-          onUpdate={() => {}}
-        />
         <div style={styles().dueDate}>
           {props.item.dueDate ? props.item.dueDate.slice(0, 10) : 'Someday'}
         </div>
@@ -68,17 +61,17 @@ const styles = () => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 30,
+    width: 30 * getDimRatio().X,
   },
   backContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 40,
+    width: 70 * getDimRatio().X,
   },
   dueDate: {
-    fontSize: 8,
+    fontSize: 12 * getDimRatio().X,
     borderRadius: 20,
     background: 'lightgrey'
   }
