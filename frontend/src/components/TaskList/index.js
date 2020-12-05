@@ -95,6 +95,7 @@ function TaskList (props) {
                                   item={item}
                                   onDescribe={() => {}}
                                   project={props.project}
+                                  scale={props.scale}
                                   onUpdate={props.onUpdate}
                                 />
                               )}  
@@ -103,6 +104,7 @@ function TaskList (props) {
                                   item={item}
                                   onDescribe={() => {}}
                                   goal={props.project}
+                                  scale={props.scale}
                                   onUpdate={props.onUpdate}
                                 />
                               )}  

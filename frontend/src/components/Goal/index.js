@@ -5,6 +5,8 @@ import { getDimRatio } from '../../app/DynamicSizing'
 
 function Goal (props) {
   
+  const scale = props.scale ? props.scale : 1
+
   return (
     <div 
       className='task'
@@ -26,14 +28,14 @@ function Goal (props) {
           event.target.style.background = 'white'
       }}
     >
-      <div style={styles().firstPartContainer}>
-        <div style={styles().frontContainer}>
+      <div style={styles(scale).firstPartContainer}>
+        <div style={styles(scale).frontContainer}>
           <GoalShape colorCode={props.item.colorCode} />
         </div>
         {props.item.content}
       </div>
-      <div style={styles().backContainer}>
-        <div style={styles().dueDate}>
+      <div style={styles(scale).backContainer}>
+        <div style={styles(scale).dueDate}>
           {props.item.dueDate ? props.item.dueDate.slice(0, 10) : 'Someday'}
         </div>
       </div>
@@ -42,7 +44,7 @@ function Goal (props) {
 }
 
 
-const styles = () => ({
+const styles = (scale) => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'row',
@@ -54,24 +56,24 @@ const styles = () => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    fontSize: 15 * getDimRatio().X,
+    fontSize: 15 * scale *  getDimRatio().X,
   },
   frontContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 30 * getDimRatio().X,
+    width: 30 * scale *  getDimRatio().X,
   },
   backContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 70 * getDimRatio().X,
+    width: 70 * scale * getDimRatio().X,
   },
   dueDate: {
-    fontSize: 12 * getDimRatio().X,
+    fontSize: 12 * scale *  getDimRatio().X,
     borderRadius: 20,
     background: 'lightgrey'
   }
