@@ -131,8 +131,13 @@ class Api {
   }
   
   async getRoutinesHabit ({habitId, isDone, since, limit}) {
-    const url = this.baseUrl + `/habit/${habitId}/routines`
-      + `?isDone=${isDone}&since=${since}&limit=${limit}`
+    let url = this.baseUrl + `/habit/${habitId}/routines`
+    if (isDone === true || isDone === false)
+      url += `?isDone=${isDone}`
+    if (since)
+      url += `&since=${since}`
+    if (limit)
+      url += `&limit=${limit}`
     return await this.get(url)
   }
   

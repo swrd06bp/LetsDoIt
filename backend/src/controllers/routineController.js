@@ -3,11 +3,13 @@ const dbClient = require('../dbclient')
 exports.routineHabitGet = async (req, res) => {
   const habitId = req.params.habitId
   const { isDone, since, limit } = req.query
-  const query = {
-    habitId,
-    createdAt: {'$gte': new Date(since).toJSON()},
-    isDone: (isDone === 'true')
-  }
+  let query =  { habitId }
+
+  if (since)
+    query['createdAt'] = {'$gte': new Date(since).toJSON()}
+  if (isDone)
+    query['isDone'] = (isDone === 'true')
+  
   const routines = await dbClient.getElems({
     table: 'routines',
     query,

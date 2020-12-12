@@ -142,7 +142,7 @@ const styles = () => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    margin: 50,
+    margin: 25,
   },
   title: {
     display: 'flex',
