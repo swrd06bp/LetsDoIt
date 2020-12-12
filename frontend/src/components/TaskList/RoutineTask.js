@@ -5,7 +5,7 @@ import 'react-dropdown/style.css'
 
 import GoalShape from '../Goal/GoalShape'
 import Api from '../../app/Api'
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 import {tomorrowDate} from '../../app/utils'
 
 
@@ -135,7 +135,7 @@ const styles = () => ({
   },
   titleContainer: {
     marginLeft: 5,
-    fontSize: 15 * getDimRatio().X,
+    fontSize: 18 * getDimRatioText().X,
   },
   frontContainer: {
     display: 'flex',
@@ -147,11 +147,11 @@ const styles = () => ({
     justifyContent: 'center',
     fontWeight: 'bold',
     marginRight: 5,
-    width: 75 * getDimRatio().X,
+    width: 85 * getDimRatio().X,
     background: '#009933',
     color: 'white',
     borderRadius: 20,
-    fontSize: 15 * getDimRatio().X,
+    fontSize: 18 * getDimRatioText().X,
   },
   buttonContainer: {
     display: 'flex',
@@ -167,7 +167,12 @@ const styles = () => ({
     transform: 'translate(-50%, -50%)'
   },
   failureWrapper: {
-    height: 300 * getDimRatio().Y,
+    width: 200 * getDimRatio().X,
+    height: 400 * getDimRatio().Y,
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+
     
   },
   failureTitle: {

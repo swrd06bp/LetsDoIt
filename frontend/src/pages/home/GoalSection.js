@@ -5,7 +5,7 @@ import Goal from '../../components/Goal'
 import Project from '../../components/Project'
 import AddGoal from '../../components/AddGoal'
 import AddProject from '../../components/AddProject'
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 
 
 function ToolSection (props) {
@@ -124,10 +124,10 @@ function GoalSection (props) {
 const styles = () => ({
   wrapper: {
     background: 'white',
-    width: 350 * getDimRatio().X,
+    width: 450 * getDimRatio().X,
     display: 'flex',
     flexDirection: 'column',
-    height: 550* getDimRatio().Y,
+    height: 650* getDimRatio().Y,
     borderRadius: 20,
     margin: 30,
     boxShadow: '2px 4px grey',
@@ -161,7 +161,7 @@ const styles = () => ({
     borderStyle: 'solid',
   },
   titleSection: {
-    fontSize: 25 * getDimRatio().X,
+    fontSize: 28 * getDimRatioText().X,
     marginLeft: 10,
     fontWeight: 'normal',
   },

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import moment from 'moment'
 
 import AddWeekGoal from './AddWeekGoal'
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatioText } from '../../app/DynamicSizing'
 import Api from '../../app/Api'
 
 
@@ -94,7 +94,7 @@ const styles = (scale) => ({
     paddingRight: 10,
     borderWidth: 1,
     borderRadius: 20,
-    fontSize: scale * 16 * getDimRatio().X,
+    fontSize: scale * 21 * getDimRatioText().X,
     color: 'white',
     borderStyle: 'solid',
   },
@@ -102,7 +102,7 @@ const styles = (scale) => ({
     background: '#009933',
     color: 'white',
     cursor: 'pointer',
-    fontSize: scale * 16 * getDimRatio().X,
+    fontSize: scale * 21 * getDimRatioText().X,
     borderRadius: 20,
     paddingRight: 10,
     paddingLeft: 10,

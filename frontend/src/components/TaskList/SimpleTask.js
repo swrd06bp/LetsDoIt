@@ -5,7 +5,7 @@ import GoalShape from '../Goal/GoalShape'
 import ListButton from '../ListButton'
 import DeleteButton from '../DeleteButton'
 import Api from '../../app/Api'
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatioText } from '../../app/DynamicSizing'
 import { todayDate } from '../../app/utils'
 
 
@@ -58,7 +58,7 @@ function SimpleTask (props) {
             height: '100%',
             marginLeft: 5,
             flexGrow: 1,
-            fontSize:15 * props.scale * getDimRatio().X,
+            fontSize:18 * props.scale * getDimRatioText().X,
             textDecoration: props.item.doneAt ? 'line-through': null,
             color: props.item.doneAt ? 'grey': 'black',
           }} 

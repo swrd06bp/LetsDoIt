@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react'
 import 'react-dropdown/style.css'
 import { DragDropContext } from 'react-beautiful-dnd'
 
+import GoalProgress from './GoalProgress'
 import ListHabit from '../../components/AddGoal/ListHabit'
 import AddHabit from '../../components/AddGoal/AddHabit' 
 import AddTask from '../../components/AddTask'
@@ -225,6 +226,12 @@ function GoalDescription (props) {
         <ListHabit goalId={props.goal._id} update={update} />
       </div>
     )} 
+
+    {showPage === 'Progress' && (
+      <div style={styles().habitsWrapper}>
+        <GoalProgress goalId={props.goal._id} />
+      </div>
+    )} 
     </div>
   )
 }
@@ -233,8 +240,8 @@ const styles = () => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    width: 700 * getDimRatio().X,
-    height: 550* getDimRatio().Y,
+    width: 900 * getDimRatio().X,
+    height: 650* getDimRatio().Y,
     margin: 30,
     background: 'white',
     borderRadius: 20,

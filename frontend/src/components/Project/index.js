@@ -1,7 +1,7 @@
 import React from 'react'
 import ProjectShape from '../Project/ProjectShape'
 
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 
 function Project (props) {
   
@@ -56,7 +56,7 @@ const styles = (scale) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    fontSize: 15 * scale *  getDimRatio().X,
+    fontSize: 18 * scale *  getDimRatio().X,
   },
   frontContainer: {
     display: 'flex',
@@ -73,7 +73,7 @@ const styles = (scale) => ({
     width: 70 * scale * getDimRatio().X,
   },
   dueDate: {
-    fontSize: 12 * scale *  getDimRatio().X,
+    fontSize: 15 * scale *  getDimRatio().X,
     borderRadius: 20,
     background: 'lightgrey'
   }

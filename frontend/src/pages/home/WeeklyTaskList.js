@@ -8,7 +8,7 @@ import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
 import AddTask from '../../components/AddTask'
 import WeekGoal from '../../components/WeekGoal'
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 import { updateSocketTasks, removeSocketListener } from '../../app/socket'
 import {
   sortTasks,
@@ -547,7 +547,6 @@ function WeeklyTaskList (props) {
 
 const styles = () => ({
   wrapper: {
-    height: 620 * getDimRatio().Y,
     background: 'white',
     borderRadius: 20,
     padding: 20,
@@ -555,19 +554,19 @@ const styles = () => ({
   },
   dayContainer: {
     textAlign: 'center', 
-    width: 150 * getDimRatio().X,
+    width: 190 * getDimRatio().X,
   },
   dayTitle: {
     color: '#32A3BC',
     fontWeight: 'bold',
-    fontSize: 20 * getDimRatio().X
+    fontSize: 23 * getDimRatioText().X
   },
   dayNumberTitle: {
     color: '#32A3BC',
-    fontSize: 18 * getDimRatio().X
+    fontSize: 21 * getDimRatioText().X
   },
   monthTitle: {
-    fontSize: 20 * getDimRatio().X,
+    fontSize: 23 * getDimRatioText().X,
     marginLeft: 10,
   },
   calendarContainer: {
@@ -605,7 +604,7 @@ const styles = () => ({
     paddingRight: 10,
     borderWidth: 1,
     borderRadius: 5,
-    fontSize: 16 * getDimRatio().X,
+    fontSize: 18 * getDimRatioText().X,
     color: 'white',
     borderStyle: 'solid',
   },

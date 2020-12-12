@@ -226,8 +226,8 @@ const styles = () => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    width: 700 * getDimRatio().X,
-    height: 550* getDimRatio().Y,
+    width: 900 * getDimRatio().X,
+    height: 650* getDimRatio().Y,
     margin: 30,
     background: 'white',
     borderRadius: 20,

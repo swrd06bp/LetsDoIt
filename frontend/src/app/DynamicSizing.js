@@ -9,8 +9,15 @@ function DynamicResize (forceUpdate) {
 
 function getDimRatio () {
   return {
-    X: window.screen.availWidth / 1900,
-    Y: window.screen.availHeight / 1100,
+    X: Math.max(window.innerWidth / 1900, window.screen.availWidth / 1900 / 2),
+    Y: Math.max(window.innerHeight / 1100, window.screen.availHeight / 1100 / 1.5),
+  }
+}
+
+function getDimRatioText () {
+  return {
+    X: Math.max(window.innerWidth / 1900, window.screen.availWidth / 1900 / 2),
+    Y: Math.max(window.innerHeight / 1100, window.screen.availHeight / 1100 / 1.5),
   }
 }
 
@@ -23,4 +30,4 @@ function getDimScreen () {
 }
 
 
-export { DynamicResize, getDimRatio, getDimScreen }
+export { DynamicResize, getDimRatio, getDimRatioText, getDimScreen }

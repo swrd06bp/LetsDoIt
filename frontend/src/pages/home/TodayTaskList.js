@@ -71,8 +71,8 @@ function TodayTaskList (props) {
     let allRoutineTasks = []
     for (let habit of allHabits) {
       // get the doneRoutines
-      const since = habit.frequency.type === 'day' ? todayDate() 
-        : (habit.frequency.type === 'week' ? lastWeekDate() : lastMonthDate())
+      const since = habit.frequency.type === 'day' ? todayDate().toJSON() 
+        : (habit.frequency.type === 'week' ? lastWeekDate().toJSON() : lastMonthDate().toJSON())
       const response = await api.getRoutinesHabit({
         habitId: habit._id,
         isDone: true,
@@ -341,8 +341,8 @@ function TodayTaskList (props) {
 const styles =  () => ({
   wrapper: {
     background: 'white',
-    width: 700 * getDimRatio().X,
-    height: 550* getDimRatio().Y,
+    width: 900 * getDimRatio().X,
+    height: 650* getDimRatio().Y,
     margin: 30,
     borderRadius: 20,
     boxShadow: '2px 4px #888888',
@@ -355,7 +355,7 @@ const styles =  () => ({
   sectionTitleText: {
     color: '#32A3BC',
     fontWeight: 'bold',
-    fontSize: 20 * getDimRatio().X,
+    fontSize: 23 * getDimRatio().X,
   },
   titleContainer: {
     display: 'flex',
@@ -365,7 +365,7 @@ const styles =  () => ({
   },
   titleDoTo: {
     marginLeft: 10,
-    fontSize: 25 * getDimRatio().X,
+    fontSize: 28 * getDimRatio().X,
     fontWeight: 'normal',
     height: '5%',
   },
