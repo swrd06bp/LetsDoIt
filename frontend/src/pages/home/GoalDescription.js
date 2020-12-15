@@ -1,22 +1,16 @@
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useEffect} from 'react'
 import 'react-dropdown/style.css'
 import { DragDropContext } from 'react-beautiful-dnd'
 
-import GoalProgress from './GoalProgress'
-import ListHabit from '../../components/AddGoal/ListHabit'
-import AddHabit from '../../components/AddGoal/AddHabit' 
+import HabitsTab from './HabitsTab'
 import CharacteristicsTab from './CharacteristicTab'
-import AddTask from '../../components/AddTask'
-import TaskList from '../../components/TaskList'
 import DeleteButton from '../../components/DeleteButton'
-import ListButton from '../../components/ListButton'
 import Api from '../../app/Api'
 import { getDimRatio } from '../../app/DynamicSizing'
 import { sortProjectTasks} from '../../app/utils'
 
 
 function GoalDescription (props) {
-  const [update, forceUpdate] = useReducer(x => x + 1, 0)
   const [tasks, setTasks] = useState([])
   const [showPage, setShowPage] = useState('Characteristics')
   const api = new Api()
@@ -97,15 +91,11 @@ function GoalDescription (props) {
       />
     )}
     {showPage === 'Habits' && (
-      <div style={styles().habitsWrapper}>
-        <AddHabit goalId={props.goal._id} getAllHabits={forceUpdate} />
-        <ListHabit goalId={props.goal._id} update={update} />
-      </div>
+      <HabitsTab goal={props.goal} />
     )} 
 
     {showPage === 'Progress' && (
       <div style={styles().habitsWrapper}>
-        <GoalProgress goalId={props.goal._id} />
       </div>
     )} 
     </div>
@@ -156,104 +146,6 @@ const styles = () => ({
     marginLeft: 10,
     color: 'blue',
     cursor: 'pointer',
-  },
-  titleTaskContainer: {
-    background: 'rgba(196, 196, 196, 0.21)',
-    height: 100 * getDimRatio().X,
-    padding: 3,
-    margin: 10,
-  },
-  titleTaskText: {
-    background: 'transparent',
-    fontSize: 20 * getDimRatio().X,
-    width: '100%',
-    justifyContent: 'center',
-    borderWidth: 0,
-    fontWeight: 'bold',
-  },
-  taskListTitle: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  taskList: {
-    overflow: 'scroll',
-    height: '100%',
-  },
-  noteTitle: {
-    marginLeft: 10* getDimRatio().X,
-    marginRight: 10 * getDimRatio().X,
-    color: '#32A3BC',
-    fontSize: 20 * getDimRatio().X,
-  },
-  noteText: {
-    width: '90%',
-    height: 120 * getDimRatio().Y,
-  },
-  noteContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  checkboxContainer: {
-    marginLeft: 10,
-    fontSize: 13 * getDimRatio().X,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  linkContainer: {
-    marginLeft: 10,
-    marginTop: 10,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dropdownContainer: {
-    display: 'flex',
-    marginLeft: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'black',
-  },
-  footer: {
-    height: '10%',
-    display: 'flex',
-    flexDirection: 'row',
-    margin: 20,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  buttonCancel: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    background: '#F51111',
-    height: 30* getDimRatio().Y,
-    width: 60 * getDimRatio().X,
-    fontSize: 15 * getDimRatio().X,
-    color: 'white',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    borderWidth: 0,
-    borderRadius: 20,
-  },
-  buttonSave: {
-    alignItems: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    background: '#32A3BC',
-    height: 30* getDimRatio().Y,
-    width: 60 * getDimRatio().X,
-    fontSize: 15 * getDimRatio().X,
-    color: 'white',
-    fontWeight: 'bold',
-    borderWidth: 0,
-    borderRadius: 20,
   },
   habitsWrapper: {
     display: 'flex',

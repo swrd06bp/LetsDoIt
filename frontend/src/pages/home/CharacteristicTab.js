@@ -96,7 +96,7 @@ function CharacteristicsTab (props) {
 
        {props.goals && (
        <div style={styles().linkContainer}>
-        <div>
+        <div style={styles().checkboxContainer}>
         Link to:
         </div>
         <GoalShape colorCode={goalColorCode} />
@@ -246,7 +246,7 @@ const styles = () => ({
   },
   checkboxContainer: {
     marginLeft: 10,
-    fontSize: 13 * getDimRatio().X,
+    fontSize: 14 * getDimRatio().X,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
