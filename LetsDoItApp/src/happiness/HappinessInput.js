@@ -12,7 +12,8 @@ function HappinessInput (props) {
   
   const onSubmit = async (note) => {
     const api = new Api()
-    await api.postHappiness(score, note)
+    const dueDate = new Date().toJSON()
+    await api.postHappiness({dueDate, score, note})
     props.navigation.dispatch(CommonActions.reset({
       index: 0,
       routes: [
