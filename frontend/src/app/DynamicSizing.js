@@ -9,15 +9,15 @@ function DynamicResize (forceUpdate) {
 
 function getDimRatio () {
   return {
-    X: Math.max(window.innerWidth / 1900, window.screen.availWidth / 1900 / 2),
+    X: Math.max(window.innerWidth / 1900, window.screen.availWidth / 1900 / 1.5),
     Y: Math.max(window.innerHeight / 1100, window.screen.availHeight / 1100 / 1.5),
   }
 }
 
 function getDimRatioText () {
   return {
-    X: Math.max(window.innerWidth / 1900, window.screen.availWidth / 1900 / 2),
-    Y: Math.max(window.innerHeight / 1100, window.screen.availHeight / 1100 / 1.5),
+    X: Math.max(window.innerWidth / 1900, window.screen.availWidth / 1900 / 1.2),
+    Y: Math.max(window.innerHeight / 1100, window.screen.availHeight / 1100 / 1.2),
   }
 }
 

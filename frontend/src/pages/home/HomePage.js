@@ -150,7 +150,7 @@ const styles = () => ({
     fontSize: 40 * getDimRatio().X,
   },
   weeklyToogle: {
-    fontSize: 14 * getDimRatio().X
+    fontSize: 17 * getDimRatio().X
   },
   mainCantainer: {
     display: 'flex',
