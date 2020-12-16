@@ -15,7 +15,7 @@ import {
   decomposeTasksToday,
   generateRoutineTask,
 } from '../../app/utils'
-import { updateSocketTasks,updateSocketRoutines, removeSocketListener } from '../../app/socket'
+import { updateSocketElems, removeSocketListener } from '../../app/socket'
 
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -121,8 +121,8 @@ function TodayTaskList (props) {
 
 
   useEffect(() => {
-    updateSocketTasks((err, data) => getAllItems())
-    updateSocketRoutines((err, data) => getAllItems())
+    updateSocketElems('tasks', (err, data) => getAllItems())
+    updateSocketElems('routines', (err, data) => getAllItems())
     getAllItems() 
     return () => {
       removeSocketListener('tasks')

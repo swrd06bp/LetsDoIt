@@ -9,7 +9,7 @@ import TaskList from '../../components/TaskList'
 import AddTask from '../../components/AddTask'
 import WeekGoal from '../../components/WeekGoal'
 import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
-import { updateSocketTasks, removeSocketListener } from '../../app/socket'
+import { updateSocketElems, removeSocketListener } from '../../app/socket'
 import {
   sortTasks,
   weekDayDate,
@@ -114,8 +114,8 @@ function WeeklyTaskList (props) {
 
 
   useEffect(() => {
-    updateSocketTasks((err, data) => getTasks())
     getTasks() 
+    updateSocketElems('tasks', (err, data) => getTasks())
     return () => removeSocketListener('tasks')
   },[props.task, date]) 
 

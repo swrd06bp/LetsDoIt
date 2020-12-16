@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Navbar, Nav, NavDropdown, } from 'react-bootstrap'
 
 import { todayDate } from './utils'
-import { updateSocketHappiness, removeSocketListener } from '../app/socket'
+import { updateSocketElems, removeSocketListener } from '../app/socket'
 import Api from './Api'
 
 function TopNavigation() {
   const [showLink, setShowLink] = useState(false)
 
   useEffect(() => {
-    updateSocketHappiness((err, data) => getHappiness())
+    updateSocketElems('happiness', (err, data) => getHappiness())
     getHappiness() 
     return () => removeSocketListener('happiness')
   }, [])
