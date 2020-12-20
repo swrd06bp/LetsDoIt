@@ -106,7 +106,12 @@ export default function AddHabit (props) {
             </div>
           <div style={styles().frequencyContainer}>
             <div style={styles().titleFrequency}>Start time: </div>
-            <input type='time' value={startTime} onChange={x => setStartTime(x.target.value)} />
+            <input 
+              type='time'
+              step="1800"
+              value={startTime}
+              onChange={x => setStartTime(x.target.value)}
+            />
           </div>
           </div>
           <div

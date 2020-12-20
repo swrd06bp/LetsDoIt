@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Navbar, Nav, NavDropdown, } from 'react-bootstrap'
+import { useMixpanel } from 'react-mixpanel-browser'
 
 import { todayDate } from './utils'
 import { updateSocketElems, removeSocketListener } from '../app/socket'
@@ -7,6 +8,7 @@ import Api from './Api'
 
 function TopNavigation() {
   const [showLink, setShowLink] = useState(false)
+  const mixpanel = useMixpanel()
 
   useEffect(() => {
     updateSocketElems('happiness', (err, data) => getHappiness())
@@ -23,12 +25,16 @@ function TopNavigation() {
   }
 
   const clickLogout = () => {
+    if (mixpanel.config.token)
+      mixpanel.track('Top navigation - Logout')
     const api = new Api()
     api.logout()
     window.location.assign('/login')
   } 
 
   const goAccountPage = () => {
+    if (mixpanel.config.token)
+      mixpanel.track('Top navigation - Go to account page')
     window.location.assign('/account')
   }
 
@@ -37,14 +43,30 @@ function TopNavigation() {
     <Navbar bg="light" expand="lg">
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
-      <Navbar.Brand href="/"><img src='/logo.png' style={styles.logoImage} alt='' /></Navbar.Brand>
-      {showLink && ( <Navbar.Brand href={'/happinesscreate/' + new Date().toJSON()} style={styles.linkHappiness}>Check yourself</Navbar.Brand>)} 
+      <Navbar.Brand href="/" onClick={() => {
+        if (mixpanel.config.token)
+          mixpanel.track('Top navigation - Go to logo icon home')
+      }}><img src='/logo.png' style={styles.logoImage} alt='' /></Navbar.Brand>
+      {showLink && ( 
+        <Navbar.Brand
+          href={'/happinesscreate/' + new Date().toJSON()}
+          style={styles.linkHappiness}
+          onClick={() => {
+            if (mixpanel.config.token)
+              mixpanel.track('Top navigation - Check yourself')
+        }}>Check yourself</Navbar.Brand>)} 
         <Nav className="sm-2" align="right">
           <Nav.Item>
-            <Nav.Link href='/'>Home</Nav.Link>
+            <Nav.Link href='/' onClick={() => {
+              if (mixpanel.config.token)
+                mixpanel.track('Top navigation - Go to home page')
+            }}>Home</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link href='/happiness'>Happiness</Nav.Link>
+            <Nav.Link href='/happiness' onClick={() =>{
+              if (mixpanel.config.token)
+                mixpanel.track('Top navigation - Go to happiness page')
+            }}>Happiness</Nav.Link>
           </Nav.Item>
           <NavDropdown title="Settings" id="basic-nav-dropdown">
             <NavDropdown.Item onClick={goAccountPage}>Account</NavDropdown.Item>

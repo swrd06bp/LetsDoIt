@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useMixpanel } from 'react-mixpanel-browser'
 import Modal from 'react-modal'
 
 import Goal from '../../components/Goal'
@@ -51,7 +52,7 @@ function GoalSection (props) {
   const [modalOpen, setModalOpen] = React.useState(null)
   const [showCompletedProjects, setShowCompletedProjects] = useState(false)
   const [showCompletedGoals, setShowCompletedGoals] = useState(false)
-
+  const mixpanel = useMixpanel()
 
   useEffect(() => {
     Modal.setAppElement('body')
@@ -79,7 +80,19 @@ function GoalSection (props) {
       </Modal>
     <div style={styles().wrapper}>
       <h3 style={styles().titleSection}>Goals</h3>
-      <ToolSection showCompleted={showCompletedGoals} onChange={setShowCompletedGoals} onNew={() => {setModalOpen('goals')}}/>
+      <ToolSection 
+        showCompleted={showCompletedGoals}
+        onChange={(flag) => {
+          if (mixpanel.config.token)
+            mixpanel.track('Goal Section Page - Show completed/pending goal', {showCompleted: flag})
+          setShowCompletedGoals(flag)
+        }}
+        onNew={() => {
+          if (mixpanel.config.token)
+            mixpanel.track('Goal Section Page - Add a goal')
+          setModalOpen('goals')
+        }}
+      />
       <div style={styles().goalSection}>
       {props.goals.map((item) => {
         if ((item.doneAt === null) === (!showCompletedGoals))
@@ -97,7 +110,18 @@ function GoalSection (props) {
       })}
       </div>
       <h3 style={styles().titleSection}>Projects</h3>
-      <ToolSection showCompleted={showCompletedProjects} onChange={setShowCompletedProjects} onNew={() => {setModalOpen('projects')}} />
+      <ToolSection
+        showCompleted={showCompletedProjects}
+        onChange={(flag) => {
+          if (mixpanel.config.token)
+            mixpanel.track('Goal Section Page - Show completed/pending projects', {showCompleted: flag})
+          setShowCompletedProjects(flag)
+        }}
+        onNew={() => {
+          if (mixpanel.config.token)
+            mixpanel.track('Goal Section Page - Add a project')
+          setModalOpen('projects')
+        }} />
       <div style={styles().projectSection}>
         {props.projects.map((item) => {
         if ((item.doneAt === null) === (!showCompletedProjects))
