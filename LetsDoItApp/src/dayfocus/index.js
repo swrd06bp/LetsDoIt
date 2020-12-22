@@ -6,19 +6,36 @@ import {
   ImageBackground,
   StyleSheet
 } from 'react-native'
+import { CommonActions} from '@react-navigation/native'
+import moment from 'moment'
+
 import ActionButton from '../components/ActionButton'
 
 import Api from '../Api'
+
+function homeAction(routeName) {
+  return CommonActions.reset({
+    index: 0,
+    routes: [
+      {name: routeName},
+    ],
+  })
+}
 
 function DayFocus (props) {
   const [photo, setPhoto] = useState(null)
   const [content, setContent] = useState('')
   const [focusId, setFocusId] = useState(null)
+  const type = props.route.params.type
   const api = new Api()
   const date = new Date()
-  const number = new Date().getFullYear()*1000 
+  let number 
+  if (type === 'day')
+    number = new Date().getFullYear()*1000 
     + (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) 
       - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000
+  else if (type === 'week')
+    number = new Date().getFullYear()*100 + parseInt(moment(new Date()).isoWeek())
 
   useEffect(() => {
     const getPhoto = async () => {
@@ -32,7 +49,7 @@ function DayFocus (props) {
     }
 
     const getFocus = async () => {
-      const resp = await api.getFocus({type: 'day', number, limit: 1})
+      const resp = await api.getFocus({type, number, limit: 1})
       const json = await resp.json()
       if (json.length) {
         setContent(json[0].content)
@@ -46,13 +63,13 @@ function DayFocus (props) {
 
   const onSubmit = async () => {
     const focus = {
-      type: 'day',
+      type,
       number,
       content,
     } 
     if(focusId)  await api.putFocus(focusId, focus)
     else await api.postFocus(focus)
-    props.navigation.goBack()
+    props.navigation.dispatch(homeAction('HomePage'))
   }
 
 
@@ -65,7 +82,7 @@ function DayFocus (props) {
         resizeMode="cover"
       >
         <View style={styles.header}>
-          <Text style={styles.headerText}>What is your main focus for today?</Text>
+          <Text style={styles.headerText}>What is your main focus for {props.type === 'day' ? 'today' : 'this week'}?</Text>
         </View>
         <View style={styles.header}>
           <TextInput
@@ -122,10 +139,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: 26,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    opacity: 0.9,
   },
   inputText: {
     fontWeight: 'bold',
+    textAlign: 'center',
     fontSize: 18,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    opacity: 0.7,
   }
 })
 

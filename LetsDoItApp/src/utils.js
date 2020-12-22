@@ -34,6 +34,9 @@ const weekDayDate = (date, day) => {
   return new Date(d.setDate(diff));
 }
 
+
+
+
 const sortTasks = tasks => {
   let sortedTasks = JSON.parse(JSON.stringify(tasks))
   sortedTasks.sort((a, b) => {return(a.createdAt > b.createdAt)})
@@ -113,6 +116,34 @@ const decomposeTasksToday = allTasks => {
   return { unfinishedTasks, todayTasks, tomorrowTasks, upcomingTasks, somedayTasks }
 }
 
+
+const decomposeItemsWeek = (allItems, date, type) => {
+  let weekDaysItems = []
+  for (let i = 0; i < 7; i++) { 
+    const dayItems = sortTasks(allItems.filter( x => {
+      return (
+        (!x.doneAt 
+        && x.dueDate
+        && new Date(x.dueDate) >= weekDayDate(date, i) 
+        && new Date(x.dueDate) < weekDayDate(date, i+1))
+        ||
+        (x.doneAt 
+        && new Date(x.doneAt) >= weekDayDate(date, i) 
+        && new Date(x.doneAt) < weekDayDate(date, i+1))
+      )
+    }).map(x => {
+      let item = x
+      item.id = item._id
+      item.type = type
+      return item
+    }))
+    weekDaysItems.push(dayItems)
+  }
+
+  return weekDaysItems
+}
+
+
 const generateRoutineTask = ({habit, doneRoutines, unDoneRoutines}) => {
   const routineTask = {
     id: habit._id,
@@ -154,5 +185,6 @@ export {
   lastMonthDate,
   nextMondayDate,
   decomposeTasksToday,
+  decomposeItemsWeek,
   generateRoutineTask,
 }
