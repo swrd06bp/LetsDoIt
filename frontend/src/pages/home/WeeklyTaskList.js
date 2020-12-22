@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
+import { useMixpanel } from 'react-mixpanel-browser'
 import moment from 'moment'
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
@@ -9,7 +10,7 @@ import TaskList from '../../components/TaskList'
 import AddTask from '../../components/AddTask'
 import WeekGoal from '../../components/WeekGoal'
 import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
-import { updateSocketTasks, removeSocketListener } from '../../app/socket'
+import { updateSocketElems, removeSocketListener } from '../../app/socket'
 import {
   sortTasks,
   weekDayDate,
@@ -77,6 +78,7 @@ function WeeklyTaskList (props) {
   const [dropdownOptions, setDropdownOptions] = useState(getInitialDropdownOptions())
   
   const api = new Api()
+  const mixpanel = useMixpanel()
 
 
 
@@ -114,8 +116,8 @@ function WeeklyTaskList (props) {
 
 
   useEffect(() => {
-    updateSocketTasks((err, data) => getTasks())
     getTasks() 
+    updateSocketElems('tasks', (err, data) => getTasks())
     return () => removeSocketListener('tasks')
   },[props.task, date]) 
 
@@ -168,6 +170,11 @@ function WeeklyTaskList (props) {
       if (!destination) {
           return
       }
+      if (mixpanel.config.token)
+        mixpanel.track('Week Task List - move a task', {
+          origin: source.droppableId,
+          destination: destination.droppableId 
+        })
 
       if (source.droppableId !== destination.droppableId) {
           const result = move(
@@ -220,6 +227,8 @@ function WeeklyTaskList (props) {
   }
 
   const onCreateTask = (task) => {
+    if (mixpanel.config.token)
+      mixpanel.track('Week Task List - Create a task')
     const newDate = new Date()
     if ((weekDates[0] <= newDate && weekDates[1] > newDate) || weekDates[0] <= newDate) {
       const newDateDay = newDate.getDay()
@@ -236,12 +245,16 @@ function WeeklyTaskList (props) {
   }
 
   const getDeletedList = (taskId, listTasks, setListFunction) => {
+    if (mixpanel.config.token)
+      mixpanel.track('Week Task List - Delete a task')
     const index = listTasks.map(x => x._id).indexOf(taskId)
     listTasks.splice(index, 1)
     setListFunction([...listTasks])
   }
 
   const getDoneList = (taskId, listTasks) => {
+    if (mixpanel.config.token)
+      mixpanel.track('Week Task List - Make a task done')
 
     return listTasks.map(x => {
       if(x._id === taskId) {

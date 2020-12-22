@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useMixpanel } from 'react-mixpanel-browser'
 
 import './LoginPage.css'
 
@@ -9,9 +10,12 @@ function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassowrd] = useState('')
   const [showError, setShowError] = useState(false)
+  const mixpanel = useMixpanel()
   
   const handleSubmit = async () => {
     const isLogin = await new Api().login(username, password)
+    if (mixpanel.config.token)
+      mixpanel.track('Login Page - Submit Login', {isLogin})
     if (isLogin) window.location.assign('/')
     else setShowError(true)
   }
@@ -34,8 +38,13 @@ function LoginPage() {
               if (showError) setShowError(false)
             }}
           />
-          <button onClick={() => handleSubmit()}>login</button>
-          <p class="message">Not registered? <a href="/signup">Create an account</a></p>
+          <button onClick={() => {
+            handleSubmit()
+          }}>login</button>
+          <p class="message">Not registered? <a href="/signup" onClick={() => {
+            if (mixpanel.config.token)
+              mixpanel.track('Login Page - Redirect to signup page')
+          }}>Create an account</a></p>
         </div>
       </div>
     </div>

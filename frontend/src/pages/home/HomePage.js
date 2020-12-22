@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useMixpanel } from 'react-mixpanel-browser'
 
 import GoalSection from './GoalSection'
 import TodayTaskList from './TodayTaskList'
@@ -20,6 +21,7 @@ function HomePage() {
   const [allProjects, setAllProjects] = useState([])
   const [name, setName] = useState('')
   const api = new Api()
+  const mixpanel = useMixpanel()
  
   useEffect(() => {
     createSocketConnection()
@@ -35,8 +37,10 @@ function HomePage() {
     const resultName = await respName.json()
     setAllGoals(resultGoals)
     setAllProjects(resultProjects)
-    if (resultName.length)
+    if (resultName.length) {
+      mixpanel.identify(resultName[0]._id)
       setName(resultName[0].name)
+    }
   }
 
 
@@ -54,7 +58,11 @@ function HomePage() {
           <input 
             type='checkbox'
             checked={isWeekly}
-            onChange={() => {setIsWeekly(!isWeekly)}}
+            onChange={() => {
+              if (mixpanel.config.token)
+                mixpanel.track('Home page - set weekly')
+              setIsWeekly(!isWeekly)
+            }}
           />
         </div>
       </div>
@@ -150,7 +158,7 @@ const styles = () => ({
     fontSize: 40 * getDimRatio().X,
   },
   weeklyToogle: {
-    fontSize: 14 * getDimRatio().X
+    fontSize: 17 * getDimRatio().X
   },
   mainCantainer: {
     display: 'flex',

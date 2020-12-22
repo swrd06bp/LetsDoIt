@@ -15,7 +15,6 @@ class Api {
     const resp = await this.get(url)
     if (resp.status !== 200) {
       this.logout()
-
       return false
     } else {
       return true

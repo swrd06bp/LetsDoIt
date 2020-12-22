@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { ReCaptcha } from 'react-recaptcha-google'
+import { useMixpanel } from 'react-mixpanel-browser'
 
 import './SignupPage.css'
 
@@ -12,6 +13,7 @@ function SignupPage() {
   const [password, setPassowrd] = useState('')
   const [captchaToken, setCaptchaToken] = useState('')
   const captchaRef = useRef(null)
+  const mixpanel = useMixpanel()
 
 
   useEffect(() => {
@@ -20,6 +22,8 @@ function SignupPage() {
   
   const handleSubmit = async () => {
     const isSignup = await new Api().signup(name, username, password, captchaToken)
+    if (mixpanel.config.token)
+      mixpanel.track('Signup Page - Submit signup', {isSignup: isSignup.status === 200})
     if (isSignup.status === 200) window.location.assign('/login')
   }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
+import { useMixpanel } from 'react-mixpanel-browser'
 import moment from 'moment'
 
 import Api from '../../app/Api'
@@ -15,7 +16,7 @@ import {
   decomposeTasksToday,
   generateRoutineTask,
 } from '../../app/utils'
-import { updateSocketTasks,updateSocketRoutines, removeSocketListener } from '../../app/socket'
+import { updateSocketElems, removeSocketListener } from '../../app/socket'
 
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -42,6 +43,7 @@ function TodayTaskList (props) {
   const [itemsUpcoming, setItemsUpcoming] = useState([])
   const [itemsSomeday, setItemsSomeday] = useState([])
   const api = new Api()
+  const mixpanel = useMixpanel()
 
 
   const getAllTasks = async () => {
@@ -121,8 +123,8 @@ function TodayTaskList (props) {
 
 
   useEffect(() => {
-    updateSocketTasks((err, data) => getAllItems())
-    updateSocketRoutines((err, data) => getAllItems())
+    updateSocketElems('tasks', (err, data) => getAllItems())
+    updateSocketElems('routines', (err, data) => getAllItems())
     getAllItems() 
     return () => {
       removeSocketListener('tasks')
@@ -161,6 +163,13 @@ function TodayTaskList (props) {
           return
       }
 
+      if (mixpanel.config.token)
+        mixpanel.track('Today Task List - move a task', {
+          origin: source.droppableId,
+          destination: destination.droppableId 
+        })
+
+
       if (source.droppableId !== destination.droppableId 
         && destination.droppableId !== 'unfinished') {
           const result = move(
@@ -191,16 +200,22 @@ function TodayTaskList (props) {
 
 
   const onCreate = (task) => {
+    if (mixpanel.config.token)
+      mixpanel.track('Today Task List - Create a task')
     setItemsToday(sortTasks([task, ...itemsToday]))
   }
 
   const getDeletedList = (taskId, listTasks, setListFunction) => {
+    if (mixpanel.config.token)
+      mixpanel.track('Today Task List - Delete a task')
     const index = listTasks.map(x => x._id).indexOf(taskId)
     listTasks.splice(index, 1)
     setListFunction([...listTasks])
   }
 
   const getDoneList = (taskId, listTasks) => {
+    if (mixpanel.config.token)
+      mixpanel.track('Today Task List - Make a task done')
     return listTasks.map(x => {
       if(x._id === taskId) {
         x.doneAt = x.doneAt ? null : new Date()
@@ -218,6 +233,10 @@ function TodayTaskList (props) {
         <WeekGoal
           day={true}
           weekNumber={new Date().getFullYear()*1000 + moment(new Date()).dayOfYear()}
+          onClick={() => {
+          if (mixpanel.config.token)
+            mixpanel.track('Today Task List - Set a focus')
+          }}
         />
       </div>
       <div style={styles().allTasksContainer}>
@@ -332,7 +351,9 @@ function TodayTaskList (props) {
             </DragDropContext>
        </div>
       <AddTask
-        onCreate={(task) => setItemsToday(sortTasks([task, ...itemsToday]))}
+        onCreate={(task) => {
+          setItemsToday(sortTasks([task, ...itemsToday]))
+        }}
       />
     </div>
   )

@@ -9,12 +9,8 @@ function createSocketConnection() {
   socket.emit('new', localStorage.getItem('user'))
 }
 
-function updateSocketTasks(cb) {
-  socket.on('tasks', data => cb(null, data))
-}
-
-function updateSocketRoutines(cb) {
-  socket.on('routines', data => cb(null, data))
+function updateSocketElems(elem, cb) {
+  socket.on(elem, data => cb(null, data))
 }
 
 function updateSocketHappiness(cb) {
@@ -27,8 +23,7 @@ function removeSocketListener(eventName) {
 
 export { 
   createSocketConnection,
-  updateSocketTasks,
-  updateSocketRoutines,
+  updateSocketElems,
   updateSocketHappiness,
   removeSocketListener,
 }

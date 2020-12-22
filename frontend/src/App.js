@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { loadReCaptcha } from 'react-recaptcha-google'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { MixpanelProvider } from 'react-mixpanel-browser'
 
 import HomePage from './pages/home/HomePage'
 import LoginPage from './pages/login/LoginPage'
@@ -14,8 +15,8 @@ import { DynamicResize } from './app/DynamicSizing'
 
 
 function App() {
-
   const [, forceUpdate] = useReducer(x => x + 1, 0)
+  
 
   useEffect(() => {
     loadReCaptcha()
@@ -24,6 +25,7 @@ function App() {
 
   return (
     <div>
+    <MixpanelProvider>
       <Router>
         <div>
           <PrivateRoute exact path="/" component={HomePage} />
@@ -35,6 +37,7 @@ function App() {
           <Route path="/signup" component={SignupPage} />
         </div>
       </Router>
+    </MixpanelProvider>
     </div>
   )
 }

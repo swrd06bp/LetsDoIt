@@ -72,12 +72,6 @@ function GoalDescription (props) {
         >
           Habits
         </div>
-        <div 
-          style={showPage === 'Progress' ? styles().narbarOptionActive : styles().narbarOption}
-          onClick={() => setShowPage('Progress')}
-        >
-          Progress
-        </div>
       </div>
     {showPage === 'Characteristics' && ( 
       <CharacteristicsTab
@@ -94,10 +88,6 @@ function GoalDescription (props) {
       <HabitsTab goal={props.goal} />
     )} 
 
-    {showPage === 'Progress' && (
-      <div style={styles().habitsWrapper}>
-      </div>
-    )} 
     </div>
   )
 }
