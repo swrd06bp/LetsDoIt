@@ -9,42 +9,6 @@ import AddProject from '../../components/AddProject'
 import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 
 
-function ToolSection (props) {
-
-  const onChangeCompleted = () => {
-    const newShowCompleted = !props.showCompleted
-    props.onChange(newShowCompleted)
-  }
-
-  return (
-    <div style={styles().toolContainer}>
-      <div 
-        onClick={onChangeCompleted}
-        style={styles().toolButton}
-        onMouseOver={(event) => {
-          event.target.style.background = '#58FAD0'
-        }}
-        onMouseLeave={(event) => {
-          event.target.style.background = '#32A3BC'
-        }}
-      >
-       {props.showCompleted ? 'Show pending' : 'Show completed'}
-      </div>
-      <div 
-        onClick={props.onNew}
-        style={styles().toolButton}
-        onMouseOver={(event) => {
-          event.target.style.background = '#58FAD0'
-        }}
-        onMouseLeave={(event) => {
-          event.target.style.background = '#32A3BC'
-        }}
-      >
-        New
-      </div>
-    </div>
-  )
-}
 
 
 
@@ -79,20 +43,26 @@ function GoalSection (props) {
         )}
       </Modal>
     <div style={styles().wrapper}>
-      <h3 style={styles().titleSection}>Goals</h3>
-      <ToolSection 
-        showCompleted={showCompletedGoals}
-        onChange={(flag) => {
-          if (mixpanel.config.token)
-            mixpanel.track('Goal Section Page - Show completed/pending goal', {showCompleted: flag})
-          setShowCompletedGoals(flag)
-        }}
-        onNew={() => {
-          if (mixpanel.config.token)
-            mixpanel.track('Goal Section Page - Add a goal')
-          setModalOpen('goals')
-        }}
-      />
+      <div style={styles().toolContainer}>
+        <h3 style={styles().titleSection}>Goals</h3>
+        <div 
+          onClick={() => {
+            if (mixpanel.config.token)
+              mixpanel.track('Goal Section Page - Add a goal')
+            setModalOpen('goals')
+          }}
+          style={styles().toolButton}
+          title={'Set a new goal for yourself'}
+          onMouseOver={(event) => {
+            event.target.style.background = '#58FAD0'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#32A3BC'
+          }}
+        >
+          +
+        </div>
+      </div>
       <div style={styles().goalSection}>
       {props.goals.map((item) => {
         if ((item.doneAt === null) === (!showCompletedGoals))
@@ -109,19 +79,34 @@ function GoalSection (props) {
           return (null)
       })}
       </div>
-      <h3 style={styles().titleSection}>Projects</h3>
-      <ToolSection
-        showCompleted={showCompletedProjects}
-        onChange={(flag) => {
+      <div 
+        style={styles().showCompletedText}
+        onClick={() => {
           if (mixpanel.config.token)
-            mixpanel.track('Goal Section Page - Show completed/pending projects', {showCompleted: flag})
-          setShowCompletedProjects(flag)
+            mixpanel.track('Goal Section Page - Show completed/pending goals', {showCompleted: !showCompletedGoals})
+          setShowCompletedGoals(!showCompletedGoals)
         }}
-        onNew={() => {
-          if (mixpanel.config.token)
-            mixpanel.track('Goal Section Page - Add a project')
-          setModalOpen('projects')
-        }} />
+      >{showCompletedProjects ? 'Show pending' : 'Show completed'}</div>
+      <div style={styles().toolContainer}>
+        <h3 style={styles().titleSection}>Projects</h3>
+        <div 
+          onClick={() => {
+            if (mixpanel.config.token)
+              mixpanel.track('Goal Section Page - Add a project')
+            setModalOpen('projects')
+          }}
+          style={styles().toolButton}
+          title={'Plan a new project'}
+          onMouseOver={(event) => {
+            event.target.style.background = '#58FAD0'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#32A3BC'
+          }}
+        >
+          +
+        </div>
+      </div>
       <div style={styles().projectSection}>
         {props.projects.map((item) => {
         if ((item.doneAt === null) === (!showCompletedProjects))
@@ -138,6 +123,14 @@ function GoalSection (props) {
             return null
         })}
       </div>
+      <div 
+        style={styles().showCompletedText}
+        onClick={() => {
+          if (mixpanel.config.token)
+            mixpanel.track('Goal Section Page - Show completed/pending projects', {showCompleted: !showCompletedProjects})
+          setShowCompletedProjects(!showCompletedProjects)
+        }}
+      >{showCompletedProjects ? 'Show pending' : 'Show completed'}</div>
     </div>
     </div>
   )
@@ -171,6 +164,12 @@ const styles = () => ({
     justifyContent: 'space-between',
     margin: 10,
   },
+  showCompletedText: {
+    fontSize: 13 * getDimRatioText().X,
+    textAlign: 'center',
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  },
   toolButton: {
     cursor: 'pointer',
     background: '#32A3BC',
@@ -183,6 +182,9 @@ const styles = () => ({
     fontSize: 16 * getDimRatio().X,
     color: 'white',
     borderStyle: 'solid',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   titleSection: {
     fontSize: 28 * getDimRatioText().X,
