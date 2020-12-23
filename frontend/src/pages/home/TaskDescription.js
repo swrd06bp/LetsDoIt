@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 import Modal from 'react-modal'
+import { useMixpanel } from 'react-mixpanel-browser'
 
 import TitleElem from '../../components/CommonDescription/TitleElem'
 import GoalShape from '../../components/Goal/GoalShape'
@@ -20,7 +21,7 @@ function TaskDescription (props) {
   const [projectId, setProjectId] = useState(props.describeElem.task.projectId)
   const [goalId, setGoalId] = useState(props.describeElem.task.goalId)
   const [list, setList] = useState(props.describeElem.task.list)
-
+  const mixpanel = useMixpanel()
   const api = new Api()
   
   useEffect(() => {
@@ -42,6 +43,8 @@ function TaskDescription (props) {
   goalsOptions.unshift({value: null, label: 'none'})
 
   const onSave = async () => {
+    if (mixpanel.config.token)
+      mixpanel.track('Task Description - save')
     await api.updateTask(
       props.describeElem.task.id, 
       {content, dueDate, note, projectId, goalId, list, doneAt}
@@ -50,6 +53,8 @@ function TaskDescription (props) {
   }
 
   const onDelete = async () => {
+    if (mixpanel.config.token)
+      mixpanel.track('Task Description - delete')
     await api.deleteTask(props.describeElem.task.id)
     props.onDescribe({task: null, project: props.describeElem.project, goal: props.describeElem.goal})
   }
@@ -59,7 +64,15 @@ function TaskDescription (props) {
   return (
       <Modal
         isOpen={true}
-        onRequestClose={() => {props.onDescribe({task: null, project: props.describeElem.project, goal: props.describeElem.goal})}}
+        onRequestClose={() => {
+          props.onDescribe({
+            task: null, 
+            project: props.describeElem.project, 
+            goal: props.describeElem.goal
+          })
+          if (mixpanel.config.token)
+            mixpanel.track('Task Description - close click outside')
+        }}
         style={styles}
         contentLabel="Example Modal"
       >
@@ -85,6 +98,8 @@ function TaskDescription (props) {
               type='checkbox'
               checked={dueDate ? false : true}
               onChange={() => {
+                if (mixpanel.config.token)
+                  mixpanel.track('Task Description - Chexbox dueDate', {dueDate})
                 if (dueDate) 
                   setDueDate(null)
                 else
@@ -98,7 +113,11 @@ function TaskDescription (props) {
             <input 
               type='date' 
               value={new Date(dueDate).toJSON().slice(0, 10)} 
-              onChange={(event) => {setDueDate(new Date(event.target.value))}}
+              onChange={(event) => {
+                if (mixpanel.config.token)
+                  mixpanel.track('Task Description - TextInput dueDate', {dueDate})
+                setDueDate(new Date(event.target.value))
+              }}
             />
             </div>
             )}
@@ -112,6 +131,8 @@ function TaskDescription (props) {
             type='checkbox'
             checked={doneAt ? true : false}
             onChange={() => {
+                if (mixpanel.config.token)
+                  mixpanel.track('Task Description - Checkbox doneAt', {doneAt})
               if (doneAt) 
                 setDoneAt(null)
               else
@@ -124,7 +145,11 @@ function TaskDescription (props) {
               <input 
                 type='date' 
                 value={new Date(doneAt).toJSON().slice(0, 10)} 
-                onChange={(event) => {setDoneAt(new Date(event.target.value))}}
+                onChange={(event) => {
+                  if (mixpanel.config.token)
+                    mixpanel.track('Task Description - TextInput doneAt', {doneAt})
+                  setDoneAt(new Date(event.target.value))
+                }}
               />
             </div>
           )}
@@ -141,13 +166,25 @@ function TaskDescription (props) {
           <Dropdown 
             options={projectsOptions}
             value={projectId}
-            onChange={({value}) => {setProjectId(value)}}
+            onChange={({value}) => {
+              if (mixpanel.config.token)
+                mixpanel.track('Task Description - Change projectId', {projectId})
+              setProjectId(value)
+            }}
             placeholder="Project"
           />
         </div>
         <div style={styles.dropdownContainer}>
           <GoalShape colorCode={goalColorCode} />
-          <Dropdown options={goalsOptions} value={goalId} onChange={({value}) => {setGoalId(value)}} placeholder="Goal" />
+          <Dropdown 
+            options={goalsOptions}
+            value={goalId}
+            onChange={({value}) => {
+              if (mixpanel.config.token)
+                mixpanel.track('Task Description - Change goalId', {goalId})
+              setGoalId(value)
+            }} 
+            placeholder="Goal" />
         </div>
         
        </div>
@@ -160,7 +197,11 @@ function TaskDescription (props) {
           type='text' 
           name='note'
           value={note ? note : ''} 
-          onChange={(event) => setNote(event.target.value)} 
+          onChange={(event) => { 
+            if (mixpanel.config.token)
+              mixpanel.track('Task Description - Change note', {note})
+            setNote(event.target.value)
+          }} 
           style={styles.noteText}
         />
       </div>
@@ -168,11 +209,15 @@ function TaskDescription (props) {
       <div style={styles.footer}>
         <div
           style={styles.buttonCancel}
-          onClick={() => props.onDescribe({
-            task: null,
-            project: props.describeElem.project,
-            goal: props.describeElem.goal
-          })}
+          onClick={() => {
+            props.onDescribe({
+              task: null,
+              project: props.describeElem.project,
+              goal: props.describeElem.goal
+            })
+            if (mixpanel.config.token)
+              mixpanel.track('Task Description - Cancel')
+          }}
           onMouseOver={(event) => {
             event.target.style.background = '#F5A9A9'
           }}
