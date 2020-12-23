@@ -21,6 +21,7 @@
     "react-native": "^0.61.5",
     "react-native-datepicker": "^1.7.2",
     "react-native-drax": "^0.6.0",
+    "react-native-dropdown-picker": "^3.7.5",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-modal": "^11.5.6",

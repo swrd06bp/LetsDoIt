@@ -21,10 +21,10 @@ import RoutineTask from '../components/Task/RoutineTask'
 import {
   sortTasks,
   todayDate,
+  weekDayDate,
   lastWeekDate,
   lastMonthDate,
-  decomposeTasksToday,
-  generateRoutineTask,
+  decomposeItemsWeek,
 } from '../utils'
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -43,17 +43,21 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 }
 
 
-function TodayTaskList (props) {
+function WeeklyTaskList (props) {
   const [isRefreshing, setIsRefreshing] = useState(true)
   const [isAddingTask, setIsAddingTask] = useState(false)
   const [describeTask, setDescribeTask] = useState(null)
   const [draggedTask, setDraggedTask] = useState(null)
   const [showDeletion, setShowDeletion] =useState(false)
-  const [itemsUnfinished, setItemsUnifinished] = useState([])
-  const [itemsToday, setItemsToday] = useState([])
-  const [itemsTomorrow, setItemsTomorrow] = useState([])
-  const [itemsUpcoming, setItemsUpcoming] = useState([])
-  const [itemsSomeday, setItemsSomeday] = useState([])
+  const [date, setDate] = useState(new Date())
+  const [weekDates, setWeekDates] = useState([weekDayDate(new Date(), 0), weekDayDate(new Date(), 7)])
+  const [itemsMonday, setItemsMonday] = useState([])
+  const [itemsTuesday, setItemsTuesday] = useState([])
+  const [itemsWednesday, setItemsWednesday] = useState([])
+  const [itemsThursday, setItemsThursday] = useState([])
+  const [itemsFriday, setItemsFriday] = useState([])
+  const [itemsSaturday, setItemsSaturday] = useState([])
+  const [itemsSunday, setItemsSunday] = useState([])
   const api = new Api()
 
 
@@ -63,98 +67,50 @@ function TodayTaskList (props) {
     return () => Keyboard.removeAllListeners('keyboardDidHide')
   },[props.task]) 
   
-  const getAllTasks = async () => {
-    const response = await api.getTasks({
-      from: todayDate().toJSON(),
-      someday: true,
-      unfinished: true,
-    })
-    const allTasks = await response.json()
-  
-    if (allTasks)
-      return  decomposeTasksToday(allTasks)
-    else 
-      return {
-        unfinishedTasks: [],
-        todayTasks: [],
-        tomorrowTasks: [],
-        upcomingTasks: [],
-        somedayTasks: []
-      }
-  }
-  
-  const getAllRoutines = async () => {
-    const response = await api.getHabits({unfinished: true})
-    const allHabits = await response.json()
-
-    let allRoutineTasks = []
-    for (let habit of allHabits) {
-      // get the doneRoutines
-      const since = habit.frequency.type === 'day' ? todayDate() 
-        : (habit.frequency.type === 'week' ? lastWeekDate() : lastMonthDate())
-      const response = await api.getRoutinesHabit({
-        habitId: habit._id,
-        isDone: true,
-        since,
-        limit: habit.frequency.number,
-      })
-      const doneRoutines = await response.json()
-
-      // get the unDoneRoutines
-      const resp = await api.getRoutinesHabit({
-        habitId: habit._id,
-        isDone: false,
-        since,
-        limit: 1,
-      })
-      const unDoneRoutines = await resp.json()
-      
-      const routineTask = generateRoutineTask({habit, doneRoutines, unDoneRoutines})
-      if (routineTask)
-        allRoutineTasks.push(routineTask)
-    }
-
-    return allRoutineTasks
-  }
-  
   const getAllItems = async () => {
-    // get all routines
-    const allRoutineTasks = await getAllRoutines()
-      
-    // get all tasks
-    const { 
-      unfinishedTasks,
-      todayTasks,
-      tomorrowTasks,
-      upcomingTasks,
-      somedayTasks
-    } = await getAllTasks()
-
-
-    setItemsUnifinished(unfinishedTasks)
-    setItemsToday([...allRoutineTasks, ...todayTasks])
-    setItemsTomorrow(tomorrowTasks)
-    setItemsUpcoming(upcomingTasks)
-    setItemsSomeday(somedayTasks)
+    const response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
+    const allTasks = await response.json()
     
+  
+   if (allTasks) {
+      const weekDaysTasks = decomposeItemsWeek(allTasks, date, 'task')
+      const weekDaysProjects = decomposeItemsWeek(props.projects, date, 'project')
+      const weekDaysGoals = decomposeItemsWeek(props.goals, date, 'goal')
+
+
+      setItemsMonday([...weekDaysGoals[0], ...weekDaysProjects[0], ...weekDaysTasks[0]])
+      setItemsTuesday([...weekDaysGoals[1], ...weekDaysProjects[1], ...weekDaysTasks[1]])
+      setItemsWednesday([...weekDaysGoals[2], ...weekDaysProjects[2], ...weekDaysTasks[2]])
+      setItemsThursday([...weekDaysGoals[3], ...weekDaysProjects[3], ...weekDaysTasks[3]])
+      setItemsFriday([...weekDaysGoals[4], ...weekDaysProjects[4], ...weekDaysTasks[4]])
+      setItemsSaturday([...weekDaysGoals[5], ...weekDaysProjects[5], ...weekDaysTasks[5]])
+      setItemsSunday([...weekDaysGoals[6], ...weekDaysProjects[6], ...weekDaysTasks[6]])
+    }
     setIsRefreshing(false)
   }
 
   
+  
   const id2List = {
-    Unfinished: itemsUnfinished,
-    Today: itemsToday,
-    Tomorrow: itemsTomorrow,
-    Upcoming: itemsUpcoming,
-    Someday: itemsSomeday,
+    Monday: itemsMonday,
+    Tuesday: itemsTuesday,
+    Wednesday: itemsWednesday,
+    Thursday: itemsThursday,
+    Friday: itemsFriday,
+    Saturday: itemsSaturday,
+    Sunday: itemsSunday,
   }
 
   const id2DueDate = id => {
+
     const matrix = {
-      Today: new Date().toJSON(),
-      Tomorrow: new Date(new Date().setDate(new Date().getDate() + 1)).toJSON(),
-      Upcoming: new Date(new Date().setDate(new Date().getDate() + 7)).toJSON(),
-      Someday: null,
+      monday: weekDayDate(date, 0),
+      tuesday: weekDayDate(date, 1),
+      wednesday: weekDayDate(date, 2),
+      thursday: weekDayDate(date, 3),
+      friday: weekDayDate(date, 4),
+      saturday: weekDayDate(date, 5),
+      sunday: weekDayDate(date, 6),
     }
     return matrix[id]
 
@@ -164,25 +120,33 @@ function TodayTaskList (props) {
 
   const DATA = [
     {
-      title: "Unfinished",
-      data: itemsUnfinished 
+      title: "Monday",
+      data: itemsMonday 
     },
     {
-      title: "Today",
-      data: itemsToday 
+      title: "Tuesday",
+      data: itemsTuesday 
     },
     {
-      title: "Tomorrow",
-      data: itemsTomorrow, 
+      title: "Wednesday",
+      data: itemsWednesday, 
     },
     {
-      title: "Upcoming",
-      data: itemsUpcoming 
+      title: "Thursday",
+      data: itemsThursday 
     },
     {
-      title: "Someday",
-      data: itemsSomeday 
-    }
+      title: "Friday",
+      data: itemsFriday
+    },
+    {
+      title: "Saturday",
+      data: itemsSaturday
+    },
+    {
+      title: "Sunday",
+      data: itemsSunday
+    },
   ]
   
   const onDragEnd = action => {
@@ -201,38 +165,60 @@ function TodayTaskList (props) {
             destination
           )
 
-        if (result.Unfinished)
-          setItemsUnifinished(result.Unfinished)
-        if (result.Today)
-          setItemsToday(result.Today)
-        if (result.Tomorrow)
-          setItemsTomorrow(result.Tomorrow)
-        if (result.Upcoming)
-          setItemsUpcoming(result.Upcoming)
-        if (result.Someday)
-          setItemsSomeday(result.Someday)
-
-           
-          api.updateTask(source.id, {dueDate: id2DueDate(destination.droppableId)})
-            .then(getAllItems)
-        }
+          if (result.monday)
+            setItemsMonday(sortTasks(result.monday))
+          if (result.tuesday)
+            setItemsTuesday(sortTasks(result.tuesday))
+          if (result.wednesday)
+            setItemsWednesday(sortTasks(result.wednesday))
+          if (result.thursday)
+            setItemsThursday(sortTasks(result.thursday))
+          if (result.friday)
+            setItemsFriday(sortTasks(result.friday))
+          if (result.saturday)
+            setItemsSaturday(sortTasks(result.saturday))
+          if (result.sunday)
+            setItemsSunday(sortTasks(result.sunday))
+        api.updateTask(action.draggableId, {dueDate: id2DueDate(action.destination.droppableId)})
+          .then(resp => {
+            if (resp.status !== 200)
+              getTasks()
+          })
+       }
     }
 
-  const onCreate = (task) => {
-    setItemsToday(sortTasks([task, ...itemsToday]))
+  const onCreateTask = (task) => {
+    const newDate = new Date()
+    if ((weekDates[0] <= newDate && weekDates[1] > newDate) || weekDates[0] <= newDate) {
+      const newDateDay = newDate.getDay()
+      if (newDateDay === 1) setItemsMonday(sortTasks([...itemsMonday, task]))
+      else if (newDateDay === 2) setItemsTuesday(sortTasks([...itemsTuesday, task]))
+      else if (newDateDay === 3) setItemsWednesday(sortTasks([...itemsWednesday, task]))
+      else if (newDateDay === 4) setItemsThursday(sortTasks([...itemsThursday, task]))
+      else if (newDateDay === 5) setItemsFriday(sortTasks([...itemsFriday, task]))
+      else if (newDateDay === 6) setItemsSaturday(sortTasks([...itemsSaturday, task]))
+      else if (newDateDay === 0) setItemsSunday(sortTasks([...itemsSunday, task]))
+    }
+    else
+      setItemsMonday(sortTasks([...itemsMonday, task]))
   }
 
   const getFunctions = (title) => {
-    if (title === 'Today')
-      return [itemsToday, setItemsToday]
-    else if (title === 'Tomorrow')
-      return [itemsTomorrow, setItemsTomorrow]
-    else if (title === 'Upcoming')
-      return [itemsUpcoming, setItemsUpcoming]
-    else if (title === 'Someday')
-      return [itemsSomeday, setItemsSomeday]
-    else if (title === 'Unfinished')
-      return [itemsUnfinished, setItemsUnifinished]
+    if (title === 'Monday')
+      return [itemsMonday, setItemsMonday]
+    else if (title === 'Tuesday')
+      return [itemsTuesday, setItemsTuesday]
+    else if (title === 'Wednesday')
+      return [itemsWednesday, setItemsWednesday]
+    else if (title === 'Thursday')
+      return [itemsThursday, setItemsThursday]
+    else if (title === 'Friday')
+      return [itemsFriday, setItemsFriday]
+    else if (title === 'Saturday')
+      return [itemsSaturday, setItemsSaturday]
+    else if (title === 'Sunday')
+      return [itemsSunday, setItemsSunday]
+
   }
 
   const getDeletedList = (taskId, title) => {
@@ -268,7 +254,7 @@ function TodayTaskList (props) {
         onUpdate={getAllItems}
       />)}
       <View style={styles.wrapper}>
-	    <FocusButton type={'day'} navigation={props.navigation}/>
+	    <FocusButton type={'week'} navigation={props.navigation}/>
         <DraxProvider>
           <View style={draggedTask || isAddingTask ? styles.listContainerDragged : styles.listContainer}>
             <SectionList
@@ -358,17 +344,9 @@ function TodayTaskList (props) {
               )}
               {!draggedTask && isAddingTask && (
                 <View style={[styles.addTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
-                  <AddTask 
-                    onCreate={(task, chosenDateOption) => {
-                      if (chosenDateOption === 'Today')
-                        setItemsToday(sortTasks([task, ...itemsToday]))
-                      else if (chosenDateOption === 'Tomorrow')
-                        setItemsTomorrow(sortTasks([task, ...itemsTomorrow]))
-                      else if (chosenDateOption === 'Next Monday')
-                        setItemsUpcoming(sortTasks([task, ...itemsUpcoming]))
-                      else if (chosenDateOption === 'Someday')
-                        setItemsSomeday(sortTasks([task, ...itemsSomeday]))
-                    }}
+                  <AddTask
+                    isWeek={true}
+                    onCreate={onCreateTask}
                     onUpdate={getAllItems}
                   />
                 </View>
@@ -464,4 +442,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default TodayTaskList
+export default WeeklyTaskList

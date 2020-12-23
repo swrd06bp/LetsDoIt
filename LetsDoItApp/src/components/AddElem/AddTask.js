@@ -78,21 +78,27 @@ function AddTask (props) {
           chosenDateOption={chosenDateOption}
           onChange={setChosenDateOption}
         />
+        {!props.isWeek && (
         <Helper 
           content={'Tomorrow'}
           chosenDateOption={chosenDateOption}
           onChange={setChosenDateOption}
         />
+        )}
+        {!props.isWeek && (
         <Helper
           content={'Next Monday'}
           chosenDateOption={chosenDateOption}
           onChange={setChosenDateOption}
         />
+        )}
+        {!props.isWeek && (
         <Helper
           content={'Someday'}
           chosenDateOption={chosenDateOption}
           onChange={setChosenDateOption}
         />
+        )}
       </View>
       <View style={styles.inputContainer}>
          

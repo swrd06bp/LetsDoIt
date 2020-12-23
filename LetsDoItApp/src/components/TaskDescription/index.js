@@ -13,7 +13,7 @@ import DatePicker from 'react-native-datepicker'
 import CheckBox from '@react-native-community/checkbox'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Modal from 'react-native-modal'
-import { Dropdown } from 'react-native-material-dropdown'
+import DropDownPicker from 'react-native-dropdown-picker'
 
 import Api from '../../Api'
 import ActionButton from '../ActionButton'
@@ -25,11 +25,21 @@ function TaskDescription (props) {
   const [dueDate, setDueDate] = useState(props.task.dueDate)
   const [doneAt, setDoneAt] = useState(props.task.doneAt)
   const [list, setList] = useState(props.task.list)
+  const [goalId, setGoalId] = useState(props.task.goalId ? props.task.goalId : 0)
+  const [projectId, setProjectId] = useState(props.task.projectId ? props.task.projectId : 0)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const api = new Api()
 
   const onSave = async () => {
-    await api.updateTask(props.task._id, {content, dueDate, note, list, doneAt})
+    await api.updateTask(props.task._id, {
+      content,
+       dueDate, 
+       note, 
+       list, 
+       doneAt,
+       goalId: goalId === 0 ? null : goalId,
+       projectId: projectId === 0 ? null : projectId,
+     })
     props.onDescribe(null)
     props.onUpdate()
   }
@@ -49,6 +59,33 @@ function TaskDescription (props) {
     props.onDescribe(null)
     props.onUpdate()
   }
+
+  let projectOptions = props.projects.map((x) => ({
+   value: x._id, 
+   label: x.content,
+   icon: () => (
+     <View style={{
+       backgroundColor: x.colorCode, 
+       width: 15,
+       height: 15,
+       borderRadius: 20,
+     }} />
+    )
+ }))
+  projectOptions.unshift({ value: 0, label: 'Project' })
+
+  let goalOptions = props.goals.map((x) => ({
+   value: x._id, 
+   label: x.content,
+   icon: () => (
+     <View style={{
+       backgroundColor: x.colorCode, 
+       width: 15,
+       height: 15,
+     }} />
+    )
+ }))
+  goalOptions.unshift({ value: 0, label: 'Goal' })
 
   return (
     <Modal 
@@ -142,6 +179,33 @@ function TaskDescription (props) {
             </View>
           )}
         </View>
+        <View style={styles.dueContainer}>
+           <View style={styles.dueContainer}>
+              <Text>Link with:</Text>
+              <DropDownPicker
+                items={projectOptions}
+                defaultValue={projectId}
+                containerStyle={styles.linkContainer}
+                style={styles.linkDropdown}
+                itemStyle={{
+                  justifyContent: 'flex-start'
+                }}
+                dropDownStyle={styles.linkDropdown}
+                onChangeItem={({value}) => setProjectId(value)}
+              />
+              <DropDownPicker
+                items={goalOptions}
+                defaultValue={goalId}
+                containerStyle={styles.linkContainer}
+                style={styles.linkDropdown}
+                itemStyle={{
+                  justifyContent: 'flex-start'
+                }}
+                dropDownStyle={{backgroundColor: '#fafafa'}}
+                onChangeItem={({value}) => setGoalId(value)}
+              />
+           </View>
+        </View>
       </View>
 
       <View>
@@ -165,7 +229,7 @@ const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
     alignSelf: 'center',
-    height: 400,
+    height: 430,
     width: '80%',
     borderRadius: 10,
     backgroundColor: 'white',
@@ -207,6 +271,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  linkDropdown: {
+    backgroundColor: '#fafafa',
+  },
+  linkContainer: {
+    marginLeft: 5,
+    height: 40,
+    width: 100,
   },
   dueDate: {
     marginHorizontal: 5,
