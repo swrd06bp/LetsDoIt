@@ -31,6 +31,12 @@ function Task (props) {
     props.onUpdate()
   }
 
+  const  projectColorCode = props.projects.filter(x => x._id === props.item.projectId).length
+    ? props.projects.filter(x => x._id === props.item.projectId)[0].colorCode : null
+  
+  const  goalColorCode = props.goals.filter(x => x._id === props.item.goalId).length
+    ? props.goals.filter(x => x._id === props.item.goalId)[0].colorCode : null
+
   return(
     <View 
       style={[
@@ -49,8 +55,22 @@ function Task (props) {
         </View>
       </View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <ListButton list={props.item.list} onListChange={onListChange} />
-      
+        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          <ListButton list={props.item.list} onListChange={onListChange} />
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 2}}>
+            <View style={{
+              backgroundColor: projectColorCode, 
+              width: 15,
+              height: 15,
+              borderRadius: 20,
+            }} />
+            <View style={{
+              backgroundColor: goalColorCode, 
+              width: 15,
+              height: 15,
+            }} />
+          </View>
+        </View>
       </View>
     </View>
   )  

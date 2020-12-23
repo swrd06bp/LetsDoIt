@@ -261,6 +261,8 @@ function TodayTaskList (props) {
     <View>
       {describeTask && ( <TaskDescription 
         task={describeTask}
+        projects={props.projects}
+        goals={props.goals}
         isVisible={describeTask ? true : false} 
         onDescribe={setDescribeTask}
         onUpdate={getAllItems}
@@ -287,6 +289,8 @@ function TodayTaskList (props) {
                         <TouchableOpacity onPress={() => setDescribeTask(item)}>
                         <SimpleTask 
                           item={item}
+                          projects={props.projects}
+                          goals={props.goals}
                           onUpdate={getAllItems}
                           isSelected={draggedTask && draggedTask.id === item.id} 
                           onDoneChange={(taskId) => {
