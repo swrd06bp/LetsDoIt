@@ -31,13 +31,13 @@ function homeAction(routeName) {
 
 function CheckYourself (props) {
   const [showLink, setShowLink] = useState(false)  
+  const api = new Api()
 
   useEffect(() => {
     getHappiness() 
   }, [])
 
   const getHappiness = async () => {
-    const api = new Api()
     const resp = await api.getHappiness(1)
     const json = await resp.json()
     if (!json.length || new Date(json[0].createdAt) < todayDate()) 
@@ -58,8 +58,9 @@ function CheckYourself (props) {
 export default function Home (props) {
   const [task, setTask] = useState(null)
   const [isWeekly, setIsWeekly] = useState(false)
-  const [projects, setProjects] = useState([])
-  const [goals, setGoals] = useState([])
+  const [allProjects, setAllProjects] = useState([])
+  const [allGoals, setAllGoals] = useState([])
+  const api = new Api()
 
   useEffect(() => {
     getData()
@@ -95,7 +96,6 @@ export default function Home (props) {
             <Text>See {isWeekly ? 'dayly' : 'weekly'} tasks</Text>
           </MenuOption>
           <MenuOption onSelect={() => {
-            const api = new Api()
             api.logout()
             props.navigation.dispatch(homeAction('LoginPage'))
           }} >
@@ -114,8 +114,8 @@ export default function Home (props) {
       {isWeekly && (
         <WeeklyTaskList 
           task={task}
-          projects={projects}
-          goals={goals}
+          projects={allProjects}
+          goals={allGoals}
           onDescribe={setTask}
           navigation={props.navigation}
         />
@@ -123,8 +123,8 @@ export default function Home (props) {
       {!isWeekly && (
         <TodayTaskList
           task={task}
-          projects={projects} 
-          goals={goals}
+          projects={allProjects} 
+          goals={allGoals}
           onDescribe={setTask}
           navigation={props.navigation}
         />

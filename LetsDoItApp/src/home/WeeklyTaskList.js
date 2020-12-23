@@ -70,7 +70,7 @@ function WeeklyTaskList (props) {
   const getAllItems = async () => {
     const response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
     const allTasks = await response.json()
-    console.log(allTasks)
+    
   
    if (allTasks) {
       const weekDaysTasks = decomposeItemsWeek(allTasks, date, 'task')
