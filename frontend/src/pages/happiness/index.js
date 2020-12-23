@@ -9,7 +9,6 @@ import { todayDate } from './../../app/utils'
 import Api from './../../app/Api'
 
 function HappinessPage (props) {
-  const [showGraph, setShowGraph] = useState(false)
   const [allData, setAllData] = useState([])
   const [graphData, setGraphData] = useState([])
   const [shortData, setShortData] = useState([])
@@ -29,12 +28,8 @@ function HappinessPage (props) {
     const indexInf = 0
     const indexSup = Math.min(7, json.length)
     setAllData(json)
-    if (json.length) {
+    if (json.length)
       drawGraph(json.slice(indexInf, indexSup).reverse())
-      setShowGraph(true)
-    } else {
-      setShowGraph(false)
-    }
     
   }
 
