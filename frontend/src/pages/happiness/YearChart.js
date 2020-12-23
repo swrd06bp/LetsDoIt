@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import moment from 'moment'
 
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 import { scoreToColor } from './utils'
 import { todayDate } from '../../app/utils'
 
@@ -97,16 +97,41 @@ function MonthChart (props) {
 }
 
 function YearChart (props) {
-
   const allMonths = moment.months()
 
   return (
     <div>
-      <div style={styles().titleYear}>{props.year}</div>
+      <div style={styles().yearContainer}>
+        <div
+          style={styles().toolButton}
+          onMouseOver={(event) => {
+            event.target.style.background = '#58FAD0'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#32A3BC'
+          }}
+          onClick={() => {props.setYear(props.year - 1)}}
+        >
+          &lt;
+        </div>
+        <div
+          style={styles().toolButton}
+          onMouseOver={(event) => {
+            event.target.style.background = '#58FAD0'
+          }}
+          onMouseLeave={(event) => {
+            event.target.style.background = '#32A3BC'
+          }}
+          onClick={() => {props.setYear(props.year + 1)}}
+        >
+          &gt;
+        </div>
+        <div style={styles().titleYear}>{props.year}</div>
+      </div>
       {allMonths.map((month, index) => (
         <MonthChart 
           key={month}
-          year={'2020'}
+          year={props.year.toString()}
           index={index + 1}
           allData={props.allData}
           shortData={props.shortData}
@@ -124,6 +149,12 @@ function YearChart (props) {
 
 
 const styles = () => ({
+  yearContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   titleYear: {
     display: 'flex',
     alignItems: 'center',
@@ -153,6 +184,22 @@ const styles = () => ({
   editIcon: {
     height: 20,
     width: 15,
+  },
+  toolButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    background: '#32A3BC',
+    borderColor: 'white',
+    fontWeight: 'bold',
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    fontSize: 18 * getDimRatioText().X,
+    color: 'white',
+    borderStyle: 'solid',
   },
   firstActiveDayContainer: {
   

@@ -52,9 +52,6 @@ function HomePage() {
           Let's do it{name && ', ' + name}!
         </div>
         <div style={{display: 'flex',}}>
-          <div style={styles().weeklyToogle}>
-            Show weekly
-          </div> 
           <input 
             type='checkbox'
             checked={isWeekly}
@@ -64,6 +61,9 @@ function HomePage() {
               setIsWeekly(!isWeekly)
             }}
           />
+          <div style={styles().weeklyToogle}>
+            Show weekly
+          </div> 
         </div>
       </div>
       
@@ -158,6 +158,7 @@ const styles = () => ({
     fontSize: 40 * getDimRatio().X,
   },
   weeklyToogle: {
+    marginLeft: 5,
     fontSize: 17 * getDimRatio().X
   },
   mainCantainer: {

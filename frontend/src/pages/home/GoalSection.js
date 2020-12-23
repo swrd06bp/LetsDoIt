@@ -86,7 +86,7 @@ function GoalSection (props) {
             mixpanel.track('Goal Section Page - Show completed/pending goals', {showCompleted: !showCompletedGoals})
           setShowCompletedGoals(!showCompletedGoals)
         }}
-      >{showCompletedProjects ? 'Show pending' : 'Show completed'}</div>
+      >{showCompletedGoals ? 'Show pending' : 'Show completed'}</div>
       <div style={styles().toolContainer}>
         <h3 style={styles().titleSection}>Projects</h3>
         <div 

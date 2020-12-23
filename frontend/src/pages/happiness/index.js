@@ -14,26 +14,26 @@ function HappinessPage (props) {
   const [graphData, setGraphData] = useState([])
   const [shortData, setShortData] = useState([])
   const [month, setMonth] = useState('')
-  const [year, setYear] = useState(moment(new Date()).format('YYYY'))
+  const [year, setYear] = useState(parseInt(moment(new Date()).format('YYYY')))
   const [notes, setNotes] = useState([])
    
 
   useEffect(() => {
     getHappiness()
-  },[])
+  },[year])
   
   const getHappiness = async () => {
     const api = new Api()
-    const resp = await api.getHappiness(365)
+    const resp = await api.getHappiness({currentYear: year, limit: 365})
     const json = await resp.json()
-    if (!json.length || new Date(json[0].dueDate) < todayDate()) 
-      window.location.assign('/happinesscreate/' + new Date().toJSON())
-    else {
-      const indexInf = 0
-      const indexSup = Math.min(7, json.length)
-      setAllData(json)
+    const indexInf = 0
+    const indexSup = Math.min(7, json.length)
+    setAllData(json)
+    if (json.length) {
       drawGraph(json.slice(indexInf, indexSup).reverse())
       setShowGraph(true)
+    } else {
+      setShowGraph(false)
     }
     
   }
@@ -97,7 +97,6 @@ function HappinessPage (props) {
 
   return (
     <div>
-      {showGraph && (
         <div>
           <TopNavigation />
           <div style={styles().title}>Happiness over time</div>
@@ -105,6 +104,7 @@ function HappinessPage (props) {
             <div style={{width: '50%'}}>
              <YearChart
               year={year}
+              setYear={setYear}
               allData={allData} 
               shortData={shortData}
               onChoose={onChooseData}
@@ -123,7 +123,6 @@ function HappinessPage (props) {
             </div>
           </div>
         </div>
-      )}
     </div>
   )
 }

@@ -3,10 +3,14 @@ const dbClient = require('../dbclient')
 
 exports.happinessGet = async (req, res) => {
   const userId = req.decoded
-  const { limit } = req.query
+  const { year, limit } = req.query
+  const query = { dueDate: {
+    '$gte': new Date(parseInt(year), 0, 1).toJSON(),
+    '$lt': new Date(parseInt(year) + 1, 0, 1).toJSON()
+  }}
   const gnh = await dbClient.getElems({
     table: 'happiness',
-    query: {},
+    query,
     userId,
     sortedTable: 'dueDate',
     maxNum: limit ? parseInt(limit) : 1,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Navbar, Nav, NavDropdown, } from 'react-bootstrap'
 import { useMixpanel } from 'react-mixpanel-browser'
+import moment from 'moment'
 
 import { todayDate } from './utils'
 import { updateSocketElems, removeSocketListener } from '../app/socket'
@@ -18,7 +19,7 @@ function TopNavigation() {
 
   const getHappiness = async () => {
     const api = new Api()
-    const resp = await api.getHappiness(1)
+    const resp = await api.getHappiness({currentYear: parseInt(moment(new Date()).format('YYYY')), limit: 1})
     const json = await resp.json()
     if (!json.length || new Date(json[0].dueDate) < todayDate()) 
       setShowLink(true) 
