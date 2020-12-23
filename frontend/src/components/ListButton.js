@@ -14,6 +14,7 @@ function ListButton (props) {
   return (
     <div 
       name="list"
+      title={'Change the tag list'}
       style={{fontSize: 9*props.scale, background: list === 'Personal' ? 'blue' : 'brown', cursor: 'pointer', fontWeight: 'bold',  color: 'white',  borderRadius: 60, width:45*props.scale, alignItems: 'center', justifyContent: 'center' }}
       onClick={onListChange}
     >

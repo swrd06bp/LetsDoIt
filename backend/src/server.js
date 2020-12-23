@@ -12,7 +12,7 @@ const server =  http.createServer(app)
 
 app.use(cors())
 app.use(bodyParser.json())
-app.use('/api', router)
+app.use('/v1', router)
 app.set('port', process.env.port || 4001)
 app.set('socketService', new SocketService(server))
 

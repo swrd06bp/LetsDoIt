@@ -64,7 +64,7 @@ function SmarterForm (props) {
         <div style={styles.firstLetterPoint}>S</div><div style={styles.restLetterPoint}>pecific:</div><div style={styles.definePoint}>The more specific you are about your goals, the better and more able you’ll be to accomplish them no matter what method you use.</div>
       </div>
       <div style={styles.pointContainer}>
-        <div style={styles.firstLetterPoint}>M</div><div style={styles.restLetterPoint}>iningful:</div><div style={styles.definePoint}>When your goals have a deep enough meaning to you, you’ll do whatever it takes to achieve them.</div>
+        <div style={styles.firstLetterPoint}>M</div><div style={styles.restLetterPoint}>eaningful:</div><div style={styles.definePoint}>When your goals have a deep enough meaning to you, you’ll do whatever it takes to achieve them.</div>
       </div>
       <div style={styles.pointContainer}>
         <div style={styles.firstLetterPoint}>A</div><div style={styles.restLetterPoint}>chievable:</div><div style={styles.definePoint}>There are no unrealistic goals, only unrealistic deadlines.</div>

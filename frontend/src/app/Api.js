@@ -1,8 +1,8 @@
 class Api {
 
   constructor() {
-    this.host = "https://lets-do-it.me"
-    this.baseUrl = this.host + ':4001/api'
+    this.host = "https://api.lets-do-it.me"
+    this.baseUrl = this.host + ':4001/v1'
     this.headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
