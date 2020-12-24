@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Dropdown from 'react-dropdown'
-import 'react-dropdown/style.css'
+import Select from 'react-select'
 
 import ListButton from '../ListButton'
+import { getDimRatio } from '../../app/DynamicSizing'
 import Api from '../../app/Api.js'
 
 
@@ -38,7 +38,7 @@ function SmarterForm (props) {
         const resp = await api.insertGoal({
           content: goalInput,
           list: goalList,
-          dueDate: new Date().toJSON(),
+          dueDate: goalDueDate,
         })
         const {goalId} = await resp.json()
         props.onNext(goalId.insertedId)
@@ -101,7 +101,13 @@ function SmarterForm (props) {
       <div style={styles.labelContainer}>
 
         <div style={styles.labelTitles}>Deadline:</div> 
-        <Dropdown options={allDateOptions} value={dateSelectedOption} onChange={onChooseOption}/>
+        <Select
+          menuPlacement="top"
+          styles={{control: (styles) => ({...styles, width: 150 * getDimRatio().X})}}
+          options={allDateOptions}
+          selectValue={dateSelectedOption}
+          onChange={onChooseOption}
+        />
         {dateSelectedOption === 'Custom' && ( 
           <label>
           <input 

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Dropdown from 'react-dropdown'
-import 'react-dropdown/style.css'
 import { Line } from '@reactchartjs/react-chart.js'
 import moment from 'moment'
 

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { useMixpanel } from 'react-mixpanel-browser'
 import moment from 'moment'
-import Dropdown from 'react-dropdown'
-import 'react-dropdown/style.css'
+import Select from 'react-select'
 
 import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
@@ -40,7 +39,7 @@ function WeeklyTaskList (props) {
   const getInitialDropdownOptions = () => {
     let initialDropdownOptions = [
       {value: 'All', label: 'All'},
-      {type: 'group', name: 'Lists', items: [
+      {label: 'Lists', options: [
         {value: 'Work', label: 'Work'},
         {value: 'Personal', label: 'Personal'}
       ]}
@@ -51,7 +50,7 @@ function WeeklyTaskList (props) {
       projectItems.push({value: project._id, label: project.content})
     }
     if (props.projects.length)
-      initialDropdownOptions.push({type: 'group', name: 'Projects', items: projectItems})
+      initialDropdownOptions.push({label: 'Projects', options: projectItems})
 
     let goalItems = []
     for (let goal of props.goals) {
@@ -59,7 +58,7 @@ function WeeklyTaskList (props) {
     }
 
     if (props.goals.length)
-      initialDropdownOptions.push({type: 'group', name: 'Goals', items: goalItems})
+      initialDropdownOptions.push({label: 'Goals', options: goalItems})
 
     
     return initialDropdownOptions
@@ -537,9 +536,10 @@ function WeeklyTaskList (props) {
         <div style={styles().filtersContainer}>
           <div>Filter</div>
           <div style={styles().filtersDropdown}>
-          <Dropdown
+          <Select
+            styles={styles().dropdownSelect}
             options={dropdownOptions}
-            value={selectedDropdownOption.value}
+            selectValue={selectedDropdownOption.value}
             onChange={setSelectedDropdownOption}
           />
           </div>
@@ -620,6 +620,9 @@ const styles = () => ({
     fontSize: 18 * getDimRatioText().X,
     color: 'white',
     borderStyle: 'solid',
+  },
+  dropdownSelect: {
+    control: (styles) => ({...styles, width: 240 * getDimRatio().X})
   },
   footNoteFocus: {
     display: 'flex',

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
-import Dropdown from 'react-dropdown'
-import 'react-dropdown/style.css'
 
 import GoalShape from '../Goal/GoalShape'
 import Api from '../../app/Api'

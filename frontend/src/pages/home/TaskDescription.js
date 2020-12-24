@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Dropdown from 'react-dropdown'
-import 'react-dropdown/style.css'
+import Select from 'react-select'
 import Modal from 'react-modal'
 import { useMixpanel } from 'react-mixpanel-browser'
 
@@ -8,6 +7,7 @@ import TitleElem from '../../components/CommonDescription/TitleElem'
 import GoalShape from '../../components/Goal/GoalShape'
 import ProjectShape from '../../components/Project/ProjectShape'
 import DeleteButton from '../../components/DeleteButton'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 
 import Api from '../../app/Api'
 
@@ -73,12 +73,12 @@ function TaskDescription (props) {
           if (mixpanel.config.token)
             mixpanel.track('Task Description - close click outside')
         }}
-        style={styles}
+        style={styles()}
         contentLabel="Example Modal"
       >
-    <div style={styles.wrapper}>
+    <div style={styles().wrapper}>
       <div style={{display: 'flex', flexDirection: 'row',alignItems: 'center', justifyContent: 'space-between'}}>
-        <h3 style={styles.title}>Description</h3>
+        <h3 style={styles().title}>Description</h3>
         <DeleteButton width='15' height='15' onDelete={onDelete} />
       </div>
       <TitleElem
@@ -88,10 +88,10 @@ function TaskDescription (props) {
         setList={setList}
       />
       <div>
-       <h4 style={styles.noteTitle}>
+       <h4 style={styles().noteTitle}>
         Status
        </h4>
-        <div style={styles.checkboxContainer}>
+        <div style={styles().checkboxContainer}>
           <div>
             Someday
             <input
@@ -108,7 +108,7 @@ function TaskDescription (props) {
             />
             </div>
             {dueDate && (
-            <div style={styles.checkboxContainer}>
+            <div style={styles().checkboxContainer}>
             Due 
             <input 
               type='date' 
@@ -125,7 +125,7 @@ function TaskDescription (props) {
         </div>
         
         <div>
-          <div style={styles.checkboxContainer}>
+          <div style={styles().checkboxContainer}>
             Mark as done
           <input
             type='checkbox'
@@ -140,7 +140,7 @@ function TaskDescription (props) {
             }}
           />
           {doneAt && (
-            <div style={styles.checkboxContainer}>
+            <div style={styles().checkboxContainer}>
               Done at 
               <input 
                 type='date' 
@@ -157,15 +157,19 @@ function TaskDescription (props) {
         </div>
 
 
-       <div style={styles.linkContainer}>
+       <div style={styles().linkContainer}>
         <div>
         Link to:
         </div>
-        <div style={styles.dropdownContainer}>
+        <div 
+          style={styles().dropdownContainer}
+          title={projectsOptions.filter(x => x.value === projectId)[0].label}
+        >
           <ProjectShape colorCode={projectColorCode} />
-          <Dropdown 
+          <Select 
+            styles={styles().dropdownSelect}
             options={projectsOptions}
-            value={projectId}
+            selectValue={projectId}
             onChange={({value}) => {
               if (mixpanel.config.token)
                 mixpanel.track('Task Description - Change projectId', {projectId})
@@ -174,11 +178,15 @@ function TaskDescription (props) {
             placeholder="Project"
           />
         </div>
-        <div style={styles.dropdownContainer}>
+        <div
+          style={styles().dropdownContainer}
+          title={goalsOptions.filter(x => x.value === goalId)[0].label}
+        >
           <GoalShape colorCode={goalColorCode} />
-          <Dropdown 
+          <Select 
             options={goalsOptions}
-            value={goalId}
+            selectValue={goalId}
+            styles={styles().dropdownSelect}
             onChange={({value}) => {
               if (mixpanel.config.token)
                 mixpanel.track('Task Description - Change goalId', {goalId})
@@ -189,7 +197,7 @@ function TaskDescription (props) {
         
        </div>
 
-         <h4 style={styles.noteTitle}>
+         <h4 style={styles().noteTitle}>
           Note
          </h4>
       <div style={styles.noteContainer}>
@@ -202,13 +210,13 @@ function TaskDescription (props) {
               mixpanel.track('Task Description - Change note', {note})
             setNote(event.target.value)
           }} 
-          style={styles.noteText}
+          style={styles().noteText}
         />
       </div>
 
-      <div style={styles.footer}>
+      <div style={styles().footer}>
         <div
-          style={styles.buttonCancel}
+          style={styles().buttonCancel}
           onClick={() => {
             props.onDescribe({
               task: null,
@@ -228,7 +236,7 @@ function TaskDescription (props) {
           Cancel
         </div>
         <div
-          style={styles.buttonSave} 
+          style={styles().buttonSave} 
           onClick={onSave}
           onMouseOver={(event) => {
             event.target.style.background = '#58FAD0'
@@ -245,24 +253,24 @@ function TaskDescription (props) {
   )
 }
 
-const styles = {
+const styles = () => ({
   wrapper: {
     background: 'white',
-    width: 300,
+    width: 450 * getDimRatio().X,
     height: '50%',
-    margin: 30,
+    margin: 30 * getDimRatio().X,
     display: 'flex',
     flexDirection: 'column',
     borderRadius: 20,
   },
   title: {
-    fontSize: 25,
+    fontSize: 25 * getDimRatioText().X,
     marginLeft: 10,
     fontWeight: 'normal',
   },
   buttonBack: {
-    height: 20,
-    width: 20,
+    height: 20 * getDimRatio().X,
+    width: 20 * getDimRatio().Y,
   },
   noteTitle: {
     marginLeft: 10,
@@ -271,7 +279,7 @@ const styles = {
   },
   noteText: {
     width: '90%',
-    height: 100,
+    height: 100 * getDimRatio().Y,
   },
   noteContainer: {
     display: 'flex',
@@ -300,8 +308,11 @@ const styles = {
     borderStyle: 'solid',
     borderColor: 'black',
   },
+  dropdownSelect: {
+    control: (styles) => ({...styles, width: 140 * getDimRatio().X})
+  },
   footer: {
-    height: 60,
+    height: 60 * getDimRatio().Y,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -312,8 +323,9 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     background: '#F51111',
-    height: 30,
-    width: 60,
+    fontSize: 18 * getDimRatio().X,
+    height: 40 * getDimRatio().Y,
+    width: 70 * getDimRatio().X,
     color: 'white',
     fontWeight: 'bold',
     borderWidth: 0,
@@ -325,8 +337,9 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     background: '#32A3BC',
-    height: 30,
-    width: 60,
+    fontSize: 18 * getDimRatio().X,
+    height: 40 * getDimRatio().Y,
+    width: 70 * getDimRatio().X,
     color: 'white',
     fontWeight: 'bold',
     cursor: 'pointer',
@@ -342,7 +355,7 @@ const styles = {
     borderRadius: 20,
     transform: 'translate(-50%, -50%)'
   },
-}
+})
 
 export default TaskDescription
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect} from 'react'
-import 'react-dropdown/style.css'
 import { DragDropContext } from 'react-beautiful-dnd'
 
 import HabitsTab from './HabitsTab'

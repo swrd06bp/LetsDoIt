@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Dropdown from 'react-dropdown'
-import 'react-dropdown/style.css'
+import Select from 'react-select'
 import { DragDropContext } from 'react-beautiful-dnd'
 
 import TitleElem from '../../components/CommonDescription/TitleElem'
@@ -9,7 +8,7 @@ import TaskList from '../../components/TaskList'
 import ListButton from '../../components/ListButton'
 import GoalShape from '../../components/Goal/GoalShape'
 import Api from '../../app/Api'
-import { getDimScreen, getDimRatio } from '../../app/DynamicSizing'
+import { getDimScreen, getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 import { sortProjectTasks} from '../../app/utils'
 
 
@@ -95,14 +94,18 @@ function CharacteristicsTab (props) {
         </div>
 
        {props.goals && (
-       <div style={styles().linkContainer}>
         <div style={styles().checkboxContainer}>
         Link to:
-        </div>
         <GoalShape colorCode={goalColorCode} />
-        <Dropdown options={goalsOptions} value={goalId} onChange={({value}) => {setGoalId(value)}} placeholder="Goal" />
+        <Select 
+          styles={styles().dropdownSelect}
+          options={goalsOptions} 
+          selectValue={goalId} 
+          onChange={({value}) => {setGoalId(value)}} 
+          placeholder="Goal"
+        />
+        </div>
         
-       </div>
      )}
 
       <div>
@@ -211,7 +214,7 @@ const styles = () => ({
     height: '90%',
   },
   title: {
-    fontSize: 25 * getDimRatio().X,
+    fontSize: 25 * getDimRatioText().X,
     marginLeft: 10,
     fontWeight: 'normal',
   },
@@ -232,10 +235,11 @@ const styles = () => ({
   noteTitle: {
     marginLeft: 10* getDimRatio().X,
     marginRight: 10 * getDimRatio().X,
-    fontSize: 20 * getDimRatio().X,
+    fontSize: 23 * getDimRatioText().X,
     color: '#32A3BC',
   },
   noteText: {
+    fontSize: 16 * getDimRatioText().X,
     width: '90%',
     height: 120 * getDimRatio().Y,
   },
@@ -246,14 +250,7 @@ const styles = () => ({
   },
   checkboxContainer: {
     marginLeft: 10,
-    fontSize: 14 * getDimRatio().X,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  linkContainer: {
-    marginLeft: 10,
-    marginTop: 10,
+    fontSize: 18 * getDimRatioText().X,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -266,6 +263,9 @@ const styles = () => ({
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: 'black',
+  },
+  dropdownSelect: {
+    control: (styles) => ({...styles, width: 140 * getDimRatio().X})
   },
   footer: {
     height: '10%',
@@ -283,7 +283,7 @@ const styles = () => ({
     background: '#F51111',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,
-    fontSize: 15 * getDimRatio().X,
+    fontSize: 15 * getDimRatioText().X,
     cursor: 'pointer',
     color: 'white',
     fontWeight: 'bold',
@@ -298,7 +298,7 @@ const styles = () => ({
     background: '#32A3BC',
     height: 30* getDimRatio().Y,
     width: 60 * getDimRatio().X,
-    fontSize: 15 * getDimRatio().X,
+    fontSize: 15 * getDimRatioText().X,
     cursor: 'pointer',
     color: 'white',
     fontWeight: 'bold',

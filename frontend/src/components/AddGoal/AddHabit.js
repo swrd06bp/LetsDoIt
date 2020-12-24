@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import Dropdown from 'react-dropdown'
-import 'react-dropdown/style.css'
 import Select from 'react-select'
 import { getDimRatio } from '../../app/DynamicSizing'
 
@@ -83,13 +81,15 @@ export default function AddHabit (props) {
 
           <div style={styles().frequencyContainer}>
             <div style={styles().titleFrequency}>Set the frequency of that new habit: </div>
-              <Dropdown
+              <Select
+                styles={{control: (styles) => ({...styles, width: 200 * getDimRatio().X})}}
                 options={allFrequencyOptions} 
                 onChange={onOptionChange}
               />
               {frequecyOption === 1 && (
                 <div style={styles().weeklySelect}>
-                <Dropdown
+                <Select
+                  styles={{control: (styles) => ({...styles, width: 250 * getDimRatio().X})}}
                   options={weeklyFrequencyOptions}
                   onChange={onOptionWeeklyChange}
                 />
@@ -97,7 +97,8 @@ export default function AddHabit (props) {
               )}
               {frequecyOption === 2 && (
               <div style={styles().monthlySelect}>
-                <Dropdown 
+                <Select 
+                  styles={{control: (styles) => ({...styles, width: 250 * getDimRatio().X})}}
                   options={monthlyFrequencyOptions}
                   onChange={onOptionMonthlyChange}
                 />
