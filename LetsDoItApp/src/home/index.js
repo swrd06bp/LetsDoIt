@@ -29,31 +29,7 @@ function homeAction(routeName) {
   })
 }
 
-function CheckYourself (props) {
-  const [showLink, setShowLink] = useState(false)  
-  const api = new Api()
 
-  useEffect(() => {
-    getHappiness() 
-  }, [])
-
-  const getHappiness = async () => {
-    const resp = await api.getHappiness(1)
-    const json = await resp.json()
-    if (!json.length || new Date(json[0].createdAt) < todayDate()) 
-      setShowLink(true) 
-  }
-
-  if (!showLink) return null
-
-  return (
-    <TouchableOpacity
-      onPress={() => {props.navigation.navigate('HappinessInput')}}
-    >
-      <Text style={styles.headerTitle}>Check yourself</Text>
-    </TouchableOpacity>
-  )
-}
 
 export default function Home (props) {
   const [task, setTask] = useState(null)
@@ -78,7 +54,6 @@ export default function Home (props) {
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
-      headerTitle: () => <CheckYourself navigation={props.navigation} />,
       headerLeft: () => (
 	<Image source={require('../../static/logo.png')} style={styles.companyLogo} />
       ),
@@ -113,6 +88,7 @@ export default function Home (props) {
       <View style={styles.todayTaskList}>
       {isWeekly && (
         <WeeklyTaskList 
+          navigation={props.navigation}
           task={task}
           projects={allProjects}
           goals={allGoals}

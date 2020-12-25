@@ -9,12 +9,14 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native'
+import moment from 'moment'
 import { DraxProvider, DraxView } from 'react-native-drax'
 import Api from '../Api.js'
 import AddTask from '../components/AddElem/AddTask'
 import AddButton from '../components/AddButton'
 import FocusButton from '../components/FocusButton'
 import TaskDescription from '../components/TaskDescription'
+import HappinessTask from '../components/Task/HappinessTask'
 import SimpleTask from '../components/Task/SimpleTask'
 import RoutineTask from '../components/Task/RoutineTask'
 
@@ -116,8 +118,19 @@ function TodayTaskList (props) {
 
     return allRoutineTasks
   }
+
+  const getHappiness = async () => {
+    const resp = await api.getHappiness({currentYear: parseInt(moment(new Date()).format('YYYY')), limit: 1})
+    const json = await resp.json()
+    if (!json.length || new Date(json[0].dueDate) < todayDate()) 
+      return [{id: 'happiness', type: 'happiness'}]
+    else 
+      return []
+  }
   
   const getAllItems = async () => {
+    const happinessTask = await getHappiness()
+
     // get all routines
     const allRoutineTasks = await getAllRoutines()
       
@@ -132,7 +145,7 @@ function TodayTaskList (props) {
 
 
     setItemsUnifinished(unfinishedTasks)
-    setItemsToday([...allRoutineTasks, ...todayTasks])
+    setItemsToday([...happinessTask, ...allRoutineTasks, ...todayTasks])
     setItemsTomorrow(tomorrowTasks)
     setItemsUpcoming(upcomingTasks)
     setItemsSomeday(somedayTasks)
@@ -299,7 +312,7 @@ function TodayTaskList (props) {
                         />
                         </TouchableOpacity>
                       )
-                    else if (item.type === 'routine')
+                    if (item.type === 'routine')
                       return (
                         <RoutineTask
                           item={item}
@@ -307,7 +320,14 @@ function TodayTaskList (props) {
                           onUpdate={getAllItems}
                         />
                       )
-
+                    else if (item.type === 'happiness')
+                      return (
+                        <HappinessTask
+                          navigation={props.navigation}
+                          onDescribe={() => {}}
+                          onUpdate={getAllItems}
+                        />
+                      )
                   }}
                   longPressDelay={1000}
                   animateSnapback={false}

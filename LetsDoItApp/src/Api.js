@@ -67,8 +67,8 @@ class Api {
     return await this.put(url, body)
   }
 
-  async getHappiness (limit) {
-    const url = this.baseUrl + `/happiness?limit=${limit}`
+  async getHappiness ({currentYear, limit}) {
+    const url = this.baseUrl + `/happiness?year=${currentYear}&limit=${limit}`
     return await this.get(url)
   }
   
