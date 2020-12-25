@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const userController = require('./controllers/userController')
+const notificationsController = require('./controllers/notificationsController')
 const happinessController = require('./controllers/happinessController')
 const focusController = require('./controllers/focusController')
 const taskController = require('./controllers/taskController')
@@ -34,6 +35,10 @@ router.get('/photo', photoController.photoGet)
 router.get('/user', userController.userGet)
 router.put('/user', userController.userPut)
 router.put('/newpassword', userController.userChangePassword)
+
+// get token for notifications
+router.get('/notifications', notificationsController.notificationsGet)
+router.post('/notifications', notificationsController.notificationsPost)
 
 // happiness
 router.get('/happiness', happinessController.happinessGet)

@@ -17,6 +17,8 @@ function TaskDescription (props) {
   const [content, setContent] = useState(props.describeElem.task.content)
   const [note, setNote] = useState(props.describeElem.task.note)
   const [dueDate, setDueDate] = useState(props.describeElem.task.dueDate)
+  const [isNotification, setIsNotification] = useState(props.describeElem.task.isNotification)
+  const [hourNotif, setHourNotif] = useState(new Date(props.describeElem.task.dueDate).getHours())
   const [doneAt, setDoneAt] = useState(props.describeElem.task.doneAt)
   const [projectId, setProjectId] = useState(props.describeElem.task.projectId)
   const [goalId, setGoalId] = useState(props.describeElem.task.goalId)
@@ -47,7 +49,7 @@ function TaskDescription (props) {
       mixpanel.track('Task Description - save')
     await api.updateTask(
       props.describeElem.task.id, 
-      {content, dueDate, note, projectId, goalId, list, doneAt}
+      {content, dueDate, note, projectId, goalId, list, doneAt, isNotification}
     )
     props.onDescribe({task: null, project: props.describeElem.project, goal: props.describeElem.goal})
   }
@@ -122,6 +124,48 @@ function TaskDescription (props) {
             </div>
             )}
           </div>
+
+        {dueDate && (
+          <div style={styles().checkboxContainer}>
+          <div>
+            Notifications
+            <input
+              type='checkbox'
+              checked={isNotification}
+              onChange={() => {
+                if (mixpanel.config.token)
+                  mixpanel.track('Task Description - Checkbox notifications', {isNotification})
+                if (isNotification) 
+                  setIsNotification(false)
+                else
+                  setIsNotification(true)
+              }}
+            />
+            </div>
+            {isNotification && (
+            <div style={styles().checkboxContainer}>
+            hour 
+            <input 
+              style={{width: 40}}
+              type='number' 
+              value={hourNotif} 
+              min={0}
+              max={23}
+              onChange={(event) => {
+                if (mixpanel.config.token)
+                  mixpanel.track('Task Description - NumberInput dueDate', {dueDate})
+                if (event.target.value && event.target.value >= 0 && event.target.value < 24) {
+                  setHourNotif(event.target.value)
+                  const newDueDate = new Date(dueDate)
+                  newDueDate.setHours(parseInt(event.target.value))
+                  setDueDate(newDueDate)
+                }
+              }}
+            />
+            </div>
+            )}
+          </div>
+        )}
         </div>
         
         <div>
