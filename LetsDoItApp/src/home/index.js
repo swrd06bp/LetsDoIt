@@ -14,6 +14,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu'
+import messaging from '@react-native-firebase/messaging'
 
 import TodayTaskList from './TodayTaskList'
 import WeeklyTaskList from './WeeklyTaskList'
@@ -40,8 +41,41 @@ export default function Home (props) {
 
   useEffect(() => {
     getData()
+    checkPermission()
   }, [])
 
+  const checkPermission = async () => {
+    const enabled = await messaging().hasPermission()
+    // If Premission granted proceed towards token fetch
+    if (enabled) {
+      getToken()
+    } else {
+      // If permission hasn’t been granted to our app, request user in requestPermission method. 
+      requestPermission()
+    }
+  }
+
+  const getToken = async () => {
+    const fcmToken = await messaging().getToken()
+    const resp = await api.getNotifications()
+    const json = await resp.json()
+
+    if (!json.map(x => x.fcmToken).includes(fcmToken))
+       await api.postNotifications({fcmToken})
+
+    return fcmToken
+  }
+
+  const requestPermission = async () => {
+    try {
+      await messaging().requestPermission()
+      // User has authorised
+      getToken();
+    } catch (error) {
+      // User has rejected permissions
+      console.log('permission rejected');
+    }
+  }
 
   const getData = async () => {
     const respGoals = await api.getGoals()

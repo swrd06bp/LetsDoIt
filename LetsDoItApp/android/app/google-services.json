@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "774655857613",
+    "project_id": "letsdoit-593a8",
+    "storage_bucket": "letsdoit-593a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774655857613:android:b21bd7264e0d881554ea84",
+        "android_client_info": {
+          "package_name": "com.letsdoitapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "774655857613-d7gg387p8haosfiarcfcedkk8rekqo66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqq3g9b0Np8Wc87dpb6OyswXW-l_mKMdI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "774655857613-d7gg387p8haosfiarcfcedkk8rekqo66.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

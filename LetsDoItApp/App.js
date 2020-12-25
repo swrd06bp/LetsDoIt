@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text, StyleSheet, Platform, TouchableOpacity } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { MenuProvider } from 'react-native-popup-menu'
+
 
 import Home from './src/home'
 import LandingPage from './src/landing'
@@ -13,11 +14,14 @@ import DayFocus from './src/dayfocus'
 const Stack = createStackNavigator()
 
 
+
 const App: () => React$Node = () => {
   // change fontFamily
   Text.defaultProps = Text.defaultProps || {}
   if (Platform.OS !== 'ios') 
     Text.defaultProps.style =  { fontFamily: 'muli_regular' }
+
+ 
 
   return (
     <MenuProvider>
