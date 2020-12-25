@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Navbar, Nav, NavDropdown, } from 'react-bootstrap'
 import { useMixpanel } from 'react-mixpanel-browser'
 import moment from 'moment'
@@ -8,22 +8,7 @@ import { updateSocketElems, removeSocketListener } from '../app/socket'
 import Api from './Api'
 
 function TopNavigation() {
-  const [showLink, setShowLink] = useState(false)
   const mixpanel = useMixpanel()
-
-  useEffect(() => {
-    updateSocketElems('happiness', (err, data) => getHappiness())
-    getHappiness() 
-    return () => removeSocketListener('happiness')
-  }, [])
-
-  const getHappiness = async () => {
-    const api = new Api()
-    const resp = await api.getHappiness({currentYear: parseInt(moment(new Date()).format('YYYY')), limit: 1})
-    const json = await resp.json()
-    if (!json.length || new Date(json[0].dueDate) < todayDate()) 
-      setShowLink(true) 
-  }
 
   const clickLogout = () => {
     if (mixpanel.config.token)
@@ -48,14 +33,6 @@ function TopNavigation() {
         if (mixpanel.config.token)
           mixpanel.track('Top navigation - Go to logo icon home')
       }}><img src='/logo.png' style={styles.logoImage} alt='' /></Navbar.Brand>
-      {showLink && ( 
-        <Navbar.Brand
-          href={'/happinesscreate/' + new Date().toJSON()}
-          style={styles.linkHappiness}
-          onClick={() => {
-            if (mixpanel.config.token)
-              mixpanel.track('Top navigation - Check yourself')
-        }}>Check yourself</Navbar.Brand>)} 
         <Nav className="sm-2" align="right">
           <Nav.Item>
             <Nav.Link href='/' onClick={() => {

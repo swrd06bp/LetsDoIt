@@ -16,7 +16,10 @@ import {
   decomposeTasksToday,
   generateRoutineTask,
 } from '../../app/utils'
-import { updateSocketElems, removeSocketListener } from '../../app/socket'
+import { 
+  updateSocketElems,
+  removeSocketListener 
+} from '../../app/socket'
 
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -99,8 +102,21 @@ function TodayTaskList (props) {
 
     return allRoutineTasks
   }
+  
+  const getHappiness = async () => {
+    const api = new Api()
+    const resp = await api.getHappiness({currentYear: parseInt(moment(new Date()).format('YYYY')), limit: 1})
+    const json = await resp.json()
+    if (!json.length || new Date(json[0].dueDate) < todayDate()) 
+      return [{id: 'happiness', type: 'happiness'}]
+    else 
+      return []
+
+  }
 
   const getAllItems = async () => {
+
+    const happinessTask = await getHappiness()
     // get all routines
     const allRoutineTasks = await getAllRoutines()
       
@@ -115,7 +131,11 @@ function TodayTaskList (props) {
 
 
     setItemsUnifinished(unfinishedTasks)
-    setItemsToday(sortTasks([...allRoutineTasks, ...todayTasks]))
+    setItemsToday(sortTasks([
+      ...happinessTask,
+      ...allRoutineTasks,
+      ...todayTasks
+    ]))
     setItemsTomorrow(tomorrowTasks)
     setItemsUpcoming(upcomingTasks)
     setItemsSomeday(somedayTasks)
@@ -125,11 +145,13 @@ function TodayTaskList (props) {
   useEffect(() => {
     updateSocketElems('tasks', (err, data) => getAllItems())
     updateSocketElems('routines', (err, data) => getAllItems())
+    updateSocketElems('happiness', (err, data) => getHappiness())
     getAllItems() 
     return () => {
       removeSocketListener('tasks')
       removeSocketListener('routines')
-    }
+      removeSocketListener('happiness')
+}
   },[props.task]) 
 
 

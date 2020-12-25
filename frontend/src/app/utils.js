@@ -38,6 +38,7 @@ const sortTasks = tasks => {
   sortedTasks.sort((a, b) => {return(a.doneAt > b.doneAt)})
   sortedTasks.sort((a, b) => {return(a.doneAt && !b.doneAt)})
   sortedTasks.sort((a, b) => {return(a.type === 'task' && b.type === 'routine')})
+  sortedTasks.sort((a, b) => {return(a.type === 'routine' && b.type === 'happiness')})
   return sortedTasks
 }
 
