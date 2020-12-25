@@ -45,6 +45,18 @@ class Api {
     return await this.get(url)
   }
 
+  async getNotifications () {
+    const url = this.baseUrl + `/notifications`
+    return await this.get(url)
+  }
+  
+  async postNotifications ({fcmToken}) {
+    const url = this.baseUrl + '/notifications'
+    const body = {fcmToken}
+    return await this.post(url, body)
+  }
+  
+
   async getRandomPhoto() {
     const url = this.baseUrl + '/photo'
     return await this.get(url)
