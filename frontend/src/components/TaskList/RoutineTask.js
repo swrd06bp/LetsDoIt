@@ -81,7 +81,7 @@ function RoutineTask (props) {
 
   const filterGoal = props.goals.filter(x => (x._id === props.item.goalId))
 
-  const colorCode = filterGoal && filterGoal.length ? filterGoal[0].colorCode : null
+  const goal = filterGoal && filterGoal.length ? filterGoal[0] : null
   
 
   return (
@@ -95,7 +95,7 @@ function RoutineTask (props) {
         onUpdate={props.onUpdate}
       />
       <div style={styles().frontContainer}>
-        <GoalShape colorCode={colorCode}/>
+        <GoalShape goal={goal}/>
         <div style={styles().titleContainer}>{props.item.content}</div>
       </div>
       <div style={styles().buttonContainer}>
