@@ -28,11 +28,11 @@ function SimpleTask (props) {
   }
 
   
-  const  projectColorCode = props.projects.filter(x => x._id === props.item.projectId).length
-    ? props.projects.filter(x => x._id === props.item.projectId)[0].colorCode : null
+  const  project = props.projects.filter(x => x._id === props.item.projectId).length
+    ? props.projects.filter(x => x._id === props.item.projectId)[0] : null
   
-  const  goalColorCode = props.goals.filter(x => x._id === props.item.goalId).length
-    ? props.goals.filter(x => x._id === props.item.goalId)[0].colorCode : null
+  const  goal = props.goals.filter(x => x._id === props.item.goalId).length
+    ? props.goals.filter(x => x._id === props.item.goalId)[0] : null
 
 
   return (
@@ -82,8 +82,8 @@ function SimpleTask (props) {
             />
           )}
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <ProjectShape colorCode={projectColorCode} />
-            <GoalShape colorCode={goalColorCode} />
+            <ProjectShape project={project} />
+            <GoalShape goal={goal} />
           </div>
         </div>
       

@@ -30,7 +30,7 @@ function Project (props) {
     >
       <div style={styles(scale).firstPartContainer}>
         <div style={styles(scale).frontContainer}>
-          <ProjectShape colorCode={props.item.colorCode} />
+          <ProjectShape project={props.item} />
         </div>
         {props.item.content}
       </div>

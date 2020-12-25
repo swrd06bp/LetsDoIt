@@ -30,7 +30,7 @@ function Goal (props) {
     >
       <div style={styles(scale).firstPartContainer}>
         <div style={styles(scale).frontContainer}>
-          <GoalShape colorCode={props.item.colorCode} />
+          <GoalShape goal={props.item} />
         </div>
         {props.item.content}
       </div>
