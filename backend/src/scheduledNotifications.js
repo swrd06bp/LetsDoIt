@@ -41,6 +41,7 @@ async function getNotifTasks () {
     table: 'tasks',
     query: { 
       isNotification: { '$eq': true },
+      doneAt: null,
       dueDate: {
         '$gte': new Date().toJSON(),
         '$lt': tomorrowDate.toJSON(), 
