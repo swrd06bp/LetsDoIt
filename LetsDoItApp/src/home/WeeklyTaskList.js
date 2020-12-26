@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { 
+  AppState,
   View,
   Text,
   SectionList,
@@ -62,9 +63,13 @@ function WeeklyTaskList (props) {
 
 
   useEffect(() => {
+    AppState.addEventListener("change", getAllItems)
     Keyboard.addListener('keyboardDidHide', () => setIsAddingTask(false))
     getAllItems() 
-    return () => Keyboard.removeAllListeners('keyboardDidHide')
+    return () => {
+      AppState.addEventListener("change", getAllItems)
+      Keyboard.removeAllListeners('keyboardDidHide')
+    }
   },[props.task]) 
   
   const getAllItems = async () => {

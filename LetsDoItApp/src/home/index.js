@@ -57,6 +57,7 @@ export default function Home (props) {
 
   const getToken = async () => {
     const fcmToken = await messaging().getToken()
+    console.log('token', fcmToken)
     const resp = await api.getNotifications()
     const json = await resp.json()
 

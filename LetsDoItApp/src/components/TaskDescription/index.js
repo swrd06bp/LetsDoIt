@@ -24,12 +24,15 @@ function TaskDescription (props) {
   const [note, setNote] = useState(props.task.note)
   const [dueDate, setDueDate] = useState(props.task.dueDate)
   const [doneAt, setDoneAt] = useState(props.task.doneAt)
+  const [isNotification, setIsNotification] = useState(props.task.isNotification)
+  const [hourNotif, setHourNotif] = useState(new Date(props.task.dueDate).getHours())
   const [list, setList] = useState(props.task.list)
   const [goalId, setGoalId] = useState(props.task.goalId ? props.task.goalId : 0)
   const [projectId, setProjectId] = useState(props.task.projectId ? props.task.projectId : 0)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const api = new Api()
 
+ 
   const onSave = async () => {
     await api.updateTask(props.task._id, {
       content,
@@ -37,6 +40,7 @@ function TaskDescription (props) {
        note, 
        list, 
        doneAt,
+       isNotification,
        goalId: goalId === 0 ? null : goalId,
        projectId: projectId === 0 ? null : projectId,
      })
@@ -155,6 +159,39 @@ function TaskDescription (props) {
             </View>
           )}
         </View>
+        {dueDate && ( <View style={styles.dueContainer}>
+          <View style={styles.dueContainer}>
+            <Text>Notification</Text>
+            <CheckBox 
+              value={isNotification}
+              onChange={() => {
+              if (isNotification) 
+                setIsNotification(false)
+              else
+                setIsNotification(true)
+            }}/>
+          </View>
+          {isNotification && (
+            <View style={styles.dueContainer}>
+            <Text>Hour</Text>
+            <TextInput
+              style={styles.dueDate}
+              value={hourNotif.toString()}
+              onChangeText={(text) => {
+                if (text && parseInt(text) >= 0 && parseInt(text) < 24) {
+
+                  setHourNotif(text.replace(/[^0-9]/g, ''))
+                  const newDueDate = new Date(dueDate)
+                  newDueDate.setHours(parseInt(text))
+                  setDueDate(newDueDate)
+                }
+              }}
+            />
+             
+            
+            </View>
+          )}
+        </View>)}
         <View style={styles.dueContainer}>
           <View style={styles.dueContainer}>
             <Text>Mark as done</Text>
@@ -229,7 +266,7 @@ const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
     alignSelf: 'center',
-    height: 430,
+    height: 460,
     width: '80%',
     borderRadius: 10,
     backgroundColor: 'white',
