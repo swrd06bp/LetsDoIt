@@ -143,14 +143,16 @@ function TodayTaskList (props) {
 
 
   useEffect(() => {
+    window.addEventListener('focus', getAllItems)
     updateSocketElems('tasks', (err, data) => getAllItems())
     updateSocketElems('routines', (err, data) => getAllItems())
-    updateSocketElems('happiness', (err, data) => getHappiness())
+    updateSocketElems('happiness', (err, data) => getAllItems())
     getAllItems() 
     return () => {
       removeSocketListener('tasks')
       removeSocketListener('routines')
       removeSocketListener('happiness')
+      window.addEventListener('focus', getAllItems)
 }
   },[props.task]) 
 

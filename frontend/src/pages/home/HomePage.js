@@ -28,6 +28,8 @@ function HomePage() {
     getData() 
   }, [])
   
+
+
   const getData = async () => {
     const respGoals = await api.getGoals()
     const resultGoals = await respGoals.json()

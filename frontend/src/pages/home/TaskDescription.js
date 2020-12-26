@@ -31,14 +31,17 @@ function TaskDescription (props) {
   }, [])
 
 
+
   let projectsOptions = props.projects.map(x => ({value: x._id, label: x.content}))
   projectsOptions.unshift({value: null, label: 'none'})
-
-  const projectColorCode = props.projects.filter(x => x._id === projectId).length
-    ? props.projects.filter(x => x._id === projectId)[0].colorCode : null
   
-  const goalColorCode = props.goals.filter(x => x._id === goalId).length
-    ? props.goals.filter(x => x._id === goalId)[0].colorCode : null
+  console.log(projectId, projectsOptions)
+
+  const project = props.projects.filter(x => x._id === projectId).length
+    ? props.projects.filter(x => x._id === projectId)[0] : null
+  
+  const goal = props.goals.filter(x => x._id === goalId).length
+    ? props.goals.filter(x => x._id === goalId)[0] : null
 
 
   let goalsOptions = props.goals.map(x => ({value: x._id, label: x.content}))
@@ -209,7 +212,7 @@ function TaskDescription (props) {
           style={styles().dropdownContainer}
           title={projectsOptions.filter(x => x.value === projectId)[0].label}
         >
-          <ProjectShape colorCode={projectColorCode} />
+          <ProjectShape project={project} />
           <Select 
             styles={styles().dropdownSelect}
             options={projectsOptions}
@@ -226,7 +229,7 @@ function TaskDescription (props) {
           style={styles().dropdownContainer}
           title={goalsOptions.filter(x => x.value === goalId)[0].label}
         >
-          <GoalShape colorCode={goalColorCode} />
+          <GoalShape goal={goal} />
           <Select 
             options={goalsOptions}
             selectValue={goalId}

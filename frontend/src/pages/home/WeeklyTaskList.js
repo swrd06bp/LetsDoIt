@@ -116,8 +116,12 @@ function WeeklyTaskList (props) {
 
   useEffect(() => {
     getTasks() 
+    window.addEventListener('focus', getTasks)
     updateSocketElems('tasks', (err, data) => getTasks())
-    return () => removeSocketListener('tasks')
+    return () => {
+      removeSocketListener('tasks')
+      window.addEventListener('focus', getTasks)
+    }
   },[props.task, date]) 
 
   useEffect(() => {

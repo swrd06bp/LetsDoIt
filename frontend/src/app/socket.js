@@ -1,6 +1,6 @@
 import openSocket from 'socket.io-client'
 
-const host = "https://lets-do-it.me"
+const host = "https://api.lets-do-it.me"
 const baseUrl = host + ':4001'
 const socket = openSocket(baseUrl)
 
