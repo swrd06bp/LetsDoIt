@@ -9,3 +9,5 @@ build/*
 build
 *.lock
 *.DS_Store
+Podfile.lock
+yarn.lock
