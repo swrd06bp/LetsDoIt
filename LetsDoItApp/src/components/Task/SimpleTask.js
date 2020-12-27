@@ -51,23 +51,21 @@ function Task (props) {
           onValueChange={onCheckboxChange}
         />
         <View style={{flexGrow: 1, }} onClick={() => props.onDescribe(props.task ? null : props.item)}>
-        <Text style={{fontSize:14, textDecorationLine: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}}>{props.item.content}</Text>
+        <Text style={{textDecorationLine: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}}>{props.item.content}</Text>
         </View>
       </View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <ListButton list={props.item.list} onListChange={onListChange} />
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 2}}>
+          <View style={{...styles.text, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 2}}>
             <View style={{
               backgroundColor: projectColorCode, 
-              width: 15,
-              height: 15,
+              ...styles.shape,
               borderRadius: 20,
             }} />
             <View style={{
               backgroundColor: goalColorCode, 
-              width: 15,
-              height: 15,
+              ...styles.shape,
             }} />
           </View>
         </View>
@@ -91,6 +89,15 @@ const styles = EStyleSheet.create({
     width: '70%',
     left: '10rem',
   }, 
+  text: {
+    fontSize: '14rem', 
+  },
+  shape: {
+    width: '15rem',
+    height: '15rem',
+  },
+
+
 
 })
 

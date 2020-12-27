@@ -5,8 +5,8 @@ import {
   Vibration,
   Text, 
   TouchableOpacity,
-  StyleSheet
 } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 
 function HappinessTask (props) {
 
@@ -33,18 +33,18 @@ function HappinessTask (props) {
   
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   wrapper: {
     backgroundColor: 'white',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 37,
-    borderRadius: 40,
-    marginHorizontal: 5,
+    height: '37rem',
+    borderRadius: '40rem',
+    marginHorizontal: '5rem',
   },
   titleContainer: {
-    marginLeft: 20,
-    fontSize: 14,
+    marginLeft: '20rem',
+    fontSize: '14rem',
   },
   frontContainer: {
     flexDirection: 'row',
@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 5,
-    width: 130,
+    marginRight: '5rem',
+    width: '130rem',
     backgroundColor: 'lightgrey',
     borderRadius: 20,
   },
