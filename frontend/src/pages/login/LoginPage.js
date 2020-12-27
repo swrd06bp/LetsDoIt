@@ -6,18 +6,20 @@ import './LoginPage.css'
 import Api from '../../app/Api'
 
 function LoginPage() {
-  
+  const [isLoading, setIsLoading] = useState(false) 
   const [username, setUsername] = useState('')
   const [password, setPassowrd] = useState('')
   const [showError, setShowError] = useState(false)
   const mixpanel = useMixpanel()
   
   const handleSubmit = async () => {
+    setIsLoading(true)
     const isLogin = await new Api().login(username, password)
     if (mixpanel.config.token)
       mixpanel.track('Login Page - Submit Login', {isLogin})
     if (isLogin) window.location.assign('/')
     else setShowError(true)
+    setIsLoading(false)
   }
 
   
@@ -40,7 +42,15 @@ function LoginPage() {
           />
           <button onClick={() => {
             handleSubmit()
-          }}>login</button>
+          }}>
+            {isLoading && (<img 
+              alt={'loading'}
+              src="/loading.svg"
+              width="20" height="20"
+              frameBorder="0" 
+            />)}
+            <div>Login</div>
+          </button>
           <p class="message">Not registered? <a href="/signup" onClick={() => {
             if (mixpanel.config.token)
               mixpanel.track('Login Page - Redirect to signup page')

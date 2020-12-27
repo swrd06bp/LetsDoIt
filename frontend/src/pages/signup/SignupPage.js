@@ -8,6 +8,7 @@ import Api from '../../app/Api'
 
 function SignupPage() {
   
+  const [isLoading, setIsLoading] = useState(false) 
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassowrd] = useState('')
@@ -21,7 +22,9 @@ function SignupPage() {
   }, [])
   
   const handleSubmit = async () => {
+    setIsLoading(true)
     const isSignup = await new Api().signup(name, username, password, captchaToken)
+    setIsLoading(false)
     if (mixpanel.config.token)
       mixpanel.track('Signup Page - Submit signup', {isSignup: isSignup.status === 200})
     if (isSignup.status === 200) window.location.assign('/login')
@@ -53,7 +56,15 @@ function SignupPage() {
             onloadCallback={onLoadCallback}
             verifyCallback={setCaptchaToken}
           />
-          <button onClick={() => handleSubmit()}>signup</button>
+          <button onClick={() => handleSubmit()}>
+            {isLoading && (<img 
+              alt={'loading'}
+              src="/loading.svg"
+              width="20" height="20"
+              frameBorder="0" 
+            />)}
+            <div>signup</div>
+           </button>
           <p class="message">Already registered? <a href="/login">Sign In</a></p>
         </div>
       </div>
