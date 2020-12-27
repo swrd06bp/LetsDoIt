@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { Text, StyleSheet, Platform, TouchableOpacity } from 'react-native'
+import { Text, Platform, TouchableOpacity, Dimensions } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { MenuProvider } from 'react-native-popup-menu'
+import EStyleSheet from 'react-native-extended-stylesheet'
 
 
 import Home from './src/home'
@@ -16,6 +17,15 @@ const Stack = createStackNavigator()
 
 
 const App: () => React$Node = () => {
+
+  // apply rem for all absolute size
+  const { height, width } = Dimensions.get('window')
+  const rem = Math.max(height, width) / 690
+  EStyleSheet.build({
+    $rem: rem,
+  })
+
+
   // change fontFamily
   Text.defaultProps = Text.defaultProps || {}
   if (Platform.OS !== 'ios') 
@@ -73,12 +83,12 @@ const App: () => React$Node = () => {
   )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   title: {
     fontFamily: 'Barlow-Bold',
     fontWeight: 'bold',
-    fontSize: 16,
-    marginHorizontal: 10,
+    fontSize: '16rem',
+    marginHorizontal: '10rem',
 
   }
 })

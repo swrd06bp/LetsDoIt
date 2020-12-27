@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import EStyleSheet from 'react-native-extended-stylesheet'
+import { View, Text, TouchableOpacity } from 'react-native'
 
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 function ScoreBox(props) {
 
@@ -39,30 +40,30 @@ function Survey (props) {
 }
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   wrapper: {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
-    fontSize: 40,
-    marginBottom: 30,
+    fontSize: '40rem',
+    marginBottom: '30rem',
   },
   sliderContainer: {
     flexDirection: 'column-reverse',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    width: 150,
-    height: 450,
+    width: '150rem',
+    height: '450rem',
   },
   scoreContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
     height: '10%',
-    width: 150,
+    width: '150rem',
   }
 })
 

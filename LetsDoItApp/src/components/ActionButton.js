@@ -1,5 +1,6 @@
 import React from 'react'
-import { TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { TouchableOpacity, Text } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 
 function ActionButton (props) {
   return (
@@ -12,11 +13,11 @@ function ActionButton (props) {
 
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   button: {
     backgroundColor: '#32A3BC',
-    margin: 10,
-    borderRadius: 40,
+    margin: '10rem',
+    borderRadius: '40rem',
     alignItems: 'center',
     justifyContent: 'center',
 
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    margin: 10,
+    margin: '10rem',
   },
 
 })

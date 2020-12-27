@@ -225,7 +225,9 @@ function TaskDescription (props) {
                 containerStyle={styles.linkContainer}
                 style={styles.linkDropdown}
                 itemStyle={{
-                  justifyContent: 'flex-start'
+                  flex:1,
+                  justifyContent: 'flex-start',
+                  width: 40,
                 }}
                 dropDownStyle={styles.linkDropdown}
                 onChangeItem={({value}) => setProjectId(value)}

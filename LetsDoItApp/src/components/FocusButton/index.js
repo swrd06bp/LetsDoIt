@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
+import { TouchableOpacity, View, Text } from 'react-native'
 import moment from 'moment'
 
 import Api from '../../Api'
@@ -50,7 +51,7 @@ function FocusButton (props) {
 
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   button: {
     backgroundColor: '#32A3BC',
     margin: 2,
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: '16rem',
     margin: 5,
   },
 

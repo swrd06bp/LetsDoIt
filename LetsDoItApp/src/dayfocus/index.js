@@ -4,8 +4,8 @@ import {
   Text,
   TextInput,
   ImageBackground,
-  StyleSheet
 } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 import { CommonActions} from '@react-navigation/native'
 import moment from 'moment'
 
@@ -118,7 +118,7 @@ function DayFocus (props) {
   )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   coverImage: {
     width: '100%',
     height: '100%',
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: 'absolute',
-    bottom: 10,
+    bottom: '10rem',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -138,15 +138,15 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 26,
-    borderRadius: 10,
+    fontSize: '26rem',
+    borderRadius: '10rem',
     backgroundColor: 'white',
     opacity: 0.9,
   },
   inputText: {
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: '18rem',
     borderRadius: 10,
     backgroundColor: 'white',
     opacity: 0.7,

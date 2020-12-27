@@ -1,5 +1,6 @@
 import React from 'react'
-import { TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { TouchableOpacity, Text } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 
 
 function ListButton (props) {
@@ -14,16 +15,16 @@ function ListButton (props) {
 }
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   button: {
-    borderRadius: 60,
-    marginHorizontal: 10,
+    borderRadius: '60rem',
+    marginHorizontal: '10rem',
     elevation: 6,
-    width: 50,
+    width: '50rem',
     alignItems: 'center'
   },
   buttonText: {
-    fontSize: 10,
+    fontSize: '10rem',
     fontWeight: 'bold',
     color: 'white',
   },

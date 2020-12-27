@@ -6,8 +6,8 @@ import {
   Vibration,
   Image,
   TouchableOpacity,
-  StyleSheet,
 } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 import { DraxView } from 'react-native-drax'
 import CheckBox from '@react-native-community/checkbox'
 
@@ -76,20 +76,20 @@ function Task (props) {
   )  
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   wrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 37,
-    borderRadius: 40,
-    marginHorizontal: 5,
+    height: '37rem',
+    borderRadius: '40rem',
+    marginHorizontal: '5rem',
   },
   firstPart: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '80%',
-    left: 10,
+    width: '70%',
+    left: '10rem',
   }, 
 
 })

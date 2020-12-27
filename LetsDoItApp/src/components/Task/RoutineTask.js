@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import EStyleSheet from 'react-native-extended-stylesheet'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Modal from 'react-native-modal'
 import { 
@@ -7,7 +8,6 @@ import {
   Vibration,
   Text, 
   TouchableOpacity,
-  StyleSheet
 } from 'react-native'
 import ActionButton from '../ActionButton'
 import Api from '../../Api'
@@ -125,23 +125,23 @@ function RoutineTask (props) {
 
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   wrapper: {
     backgroundColor: 'white',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 37,
-    borderRadius: 40,
-    marginHorizontal: 5,
+    height: '37rem',
+    borderRadius: '40rem',
+    marginHorizontal: '5rem',
   },
   goalShape: {
-    width: 17,
-    height: 17,
-    marginLeft: 17,
+    width: '17rem',
+    height: '17rem',
+    marginLeft: '17rem',
   },
   titleContainer: {
-    marginLeft: 5,
-    fontSize: 14,
+    marginLeft: '5rem',
+    fontSize: '14rem',
   },
   frontContainer: {
     flexDirection: 'row',
@@ -160,44 +160,44 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 5,
-    width: 75,
+    marginRight: '5rem',
+    width: '75rem',
     backgroundColor: 'lightgrey',
-    borderRadius: 20,
+    borderRadius: '20rem',
   },
   failureWrapper: {
     position: 'absolute',
     alignSelf: 'center',
     borderRadius: 10,
-    height: 300,
-    width: 250,
+    height: '300rem',
+    width: '250rem',
     backgroundColor: 'white',
   },
   failureTitleText: {
-    fontSize: 18,
+    fontSize: '18rem',
     fontWeight: 'bold',
     color: '#32A3BC',
-    margin: 10,
+    margin: '10rem',
   },
   failureDate: {
-    marginHorizontal: 5,
+    marginHorizontal: '5rem',
     borderWidth: 1,
     borderColor: 'lightgrey',
   },
   failureNoteTitle: {
     fontWeight: 'bold',
-    marginHorizontal: 10,
+    marginHorizontal: '10rem',
   },
   failureNoteText: {
     borderColor: 'lightgrey',
     borderWidth: 1,
-    marginHorizontal: 10,
-    height: 100,
+    marginHorizontal: '10rem',
+    height: '100rem',
   },
   failurePostponeContainer: {
     flexDirection: 'row',
-    marginHorizontal: 10,
-    marginVertical: 15,
+    marginHorizontal: '10rem',
+    marginVertical: '15rem',
   },
 })
 

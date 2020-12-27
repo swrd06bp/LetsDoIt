@@ -3,7 +3,6 @@ import { CommonActions } from '@react-navigation/native'
 import {
   SafeAreaView,
   View,
-  StyleSheet,
   Image,
   Text,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu'
+import EStyleSheet from 'react-native-extended-stylesheet'
 import messaging from '@react-native-firebase/messaging'
 
 import TodayTaskList from './TodayTaskList'
@@ -145,7 +145,7 @@ export default function Home (props) {
   )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   headerTitle: {
     textAlign: 'center',
     textDecorationLine: 'underline',
@@ -162,13 +162,13 @@ const styles = StyleSheet.create({
     borderColor: 'lightblue',
   }, 
   companyLogo: {
-    height: 40,
-    width: 60,
-    marginLeft: 10,
+    height: '40rem',
+    width: '60rem',
+    marginLeft: '10rem',
   },
   optionImage: {
-    height: 25,
-    width: 25,
-    marginRight: 10,
+    height: '25rem',
+    width: '25rem',
+    marginRight: '10rem',
   },
 })

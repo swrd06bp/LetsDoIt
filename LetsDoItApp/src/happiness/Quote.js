@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 
 function Quote (props) {
   const [note, setNote] = useState(null)
@@ -25,7 +26,7 @@ function Quote (props) {
   )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
@@ -34,19 +35,19 @@ const styles = StyleSheet.create({
     height: window.innerHeight,
   },
   title: {
-    fontSize: 40,
-    marginBottom: 40,
+    fontSize: '40rem',
+    marginBottom: '40rem',
   },
   inputArea: {
-    width: 300,
-    height: 300,
+    width: '300rem',
+    height: '300rem',
     borderWidth: 0.5,
   },
   doneButton: {
-    marginTop: 30,
+    marginTop: '30rem',
     alignItems: 'center',
-    width: 100,
-    borderRadius: 10,
+    width: '100rem',
+    borderRadius: '10rem',
     borderStyle: 'solid',
     borderWidth: 1,
     backgroundColor: 'lightblue',

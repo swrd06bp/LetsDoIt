@@ -6,11 +6,12 @@ import {
   SectionList,
   Keyboard,
   Vibration,
-  StyleSheet,
   Image,
   TouchableOpacity,
 } from 'react-native'
 import { DraxProvider, DraxView } from 'react-native-drax'
+import EStyleSheet from 'react-native-extended-stylesheet'
+
 import Api from '../Api.js'
 import AddTask from '../components/AddElem/AddTask'
 import AddButton from '../components/AddButton'
@@ -392,7 +393,7 @@ function WeeklyTaskList (props) {
   )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   wrapper: {
     height: '100%'
   },
@@ -411,38 +412,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   sectionTitleColor: {
-    fontSize: 18,
+    fontSize: '18rem',
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: '10rem',
     color: '#32A3BC',
   },
   backgroundItem: {
-    height: 40,
+    height: '40rem',
     backgroundColor: '#E5E5E5'
   },
   backgroundReceivingItem: {
-    height: 40,
+    height: '40rem',
     backgroundColor: 'lightblue'
   },
   backgroundTitle: {
-    height: 50,
+    height: '50rem',
     flexDirection: 'column-reverse',
-    left: 10,
+    left: '10rem',
   },
   backgroundReceivingTitle: {
-    height: 50,
+    height: '50rem',
     flexDirection: 'column-reverse',
-    left: 10,
+    left: '10rem',
     backgroundColor: 'lightblue'
   },
   trashImage: {
-    height: 52,
-    width: 50
+    height: '52rem',
+    width: '50rem'
   },
   addButton: {
     position: 'absolute',
-    bottom: 30,
-    right: 30,
+    bottom: '30rem',
+    right: '30rem',
   },
 })
 
