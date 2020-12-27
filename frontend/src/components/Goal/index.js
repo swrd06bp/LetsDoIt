@@ -70,10 +70,10 @@ const styles = (scale) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 70 * scale * getDimRatio().X,
+    width: 90 * scale * getDimRatio().X,
   },
   dueDate: {
-    fontSize: 15 * scale *  getDimRatioText().X,
+    fontSize: 14 * scale *  getDimRatioText().X,
     borderRadius: 20,
     background: 'lightgrey'
   }
