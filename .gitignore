@@ -7,3 +7,5 @@ data/*
 *.swp
 build/*
 build
+*.lock
+*.DS_Store
