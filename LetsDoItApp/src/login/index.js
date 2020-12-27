@@ -6,8 +6,8 @@ import {
   View,
   Image,
   Text,
-  StyleSheet,
 } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 
 import LoginForm from './LoginForm'
 
@@ -31,6 +31,12 @@ function LoginPage(props) {
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.loginContainer}>
+      <View style={styles.logoContainer}>
+      <Image
+         resizeMode="contain" style={styles.logo}
+         source={require('../../static/logo.png')}
+        />
+        </View>
       <LoginForm
         _accessHomePage={_accessHomePage}
       />
@@ -44,19 +50,22 @@ LoginPage.navigationOptions = {
   },
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   loginContainer: {
     flex: 1,
     backgroundColor: '#ffffff',
   },
+  logoContainer: {
+    alignItems: 'center',
+  },
   textLogo: {
     color: '#5375ff',
-    fontSize: 32,
+    fontSize: '32rem',
     fontWeight: 'bold',
   },
   logo: {
-    width: 130,
-    height: 100,
+    width: '130rem',
+    height: '100rem',
   },
 })
 

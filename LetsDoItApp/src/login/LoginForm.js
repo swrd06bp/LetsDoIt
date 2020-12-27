@@ -6,8 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  StyleSheet,
 } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 
 import * as Animatable from 'react-native-animatable'
 
@@ -98,35 +98,35 @@ function LoginForm(props) {
 }
 
 // define your styles
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   container: {
-    padding: 20,
+    padding: '20rem',
   },
   input: {
-    height: 60,
-    marginBottom: 10,
-    padding: 10,
+    height: '60rem',
+    marginBottom: '10rem',
+    padding: '10rem',
     borderColor: '#d4d4d4',
     borderWidth: 1,
   },
   buttonContainer: {
     backgroundColor: '#5375ff',
-    paddingVertical: 15,
+    paddingVertical: '15rem',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    height: 60,
+    height: '60rem',
   },
   buttonText: {
     color: '#fff',
-    marginHorizontal: 20,
+    marginHorizontal: '20rem',
     textAlign: 'center',
     fontWeight: 'bold',
   },
   errorMessage: {
     color: 'red',
     alignSelf: 'center',
-    marginBottom: 10,
+    marginBottom: '10rem',
   },
 })
 
