@@ -5,10 +5,10 @@ import {
   Text,
   TextInput,
   Image,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 import DatePicker from 'react-native-datepicker'
 import CheckBox from '@react-native-community/checkbox'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -224,11 +224,12 @@ function TaskDescription (props) {
                 defaultValue={projectId}
                 containerStyle={styles.linkContainer}
                 style={styles.linkDropdown}
+                selectedLabelStyle={styles.activeLinkDropdown}
                 itemStyle={{
-                  flex:1,
                   justifyContent: 'flex-start',
-                  width: 40,
+                  
                 }}
+
                 dropDownStyle={styles.linkDropdown}
                 onChangeItem={({value}) => setProjectId(value)}
               />
@@ -236,6 +237,7 @@ function TaskDescription (props) {
                 items={goalOptions}
                 defaultValue={goalId}
                 containerStyle={styles.linkContainer}
+                selectedLabelStyle={styles.activeLinkDropdown}
                 style={styles.linkDropdown}
                 itemStyle={{
                   justifyContent: 'flex-start'
@@ -264,13 +266,13 @@ function TaskDescription (props) {
   )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   wrapper: {
     position: 'absolute',
     alignSelf: 'center',
-    height: 460,
+    height: '460rem',
     width: '80%',
-    borderRadius: 10,
+    borderRadius: '10rem',
     backgroundColor: 'white',
   },
   header: {
@@ -279,35 +281,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   trashContainer: {
-    height: 30,
-    width: 30,
+    height: '30rem',
+    width: '30rem',
     justifyContent: 'center',
     alignItems: 'center'
   },
   trashImage: {
-    height: 20,
-    width: 20,
+    height: '20rem',
+    width: '20rem',
   },
   descriptionText: {
-    fontSize: 18,
+    fontSize: '18rem',
     fontWeight: 'bold',
     color: '#32A3BC',
-    margin: 10,
+    margin: '10rem',
   },
   titleContainer: {
     backgroundColor: 'lightgrey',
-    height: 70,
+    height: '70rem',
     width: '90%',
-    marginVertical: 10,
+    marginVertical: '10rem',
     alignSelf: 'center',
   },
   titleText: {
     marginHorizontal: 5,
-    fontSize: 16,
+    fontSize: '16rem',
     fontWeight: 'bold',
   },
   dueContainer: {
-    marginHorizontal: 5,
+    marginHorizontal: '5rem',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -315,23 +317,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafafa',
   },
   linkContainer: {
-    marginLeft: 5,
-    height: 40,
-    width: 100,
+    marginLeft: '5rem',
+    height: '40rem',
+    width: '100rem',
   },
+  activeLinkDropdown: {
+    height: '20rem'  },
   dueDate: {
-    marginHorizontal: 5,
+    marginHorizontal: '5rem',
     borderWidth: 1,
     borderColor: 'lightgrey',
   },
   noteTitle: {
     fontWeight: 'bold',
-    marginHorizontal: 10,
+    marginHorizontal: '10rem',
   },
   noteText: {
     borderColor: 'lightgrey',
     borderWidth: 1,
-    marginHorizontal: 10,
+    marginHorizontal: '10rem',
   },
   
 
