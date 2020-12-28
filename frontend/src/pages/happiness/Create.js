@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useParams, useHistory } from "react-router-dom"
+import TopNavigation from '../../app/Navigation'
 
 import Survey from './Survey'
 import Quote from './Quote'
@@ -26,6 +27,7 @@ function HappinessCreatePage (props) {
 
   return (
     <div>
+      <TopNavigation />
       {!showQuote && (
         <Survey onSubmit={(value) => {
           setScore(value)
