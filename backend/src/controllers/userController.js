@@ -37,6 +37,8 @@ exports.userLogin = async (req, res) => {
 
 exports.userSignup = async (req, res) => {
   const { name, username, password, captchaToken } = req.body
+  
+  
   const headers = {
     "Content-Type": "application/x-www-form-urlencoded"
   }
@@ -48,12 +50,21 @@ exports.userSignup = async (req, res) => {
   const json = await resp.json()
   if (json.success && name && username && password) {
     const encryptedPass = encryption.encrypt(password)
+    
+    // check if user already exist
+    const user = await dbClient.getElems({table: 'users', query: {username}})
+    if (user.length) {
+      res.status(400).send('Username already exist')
+      return
+    }
+    
+    // create a user
     const userId = await dbClient.writeElem({table: 'users', elem: {name, username, encryptedPass}})
     res.status(200)
     res.json({'userId': userId})
     res.end()
   } else {
-    res.status(400)
+    res.status(401)
     res.end()
   }
 }

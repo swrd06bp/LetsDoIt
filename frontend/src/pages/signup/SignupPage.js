@@ -9,6 +9,7 @@ import Api from '../../app/Api'
 function SignupPage() {
   
   const [isLoading, setIsLoading] = useState(false) 
+  const [errorMess, setErrorMess] = useState(false)
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassowrd] = useState('')
@@ -23,11 +24,17 @@ function SignupPage() {
   
   const handleSubmit = async () => {
     setIsLoading(true)
+    setErrorMess(false)
     const isSignup = await new Api().signup(name, username, password, captchaToken)
     setIsLoading(false)
     if (mixpanel.config.token)
       mixpanel.track('Signup Page - Submit signup', {isSignup: isSignup.status === 200})
     if (isSignup.status === 200) window.location.assign('/login')
+    else if (isSignup.status === 400) {
+      setErrorMess(true)  
+      captchaRef.current.reset()
+    }
+    captchaRef.current.reset()
   }
 
 
@@ -40,13 +47,14 @@ function SignupPage() {
   
   return (
     <div className="signup-page">
+    {errorMess && (<div className='error'>This email is already used by somebody else..</div>)}
       <div className="form">
         <div className="signup-form">
-          <input type="text" placeholder="name" value={name} 
+          <input type="text" placeholder="First name" value={name} 
             onChange={(e) => setName(e.target.value)}/>
-          <input type="email" placeholder="email" value={username} 
+          <input type="email" placeholder="Email" value={username} 
             onChange={(e) => setUsername(e.target.value)}/>
-          <input type="password" placeholder="password" value={password} 
+          <input type="password" placeholder="Password" value={password} 
             onChange={(e) => setPassowrd(e.target.value)}/>
           <ReCaptcha
             ref={captchaRef}
