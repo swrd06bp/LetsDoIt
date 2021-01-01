@@ -3,13 +3,13 @@ import {
   View, 
   Keyboard,
   TextInput,
-  ScrollView,
   Text, 
   TouchableOpacity,
   Platform,
-  StyleSheet,
+  ScrollView,
   KeyboardAvoidingView,
 } from 'react-native'
+import EStyleSheet from 'react-native-extended-stylesheet'
 
 import {
   todayDate,
@@ -72,6 +72,8 @@ function AddTask (props) {
       scrolEnabled={false}
       keyboardShouldPersistTaps='always'
     >
+    <View style={styles.inputContainer}>
+      <View style={styles.firstPart}>
       <View style={styles.helpersContainer}>
         <Helper 
           content={'Today'}
@@ -100,7 +102,7 @@ function AddTask (props) {
         />
         )}
       </View>
-      <View style={styles.inputContainer}>
+      
          
         <TextInput 
           ref={inputRef}
@@ -112,13 +114,15 @@ function AddTask (props) {
           onSubmitEditing={onSubmit}
           onChangeText={(text) => setTaskInput(text)}
         />
+        </View>
+      
         <ActionButton onSubmit={onSubmit} text={'Add'}/>
       </View>
     </ScrollView>
   )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   ScrollView: {
     backgroundColor: 'white',
     flex: 1,
@@ -126,37 +130,47 @@ const styles = StyleSheet.create({
   helpersContainer: {
     flexDirection: 'row',
     marginVertical: 1,
+
   },
   helperWrapper: {
     backgroundColor: '#D8D8D8',
-    marginHorizontal: 2,
-    paddingHorizontal: 4,
+    marginHorizontal: '2rem',
+    paddingHorizontal: '4rem',
     borderRadius: 20,
   },
   helperActiveWrapper: {
     backgroundColor: '#A4A4A4',
-    marginHorizontal: 2,
-    paddingHorizontal: 4,
+    marginHorizontal: '2rem',
+    paddingHorizontal: '4rem',
     borderRadius: 20,
   },
   helperText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: '14rem',
+  },
+  firstPart: {
+    width: '80%'
   },
   inputContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
+
   },
   textInput: {
-    paddingHorizontal: 20,
-    height: 50,
-    fontSize: 16,
-    width: '80%',
+    paddingHorizontal: '20rem',
+    height: '50rem',
+    fontSize: '16rem',
+    width: '100%',
     borderWidth: 1,
+    height: '40rem',
+    marginBottom: '18rem',
     borderColor: 'lightblue',
-    borderRadius: 10,
+    borderRadius: '10rem',
+  },
+  buttonAdd: {
+    
   },
 })
 
