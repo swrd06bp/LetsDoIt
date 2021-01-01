@@ -84,7 +84,7 @@ function GoalsSection (props) {
 
               	style={styles.completedContainer}
               >
-                  <Text style={styles.completedText}>{props.completed ? 'Show completed' : 'Show pending'}</Text>
+                  <Text style={styles.completedText}>{showCompletedGoals ? 'Show pending' : 'Show completed'}</Text>
               </TouchableOpacity>
               </View>              
 
@@ -110,9 +110,12 @@ function GoalsSection (props) {
                 </View>
                 <TouchableOpacity 
                   style={styles.completedContainer}
-                  onPress={() => setShowCompletedProjects(!showCompletedProjects)}
+                  onPress={() => {
+                    const newCompleted = !showCompletedProjects
+                    setShowCompletedProjects(newCompleted)
+                  }}
                 >
-                  <Text style={styles.completedText}>{props.completed ? 'Show completed' : 'Show pending'}</Text>
+                  <Text style={styles.completedText}>{showCompletedProjects ? 'Show pending' : 'Show completed'}</Text>
                 </TouchableOpacity>
               </View>
       

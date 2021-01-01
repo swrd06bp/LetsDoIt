@@ -7,6 +7,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 
 
 import Home from './src/home'
+import HappinessPage from './src/HappinessPage'
 import GoalsSection from './src/GoalsSection'
 import LandingPage from './src/landing'
 import HappinessInput from './src/happiness/HappinessInput'
@@ -68,6 +69,17 @@ const App: () => React$Node = () => {
           <Stack.Screen
             name="GoalsSection"
             component={GoalsSection}
+            options={() => ({
+              headerTitle: () => null,
+              headerLeft: () => (
+                <Image source={require('./static/logo.png')} style={styles.companyLogo} />
+               ),
+            })} 
+          >
+          </Stack.Screen>
+          <Stack.Screen
+            name="HappinessPage"
+            component={HappinessPage}
             options={() => ({
               headerTitle: () => null,
               headerLeft: () => (

@@ -22,7 +22,7 @@ function Footer (props) {
     const goalsImage = props.current === 'goals' ? require('../../static/goal_active.png')
     	: require('../../static/goal.png')
 
-    const happinessImage = props.current === 'hapinness' ? require('../../static/happiness_active.png')
+    const happinessImage = props.current === 'happiness' ? require('../../static/happiness_active.png')
     	: require('../../static/happiness.png')
 
 	return (
