@@ -14,6 +14,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import { DraxProvider, DraxView } from 'react-native-drax'
 
 import Api from '../Api.js'
+import Footer from '../components/Footer'
 import AddTask from '../components/AddElem/AddTask'
 import AddButton from '../components/AddButton'
 import FocusButton from '../components/FocusButton'
@@ -378,6 +379,14 @@ function TodayTaskList (props) {
             />     
             </View>
               {!draggedTask && !isAddingTask && (
+                <View style={styles.navigation}>
+                  <Footer
+                    current={'tasks'} 
+                    navigation={props.navigation}
+                  />
+                </View>
+              )}
+              {!draggedTask && !isAddingTask && (
                 <AddButton 
                   style={styles.addButton}
                   onClick={() => setIsAddingTask(true)} 
@@ -441,7 +450,7 @@ const styles = EStyleSheet.create({
     height: '100%'
   },
   listContainer: {
-    height: '100%'
+    height: '90%'
   },
   listContainerDragged: {
     height: '88%'
@@ -449,6 +458,9 @@ const styles = EStyleSheet.create({
   addTaskContainer: {
     height: '22%',
     justifyContent: 'center',
+  },
+  navigation:{
+    height: '10%',
   },
   removeTaskContainer: {
     height: '12%',
@@ -485,7 +497,7 @@ const styles = EStyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: '30rem',
+    bottom: '90rem',
     right: '30rem',
   },
 })
