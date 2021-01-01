@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Text, Platform, TouchableOpacity, Dimensions } from 'react-native'
+import { Text, Platform, TouchableOpacity, Dimensions, Image } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { MenuProvider } from 'react-native-popup-menu'
@@ -7,6 +7,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 
 
 import Home from './src/home'
+import GoalsSection from './src/GoalsSection'
 import LandingPage from './src/landing'
 import HappinessInput from './src/happiness/HappinessInput'
 import LoginPage from './src/login'
@@ -57,7 +58,21 @@ const App: () => React$Node = () => {
             name="HomePage"
             component={Home}
             options={() => ({
-              headerLeft: () => <Text style={styles.title}>LetsDoIt</Text>,
+              headerTitle: () => null,
+              headerLeft: () => (
+                <Image source={require('./static/logo.png')} style={styles.companyLogo} />
+               ),
+            })} 
+          >
+          </Stack.Screen>
+          <Stack.Screen
+            name="GoalsSection"
+            component={GoalsSection}
+            options={() => ({
+              headerTitle: () => null,
+              headerLeft: () => (
+                <Image source={require('./static/logo.png')} style={styles.companyLogo} />
+               ),
             })} 
           >
           </Stack.Screen>
@@ -90,7 +105,12 @@ const styles = EStyleSheet.create({
     fontSize: '16rem',
     marginHorizontal: '10rem',
 
-  }
+  },
+  companyLogo: {
+    height: '40rem',
+    width: '60rem',
+    marginLeft: '10rem',
+  },
 })
 
 export default App

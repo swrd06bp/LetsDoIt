@@ -14,6 +14,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 
 import Api from '../Api.js'
 import AddTask from '../components/AddElem/AddTask'
+import Footer from '../components/Footer'
 import AddButton from '../components/AddButton'
 import FocusButton from '../components/FocusButton'
 import TaskDescription from '../components/TaskDescription'
@@ -343,6 +344,14 @@ function WeeklyTaskList (props) {
             />     
             </View>
               {!draggedTask && !isAddingTask && (
+                <View style={styles.navigation}>
+                  <Footer
+                    current={'tasks'} 
+                    navigation={props.navigation}
+                  />
+                </View>
+              )}
+              {!draggedTask && !isAddingTask && (
                 <AddButton 
                   style={styles.addButton}
                   onClick={() => setIsAddingTask(true)} 
@@ -398,10 +407,13 @@ const styles = EStyleSheet.create({
     height: '100%'
   },
   listContainer: {
-    height: '100%'
+    height: '92%'
   },
   listContainerDragged: {
     height: '88%'
+  },
+  navigation:{
+    height: '8%',
   },
   addTaskContainer: {
     height: '22%',
@@ -442,7 +454,7 @@ const styles = EStyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: '30rem',
+    bottom: '90rem',
     right: '30rem',
   },
 })

@@ -89,9 +89,6 @@ export default function Home (props) {
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
-      headerLeft: () => (
-	<Image source={require('../../static/logo.png')} style={styles.companyLogo} />
-      ),
       headerRight: () => (
         <View>
         <Menu>
@@ -161,11 +158,6 @@ const styles = EStyleSheet.create({
     borderWidth: 1,
     borderColor: 'lightblue',
   }, 
-  companyLogo: {
-    height: '40rem',
-    width: '60rem',
-    marginLeft: '10rem',
-  },
   optionImage: {
     height: '25rem',
     width: '25rem',

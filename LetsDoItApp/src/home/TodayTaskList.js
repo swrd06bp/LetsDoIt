@@ -450,7 +450,7 @@ const styles = EStyleSheet.create({
     height: '100%'
   },
   listContainer: {
-    height: '90%'
+    height: '92%'
   },
   listContainerDragged: {
     height: '88%'
@@ -460,7 +460,7 @@ const styles = EStyleSheet.create({
     justifyContent: 'center',
   },
   navigation:{
-    height: '10%',
+    height: '8%',
   },
   removeTaskContainer: {
     height: '12%',
