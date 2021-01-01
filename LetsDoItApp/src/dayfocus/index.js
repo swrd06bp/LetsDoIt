@@ -42,7 +42,8 @@ function DayFocus (props) {
       try {
         const resp = await api.getRandomPhoto()
         const json = await resp.json()
-        setPhoto(json) 
+        if (json.lenght)
+          setPhoto(json) 
       } catch (e) {
         console.log(e)
       }
@@ -97,7 +98,7 @@ function DayFocus (props) {
     {!photo && ( 
       <View style={styles.coverImage}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>What is your main focus for today?</Text>
+          <Text style={styles.headerText}>What is your main focus for {props.type === 'day' ? 'today' : 'this week'}?</Text>
         </View>
         <View style={styles.header}>
           <TextInput

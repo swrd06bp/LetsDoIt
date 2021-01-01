@@ -41,7 +41,7 @@ function FocusButton (props) {
           onPress={() => props.navigation.navigate('DayFocus', {type: props.type})}
           style={focusGoal ? styles.activeButton : styles.button}
         >
-          <Text style={styles.buttonText}>{focusGoal ? focusGoal : 'Set the focus of your day'}</Text>
+          <Text style={styles.buttonText}>{focusGoal ? focusGoal : (props.type === 'day' ? 'Set the focus of your day' : 'Set the focus of your week')}</Text>
         </TouchableOpacity>
       )}
     </View>
