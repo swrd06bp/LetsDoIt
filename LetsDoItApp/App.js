@@ -6,6 +6,7 @@ import { MenuProvider } from 'react-native-popup-menu'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 
+
 import Home from './src/home'
 import HappinessPage from './src/HappinessPage'
 import GoalsSection from './src/GoalsSection'
@@ -30,8 +31,7 @@ const App: () => React$Node = () => {
 
   // change fontFamily
   Text.defaultProps = Text.defaultProps || {}
-  if (Platform.OS !== 'ios') 
-    Text.defaultProps.style =  { fontFamily: 'muli_regular' }
+  Text.defaultProps.style =  { fontFamily: 'muli' }
 
  
 
