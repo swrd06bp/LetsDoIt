@@ -41,10 +41,11 @@ const styles = EStyleSheet.create({
     height: '37rem',
     borderRadius: '40rem',
     marginHorizontal: '5rem',
+    justifyContent: 'space-between',
   },
   titleContainer: {
     marginLeft: '20rem',
-    fontSize: '14rem',
+    fontSize: '13rem',
   },
   frontContainer: {
     flexDirection: 'row',
@@ -54,6 +55,7 @@ const styles = EStyleSheet.create({
   buttonText: {
     justifyContent: 'center',
     fontWeight: 'bold',
+    fontSize: '12rem',
   },
   buttonWrapper: {
     flexDirection: 'row',
@@ -64,7 +66,7 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: '5rem',
-    width: '130rem',
+    padding: '2rem',
     backgroundColor: 'lightgrey',
     borderRadius: 20,
   },

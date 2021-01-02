@@ -96,6 +96,7 @@ function TaskDescription (props) {
       style={styles.wrapper}
       onBackdropPress={() => props.onDescribe(null)}
       isVisible={props.isVisible}
+      hasBackdrop={true}
     >
       {showDatePicker && (
         <DateTimePicker
@@ -139,6 +140,8 @@ function TaskDescription (props) {
           <View style={styles.dueContainer}>
             <Text>Someday</Text>
             <CheckBox 
+              boxType={'square'}
+              style={styles.checkbox}
               value={dueDate ? false : true}
               onChange={() => {
               if (dueDate) 
@@ -162,7 +165,9 @@ function TaskDescription (props) {
         {dueDate && ( <View style={styles.dueContainer}>
           <View style={styles.dueContainer}>
             <Text>Notification</Text>
-            <CheckBox 
+            <CheckBox
+              boxType={'square'} 
+              style={styles.checkbox}
               value={isNotification}
               onChange={() => {
               if (isNotification) 
@@ -195,7 +200,9 @@ function TaskDescription (props) {
         <View style={styles.dueContainer}>
           <View style={styles.dueContainer}>
             <Text>Mark as done</Text>
-            <CheckBox 
+            <CheckBox
+              style={styles.checkbox}
+              boxType={'square'} 
               value={doneAt ? true : false}
               onChange={() => {
               if (doneAt) 
@@ -270,7 +277,7 @@ const styles = EStyleSheet.create({
   wrapper: {
     position: 'absolute',
     alignSelf: 'center',
-    height: '460rem',
+    height: '480rem',
     width: '80%',
     borderRadius: '10rem',
     backgroundColor: 'white',
@@ -310,6 +317,7 @@ const styles = EStyleSheet.create({
   },
   dueContainer: {
     marginHorizontal: '5rem',
+    height: '40rem',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -319,7 +327,7 @@ const styles = EStyleSheet.create({
   linkContainer: {
     marginLeft: '5rem',
     height: '40rem',
-    width: '100rem',
+    width: '120rem',
   },
   activeLinkDropdown: {
     height: '20rem'  },
@@ -336,8 +344,13 @@ const styles = EStyleSheet.create({
     borderColor: 'lightgrey',
     borderWidth: 1,
     marginHorizontal: '10rem',
+    height: '85rem',
   },
-  
+  checkbox: { 
+    height: '18rem', 
+    width: '18rem',
+    marginRight: '10rem', 
+  }  
 
 })
 

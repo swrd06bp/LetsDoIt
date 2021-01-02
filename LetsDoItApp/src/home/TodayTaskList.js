@@ -463,8 +463,7 @@ const styles = EStyleSheet.create({
     height: '88%'
   },
   navigation: {
-    height: '12%',
-    justifyContent: 'center',
+    height: '8%',
   },
   removeTaskContainer: {
     height: '12%',

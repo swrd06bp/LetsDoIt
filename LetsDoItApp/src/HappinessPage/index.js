@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import {
+  SafeAreaView, 
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import moment from 'moment'
 
@@ -69,7 +74,7 @@ function YearChart (props) {
 	const allMonths = moment.months()
 
 	return (
-       <View>
+       <SafeAreaView>
           <View style={styles.yearHeaderContainer}>
              <TouchableOpacity
                style={styles.yearButtonContainer}
@@ -94,7 +99,7 @@ function YearChart (props) {
               month={month}
             />
           ))}
-       </View>
+       </SafeAreaView>
 	)
 }
 
@@ -179,10 +184,11 @@ const styles = EStyleSheet.create({
    	textAlign: 'center'
    },
    dayContainer: {
-   	  borderColor: 'grey',
-      borderTopWidth: 0.5,
+   	  borderColor: 'black',
+      borderWidth: 0.3,
       height: '30rem',
       width: '10rem',
+
    },
  })
 

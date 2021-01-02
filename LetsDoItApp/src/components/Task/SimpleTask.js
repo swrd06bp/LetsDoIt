@@ -47,11 +47,16 @@ function Task (props) {
     >
       <View style={styles.firstPart}> 
         <CheckBox 
+          style={styles.checkbox}
+          boxType={'square'}
           value={props.item.doneAt ? true : false}
           onValueChange={onCheckboxChange}
         />
         <View style={{flexGrow: 1, }} onClick={() => props.onDescribe(props.task ? null : props.item)}>
-        <Text style={{textDecorationLine: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}}>{props.item.content}</Text>
+        <Text style={[
+          styles.titleText,
+          {textDecorationLine: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}
+          ]}>{props.item.content}</Text>
         </View>
       </View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -80,7 +85,7 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: '37rem',
-    borderRadius: '40rem',
+    borderRadius: 40,
     marginHorizontal: '5rem',
   },
   firstPart: {
@@ -89,13 +94,18 @@ const styles = EStyleSheet.create({
     width: '70%',
     left: '10rem',
   }, 
-  text: {
-    fontSize: '14rem', 
+  titleText: {
+    fontSize: '13rem', 
   },
   shape: {
     width: '15rem',
     height: '15rem',
   },
+  checkbox: { 
+    height: '18rem', 
+    width: '18rem',
+    marginRight: '10rem', 
+  }
 
 
 

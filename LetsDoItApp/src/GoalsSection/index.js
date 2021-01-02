@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import { SafeAreaView, View, Text, TouchableOpacity, FlatList } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import Footer from '../components/Footer'
@@ -57,7 +57,7 @@ function GoalsSection (props) {
   	}
 
 	return (
-	  <View style={styles.wrapper}>
+	  <SafeAreaView style={styles.wrapper}>
 	    <View style={styles.goalsWrapper}>
            <View style={styles.goalsSection}>
               <View style={styles.titleContainer}>
@@ -125,7 +125,7 @@ function GoalsSection (props) {
 		<View style={styles.navigation}>
 			<Footer current={'goals'} navigation={props.navigation}/>
 		</View>
-	  </View>
+	  </SafeAreaView>
 	)
 }
 
@@ -146,7 +146,7 @@ const styles = EStyleSheet.create({
   	height: '60%'
   },
   titleText: {
-    fontSize: '24rem',
+    fontSize: '20rem',
     fontWeight: 'bold',
     marginBottom: '10rem',
     color: '#32A3BC',
@@ -158,7 +158,7 @@ const styles = EStyleSheet.create({
   	height: '100%',
   },
   flatListContainer: {
-  	height: '70%',
+  	height: '60%',
   },
   completedContainer: {
   	height: '20%',
@@ -171,7 +171,7 @@ const styles = EStyleSheet.create({
   },
   itemWrapper: {
   	marginTop: '3rem',
-  	height: '55rem',
+  	height: '40rem',
   	borderWidth: 0.5,
   	borderRadius: 20,
   	alignItems: 'center',
@@ -199,15 +199,15 @@ const styles = EStyleSheet.create({
   	width: '15rem',
   },
   contentText: {
-    fontSize: '16rem',
+    fontSize: '14rem',
   },
   dueDateContainer: {
     backgroundColor: 'lightgrey',
-    borderRadius: '10rem',
+    borderRadius: 40,
     padding: '1rem',
   },
   dueDateText: {
-  	fontSize: '14rem',
+  	fontSize: '12rem',
   },
  })
 

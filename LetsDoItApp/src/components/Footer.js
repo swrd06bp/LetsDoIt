@@ -58,13 +58,14 @@ const styles = EStyleSheet.create({
   	justifyContent: 'space-around',
   },
   image: {
-  	height: '30rem',
-  	width: '30rem',
+    marginTop: '2rem',
+  	height: '26rem',
+  	width: '26rem',
   },
   navContainer: {
   	flex: 1,
   	height: '100%',
-  	borderWidth: 1,
+  	borderWidth: 0.5,
   	borderColor: 'black',
   	alignItems:'center',
   	justifyContent: 'center',

@@ -23,7 +23,8 @@ const App: () => React$Node = () => {
 
   // apply rem for all absolute size
   const { height, width } = Dimensions.get('window')
-  const rem = Math.max(height, width) / 690
+  const dimPhone = Platform.OS === 'ios' ? 900 : 690
+  const rem = Math.max(height, width) / dimPhone
   EStyleSheet.build({
     $rem: rem,
   })

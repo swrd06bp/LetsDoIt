@@ -133,6 +133,7 @@ const styles = EStyleSheet.create({
     height: '37rem',
     borderRadius: '40rem',
     marginHorizontal: '5rem',
+    justifyContent: 'space-between'
   },
   goalShape: {
     width: '17rem',
@@ -141,16 +142,17 @@ const styles = EStyleSheet.create({
   },
   titleContainer: {
     marginLeft: '5rem',
-    fontSize: '14rem',
+    fontSize: '13rem',
   },
   frontContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '60%',
+    width: '65%',
   },
   buttonText: {
     justifyContent: 'center',
     fontWeight: 'bold',
+    fontSize: '12rem',
   },
   buttonWrapper: {
     flexDirection: 'row',
@@ -161,7 +163,7 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: '5rem',
-    width: '75rem',
+    padding: '2rem',
     backgroundColor: 'lightgrey',
     borderRadius: '20rem',
   },
