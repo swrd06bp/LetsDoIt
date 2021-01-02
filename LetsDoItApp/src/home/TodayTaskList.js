@@ -62,15 +62,18 @@ function TodayTaskList (props) {
   const [itemsSomeday, setItemsSomeday] = useState([])
   const api = new Api()
 
-
   useEffect(() => {
-    Keyboard.addListener('keyboardDidHide', () => setIsAddingTask(false))
     AppState.addEventListener("change", getAllItems)
-    getAllItems() 
+    Keyboard.addListener('keyboardDidHide', () => setIsAddingTask(false))
     return () => {
+      Keyboard.removeListener('keyboardDidHide', () => setIsAddingTask(false))
       AppState.addEventListener("change", getAllItems)
-      Keyboard.removeAllListeners('keyboardDidHide')
     }
+  }, [])
+
+
+  useEffect(() => {  
+    getAllItems() 
   },[props.task]) 
   
   const getAllTasks = async () => {

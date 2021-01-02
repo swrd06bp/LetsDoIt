@@ -38,7 +38,10 @@ function AddTask (props) {
   const [chosenDateOption, setChosenDateOption] = useState('Today')
 
   useEffect(() => {
-    inputRef.current.focus()
+    if (Platform.OS === "ios") 
+      setTimeout(() => inputRef.current.focus(), 50)
+    else
+      inputRef.current.focus()
   }, [])
 
   const onSubmit = async (e) => {

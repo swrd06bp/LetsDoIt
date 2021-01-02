@@ -63,15 +63,17 @@ function WeeklyTaskList (props) {
   const [itemsSunday, setItemsSunday] = useState([])
   const api = new Api()
 
-
   useEffect(() => {
     AppState.addEventListener("change", getAllItems)
     Keyboard.addListener('keyboardDidHide', () => setIsAddingTask(false))
-    getAllItems() 
     return () => {
       AppState.addEventListener("change", getAllItems)
-      Keyboard.removeAllListeners('keyboardDidHide')
+      Keyboard.removeListener('keyboardDidHide',  () => setIsAddingTask(false))
     }
+  }, [])
+
+  useEffect(() => {
+    getAllItems() 
   },[props.task]) 
   
   const getAllItems = async () => {
