@@ -291,10 +291,12 @@ function TodayTaskList (props) {
         onDescribe={setDescribeTask}
         onUpdate={getAllItems}
       />)}
-      <View style={styles.wrapper}>
-	    <FocusButton type={'day'} navigation={props.navigation}/>
+      {!isAddingTask && (
+        <View style={styles.wrapper}>
+	    
+        <FocusButton type={'day'} navigation={props.navigation}/>
         <DraxProvider>
-          <View style={draggedTask || isAddingTask ? styles.listContainerDragged : styles.listContainer}>
+          <View style={draggedTask ? styles.listContainerDragged : styles.listContainer}>
             <SectionList
               refreshing={isRefreshing}
               onRefresh={() => {
@@ -381,7 +383,7 @@ function TodayTaskList (props) {
               }}
             />     
             </View>
-              {!draggedTask && !isAddingTask && (
+              {!draggedTask && (
                 <View style={styles.navigation}>
                   <Footer
                     current={'tasks'} 
@@ -389,29 +391,13 @@ function TodayTaskList (props) {
                   />
                 </View>
               )}
-              {!draggedTask && !isAddingTask && (
+              {!draggedTask && (
                 <AddButton 
                   style={styles.addButton}
                   onClick={() => setIsAddingTask(true)} 
                 />
               )}
-              {!draggedTask && isAddingTask && (
-                <View style={[styles.addTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
-                  <AddTask 
-                    onCreate={(task, chosenDateOption) => {
-                      if (chosenDateOption === 'Today')
-                        setItemsToday(sortTasks([task, ...itemsToday]))
-                      else if (chosenDateOption === 'Tomorrow')
-                        setItemsTomorrow(sortTasks([task, ...itemsTomorrow]))
-                      else if (chosenDateOption === 'Next Monday')
-                        setItemsUpcoming(sortTasks([task, ...itemsUpcoming]))
-                      else if (chosenDateOption === 'Someday')
-                        setItemsSomeday(sortTasks([task, ...itemsSomeday]))
-                    }}
-                    onUpdate={getAllItems}
-                  />
-                </View>
-              )}
+  
               {draggedTask && (
                 <View style={[styles.removeTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
                   <DraxView
@@ -444,6 +430,24 @@ function TodayTaskList (props) {
               )}
           </DraxProvider>
         </View>
+       )}
+       {isAddingTask && (
+        <View style={styles.addTaskContainer}>
+            <AddTask 
+              onCreate={(task, chosenDateOption) => {
+                if (chosenDateOption === 'Today')
+                  setItemsToday(sortTasks([task, ...itemsToday]))
+                else if (chosenDateOption === 'Tomorrow')
+                  setItemsTomorrow(sortTasks([task, ...itemsTomorrow]))
+                else if (chosenDateOption === 'Next Monday')
+                  setItemsUpcoming(sortTasks([task, ...itemsUpcoming]))
+                else if (chosenDateOption === 'Someday')
+                  setItemsSomeday(sortTasks([task, ...itemsSomeday]))
+              }}
+              onUpdate={getAllItems}
+            />
+          </View>
+        )}
     </View>
   )
 }
@@ -458,12 +462,9 @@ const styles = EStyleSheet.create({
   listContainerDragged: {
     height: '88%'
   },
-  addTaskContainer: {
-    height: '22%',
+  navigation: {
+    height: '12%',
     justifyContent: 'center',
-  },
-  navigation:{
-    height: '8%',
   },
   removeTaskContainer: {
     height: '12%',

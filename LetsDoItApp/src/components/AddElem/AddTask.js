@@ -68,6 +68,7 @@ function AddTask (props) {
       props.onCreate(newTask, chosenDateOption)
     }
     setTaskInput('')
+    Keyboard.dismiss()
   }
 
   return (
@@ -76,7 +77,19 @@ function AddTask (props) {
       keyboardShouldPersistTaps='always'
     >
     <View style={styles.inputContainer}>
-      <View style={styles.firstPart}>
+     <View style={styles.firstPart}>
+      <TextInput 
+        ref={inputRef}
+        type="text"
+        name="task"
+        placeholder="I want to.."
+        value={taskInput}
+        style={styles.textInput}
+        onSubmitEditing={onSubmit}
+        onChangeText={(text) => setTaskInput(text)}
+      />
+      <ActionButton onSubmit={onSubmit} text={'Add'}/>
+</View>
       <View style={styles.helpersContainer}>
         <Helper 
           content={'Today'}
@@ -104,22 +117,9 @@ function AddTask (props) {
           onChange={setChosenDateOption}
         />
         )}
-      </View>
-      
-         
-        <TextInput 
-          ref={inputRef}
-          type="text"
-          name="task"
-          placeholder="I want to.."
-          value={taskInput}
-          style={styles.textInput}
-          onSubmitEditing={onSubmit}
-          onChangeText={(text) => setTaskInput(text)}
-        />
+        
         </View>
-      
-        <ActionButton onSubmit={onSubmit} text={'Add'}/>
+        
       </View>
     </ScrollView>
   )
@@ -153,10 +153,11 @@ const styles = EStyleSheet.create({
     fontSize: '14rem',
   },
   firstPart: {
-    width: '80%'
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   inputContainer: {
-    flexDirection: 'row',
+    
     justifyContent: 'space-around',
     alignItems: 'center',
 
@@ -165,10 +166,9 @@ const styles = EStyleSheet.create({
     paddingHorizontal: '20rem',
     height: '50rem',
     fontSize: '16rem',
-    width: '100%',
+    width: '80%',
     borderWidth: 1,
     height: '40rem',
-    marginBottom: '18rem',
     borderColor: 'lightblue',
     borderRadius: '10rem',
   },

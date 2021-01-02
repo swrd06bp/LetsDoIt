@@ -262,10 +262,12 @@ function WeeklyTaskList (props) {
         onDescribe={setDescribeTask}
         onUpdate={getAllItems}
       />)}
+      {!isAddingTask && (
       <View style={styles.wrapper}>
-	    <FocusButton type={'week'} navigation={props.navigation}/>
+	
+        <FocusButton type={'week'} navigation={props.navigation}/>
         <DraxProvider>
-          <View style={draggedTask || isAddingTask ? styles.listContainerDragged : styles.listContainer}>
+          <View style={draggedTask ? styles.listContainerDragged : styles.listContainer}>
             <SectionList
               refreshing={isRefreshing}
               onRefresh={() => {
@@ -345,7 +347,7 @@ function WeeklyTaskList (props) {
               }}
             />     
             </View>
-              {!draggedTask && !isAddingTask && (
+              {!draggedTask && (
                 <View style={styles.navigation}>
                   <Footer
                     current={'tasks'} 
@@ -353,20 +355,11 @@ function WeeklyTaskList (props) {
                   />
                 </View>
               )}
-              {!draggedTask && !isAddingTask && (
+              {!draggedTask && (
                 <AddButton 
                   style={styles.addButton}
                   onClick={() => setIsAddingTask(true)} 
                 />
-              )}
-              {!draggedTask && isAddingTask && (
-                <View style={[styles.addTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
-                  <AddTask
-                    isWeek={true}
-                    onCreate={onCreateTask}
-                    onUpdate={getAllItems}
-                  />
-                </View>
               )}
               {draggedTask && (
                 <View style={[styles.removeTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
@@ -399,7 +392,18 @@ function WeeklyTaskList (props) {
                 </View>
               )}
           </DraxProvider>
+
         </View>
+        )}
+        {isAddingTask && (
+          <View style={[styles.addTaskContainer, {backgroundColor: showDeletion ? 'lightblue': 'white'}]}>
+            <AddTask
+              isWeek={true}
+              onCreate={onCreateTask}
+              onUpdate={getAllItems}
+            />
+          </View>
+        )}
     </View>
   )
 }
@@ -418,8 +422,7 @@ const styles = EStyleSheet.create({
     height: '8%',
   },
   addTaskContainer: {
-    height: '22%',
-    justifyContent: 'center',
+
   },
   removeTaskContainer: {
     height: '12%',
