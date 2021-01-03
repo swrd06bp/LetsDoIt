@@ -92,6 +92,7 @@ function TaskDescription (props) {
   goalOptions.unshift({ value: 0, label: 'Goal' })
 
   return (
+    <View>
     <Modal 
       style={styles.wrapper}
       onBackdropPress={() => props.onDescribe(null)}
@@ -270,6 +271,7 @@ function TaskDescription (props) {
       <ActionButton onSubmit={onSave} text={'Save'} />
       </KeyboardAvoidingView>
     </Modal>
+    </View>
   )
 }
 
