@@ -83,7 +83,7 @@ function DayFocus (props) {
         resizeMode="cover"
       >
         <View style={styles.header}>
-          <Text style={styles.headerText}>What is your main focus for {props.type === 'day' ? 'today' : 'this week'}?</Text>
+          <Text style={styles.headerText}>What is your main focus for {type === 'day' ? 'today' : 'this week'}?</Text>
         </View>
         <View style={styles.header}>
           <TextInput
@@ -98,7 +98,7 @@ function DayFocus (props) {
     {!photo && ( 
       <View style={styles.coverImage}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>What is your main focus for {props.type === 'day' ? 'today' : 'this week'}?</Text>
+          <Text style={styles.headerText}>What is your main focus for {type === 'day' ? 'today' : 'this week'}?</Text>
         </View>
         <View style={styles.header}>
           <TextInput
