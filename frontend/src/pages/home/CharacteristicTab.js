@@ -20,8 +20,8 @@ function CharacteristicsTab (props) {
   const [goalId, setGoalId] = useState(props.elem.goalId)
   const [list, setList] = useState(props.elem.list)
   
-  const goalColorCode = props.goals && props.goals.filter(x => x._id === goalId).length
-    ? props.goals.filter(x => x._id === goalId)[0].colorCode : null
+  const goal = props.goals && props.goals.filter(x => x._id === goalId).length
+    ? props.goals.filter(x => x._id === goalId)[0] : null
 
   let goalsOptions = props.goals ? props.goals.map(x => ({value: x._id, label: x.content})) : null
   if (goalsOptions)
@@ -96,14 +96,16 @@ function CharacteristicsTab (props) {
        {props.goals && (
         <div style={styles().checkboxContainer}>
         Link to:
-        <GoalShape colorCode={goalColorCode} />
-        <Select 
-          styles={styles().dropdownSelect}
-          options={goalsOptions} 
-          selectValue={goalId} 
-          onChange={({value}) => {setGoalId(value)}} 
-          placeholder="Goal"
-        />
+        <div style={styles().checkbox}>
+          <GoalShape goal={goal} />
+          <Select 
+            styles={styles().dropdownSelect}
+            options={goalsOptions} 
+            selectValue={goalId} 
+            onChange={({value}) => {setGoalId(value)}} 
+            placeholder="Goal"
+          />
+        </div>
         </div>
         
      )}
@@ -217,6 +219,15 @@ const styles = () => ({
     fontSize: 25 * getDimRatioText().X,
     marginLeft: 10,
     fontWeight: 'normal',
+  },
+  checkbox: {
+    borderStyle: 'solid',
+    borderColor: 'grey',
+    borderWidth: 1,
+    flexDirection: 'row',
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: 5,
   },
   buttonBack: {
     height: 20 * getDimRatio().X,

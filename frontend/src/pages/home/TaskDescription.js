@@ -35,7 +35,6 @@ function TaskDescription (props) {
   let projectsOptions = props.projects.map(x => ({value: x._id, label: x.content}))
   projectsOptions.unshift({value: null, label: 'none'})
   
-  console.log(projectId, projectsOptions)
 
   const project = props.projects.filter(x => x._id === projectId).length
     ? props.projects.filter(x => x._id === projectId)[0] : null
