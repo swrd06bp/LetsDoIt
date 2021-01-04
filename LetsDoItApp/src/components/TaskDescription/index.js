@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   KeyboardAvoidingView,
+  ScrollView,
   Platform,
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -57,6 +58,7 @@ function TaskDescription (props) {
       setShowDatePicker(false)
     }
   }
+  console.log('ssdkfsd', isNotification)
   
   const onDelete = async () => {
     const resp = await api.deleteTask(props.task._id)
@@ -144,7 +146,7 @@ function TaskDescription (props) {
               boxType={'square'}
               style={styles.checkbox}
               value={dueDate ? false : true}
-              onChange={() => {
+              onValueChange={() => {
               if (dueDate) 
                 setDueDate(null)
               else
@@ -169,8 +171,8 @@ function TaskDescription (props) {
             <CheckBox
               boxType={'square'} 
               style={styles.checkbox}
-              value={isNotification}
-              onChange={() => {
+              value={isNotification ? true : false}
+              onValueChange={() => {
               if (isNotification) 
                 setIsNotification(false)
               else
@@ -205,7 +207,7 @@ function TaskDescription (props) {
               style={styles.checkbox}
               boxType={'square'} 
               value={doneAt ? true : false}
-              onChange={() => {
+              onValueChange={() => {
               if (doneAt) 
                 setDoneAt(null)
               else
@@ -279,7 +281,7 @@ const styles = EStyleSheet.create({
   wrapper: {
     position: 'absolute',
     alignSelf: 'center',
-    height: '480rem',
+    top: '10%',
     width: '80%',
     borderRadius: '10rem',
     backgroundColor: 'white',

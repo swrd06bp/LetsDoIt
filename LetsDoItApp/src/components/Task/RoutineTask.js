@@ -176,7 +176,6 @@ const styles = EStyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     borderRadius: 10,
-    height: '300rem',
     width: '250rem',
     backgroundColor: 'white',
   },
