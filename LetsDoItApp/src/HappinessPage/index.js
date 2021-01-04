@@ -4,6 +4,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import moment from 'moment'
@@ -74,7 +75,7 @@ function YearChart (props) {
 	const allMonths = moment.months()
 
 	return (
-       <SafeAreaView>
+       <View>
           <View style={styles.yearHeaderContainer}>
              <TouchableOpacity
                style={styles.yearButtonContainer}
@@ -90,7 +91,12 @@ function YearChart (props) {
              </TouchableOpacity>
              <Text style={styles.titleText}>{props.year}</Text>
           </View>
-          {allMonths.map((month, index) => (
+          {props.isLoading && (
+            <View style={styles.activityContainer}>
+              <ActivityIndicator size='large' color='black' />
+            </View>
+          )}
+          {!props.isLoading && allMonths.map((month, index) => (
             <MonthChart 
               key={month}
               year={props.year.toString()}
@@ -99,32 +105,36 @@ function YearChart (props) {
               month={month}
             />
           ))}
-       </SafeAreaView>
+       </View>
 	)
 }
 
 function HappinessPage (props) {
   const [allData, setAllData] = useState([])
   const [year, setYear] = useState(parseInt(moment(new Date()).format('YYYY')))
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
      getHappiness()
   }, [year])
 
   const getHappiness = async () => {
+    setIsLoading(true)
     const api = new Api()
     const resp = await api.getHappiness({currentYear: year, limit: 365})
     const json = await resp.json()
     setAllData(json)
+    setIsLoading(false)
   }
 	
 	return (
-       <View style={styles.wrapper}>
+       <SafeAreaView style={styles.wrapper}>
          <View style={styles.happinessWrapper}>
          	<YearChart
               year={year}
               setYear={setYear}
               allData={allData} 
+              isLoading={isLoading}
             />
          </View>
          <View style={styles.navigation}>
@@ -133,16 +143,17 @@ function HappinessPage (props) {
              navigation={props.navigation}
            />
          </View>
-       </View>
+       </SafeAreaView>
 	)
 }
 
 const styles = EStyleSheet.create({
   wrapper: {
-    height: '100%'
+    height: '100%',
   },
   happinessWrapper: {
-    height: '92%'
+    height: '92%',
+    justifyContent: 'center',
   },
   navigation:{
     height: '8%',
@@ -180,8 +191,13 @@ const styles = EStyleSheet.create({
    },
    monthText: {
    	fontSize: '15rem',
-   	width: '80rem',
+   	width: '85rem',
    	textAlign: 'center'
+   },
+   activityContainer: {
+     height: '480rem',
+     justifyContent: 'center',
+     alignItems: 'center',
    },
    dayContainer: {
    	  borderColor: 'black',

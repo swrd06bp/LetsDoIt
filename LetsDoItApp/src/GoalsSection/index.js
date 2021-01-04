@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, View, Text, TouchableOpacity, FlatList } from 'react-native'
+import { 
+  SafeAreaView,
+  View, 
+  Text, 
+  TouchableOpacity, 
+  FlatList,
+  ActivityIndicator, 
+} from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import Footer from '../components/Footer'
@@ -41,6 +48,7 @@ function GoalsSection (props) {
     const [showCompletedGoals, setShowCompletedGoals] = useState(false)
     const [allProjects, setAllProjects] = useState([])
     const [allGoals, setAllGoals] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     const api = new Api()
 
     useEffect(() => {
@@ -54,6 +62,7 @@ function GoalsSection (props) {
     	const resultProjects = await respProjects.json()
     	setAllGoals(resultGoals)
     	setAllProjects(resultProjects)
+      setIsLoading(false)
   	}
 
 	return (
@@ -65,19 +74,26 @@ function GoalsSection (props) {
               </View>
               <View style={styles.elemsContainer}>
               <View style={styles.flatListContainer}>
-              <FlatList
-                style={{flex: 1}}
-                data={allGoals}
-                renderItem={({item}) => (
-                  <Item 
-                    key={item._id} 
-                    item={item}
-                    completed={showCompletedGoals} 
-                    type={'goal'}
+                {isLoading && (
+                   <View style={styles.activityContainer}>
+                      <ActivityIndicator size='large' color='black' />
+                   </View>
+                )}
+                {!isLoading && (
+                  <FlatList
+                    style={{flex: 1}}
+                    data={allGoals}
+                    renderItem={({item}) => (
+                      <Item 
+                        key={item._id} 
+                        item={item}
+                        completed={showCompletedGoals} 
+                        type={'goal'}
+                      />
+                    )}
+                    keyExtractor={item => item._id}
                   />
                 )}
-                keyExtractor={item => item._id}
-              />
               </View>
               <TouchableOpacity 
               	onPress={() => setShowCompletedGoals(!showCompletedGoals)}
@@ -95,18 +111,25 @@ function GoalsSection (props) {
               </View>
               <View style={styles.elemsContainer}>
               <View style={styles.flatListContainer}>
-              	<FlatList
-                	data={allProjects}
-                	renderItem={({item}) => (
-                  		<Item 
-                    	key={item._id} 
-                    	item={item}
-                    	completed={showCompletedProjects} 
-                    	type={'project'}
-                    	/>
-                  	)}
-                  	keyExtractor={item => item._id}
-                />
+                {isLoading && (
+                   <View style={styles.activityContainer}>
+                      <ActivityIndicator size='large' color='black' />
+                   </View>
+                )}
+              	{!isLoading && (
+                  <FlatList
+                  	data={allProjects}
+                  	renderItem={({item}) => (
+                    		<Item 
+                      	key={item._id} 
+                      	item={item}
+                      	completed={showCompletedProjects} 
+                      	type={'project'}
+                      	/>
+                    	)}
+                    	keyExtractor={item => item._id}
+                  />
+                )}
                 </View>
                 <TouchableOpacity 
                   style={styles.completedContainer}
@@ -156,6 +179,11 @@ const styles = EStyleSheet.create({
   },
   elemsContainer: {
   	height: '100%',
+  },
+  activityContainer: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   flatListContainer: {
   	height: '60%',

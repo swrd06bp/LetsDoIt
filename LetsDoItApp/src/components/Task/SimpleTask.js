@@ -6,6 +6,7 @@ import {
   Vibration,
   Image,
   TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { DraxView } from 'react-native-drax'
@@ -46,12 +47,15 @@ function Task (props) {
       ]}
     >
       <View style={styles.firstPart}> 
-        <CheckBox 
+        <TouchableHighlight>
+        <CheckBox
+          activeOpacity={1} 
           style={styles.checkbox}
           boxType={'square'}
           value={props.item.doneAt ? true : false}
           onValueChange={onCheckboxChange}
         />
+        </TouchableHighlight>
         <View style={{flexGrow: 1, }} onClick={() => props.onDescribe(props.task ? null : props.item)}>
         <Text style={[
           styles.titleText,
