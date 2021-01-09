@@ -55,6 +55,7 @@ const styles = EStyleSheet.create({
   buttonText: {
     justifyContent: 'center',
     fontWeight: 'bold',
+    color: 'white',
     fontSize: '12rem',
   },
   buttonWrapper: {
@@ -67,7 +68,7 @@ const styles = EStyleSheet.create({
     justifyContent: 'center',
     marginRight: '5rem',
     padding: '2rem',
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#009933',
     borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

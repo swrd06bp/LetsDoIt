@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { TouchableOpacity, View, Text } from 'react-native'
+import { TouchableOpacity, View, Text, AppState } from 'react-native'
 import moment from 'moment'
 
 import Api from '../../Api'
@@ -19,7 +19,9 @@ function FocusButton (props) {
     number = new Date().getFullYear()*100 + parseInt(moment(new Date()).isoWeek())
 
   useEffect(() => {
+    AppState.addEventListener("change", getFocus)
     getFocus()
+    return () => AppState.addEventListener("change", getFocus)
   }, [])
 
   const getFocus = async () => {
