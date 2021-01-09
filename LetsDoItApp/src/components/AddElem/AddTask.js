@@ -8,6 +8,7 @@ import {
   Platform,
   ScrollView,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
@@ -67,8 +68,12 @@ function AddTask (props) {
       newTask._id = json.taskId.insertedId
       props.onCreate(newTask, chosenDateOption)
     }
+    onDismiss()
+  }
+
+  function onDismiss (props) {
     setTaskInput('')
-    Keyboard.dismiss()
+    Keyboard.dismiss()    
   }
 
   return (
@@ -78,6 +83,13 @@ function AddTask (props) {
     >
     <View style={styles.inputContainer}>
      <View style={styles.firstPart}>
+      <TouchableOpacity onPress={onDismiss}>
+        <Image 
+          resizeMode="contain"
+          source={require('../../../static/cross.png')} 
+          style={styles.imageCross} 
+        />
+      </TouchableOpacity>
       <TextInput 
         ref={inputRef}
         type="text"
@@ -133,7 +145,11 @@ const styles = EStyleSheet.create({
   helpersContainer: {
     flexDirection: 'row',
     marginVertical: 1,
-
+  },
+  imageCross: {
+    height: '15rem',
+    width: '15rem',
+    marginRight: '8rem',
   },
   helperWrapper: {
     backgroundColor: '#D8D8D8',
@@ -166,7 +182,7 @@ const styles = EStyleSheet.create({
     paddingHorizontal: '20rem',
     height: '50rem',
     fontSize: '16rem',
-    width: '80%',
+    width: '75%',
     borderWidth: 1,
     height: '40rem',
     borderColor: 'lightblue',

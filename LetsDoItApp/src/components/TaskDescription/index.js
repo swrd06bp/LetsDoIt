@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   KeyboardAvoidingView,
+  ScrollView,
   Platform,
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -13,6 +14,7 @@ import DatePicker from 'react-native-datepicker'
 import CheckBox from '@react-native-community/checkbox'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Modal from 'react-native-modal'
+import RNPickerSelect from 'react-native-picker-select'
 import DropDownPicker from 'react-native-dropdown-picker'
 
 import Api from '../../Api'
@@ -57,6 +59,7 @@ function TaskDescription (props) {
       setShowDatePicker(false)
     }
   }
+
   
   const onDelete = async () => {
     const resp = await api.deleteTask(props.task._id)
@@ -67,6 +70,7 @@ function TaskDescription (props) {
   let projectOptions = props.projects.map((x) => ({
    value: x._id, 
    label: x.content,
+   itemKey: x._id,
    icon: () => (
      <View style={{
        backgroundColor: x.colorCode, 
@@ -76,7 +80,8 @@ function TaskDescription (props) {
      }} />
     )
  }))
-  projectOptions.unshift({ value: 0, label: 'Project' })
+  if (Platform.OS !== 'ios')
+    projectOptions.unshift({ value: 0, label: 'Project' })
 
   let goalOptions = props.goals.map((x) => ({
    value: x._id, 
@@ -89,7 +94,8 @@ function TaskDescription (props) {
      }} />
     )
  }))
-  goalOptions.unshift({ value: 0, label: 'Goal' })
+  if (Platform.OS !== 'ios')
+    goalOptions.unshift({ value: 0, label: 'Goal' })
 
   return (
     <View>
@@ -144,7 +150,7 @@ function TaskDescription (props) {
               boxType={'square'}
               style={styles.checkbox}
               value={dueDate ? false : true}
-              onChange={() => {
+              onValueChange={() => {
               if (dueDate) 
                 setDueDate(null)
               else
@@ -169,8 +175,8 @@ function TaskDescription (props) {
             <CheckBox
               boxType={'square'} 
               style={styles.checkbox}
-              value={isNotification}
-              onChange={() => {
+              value={isNotification ? true : false}
+              onValueChange={() => {
               if (isNotification) 
                 setIsNotification(false)
               else
@@ -205,7 +211,7 @@ function TaskDescription (props) {
               style={styles.checkbox}
               boxType={'square'} 
               value={doneAt ? true : false}
-              onChange={() => {
+              onValueChange={() => {
               if (doneAt) 
                 setDoneAt(null)
               else
@@ -227,32 +233,55 @@ function TaskDescription (props) {
         <View style={styles.dueContainer}>
            <View style={styles.dueContainer}>
               <Text>Link with:</Text>
-              <DropDownPicker
-                items={projectOptions}
-                defaultValue={projectId}
-                containerStyle={styles.linkContainer}
-                style={styles.linkDropdown}
-                selectedLabelStyle={styles.activeLinkDropdown}
-                itemStyle={{
-                  justifyContent: 'flex-start',
-                  
-                }}
+              {Platform.OS !== 'ios' && (
+                <DropDownPicker
+                  items={projectOptions}
+                  defaultValue={projectId}
+                  containerStyle={styles.linkContainer}
+                  style={styles.linkDropdown}
+                  selectedLabelStyle={styles.activeLinkDropdown}
+                  itemStyle={{
+                    justifyContent: 'flex-start',
+                    
+                  }}
 
-                dropDownStyle={styles.linkDropdown}
-                onChangeItem={({value}) => setProjectId(value)}
-              />
-              <DropDownPicker
-                items={goalOptions}
-                defaultValue={goalId}
-                containerStyle={styles.linkContainer}
-                selectedLabelStyle={styles.activeLinkDropdown}
-                style={styles.linkDropdown}
-                itemStyle={{
-                  justifyContent: 'flex-start'
-                }}
-                dropDownStyle={{backgroundColor: '#fafafa'}}
-                onChangeItem={({value}) => setGoalId(value)}
-              />
+                  dropDownStyle={styles.linkDropdown}
+                  onChangeItem={({value}) => setProjectId(value)}
+                />
+              )}
+              {Platform.OS === 'ios' && (
+               <View style={[styles.linkContainer, styles.linkIOSContainer]}>
+                 <RNPickerSelect
+                    items={projectOptions}
+                    defaultValue={projectId}
+                    Icon={projectOptions.filter(x => x.value === projectId).icon}
+                    onValueChange={(value) => setProjectId(value)}
+                 />
+                 </View>
+              )}
+              {Platform.OS !== 'ios' && (
+                <DropDownPicker
+                  items={goalOptions}
+                  defaultValue={goalId}
+                  containerStyle={styles.linkContainer}
+                  selectedLabelStyle={styles.activeLinkDropdown}
+                  style={styles.linkDropdown}
+                  itemStyle={{
+                    justifyContent: 'flex-start'
+                  }}
+                  dropDownStyle={{backgroundColor: '#fafafa'}}
+                  onChangeItem={({value}) => setGoalId(value)}
+                />
+              )}
+              {Platform.OS === 'ios' && (
+               <View style={[styles.linkContainer, styles.linkIOSContainer]}>
+                 <RNPickerSelect
+                    items={goalOptions}
+                    defaultValue={projectId}
+                    onValueChange={(value) => setGoalId(value)}
+                 />
+                 </View>
+              )}
            </View>
         </View>
       </View>
@@ -279,7 +308,7 @@ const styles = EStyleSheet.create({
   wrapper: {
     position: 'absolute',
     alignSelf: 'center',
-    height: '480rem',
+    top: '10%',
     width: '80%',
     borderRadius: '10rem',
     backgroundColor: 'white',
@@ -330,6 +359,12 @@ const styles = EStyleSheet.create({
     marginLeft: '5rem',
     height: '40rem',
     width: '120rem',
+  },
+  linkIOSContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'grey',
+    borderWidth: 1,
   },
   activeLinkDropdown: {
     height: '20rem'  },

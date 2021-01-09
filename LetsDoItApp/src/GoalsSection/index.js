@@ -1,46 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { 
   SafeAreaView,
-  View, 
+  View,
+  ScrollView, 
   Text, 
   TouchableOpacity, 
   FlatList,
+  Image,
   ActivityIndicator, 
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import Footer from '../components/Footer'
+import ProjectItem from './ProjectItem'
+import GoalItem from './GoalItem'
 import Api from '../Api'
 
 
-function Item (props) {
 
-    if (props.completed && !props.item.doneAt) return null
-
-    if (!props.completed && props.item.doneAt) return null
-
-	return (
-       <View style={styles.itemWrapper}>
-         <View style={styles.firstPartItem}>
-       	   <View style={[
-       	   	{backgroundColor: props.item.colorCode},
-       	   	props.type === 'project' && styles.projectShape,
-       	    props.type === 'goal' && styles.goalShape
-       	  ]} />
-           <Text style={styles.contentText}>{props.item.content}</Text>
-        </View>
-
-        <View style={styles.sectonPartItem}>
-           <View style={styles.dueDateContainer}>
-             <Text style={styles.dueDateText}>
-               {props.completed ? (props.item.doneAt ? props.item.doneAt.slice(0, 10) : 'Someday')
-               	 : (props.item.dueDate ? props.item.dueDate.slice(0, 10) : 'Someday')}
-             </Text>
-           </View>
-        </View>
-      </View>
-	)
-}
 
 
 function GoalsSection (props) {
@@ -64,15 +41,16 @@ function GoalsSection (props) {
     	setAllProjects(resultProjects)
       setIsLoading(false)
   	}
+   
 
 	return (
 	  <SafeAreaView style={styles.wrapper}>
-	    <View style={styles.goalsWrapper}>
-           <View style={styles.goalsSection}>
+	    <ScrollView style={styles.goalsWrapper}>
+          <View style={styles.goalsSection}>
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Goals</Text>
               </View>
-              <View style={styles.elemsContainer}>
+           
               <View style={styles.flatListContainer}>
                 {isLoading && (
                    <View style={styles.activityContainer}>
@@ -84,7 +62,7 @@ function GoalsSection (props) {
                     style={{flex: 1}}
                     data={allGoals}
                     renderItem={({item}) => (
-                      <Item 
+                      <GoalItem 
                         key={item._id} 
                         item={item}
                         completed={showCompletedGoals} 
@@ -102,7 +80,7 @@ function GoalsSection (props) {
               >
                   <Text style={styles.completedText}>{showCompletedGoals ? 'Show pending' : 'Show completed'}</Text>
               </TouchableOpacity>
-              </View>              
+                           
 
            </View>
            <View style={styles.projectsSection}>
@@ -120,7 +98,7 @@ function GoalsSection (props) {
                   <FlatList
                   	data={allProjects}
                   	renderItem={({item}) => (
-                    		<Item 
+                    	<ProjectItem 
                       	key={item._id} 
                       	item={item}
                       	completed={showCompletedProjects} 
@@ -144,7 +122,7 @@ function GoalsSection (props) {
       
            </View>
 
-	    </View>
+	    </ScrollView>
 		<View style={styles.navigation}>
 			<Footer current={'goals'} navigation={props.navigation}/>
 		</View>
@@ -162,12 +140,6 @@ const styles = EStyleSheet.create({
   navigation:{
     height: '8%',
   },
-  goalsSection: {
-  	height: '40%'
-  },
-  projectsSection: {
-  	height: '60%'
-  },
   titleText: {
     fontSize: '20rem',
     fontWeight: 'bold',
@@ -177,65 +149,19 @@ const styles = EStyleSheet.create({
   titleContainer: {
   	height: '45rem',
   },
-  elemsContainer: {
-  	height: '100%',
-  },
   activityContainer: {
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  flatListContainer: {
-  	height: '60%',
-  },
   completedContainer: {
-  	height: '20%',
+  	height: '50rem',
   	justifyContent: 'center',
   	alignItems: 'center',
   },
   completedText: {
     fontSize: '12rem',
     textDecorationLine: 'underline',
-  },
-  itemWrapper: {
-  	marginTop: '3rem',
-  	height: '40rem',
-  	borderWidth: 0.5,
-  	borderRadius: 20,
-  	alignItems: 'center',
-  	flexDirection: 'row',
-  	
-  },
-  firstPartItem: {
-  	flexDirection: 'row',
-  	alignItems: 'center',
-  	width: '72%',
-  },
-  sectonPartItem: {
-  	alignItems: 'center',
-  	width: '28%',
-  },
-  projectShape: {
-  	marginHorizontal: '5rem',
-  	height : '15rem',
-  	width: '15rem',
-  	borderRadius: 100,
-  },
-  goalShape: {
-  	marginHorizontal: '5rem',
-  	height : '15rem',
-  	width: '15rem',
-  },
-  contentText: {
-    fontSize: '14rem',
-  },
-  dueDateContainer: {
-    backgroundColor: 'lightgrey',
-    borderRadius: 40,
-    padding: '1rem',
-  },
-  dueDateText: {
-  	fontSize: '12rem',
   },
  })
 
