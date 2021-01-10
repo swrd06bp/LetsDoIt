@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { CommonActions} from '@react-navigation/native'
 
 import {
+  SafeAreaView,
   KeyboardAvoidingView,
+  TouchableOpacity,
   View,
   Image,
   Text,
@@ -10,6 +12,7 @@ import {
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import LoginForm from './LoginForm'
+import SignUpForm from './SignUpForm'
 
 
 function loginAction() {
@@ -22,6 +25,7 @@ function loginAction() {
 }
 
 function LoginPage(props) {
+  const [showSignedUp, setShowSignedUp] = useState(false)
 
   const _accessHomePage = () => {
     props.navigation.dispatch(loginAction())
@@ -30,17 +34,37 @@ function LoginPage(props) {
   
 
   return (
+    
     <KeyboardAvoidingView behavior="padding" style={styles.loginContainer}>
-      <View style={styles.logoContainer}>
-      <Image
-         resizeMode="contain" style={styles.logo}
-         source={require('../../static/logo.png')}
-        />
-        </View>
-      <LoginForm
-        _accessHomePage={_accessHomePage}
-      />
+      <SafeAreaView>
+      
+        <View style={styles.logoContainer}>
+        <Image
+           resizeMode="contain" style={styles.logo}
+           source={require('../../static/logo.png')}
+          />
+          </View>
+        {!showSignedUp && (
+          <LoginForm
+            _accessHomePage={_accessHomePage}
+          />
+        )}
+        {showSignedUp && (
+          <SignUpForm
+            _accessHomePage={() => setShowSignedUp(false)}
+          />
+        )}
+        <Text style={styles.isSignedUpText}>{!showSignedUp ? 'Not registered? ' : 'Already registered? '}
+          <TouchableOpacity
+            onPress={() => setShowSignedUp(!showSignedUp)}
+          >
+            <Text style={styles.changeFormText}>{!showSignedUp ? 'Create an account' : 'Login to your account'}</Text>
+          </TouchableOpacity>
+        </Text>
+
+      </SafeAreaView>
     </KeyboardAvoidingView>
+
   )
 }
 
@@ -66,6 +90,13 @@ const styles = EStyleSheet.create({
   logo: {
     width: '130rem',
     height: '100rem',
+  },
+  isSignedUpText: {
+    alignSelf: 'center',
+  },
+  changeFormText: {
+    color: 'green',
+    textDecorationLine: 'underline'
   },
 })
 
