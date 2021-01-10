@@ -10,7 +10,7 @@ import {
 
 import * as Animatable from 'react-native-animatable'
 
-import Api from '../../app/Api'
+import Api from '../../Api'
 
 function ForgotPassword (props) {
   const [emailInput, setEmailInput] = useState('')

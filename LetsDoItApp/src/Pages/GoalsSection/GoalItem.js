@@ -10,7 +10,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import EditHabitForm from './EditHabitForm'
 import ProjectItem from './ProjectItem'
 import HabitItem from './HabitItem'
-import Api from '../Api'
+import Api from '../../Api'
 
 
 

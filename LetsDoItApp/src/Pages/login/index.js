@@ -41,7 +41,7 @@ function LoginPage(props) {
         <View style={styles.logoContainer}>
         <Image
            resizeMode="contain" style={styles.logo}
-           source={require('../../static/logo.png')}
+           source={require('../../../static/logo.png')}
           />
           </View>
         {!showSignedUp && (

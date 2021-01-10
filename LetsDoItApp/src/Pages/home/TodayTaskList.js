@@ -13,15 +13,15 @@ import moment from 'moment'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { DraxProvider, DraxView } from 'react-native-drax'
 
-import Api from '../Api.js'
-import Footer from '../components/Footer'
-import AddTask from '../components/AddElem/AddTask'
-import AddButton from '../components/AddButton'
-import FocusButton from '../components/FocusButton'
-import TaskDescription from '../components/TaskDescription'
-import HappinessTask from '../components/Task/HappinessTask'
-import SimpleTask from '../components/Task/SimpleTask'
-import RoutineTask from '../components/Task/RoutineTask'
+import Api from '../../Api'
+import Footer from '../../components/Footer'
+import AddTask from '../../components/AddElem/AddTask'
+import AddButton from '../../components/AddButton'
+import FocusButton from '../../components/FocusButton'
+import TaskDescription from '../../components/TaskDescription'
+import HappinessTask from '../../components/Task/HappinessTask'
+import SimpleTask from '../../components/Task/SimpleTask'
+import RoutineTask from '../../components/Task/RoutineTask'
 
 
 import {
@@ -31,7 +31,7 @@ import {
   lastMonthDate,
   decomposeTasksToday,
   generateRoutineTask,
-} from '../utils'
+} from '../../utils'
 
 const move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = JSON.parse(JSON.stringify(source))
@@ -408,7 +408,7 @@ function TodayTaskList (props) {
                       return (
                         <View style={{alignItems: 'center'}}>
                           <Image 
-                            source={require('../../static/trash.png')}
+                            source={require('../../../static/trash.png')}
                             style={styles.trashImage}
                           /> 
                         </View>

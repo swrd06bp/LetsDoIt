@@ -4,7 +4,7 @@ import { CommonActions} from '@react-navigation/native'
 
 import Survey from './Survey'
 import Quote from './Quote'
-import Api from '../Api'
+import Api from '../../Api'
 
 function HappinessInput (props) {
   const [score, setScore] = useState(null)

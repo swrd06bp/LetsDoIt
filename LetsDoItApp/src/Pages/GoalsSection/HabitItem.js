@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
-import Api from '../Api'
+import Api from '../../Api'
 
 
 function HabitItem (props) {

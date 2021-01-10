@@ -7,13 +7,13 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 
 
 
-import Home from './src/home'
-import HappinessPage from './src/HappinessPage'
-import GoalsSection from './src/GoalsSection'
-import LandingPage from './src/landing'
-import HappinessInput from './src/happiness/HappinessInput'
-import LoginPage from './src/login'
-import DayFocus from './src/dayfocus'
+import Home from './src/Pages/home'
+import HappinessPage from './src/Pages/HappinessPage'
+import GoalsSection from './src/Pages/GoalsSection'
+import LandingPage from './src/Pages/landing'
+import HappinessInput from './src/Pages/happiness/HappinessInput'
+import LoginPage from './src/Pages/login'
+import DayFocus from './src/Pages/dayfocus'
 
 const Stack = createStackNavigator()
 

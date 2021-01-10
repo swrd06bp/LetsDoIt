@@ -9,9 +9,9 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import { CommonActions} from '@react-navigation/native'
 import moment from 'moment'
 
-import ActionButton from '../components/ActionButton'
+import ActionButton from '../../components/ActionButton'
 
-import Api from '../Api'
+import Api from '../../Api'
 
 function homeAction(routeName) {
   return CommonActions.reset({

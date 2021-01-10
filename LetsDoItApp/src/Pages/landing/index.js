@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { View, Text } from 'react-native'
 import { CommonActions} from '@react-navigation/native'
-import Api from '../Api'
+import Api from '../../Api'
 
 
 function homeAction(routeName) {

@@ -12,14 +12,14 @@ import {
 import { DraxProvider, DraxView } from 'react-native-drax'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
-import Api from '../Api.js'
-import AddTask from '../components/AddElem/AddTask'
-import Footer from '../components/Footer'
-import AddButton from '../components/AddButton'
-import FocusButton from '../components/FocusButton'
-import TaskDescription from '../components/TaskDescription'
-import SimpleTask from '../components/Task/SimpleTask'
-import RoutineTask from '../components/Task/RoutineTask'
+import Api from '../../Api'
+import AddTask from '../../components/AddElem/AddTask'
+import Footer from '../../components/Footer'
+import AddButton from '../../components/AddButton'
+import FocusButton from '../../components/FocusButton'
+import TaskDescription from '../../components/TaskDescription'
+import SimpleTask from '../../components/Task/SimpleTask'
+import RoutineTask from '../../components/Task/RoutineTask'
 
 import {
   sortTasks,
@@ -28,7 +28,7 @@ import {
   lastWeekDate,
   lastMonthDate,
   decomposeItemsWeek,
-} from '../utils'
+} from '../../utils'
 
 const move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = JSON.parse(JSON.stringify(source))
@@ -371,7 +371,7 @@ function WeeklyTaskList (props) {
                       return (
                         <View style={{alignItems: 'center'}}>
                           <Image 
-                            source={require('../../static/trash.png')}
+                            source={require('../../../static/trash.png')}
                             style={styles.trashImage}
                           /> 
                         </View>

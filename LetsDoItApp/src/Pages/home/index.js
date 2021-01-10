@@ -18,8 +18,8 @@ import messaging from '@react-native-firebase/messaging'
 
 import TodayTaskList from './TodayTaskList'
 import WeeklyTaskList from './WeeklyTaskList'
-import { todayDate } from '../utils'
-import Api from '../Api'
+import { todayDate } from '../../utils'
+import Api from '../../Api'
 
 function homeAction(routeName) {
   return CommonActions.reset({
@@ -93,7 +93,7 @@ export default function Home (props) {
         <View>
         <Menu>
         <MenuTrigger>
-          <Image source={require('../../static/options.png')} style={styles.optionImage} />
+          <Image source={require('../../../static/options.png')} style={styles.optionImage} />
         </MenuTrigger>
         <MenuOptions>
           <MenuOption onSelect={() => {
@@ -147,7 +147,6 @@ const styles = EStyleSheet.create({
     textAlign: 'center',
     textDecorationLine: 'underline',
     color: 'blue',
-
   },
   todayTaskList: {
     height: '100%',

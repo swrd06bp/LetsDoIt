@@ -16,8 +16,8 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import CheckBox from '@react-native-community/checkbox'
 import moment from 'moment'
 
-import ActionButton from '../components/ActionButton'
-import Api from '../Api'
+import ActionButton from '../../components/ActionButton'
+import Api from '../../Api'
 
 function EditHabitForm(props) {
 	const [content, setContent] = useState(props.habit ? props.habit.content : '')

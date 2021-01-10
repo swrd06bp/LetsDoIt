@@ -9,10 +9,10 @@ import {
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
-import Footer from '../components/Footer'
+import Footer from '../../components/Footer'
 import ProjectItem from './ProjectItem'
 import GoalItem from './GoalItem'
-import Api from '../Api'
+import Api from '../../Api'
 
 
 

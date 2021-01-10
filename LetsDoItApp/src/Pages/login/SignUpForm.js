@@ -13,7 +13,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import * as Animatable from 'react-native-animatable'
 
 
-import Api from '../Api'
+import Api from '../../Api'
 
 function SignUpForm(props) {
   const [name, setName] = useState('')

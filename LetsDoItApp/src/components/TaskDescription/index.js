@@ -61,7 +61,7 @@ function TaskDescription (props) {
     }
   }
 
-  const onTimeChange = async (event, selectedTime) => {
+  const onTimeChange = (event, selectedTime) => {
     if (selectedTime) 
       setDueDate(selectedTime.toJSON())
     

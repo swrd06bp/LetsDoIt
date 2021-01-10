@@ -9,9 +9,9 @@ import {
 import EStyleSheet from 'react-native-extended-stylesheet'
 import moment from 'moment'
 
-import Api from '../Api'
-import { scoreToColor } from '../utils'
-import Footer from '../components/Footer'
+import Api from '../../Api'
+import { scoreToColor } from '../../utils'
+import Footer from '../../components/Footer'
 
 function MonthChart (props) {
   const [editId, setEditId] = useState(null)
