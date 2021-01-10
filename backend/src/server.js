@@ -13,13 +13,14 @@ const app = express()
 const server =  http.createServer(app) 
 
 
+app.use('/public', express.static('build'))
 app.use(cors())
 app.use(bodyParser.json())
 app.use('/v1', router)
 app.set('port', process.env.port || 4001)
 app.set('socketService', new SocketService(server))
 
-cron.schedule('0 * * * *', function() {
+cron.schedule('*/15 * * * *', function() {
   console.log('running a task every hour')
   sendAllNotifications()
 })

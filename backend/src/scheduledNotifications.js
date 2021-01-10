@@ -36,7 +36,7 @@ async function sendSingleNotification (fcmToken, title, body) {
 
 async function getNotifTasks () {
   let tomorrowDate = new Date() 
-  tomorrowDate.setHours(new Date().getHours() + 1)
+  tomorrowDate.setHours(new Date().getMinutes() + 15)
   const allTasks = await dbClient.getElems({
     table: 'tasks',
     query: { 
