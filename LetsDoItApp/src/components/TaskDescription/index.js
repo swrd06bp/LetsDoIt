@@ -27,11 +27,11 @@ function TaskDescription (props) {
   const [dueDate, setDueDate] = useState(props.task.dueDate)
   const [doneAt, setDoneAt] = useState(props.task.doneAt)
   const [isNotification, setIsNotification] = useState(props.task.isNotification)
-  const [hourNotif, setHourNotif] = useState(new Date(props.task.dueDate).getHours())
   const [list, setList] = useState(props.task.list)
   const [goalId, setGoalId] = useState(props.task.goalId ? props.task.goalId : 0)
   const [projectId, setProjectId] = useState(props.task.projectId ? props.task.projectId : 0)
   const [showDatePicker, setShowDatePicker] = useState(false)
+  const [showTimePicker, setShowTimePicker] = useState(false)
   const api = new Api()
 
  
@@ -57,7 +57,16 @@ function TaskDescription (props) {
       if (showDatePicker === 'doneAt') 
         setDoneAt(selectedDate)
       setShowDatePicker(false)
+      setShowTimePicker(false)
     }
+  }
+
+  const onTimeChange = async (event, selectedTime) => {
+    if (selectedTime) 
+      setDueDate(selectedTime.toJSON())
+    
+    setShowTimePicker(false)
+    setShowDatePicker(false)
   }
 
   
@@ -98,7 +107,6 @@ function TaskDescription (props) {
     goalOptions.unshift({ value: 0, label: 'Goal' })
 
   return (
-    <View>
     <Modal 
       style={styles.wrapper}
       onBackdropPress={() => props.onDescribe(null)}
@@ -112,7 +120,22 @@ function TaskDescription (props) {
           is24Hour={true}
           mode={'date'}
           display="default"
+          onPressCancel={() => setShowDatePicker(false)}
+          onCloseModal={() => setShowDatePicker(false)}
           onChange={onDateChange}
+        />
+      )}
+      {showTimePicker && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={new Date(dueDate)}
+          is24Hour={true}
+          mode={'time'}
+          minuteInterval={15}
+          display="default"
+          onPressCancel={() => setShowTimePicker(false)}
+          onCloseModal={() => setShowTimePicker(false)}
+          onChange={onTimeChange}
         />
       )}
       <KeyboardAvoidingView 
@@ -185,22 +208,13 @@ function TaskDescription (props) {
           </View>
           {isNotification && (
             <View style={styles.dueContainer}>
-            <Text>Hour</Text>
-            <TextInput
+            <Text>Time</Text>
+            <TouchableOpacity
+              onPress={() => {setShowTimePicker(true)}}
               style={styles.dueDate}
-              value={hourNotif.toString()}
-              onChangeText={(text) => {
-                if (text && parseInt(text) >= 0 && parseInt(text) < 24) {
-
-                  setHourNotif(text.replace(/[^0-9]/g, ''))
-                  const newDueDate = new Date(dueDate)
-                  newDueDate.setHours(parseInt(text))
-                  setDueDate(newDueDate)
-                }
-              }}
-            />
-             
-            
+            >
+              <Text>{new Date(dueDate).getHours() + ':' + new Date(dueDate).getMinutes()}</Text> 
+            </TouchableOpacity>   
             </View>
           )}
         </View>)}
@@ -300,7 +314,6 @@ function TaskDescription (props) {
       <ActionButton onSubmit={onSave} text={'Save'} />
       </KeyboardAvoidingView>
     </Modal>
-    </View>
   )
 }
 
