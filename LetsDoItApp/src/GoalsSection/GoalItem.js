@@ -3,11 +3,11 @@ import {
   View, 
   Text, 
   TouchableOpacity, 
-  FlatList,
   ActivityIndicator, 
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
+import EditHabitForm from './EditHabitForm'
 import ProjectItem from './ProjectItem'
 import HabitItem from './HabitItem'
 import Api from '../Api'
@@ -17,11 +17,18 @@ import Api from '../Api'
 
 function GoalItem (props) {
   const [allHabits, setAllHabits] = useState([])
+  const [addHabitGoalId, setAddHabitGoalId] = useState(null) 
   const api = new Api()
 
   useEffect(() => {
     getHabits()
   }, [])
+
+  const onAddHabit = async (habit) => {
+    await api.insertHabit(habit) 
+    await getHabits()
+    setAddHabitGoalId(null)
+  }
 
   const getHabits = async () => {
     const resp = await api.getHabitsGoal(props.item._id)
@@ -35,6 +42,13 @@ function GoalItem (props) {
 
 	return (
     <View style={styles.itemWrapper}>
+      {addHabitGoalId && (
+        <EditHabitForm 
+          onAddHabit={onAddHabit}
+          goalId={addHabitGoalId}
+          onClose={() => setAddHabitGoalId(null)} 
+        />
+        )}
       <ProjectItem item={props.item} completed={props.completed} type={'goal'} /> 
       <View>
       <View style={[styles.habitWrapper, {borderColor: props.item.colorCode}]}>
@@ -56,7 +70,10 @@ function GoalItem (props) {
           <HabitItem key={habit._id} item={habit} />
         ))}
         </View>
-        <TouchableOpacity style={styles.addHabitContainer}>
+        <TouchableOpacity 
+          onPress={() => setAddHabitGoalId(props.item._id)}
+          style={styles.addHabitContainer}
+        >
           <Text style={styles.addHabitText}>+ Add a habit</Text>
         </TouchableOpacity>
        </View>
@@ -125,8 +142,6 @@ const styles = EStyleSheet.create({
   headerHabitText: {
     fontSize: '13rem',
   },
-
-
  })
 
 export default GoalItem

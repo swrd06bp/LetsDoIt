@@ -5,8 +5,6 @@ import {
   ScrollView, 
   Text, 
   TouchableOpacity, 
-  FlatList,
-  Image,
   ActivityIndicator, 
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -42,6 +40,7 @@ function GoalsSection (props) {
       setIsLoading(false)
   	}
    
+   
 
 	return (
 	  <SafeAreaView style={styles.wrapper}>
@@ -57,21 +56,15 @@ function GoalsSection (props) {
                       <ActivityIndicator size='large' color='black' />
                    </View>
                 )}
-                {!isLoading && (
-                  <FlatList
-                    style={{flex: 1}}
-                    data={allGoals}
-                    renderItem={({item}) => (
+                {!isLoading && allGoals.map((item) => (
                       <GoalItem 
                         key={item._id} 
                         item={item}
                         completed={showCompletedGoals} 
                         type={'goal'}
                       />
-                    )}
-                    keyExtractor={item => item._id}
-                  />
-                )}
+                ))}
+              
               </View>
               <TouchableOpacity 
               	onPress={() => setShowCompletedGoals(!showCompletedGoals)}
@@ -94,20 +87,14 @@ function GoalsSection (props) {
                       <ActivityIndicator size='large' color='black' />
                    </View>
                 )}
-              	{!isLoading && (
-                  <FlatList
-                  	data={allProjects}
-                  	renderItem={({item}) => (
-                    	<ProjectItem 
-                      	key={item._id} 
-                      	item={item}
-                      	completed={showCompletedProjects} 
-                      	type={'project'}
-                      	/>
-                    	)}
-                    	keyExtractor={item => item._id}
-                  />
-                )}
+              	{!isLoading && allProjects.map((item) => (
+                	<ProjectItem 
+                  	key={item._id} 
+                  	item={item}
+                  	completed={showCompletedProjects} 
+                  	type={'project'}
+                  	/>
+                  ))}
                 </View>
                 <TouchableOpacity 
                   style={styles.completedContainer}
