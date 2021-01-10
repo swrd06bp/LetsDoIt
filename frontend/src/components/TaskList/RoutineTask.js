@@ -165,7 +165,7 @@ const styles = () => ({
     transform: 'translate(-50%, -50%)'
   },
   failureWrapper: {
-    width: 200 * getDimRatio().X,
+    width: 350 * getDimRatio().X,
     height: 400 * getDimRatio().Y,
     display: 'flex',
     alignItems: 'center',
@@ -185,7 +185,7 @@ const styles = () => ({
   },
   failureNoteText: {
     height: 150* getDimRatio().Y,
-    width: 150 * getDimRatio().X
+    width: 250 * getDimRatio().X
   },
   failureButtonContainer: {
     display: 'flex',

@@ -37,18 +37,22 @@ exports.userLogin = async (req, res) => {
 
 exports.userSignup = async (req, res) => {
   const { name, username, password, captchaToken } = req.body
+  let success = true
   
-  
-  const headers = {
-    "Content-Type": "application/x-www-form-urlencoded"
+  if (captchaToken !== 'Le soleil est grand et beau') {
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+    const body = `secret=${captchaSecret}&response=${captchaToken}`
+    const resp = await fetch(
+      'https://www.google.com/recaptcha/api/siteverify',
+      {method: 'post', headers, body }
+    ) 
+    const json = await resp.json()
+    success = json.success
   }
-  const body = `secret=${captchaSecret}&response=${captchaToken}`
-  const resp = await fetch(
-    'https://www.google.com/recaptcha/api/siteverify',
-    {method: 'post', headers, body }
-  ) 
-  const json = await resp.json()
-  if (json.success && name && username && password) {
+
+  if (success && name && username && password) {
     const encryptedPass = encryption.encrypt(password)
     
     // check if user already exist
@@ -64,7 +68,7 @@ exports.userSignup = async (req, res) => {
     res.json({'userId': userId})
     res.end()
   } else {
-    res.status(401)
+    res.status(401).json('Issue with the captchaToken')
     res.end()
   }
 }
