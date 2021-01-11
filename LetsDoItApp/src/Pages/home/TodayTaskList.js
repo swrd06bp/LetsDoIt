@@ -103,8 +103,8 @@ function TodayTaskList (props) {
     let allRoutineTasks = []
     for (let habit of allHabits) {
       // get the doneRoutines
-      const since = habit.frequency.type === 'day' ? todayDate() 
-        : (habit.frequency.type === 'week' ? lastWeekDate() : lastMonthDate())
+      const since = habit.frequency.type === 'day' ? todayDate().toJSON() 
+        : (habit.frequency.type === 'week' ? lastWeekDate().toJSON() : lastMonthDate().toJSON())
       const response = await api.getRoutinesHabit({
         habitId: habit._id,
         isDone: true,

@@ -5,14 +5,19 @@ import {
   TouchableOpacity, 
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
+import { useNavigation } from '@react-navigation/native'
 
 import Api from '../../Api'
 
 
 function HabitItem (props) {
+  const navigation = useNavigation()
 
   return (
-     <TouchableOpacity style={styles.habitWrapper}>
+     <TouchableOpacity
+        onPress={() => {navigation.navigate('HabitPage', {habit: props.item})}}
+        style={styles.habitWrapper}
+      >
         <View style={styles.habitFirstPart}>
           <Text style={styles.habitContentText}>{props.item.content}</Text>
         </View>

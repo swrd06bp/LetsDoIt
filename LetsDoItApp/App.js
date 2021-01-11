@@ -10,6 +10,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import Home from './src/Pages/home'
 import HappinessPage from './src/Pages/HappinessPage'
 import GoalsSection from './src/Pages/GoalsSection'
+import HabitPage from './src/Pages/GoalsSection/HabitPage'
 import LandingPage from './src/Pages/landing'
 import HappinessInput from './src/Pages/happiness/HappinessInput'
 import LoginPage from './src/Pages/login'
@@ -46,16 +47,14 @@ const App: () => React$Node = () => {
             options={() => ({
               headerShown: false
             })} 
-          >
-          </Stack.Screen>
+          />
           <Stack.Screen
             name="LoginPage"
             component={LoginPage}
             options={() => ({
               headerShown: false
             })} 
-          >
-          </Stack.Screen>
+          />
           <Stack.Screen
             name="HomePage"
             component={Home}
@@ -65,8 +64,7 @@ const App: () => React$Node = () => {
                 <Image source={require('./static/logo.png')} style={styles.companyLogo} />
                ),
             })} 
-          >
-          </Stack.Screen>
+          />
           <Stack.Screen
             name="GoalsSection"
             component={GoalsSection}
@@ -76,8 +74,14 @@ const App: () => React$Node = () => {
                 <Image source={require('./static/logo.png')} style={styles.companyLogo} />
                ),
             })} 
-          >
-          </Stack.Screen>
+          />
+          <Stack.Screen
+            name="HabitPage"
+            component={HabitPage}
+            options={() => ({
+              headerTitle: () => null,
+            })} 
+          />
           <Stack.Screen
             name="HappinessPage"
             component={HappinessPage}
@@ -87,24 +91,21 @@ const App: () => React$Node = () => {
                 <Image source={require('./static/logo.png')} style={styles.companyLogo} />
                ),
             })} 
-          >
-          </Stack.Screen>
+          />
           <Stack.Screen
             name="DayFocus"
             component={DayFocus}
             options={() => ({
               headerTitle: () => null,
             })} 
-          >
-          </Stack.Screen>
+          />
           <Stack.Screen
             name="HappinessInput"
             component={HappinessInput}
             options={() => ({
               headerTitle: () => null,
             })} 
-          >
-          </Stack.Screen>
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </MenuProvider>
