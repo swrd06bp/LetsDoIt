@@ -267,7 +267,7 @@ function TaskDescription (props) {
                <View style={[styles.linkContainer, styles.linkIOSContainer]}>
                  <RNPickerSelect
                     items={projectOptions}
-                    defaultValue={projectId}
+                    value={projectId}
                     Icon={projectOptions.filter(x => x.value === projectId).icon}
                     onValueChange={(value) => setProjectId(value)}
                  />
@@ -291,7 +291,7 @@ function TaskDescription (props) {
                <View style={[styles.linkContainer, styles.linkIOSContainer]}>
                  <RNPickerSelect
                     items={goalOptions}
-                    defaultValue={projectId}
+                    value={projectId}
                     onValueChange={(value) => setGoalId(value)}
                  />
                  </View>

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { 
   SafeAreaView,
   Dimensions,
   ScrollView,
   View,
+  Image,
   Text,
   TouchableOpacity
 } from 'react-native'
@@ -15,22 +16,67 @@ import {
   ContributionGraph,
 } from "react-native-chart-kit"
 import moment from 'moment'
+import { useNavigation } from '@react-navigation/native'
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu'
 
-
+import EditHabitForm from './EditHabitForm'
 import Api from '../../Api'
 
 
 function HabitPage (props) {
-  const [allRoutines, setAllRoutines] = useState([])
   const route = useRoute()
-  const { habit } = route.params
+  const [allRoutines, setAllRoutines] = useState([])
+  const [showEditForm, setShowEditForm] = useState(false)
+  const [habit, setHabit] = useState(route.params.habit)
+  const onGoBack = route.params.onGoBack
   const api = new Api()
+  const navigation = useNavigation()
   const screenSize = Dimensions.get("window").width
   
 
   useEffect(() => {
   	getAllRoutines()
   }, [])
+
+   useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.headerNavigation}>
+        <TouchableOpacity style={styles.headerTouch} onPress={() => setShowEditForm(true)}>
+          <Image source={require('../../../static/edit.png')} style={styles.optionImage} />
+        </TouchableOpacity>
+        <Menu>
+        <MenuTrigger>
+          <Image source={require('../../../static/options.png')} style={styles.optionImage} />
+        </MenuTrigger>
+        <MenuOptions>
+          <MenuOption onSelect={onDeleteHabit} >
+            <Text>Delete habit</Text>
+          </MenuOption>
+        </MenuOptions>
+        </Menu>
+        </View>
+      )
+    })
+  }, [])
+
+   const onDeleteHabit = async () => {
+     await api.deleteHabit(habit._id)
+     onGoBack()
+     navigation.goBack()
+   }
+
+   const onUpdateHabit = async (newHabit) => {
+     await api.updateHabit(habit._id, newHabit)
+     setHabit({_id: habit._id, ...newHabit})
+     setShowEditForm(false)
+     onGoBack()
+   }
 
   const getAllRoutines = async () => {
   	const resp = await api.getRoutinesHabit({habitId: habit._id})
@@ -44,7 +90,7 @@ function HabitPage (props) {
   else if (habit.frequency.type === 'day')
   	maxStreaks = 66
   else if (habit.frequency.type === 'week')
-  	maxStreaks = 20
+  	maxStreaks = 24
   else if (habit.frequency.type === 'month')
   	maxStreaks = 12
 
@@ -118,7 +164,7 @@ function HabitPage (props) {
        	   }
        	   if (i % 6 == 0) {
        	     scoreCounts.push(score)
-       	     scoreLabels.push(scoreLabels)
+       	     scoreLabels.push(moment(date).format('DD MMM'))
        	   }
        	  }
        }
@@ -139,19 +185,19 @@ function HabitPage (props) {
        	   	 	score = 0
        	   	    penalty = 0
        	   	 }
-       	   	 else if (cumulativeStreak > 5)
+       	   	 else if (cumulativeStreak > 1)
        	   		 penalty += 1
-       	   	  else {
+       	   	 else {
        	   	 	 score -= 1
        	   	 	 penalty += 1
-       	   	  }
+       	   	 }
        	   	 cumulativeStreak = 0
        	   }
-       	   if (i % 6 == 0) {
-       	     scoreCounts.push(score)
-       	     scoreLabels.push(scoreLabels)
-       	   }
-       	  }
+       	   if (i % 2 === 0) {
+       	      scoreCounts.push(score)
+       	      scoreLabels.push(moment(date).format('DD MMM'))
+       	    }
+          }
        }
        else if (habit.frequency.type === 'month') {
        	 for (let i = maxStreaks; i >= 0; i --) {
@@ -170,7 +216,7 @@ function HabitPage (props) {
        	   	 	score = 0
        	   	    penalty = 0
        	   	 }
-       	   	 else if (cumulativeStreak > 5)
+       	   	 else if (cumulativeStreak > 0)
        	   		 penalty += 1
        	   	  else {
        	   	 	 score -= 1
@@ -178,11 +224,11 @@ function HabitPage (props) {
        	   	  }
        	   	 cumulativeStreak = 0
        	   }
-       	   if (i % 6 == 0) {
-       	     scoreCounts.push(score)
-       	     scoreLabels.push(scoreLabels)
-       	   }
-       	  }
+       	    
+       	    scoreCounts.push(score)
+       	    scoreLabels.push(moment(date).format('DD MMM'))
+       	   
+          }
        }
        return { scoreLabels, scoreCounts }
 	}
@@ -215,6 +261,7 @@ function HabitPage (props) {
         }
       ]
     }
+    console.log(dataScore)
 
 
   const chartConfig = {
@@ -234,6 +281,14 @@ function HabitPage (props) {
   }
   return (
     <SafeAreaView style={styles.wrapper}>
+      {showEditForm && (
+        <EditHabitForm 
+          goalId={habit.goalId} 
+          habit={habit} 
+          onClose={() => setShowEditForm(false)}
+          onAddHabit={onUpdateHabit} 
+        />
+      )}
       <ScrollView>
         <View style={styles.headerWrapper}>
       	  <Text style={styles.titleText}>{habit.content}</Text>
@@ -243,7 +298,7 @@ function HabitPage (props) {
       	      <Text style={styles.subTitleText}>Frequency</Text>
       	    </View>
       	    <View style={styles.subTitleContainer}>
-              <Text style={styles.subTitleValueText}>{habit.startTime ? habit.startTime : 'Off'}</Text>
+              <Text style={styles.subTitleValueText}>{habit.isNotification ? habit.startTime : 'Off'}</Text>
       	      <Text style={styles.subTitleText}>Notification</Text>
             </View>
           </View>      	
@@ -268,6 +323,7 @@ function HabitPage (props) {
 			  data={dataScore}
 			  width={screenSize}
 			  height={256}
+			  withInnerLines={false}
 			  verticalLabelRotation={30}
 			  chartConfig={chartConfig}
 			 
@@ -313,7 +369,13 @@ function HabitPage (props) {
 }
 
 const styles = EStyleSheet.create({
-	wrapper: {
+	headerNavigation: {
+    flexDirection: 'row',
+  },
+  headerTouch: {
+    marginRight: '10rem',
+  },
+  wrapper: {
 	  backgroundColor: 'white',
 	  height: '100%',
 	},
@@ -369,7 +431,11 @@ const styles = EStyleSheet.create({
 	overviewText: {
 	  fontSize: '12rem'
 	},
-
+  optionImage: {
+    height: '25rem',
+    width: '25rem',
+    marginRight: '10rem',
+  },
 })
 
 export default HabitPage

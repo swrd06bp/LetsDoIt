@@ -111,6 +111,11 @@ class Api {
     const url = this.baseUrl + '/habit'
     return await this.post(url, habit)
   }
+
+  async updateHabit(habitId, habit) {
+    const url = this.baseUrl + `/habit/${habitId}`
+    return await this.put(url, habit)
+  }
   
   async deleteHabit(habitId) {
     const url = this.baseUrl + `/habit/${habitId}`

@@ -15,7 +15,10 @@ function HabitItem (props) {
 
   return (
      <TouchableOpacity
-        onPress={() => {navigation.navigate('HabitPage', {habit: props.item})}}
+        onPress={() => {navigation.navigate('HabitPage', {
+          habit: props.item,
+          onGoBack: props.onGoBack,
+        })}}
         style={styles.habitWrapper}
       >
         <View style={styles.habitFirstPart}>

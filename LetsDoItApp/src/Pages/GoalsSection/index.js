@@ -1,13 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { 
   SafeAreaView,
   View,
   ScrollView, 
   Text, 
+  Image,
   TouchableOpacity, 
   ActivityIndicator, 
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
+import { useNavigation } from '@react-navigation/native'
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu'
 
 import Footer from '../../components/Footer'
 import ProjectItem from './ProjectItem'
@@ -24,6 +32,7 @@ function GoalsSection (props) {
     const [allProjects, setAllProjects] = useState([])
     const [allGoals, setAllGoals] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const navigation = useNavigation()
     const api = new Api()
 
     useEffect(() => {
@@ -39,8 +48,32 @@ function GoalsSection (props) {
     	setAllProjects(resultProjects)
       setIsLoading(false)
   	}
-   
-   
+
+   useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View>
+        <Menu>
+        <MenuTrigger>
+          <Image source={require('../../../static/options.png')} style={styles.optionImage} />
+        </MenuTrigger>
+        <MenuOptions>
+          <MenuOption onSelect={() => {
+            setShowCompletedProjects(!showCompletedProjects)
+          }} >
+            <Text>{showCompletedProjects ? 'Show pending projects' : 'Show completed projects'}</Text>
+          </MenuOption>
+          <MenuOption onSelect={() => {
+            setShowCompletedGoals(!showCompletedGoals)
+          }} >
+            <Text>{showCompletedGoals ? 'Show pending goals' : 'Show completed goals'}</Text>
+          </MenuOption>
+        </MenuOptions>
+        </Menu>
+        </View>
+      )
+    })
+  }, [showCompletedGoals, showCompletedProjects])
 
 	return (
 	  <SafeAreaView style={styles.wrapper}>
@@ -65,15 +98,7 @@ function GoalsSection (props) {
                       />
                 ))}
               
-              </View>
-              <TouchableOpacity 
-              	onPress={() => setShowCompletedGoals(!showCompletedGoals)}
-
-              	style={styles.completedContainer}
-              >
-                  <Text style={styles.completedText}>{showCompletedGoals ? 'Show pending' : 'Show completed'}</Text>
-              </TouchableOpacity>
-                           
+              </View>      
 
            </View>
            <View style={styles.projectsSection}>
@@ -96,15 +121,6 @@ function GoalsSection (props) {
                   	/>
                   ))}
                 </View>
-                <TouchableOpacity 
-                  style={styles.completedContainer}
-                  onPress={() => {
-                    const newCompleted = !showCompletedProjects
-                    setShowCompletedProjects(newCompleted)
-                  }}
-                >
-                  <Text style={styles.completedText}>{showCompletedProjects ? 'Show pending' : 'Show completed'}</Text>
-                </TouchableOpacity>
               </View>
       
            </View>
@@ -141,14 +157,10 @@ const styles = EStyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  completedContainer: {
-  	height: '50rem',
-  	justifyContent: 'center',
-  	alignItems: 'center',
-  },
-  completedText: {
-    fontSize: '12rem',
-    textDecorationLine: 'underline',
+  optionImage: {
+    height: '25rem',
+    width: '25rem',
+    marginRight: '10rem',
   },
  })
 

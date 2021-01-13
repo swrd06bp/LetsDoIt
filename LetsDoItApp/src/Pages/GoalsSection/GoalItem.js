@@ -52,30 +52,26 @@ function GoalItem (props) {
       <ProjectItem item={props.item} completed={props.completed} type={'goal'} /> 
       <View>
       <View style={[styles.habitWrapper, {borderColor: props.item.colorCode}]}>
-
-        {allHabits.length > 0 && (
-          <View style={styles.headerHabitsContainer}>
-            <View style={styles.firstHeaderHabit}>
-              <Text style={styles.headerHabitText}>Habits</Text>
-            </View>
-          
-            <View style={styles.secondHeaderHabit}>
-                <Text style={styles.headerHabitText}>Progress</Text>
-              </View>
-            
-
-          </View>
-        )}
-        {allHabits.map((habit) => (
-          <HabitItem key={habit._id} item={habit} />
-        ))}
-        </View>
+        <View style={styles.footerHabitContainer}>        
+        <TouchableOpacity 
+          onPress={() => setAddHabitGoalId(props.item._id)}
+          style={styles.addHabitContainer}
+        >
+          <Text style={styles.addHabitText}>Show completed</Text>
+        </TouchableOpacity>
         <TouchableOpacity 
           onPress={() => setAddHabitGoalId(props.item._id)}
           style={styles.addHabitContainer}
         >
           <Text style={styles.addHabitText}>+ Add a habit</Text>
         </TouchableOpacity>
+        </View>
+
+        {allHabits.map((habit) => (
+          <HabitItem key={habit._id} item={habit} onGoBack={getHabits} />
+        ))}
+        </View>
+
        </View>
     </View>
 	)
@@ -138,9 +134,13 @@ const styles = EStyleSheet.create({
   addHabitText: {
     fontSize: '13rem',
     fontStyle: 'italic',
+    textDecorationLine: 'underline',
   },
   headerHabitText: {
     fontSize: '13rem',
+  },
+  footerHabitContainer: {
+     flexDirection: 'row',
   },
  })
 

@@ -21,10 +21,10 @@ import Api from '../../Api'
 
 function EditHabitForm(props) {
 	const [content, setContent] = useState(props.habit ? props.habit.content : '')
-  const [maxStreak, setMaxStreak] = useState(66)
+  const [maxStreak, setMaxStreak] = useState(props.habit && props.habit.maxStreak ? props.habit.maxStreak : 66)
   const [showTimePicker, setShowTimePicker] = useState(false)
-  const [frequencyOption, setFrequencyOption] = useState(0)
-  const [chosenFrequency, setChosenFrequency] = useState({type: 'day', number:1})
+  const [frequencyOption, setFrequencyOption] = useState(props.habit.frequency.type === 'day' ? 0 : (props.habit.frequency.type === 'week' ? 1 : 2))
+  const [chosenFrequency, setChosenFrequency] = useState(props.habit ? props.habit.frequency : {type: 'day', number:1})
   const [startTime, setStartTime] = useState('00:00')
   const [isNotification, setIsNotification] = useState(false)
 
@@ -97,11 +97,12 @@ function EditHabitForm(props) {
 
          <View style={styles.container}>
          <View style={styles.titleContainer}>
-           <Text style={styles.titleText}>Create a habit</Text>
+           <Text style={styles.titleText}>{props.habit ? 'Edit this' : 'Create a'} habit</Text>
          </View>
          <View style={styles.nameContainer}>
            <Text>Name:</Text>
-           <TextInput 
+           <TextInput
+            value={content} 
              placeholder={'I want to..'}
              onChangeText={setContent}
              style={styles.nameInputContainer}
@@ -113,6 +114,7 @@ function EditHabitForm(props) {
               <RNPickerSelect 
                 items={allFrequencyOptions}
                 value={frequencyOption}
+                style={styles}
                 onValueChange={onOptionChange}
               />
             )}
@@ -120,6 +122,7 @@ function EditHabitForm(props) {
               <DropDownPicker
                 items={allFrequencyOptions}
                 value={frequencyOption}
+                defaultValue={frequencyOption}
                 containerStyle={styles.linkAndroidContainer}
                 onChangeItem={onOptionChange}
               />
@@ -128,6 +131,7 @@ function EditHabitForm(props) {
               <RNPickerSelect 
                 items={frequencyOption === 1 ? weeklyFrequencyOptions : monthlyFrequencyOptions}
                 value={chosenFrequency.number}
+                style={styles}
                 onValueChange={frequencyOption === 1 ? onOptionWeeklyChange : onOptionMonthlyChange}
               />
             )}
@@ -135,6 +139,7 @@ function EditHabitForm(props) {
               <DropDownPicker
                 items={frequencyOption === 1 ? weeklyFrequencyOptions : monthlyFrequencyOptions}
                 value={chosenFrequency.number}
+                defaultValue={chosenFrequency.number}
                 containerStyle={styles.linkAndroidContainer}
                 onChangeItem={frequencyOption === 1 ? onOptionWeeklyChange : onOptionMonthlyChange}
               />
@@ -175,6 +180,7 @@ function EditHabitForm(props) {
               acheived: null,
               startTime,
               maxStreak,
+              isNotification,
             }
             props.onAddHabit(habit)
          }
@@ -194,7 +200,7 @@ const styles = EStyleSheet.create({
     backgroundColor: 'white',
   },
   container: {
-    marginLeft: '17rem',
+    marginHorizontal: '17rem',
   },
   titleContainer: {
     justifyContent: 'center',
@@ -208,6 +214,7 @@ const styles = EStyleSheet.create({
   nameContainer: {
     alignSelf: 'center',
     width: '100%',
+    marginVertical: '2rem',
   },
   nameInputContainer: {
     borderColor: 'grey',
@@ -218,16 +225,21 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     height: '40rem',
     alignItems: 'center',
+    marginVertical: '2rem',
   },
   notificationContainer: {
     flexDirection: 'row',
     height: '40rem',
     alignItems: 'center',
+    marginVertical: '2rem',
   },
   startTimeContainer: {
     borderWidth: 0.5,
     borderColor: 'grey',
-
+    marginVertical: '2rem',
+    height: '40rem',
+    justifyContent: 'center',
+    paddingHorizontal: '3rem',
   },
   checkbox: { 
     height: '18rem', 
@@ -240,16 +252,27 @@ const styles = EStyleSheet.create({
     height: '40rem',
   },
   inputTextContainer: {
-    borderColor: 'grey',
-    borderWidth: 0.5,
+    borderColor: 'lightgrey',
+    borderWidth: 1,
     height: '40rem',
-    width: '40rem',
+    alignItems: 'center',
+    paddingHorizontal: '3rem',
   }, 
   linkAndroidContainer: {
     marginLeft: '5rem',
     height: '40rem',
-    width: '120rem',
+    width: '110rem',
   }, 
+
+  inputIOS: {
+    marginLeft: '5rem',
+    height: '40rem',
+    width: '110rem',
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+    paddingLeft: '5rem'
+    }
+
  })
 
 export default EditHabitForm
