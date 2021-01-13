@@ -23,7 +23,7 @@ function EditHabitForm(props) {
 	const [content, setContent] = useState(props.habit ? props.habit.content : '')
   const [maxStreak, setMaxStreak] = useState(props.habit && props.habit.maxStreak ? props.habit.maxStreak : 66)
   const [showTimePicker, setShowTimePicker] = useState(false)
-  const [frequencyOption, setFrequencyOption] = useState(props.habit.frequency.type === 'day' ? 0 : (props.habit.frequency.type === 'week' ? 1 : 2))
+  const [frequencyOption, setFrequencyOption] = useState(!props.habit ? 0 : (props.habit.frequency.type === 'day' ? 0 : (props.habit.frequency.type === 'week' ? 1 : 2)))
   const [chosenFrequency, setChosenFrequency] = useState(props.habit ? props.habit.frequency : {type: 'day', number:1})
   const [startTime, setStartTime] = useState('00:00')
   const [isNotification, setIsNotification] = useState(false)

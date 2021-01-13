@@ -22,7 +22,7 @@ function GoalItem (props) {
 
   useEffect(() => {
     getHabits()
-  }, [])
+  }, [props.completedHabits])
 
   const onAddHabit = async (habit) => {
     await api.insertHabit(habit) 
@@ -30,8 +30,9 @@ function GoalItem (props) {
     setAddHabitGoalId(null)
   }
 
+
   const getHabits = async () => {
-    const resp = await api.getHabitsGoal(props.item._id)
+    const resp = await api.getHabitsGoal(props.item._id, props.completedHabits)
     const json = await resp.json()
     setAllHabits(json)
   }
@@ -53,12 +54,6 @@ function GoalItem (props) {
       <View>
       <View style={[styles.habitWrapper, {borderColor: props.item.colorCode}]}>
         <View style={styles.footerHabitContainer}>        
-        <TouchableOpacity 
-          onPress={() => setAddHabitGoalId(props.item._id)}
-          style={styles.addHabitContainer}
-        >
-          <Text style={styles.addHabitText}>Show completed</Text>
-        </TouchableOpacity>
         <TouchableOpacity 
           onPress={() => setAddHabitGoalId(props.item._id)}
           style={styles.addHabitContainer}

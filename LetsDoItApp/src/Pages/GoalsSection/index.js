@@ -27,8 +27,9 @@ import Api from '../../Api'
 
 
 function GoalsSection (props) {
-	const [showCompletedProjects, setShowCompletedProjects] = useState(false)
+	  const [showCompletedProjects, setShowCompletedProjects] = useState(false)
     const [showCompletedGoals, setShowCompletedGoals] = useState(false)
+    const [showCompletedHabits, setShowCompletedHabits] = useState(false)
     const [allProjects, setAllProjects] = useState([])
     const [allGoals, setAllGoals] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -68,12 +69,17 @@ function GoalsSection (props) {
           }} >
             <Text>{showCompletedGoals ? 'Show pending goals' : 'Show completed goals'}</Text>
           </MenuOption>
+          <MenuOption onSelect={() => {
+            setShowCompletedHabits(!showCompletedHabits)
+          }} >
+            <Text>{showCompletedHabits ? 'Show only remaining habits' : 'Show all habits'}</Text>
+          </MenuOption>
         </MenuOptions>
         </Menu>
         </View>
       )
     })
-  }, [showCompletedGoals, showCompletedProjects])
+  }, [showCompletedGoals, showCompletedProjects, showCompletedHabits])
 
 	return (
 	  <SafeAreaView style={styles.wrapper}>
@@ -95,6 +101,7 @@ function GoalsSection (props) {
                         item={item}
                         completed={showCompletedGoals} 
                         type={'goal'}
+                        completedHabits={showCompletedHabits}
                       />
                 ))}
               

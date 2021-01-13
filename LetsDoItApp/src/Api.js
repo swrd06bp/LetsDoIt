@@ -102,8 +102,10 @@ class Api {
     return await this.get(url)
   }
 
-  async getHabitsGoal (goalId) {
-    const url = this.baseUrl + `/goal/${goalId}/habits`
+  async getHabitsGoal (goalId, all) {
+    let url = this.baseUrl + `/goal/${goalId}/habits`
+    if (all)
+      url += `?all=true`
     return await this.get(url)
   }
   
