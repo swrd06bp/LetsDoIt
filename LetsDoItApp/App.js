@@ -11,6 +11,7 @@ import Home from './src/Pages/home'
 import HappinessPage from './src/Pages/HappinessPage'
 import GoalsSection from './src/Pages/GoalsSection'
 import HabitPage from './src/Pages/GoalsSection/HabitPage'
+import ProjectPage from './src/Pages/GoalsSection/ProjectPage'
 import LandingPage from './src/Pages/landing'
 import HappinessInput from './src/Pages/happiness/HappinessInput'
 import LoginPage from './src/Pages/login'
@@ -78,6 +79,13 @@ const App: () => React$Node = () => {
           <Stack.Screen
             name="HabitPage"
             component={HabitPage}
+            options={() => ({
+              headerTitle: () => null,
+            })} 
+          />
+          <Stack.Screen
+            name="ProjectPage"
+            component={ProjectPage}
             options={() => ({
               headerTitle: () => null,
             })} 

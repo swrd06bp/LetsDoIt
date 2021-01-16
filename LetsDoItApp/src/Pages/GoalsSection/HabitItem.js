@@ -40,7 +40,7 @@ const styles = EStyleSheet.create({
     backgroundColor: '#d8d0d2',
    },
    habitFirstPart: {
-     width: '50%',
+
    },
    habitContentText: {
    	 marginLeft: '10rem',

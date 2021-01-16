@@ -87,6 +87,9 @@ function GoalsSection (props) {
           <View style={styles.goalsSection}>
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Goals</Text>
+                <TouchableOpacity style={styles.addButtonContainer} >
+                  <Text style={styles.addButtonText}>+</Text>
+                </TouchableOpacity>
               </View>
            
               <View style={styles.flatListContainer}>
@@ -111,6 +114,9 @@ function GoalsSection (props) {
            <View style={styles.projectsSection}>
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Projects</Text>
+                <TouchableOpacity style={styles.addButtonContainer} >
+                  <Text style={styles.addButtonText}>+</Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.elemsContainer}>
               <View style={styles.flatListContainer}>
@@ -150,14 +156,32 @@ const styles = EStyleSheet.create({
   navigation:{
     height: '8%',
   },
+  addButtonContainer: {
+    backgroundColor: '#32A3BC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    width: '30rem',
+    height: '30rem',
+    marginHorizontal: '10rem',
+    marginVertical: '3rem',
+  },
+  addButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: '24rem'
+  }, 
   titleText: {
-    fontSize: '20rem',
+    fontSize: '24rem',
     fontWeight: 'bold',
     marginBottom: '10rem',
     color: '#32A3BC',
   },
   titleContainer: {
   	height: '45rem',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   activityContainer: {
     height: '100%',

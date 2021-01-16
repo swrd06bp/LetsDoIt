@@ -17,7 +17,7 @@ import {
   tomorrowDate,
   nextMondayDate,
 } from '../../utils'
-import Api from '../../Api.js'
+import Api from '../../Api'
 import ActionButton from '../ActionButton'
 
 
@@ -83,7 +83,10 @@ function AddTask (props) {
     >
     <View style={styles.inputContainer}>
      <View style={styles.firstPart}>
-      <TouchableOpacity onPress={onDismiss}>
+      <TouchableOpacity
+        style={styles.imageCrossContainer} 
+        onPress={onDismiss}
+      >
         <Image 
           resizeMode="contain"
           source={require('../../../static/cross.png')} 
@@ -149,7 +152,9 @@ const styles = EStyleSheet.create({
   imageCross: {
     height: '15rem',
     width: '15rem',
-    marginRight: '8rem',
+  },
+  imageCrossContainer: {
+    padding: '8rem'
   },
   helperWrapper: {
     backgroundColor: '#D8D8D8',
@@ -173,10 +178,8 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
   },
   inputContainer: {
-    
     justifyContent: 'space-around',
     alignItems: 'center',
-
   },
   textInput: {
     paddingHorizontal: '20rem',

@@ -38,7 +38,6 @@ function GoalItem (props) {
   }
 
   if (props.completed && !props.item.doneAt) return null
-
   if (!props.completed && props.item.doneAt) return null
 
 	return (
@@ -50,44 +49,34 @@ function GoalItem (props) {
           onClose={() => setAddHabitGoalId(null)} 
         />
         )}
-      <ProjectItem item={props.item} completed={props.completed} type={'goal'} /> 
-      <View>
-      <View style={[styles.habitWrapper, {borderColor: props.item.colorCode}]}>
-        <View style={styles.footerHabitContainer}>        
+      <ProjectItem
+        item={props.item}
+        completed={props.completed}
+        type={'goal'}
+        onGoBack={() => {}}
+       /> 
+      <View style={styles.itemsContainer}>
         <TouchableOpacity 
           onPress={() => setAddHabitGoalId(props.item._id)}
           style={styles.addHabitContainer}
         >
-          <Text style={styles.addHabitText}>+ Add a habit</Text>
+          <Text style={styles.addHabitText}>+</Text>
         </TouchableOpacity>
-        </View>
-
-        {allHabits.map((habit) => (
-          <HabitItem key={habit._id} item={habit} onGoBack={getHabits} />
-        ))}
-        </View>
-
-       </View>
+        <View style={[styles.habitWrapper, {borderColor: props.item.colorCode}]}>
+        
+          {allHabits.map((habit) => (
+            <HabitItem key={habit._id} item={habit} onGoBack={getHabits} />
+          ))}
+       
+      </View>
     </View>
+  </View>
 	)
 }
 
 const styles = EStyleSheet.create({
   itemWrapper: {
     marginBottom: '20rem',
-    
-  },
-  firstPartItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '72%',
-  },
-  secondPartItem: {
-    alignItems: 'center',
-    width: '28%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-
   },
   projectShape: {
     marginHorizontal: '5rem',
@@ -111,25 +100,31 @@ const styles = EStyleSheet.create({
   dueDateText: {
     fontSize: '12rem',
   },
-  headerHabitsContainer: {
-    flexDirection: 'row',
-  },
-  firstHeaderHabit: {
-    width: '50%',
-    marginLeft: '8rem',
+  itemsContainer: {
+    flexDirection: 'row'
   },
   habitWrapper: {
-    marginLeft: '35rem',
+    marginLeft: '10rem',
     borderLeftWidth: '5rem',
+    flex: 1,
+    marginRight: '20rem',
+
   },
   addHabitContainer: {
-    marginLeft: '55rem',
-    marginVertical: '10rem',
+    backgroundColor: '#32A3BC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    width: '30rem',
+    height: '30rem',
+    marginHorizontal: '10rem',
+    marginVertical: '3rem',
+    alignSelf: 'flex-end',
   },
   addHabitText: {
-    fontSize: '13rem',
-    fontStyle: 'italic',
-    textDecorationLine: 'underline',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: '18rem'
   },
   headerHabitText: {
     fontSize: '13rem',

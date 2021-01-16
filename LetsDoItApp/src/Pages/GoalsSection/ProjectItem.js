@@ -5,16 +5,24 @@ import {
   TouchableOpacity, 
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
+import { useNavigation } from '@react-navigation/native'
 
 
 function ProjectItem (props) {
-    if (props.completed && !props.item.doneAt) return null
+  const navigation = useNavigation()
+  
+  if (props.completed && !props.item.doneAt) return null
 
-    if (!props.completed && props.item.doneAt) return null
-	return (
+  if (!props.completed && props.item.doneAt) return null
+	
+  return (
     <View style={styles.backgroundWrapper}>
       <TouchableOpacity
-         style={styles.itemWrapper}
+        style={styles.itemWrapper}
+        onPress={() => {navigation.navigate('ProjectPage', {
+          habit: props.item,
+          onGoBack: props.onGoBack,
+        })}}
         >
          <View style={styles.firstPartItem}>
        	   <View style={[
