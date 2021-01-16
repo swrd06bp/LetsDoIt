@@ -45,6 +45,16 @@ const sortTasks = tasks => {
   sortedTasks.sort((a, b) => {return(a.doneAt > b.doneAt)})
   sortedTasks.sort((a, b) => {return(a.doneAt && !b.doneAt)})
   sortedTasks.sort((a, b) => {return(a.type === 'task' && b.type === 'routine')})
+  sortedTasks.sort((a, b) => {return(a.type === 'routine' && b.type === 'happiness')})
+  return sortedTasks
+}
+
+const sortProjectTasks = tasks => {
+  let sortedTasks = JSON.parse(JSON.stringify(tasks))
+  sortedTasks.sort((a, b) => {return(a.dueDate < b.dueDate)})
+  sortedTasks.sort((a, b) => {return(a.dueDate && !b.dueDate)})
+  sortedTasks.sort((a, b) => {return(a.doneAt < b.doneAt)})
+  sortedTasks.sort((a, b) => {return(a.doneAt && !b.doneAt)})
   return sortedTasks
 }
 
@@ -202,6 +212,7 @@ const scoreToColor = (score) => {
 
 export {
   sortTasks,
+  sortProjectTasks,
   todayDate,
   tomorrowDate,
   weekDayDate,

@@ -8,6 +8,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import { useNavigation } from '@react-navigation/native'
 
 
+
 function ProjectItem (props) {
   const navigation = useNavigation()
   
@@ -20,7 +21,8 @@ function ProjectItem (props) {
       <TouchableOpacity
         style={styles.itemWrapper}
         onPress={() => {navigation.navigate('ProjectPage', {
-          habit: props.item,
+          type: props.type,
+          item: props.item,
           onGoBack: props.onGoBack,
         })}}
         >

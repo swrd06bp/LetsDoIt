@@ -9,14 +9,13 @@ import {
   TouchableOpacity
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { useRoute } from '@react-navigation/native'
+import { useRoute, useNavigation } from '@react-navigation/native'
 import {
   LineChart,
   BarChart,
   ContributionGraph,
 } from "react-native-chart-kit"
 import moment from 'moment'
-import { useNavigation } from '@react-navigation/native'
 import {
   Menu,
   MenuOptions,
@@ -401,6 +400,7 @@ const styles = EStyleSheet.create({
 	  flexDirection: 'row',
 	  justifyContent: 'space-around',
 	  alignItems: 'center',
+    marginBottom: '10rem',
 	},
 	subTitleContainer: {
 	  justifyContent: 'center',
