@@ -147,6 +147,7 @@ function HabitPage (props) {
       await api.updateHabit(habit._id, {acheived, doneAt})
       setHabit(newHabit)
     }
+    onGoBack()
     navigation.goBack()
    }
 
