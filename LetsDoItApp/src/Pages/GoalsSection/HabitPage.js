@@ -29,6 +29,7 @@ import Api from '../../Api'
 
 function HabitPage (props) {
   const route = useRoute()
+  const [habitScore, setHabitScore] = useState(0)
   const [allRoutines, setAllRoutines] = useState([])
   const [showEditForm, setShowEditForm] = useState(false)
   const [habit, setHabit] = useState(route.params.habit)
@@ -54,6 +55,9 @@ function HabitPage (props) {
           <Image source={require('../../../static/options.png')} style={styles.optionImage} />
         </MenuTrigger>
         <MenuOptions>
+          <MenuOption onSelect={onCompleteHabit} >
+            <Text>{habit.doneAt ? 'Start working about on the idea' : (!habit.isDone && habitScore === 100 ? 'Mark the habit as done' : 'Give up on the habit')}</Text>
+          </MenuOption>
           <MenuOption onSelect={onDeleteHabit} >
             <Text>Delete habit</Text>
           </MenuOption>
@@ -62,12 +66,34 @@ function HabitPage (props) {
         </View>
       )
     })
-  }, [])
+  }, [habit.isDone, habitScore])
+
+   console.log('sldfjsd', habit)
 
    const onDeleteHabit = async () => {
      await api.deleteHabit(habit._id)
      onGoBack()
      navigation.goBack()
+   }
+
+   const onCompleteHabit = async () => {
+    if (habit.doneAt) {
+      let newHabit = habit
+      newHabit['acheived'] = null
+      newHabit['doneAt'] = null
+      await api.updateHabit(habit._id, {acheived: null, doneAt: null})
+      setHabit(newHabit)
+    }
+    else if (!habit.doneAt) {
+      const acheived = habitScore === 100
+      const doneAt = new Date().toJSON()
+      let newHabit = habit
+      newHabit['acheived'] = acheived
+      newHabit['doneAt'] = doneAt
+      await api.updateHabit(habit._id, {acheived, doneAt})
+      setHabit(newHabit)
+    }
+    navigation.goBack()
    }
 
    const onUpdateHabit = async (newHabit) => {
@@ -81,7 +107,11 @@ function HabitPage (props) {
   	const resp = await api.getRoutinesHabit({habitId: habit._id})
   	const json = await resp.json()
   	setAllRoutines(json)
+    setHabitScore(getHabitScore(json))
+
   }
+
+
 
   let maxStreaks
   if (habit.maxStreaks)
@@ -105,6 +135,14 @@ function HabitPage (props) {
 	  date: x.createdAt.slice(0, 10),
 	  count: 1,
 	}))
+
+  const getHabitScore = (routines) => {
+    const newScoreCounts = getScoreData(routines).scoreCounts
+    let newHabitScore = 0
+    if (newScoreCounts.length > 0)
+      newHabitScore = Math.round(100 * newScoreCounts[newScoreCounts.length - 1] / maxStreaks)
+    return newHabitScore
+  }
 
 	const getDayCounts = (data) => {
 	  let dayCounts = []
@@ -161,6 +199,8 @@ function HabitPage (props) {
        	   	  }
        	   	 cumulativeStreak = 0
        	   }
+           if (score > 100)
+             score = 100
        	   if (i % 6 == 0) {
        	     scoreCounts.push(score)
        	     scoreLabels.push(moment(date).format('DD MMM'))
@@ -192,6 +232,8 @@ function HabitPage (props) {
        	   	 }
        	   	 cumulativeStreak = 0
        	   }
+           if (score > 100)
+             score = 100
        	   if (i % 2 === 0) {
        	      scoreCounts.push(score)
        	      scoreLabels.push(moment(date).format('DD MMM'))
@@ -223,7 +265,8 @@ function HabitPage (props) {
        	   	  }
        	   	 cumulativeStreak = 0
        	   }
-       	    
+       	   if (score > 100)
+             score = 100
        	    scoreCounts.push(score)
        	    scoreLabels.push(moment(date).format('DD MMM'))
        	   
@@ -260,7 +303,7 @@ function HabitPage (props) {
         }
       ]
     }
-    console.log(dataScore)
+  
 
 
   const chartConfig = {
@@ -278,6 +321,7 @@ function HabitPage (props) {
 	barPercentage: 0.5,
 	useShadowColorFromDataset: false // optional
   }
+
   return (
     <SafeAreaView style={styles.wrapper}>
       {showEditForm && (
@@ -306,7 +350,7 @@ function HabitPage (props) {
       	  <Text style={styles.titleSectionText}>Overview</Text>
       	  <View style={styles.overviewWrapper}>
       	    <View style={styles.overviewContainer}>
-      	       <Text style={styles.overviewValueText}>{Math.round(100 * dataScore.datasets[0].data[dataScore.datasets[0].data.length - 1] / maxStreaks)}%</Text>
+      	       <Text style={styles.overviewValueText}>{habitScore}%</Text>
       	       <Text style={styles.overviewText}>Progress</Text>
       	     </View>
       	     <View style={styles.overviewContainer}>
