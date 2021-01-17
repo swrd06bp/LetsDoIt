@@ -64,7 +64,7 @@ function GoalItem (props) {
         <View style={[styles.habitWrapper, {borderColor: props.item.colorCode}]}>
         
           {allHabits.map((habit) => (
-            <HabitItem key={habit._id} item={habit} onGoBack={getHabits} />
+            <HabitItem key={habit._id} item={habit} onGoBack={getHabits} goal={props.item} />
           ))}
        
       </View>

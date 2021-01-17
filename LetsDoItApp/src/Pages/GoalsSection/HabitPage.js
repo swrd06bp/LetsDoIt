@@ -31,6 +31,7 @@ function HabitPage (props) {
   const route = useRoute()
   const [habitScore, setHabitScore] = useState(0)
   const [allRoutines, setAllRoutines] = useState([])
+  const [commitsData, setCommitsData] = useState([])
   const [showEditForm, setShowEditForm] = useState(false)
   const [habit, setHabit] = useState(route.params.habit)
   const onGoBack = route.params.onGoBack
@@ -42,6 +43,7 @@ function HabitPage (props) {
   useEffect(() => {
   	getAllRoutines()
   }, [])
+
 
    useLayoutEffect(() => {
     navigation.setOptions({
@@ -68,7 +70,59 @@ function HabitPage (props) {
     })
   }, [habit.isDone, habitScore])
 
-   console.log('sldfjsd', habit)
+
+
+  let maxStreaks
+  if (habit.maxStreaks)
+  	maxStreaks = habit.maxStreaks
+  else if (habit.frequency.type === 'day')
+  	maxStreaks = 66
+  else if (habit.frequency.type === 'week')
+  	maxStreaks = 24
+  else if (habit.frequency.type === 'month')
+  	maxStreaks = 12
+
+  let frequency
+  if (habit.frequency.type === 'day') 
+    frequency = 'Every day'
+  else if (habit.frequency.type === 'week') 
+    frequency = `${habit.frequency.number} times a week`
+  else if (habit.frequency.type === 'month') 
+    frequency = `${habit.frequency.number} times a month`
+
+
+
+
+  const getAllRoutines = async () => {
+    const resp = await api.getRoutinesHabit({habitId: habit._id})
+    const json = await resp.json()
+    const newCommitsData = json.filter((x) => x.isDone).map( x => ({
+      date: x.createdAt.slice(0, 10),
+      count: 1,
+    }))
+    setAllRoutines(json)
+    setCommitsData(newCommitsData)
+    setHabitScore(getHabitScore(newCommitsData))
+
+  }
+
+  const getHabitScore = (routines) => {
+    const newScoreCounts = getScoreData(routines).scoreCounts
+    let newHabitScore = 0
+    if (newScoreCounts.length > 0)
+      newHabitScore = Math.round(100 * newScoreCounts[newScoreCounts.length - 1] / maxStreaks)
+    return newHabitScore
+  }
+
+	const getDayCounts = (data) => {
+	  let dayCounts = []
+	  for (let dayNumber of [1, 2, 3, 4, 5, 6, 0]) {
+	    const filteredData = data.filter( x => (x.isDone && new Date(x.createdAt).getDay() === dayNumber))
+	    const dayCount = filteredData.length
+	    dayCounts.push(dayCount)
+	  }
+	  return dayCounts
+	}
 
    const onDeleteHabit = async () => {
      await api.deleteHabit(habit._id)
@@ -103,58 +157,7 @@ function HabitPage (props) {
      onGoBack()
    }
 
-  const getAllRoutines = async () => {
-  	const resp = await api.getRoutinesHabit({habitId: habit._id})
-  	const json = await resp.json()
-  	setAllRoutines(json)
-    setHabitScore(getHabitScore(json))
-
-  }
-
-
-
-  let maxStreaks
-  if (habit.maxStreaks)
-  	maxStreaks = habit.maxStreaks
-  else if (habit.frequency.type === 'day')
-  	maxStreaks = 66
-  else if (habit.frequency.type === 'week')
-  	maxStreaks = 24
-  else if (habit.frequency.type === 'month')
-  	maxStreaks = 12
-
-  let frequency
-  if (habit.frequency.type === 'day') 
-    frequency = 'Every day'
-  else if (habit.frequency.type === 'week') 
-    frequency = `${habit.frequency.number} times a week`
-  else if (habit.frequency.type === 'month') 
-    frequency = `${habit.frequency.number} times a month`
-
-	const commitsData = allRoutines.filter((x) => x.isDone).map( x => ({
-	  date: x.createdAt.slice(0, 10),
-	  count: 1,
-	}))
-
-  const getHabitScore = (routines) => {
-    const newScoreCounts = getScoreData(routines).scoreCounts
-    let newHabitScore = 0
-    if (newScoreCounts.length > 0)
-      newHabitScore = Math.round(100 * newScoreCounts[newScoreCounts.length - 1] / maxStreaks)
-    return newHabitScore
-  }
-
-	const getDayCounts = (data) => {
-	  let dayCounts = []
-	  for (let dayNumber of [1, 2, 3, 4, 5, 6, 0]) {
-	    const filteredData = data.filter( x => (x.isDone && new Date(x.createdAt).getDay() === dayNumber))
-	    const dayCount = filteredData.length
-	    dayCounts.push(dayCount)
-	  }
-	  return dayCounts
-	}
-
-    const getHoursCounts = (data) => {
+  const getHoursCounts = (data) => {
 	  let hourCounts = []
 	  let hourLabels = []
 	  for (let hour = 0; hour < 24; hour++) {
@@ -179,8 +182,9 @@ function HabitPage (props) {
        	   let date = new Date()
        	   date.setDate(date.getDate() - i)
        	   const scoreLabel = date.toJSON().slice(0, 10)
-       	   const filteredData = commitsData.filter(x => x.date === scoreLabel)
-       	   if (filteredData.length >= habit.frequency.number) {
+       	   const filteredData = data.filter(x => x.date === scoreLabel)
+       
+           if (filteredData.length >= habit.frequency.number) {
              score += 1
              cumulativeStreak += 1
           }
@@ -212,7 +216,7 @@ function HabitPage (props) {
        	  	let date = new Date()
        	    date.setDate(date.getDate() - 7 * i)
        	    const scoreLabel = moment(date).format('W')
-       	    const filteredData = commitsData.filter(x => x.date === scoreLabel)
+       	    const filteredData = data.filter(x => x.date === scoreLabel)
        	   if (filteredData.length >= habit.frequency.number) {
              score += 1
              cumulativeStreak += 1
@@ -238,6 +242,7 @@ function HabitPage (props) {
        	      scoreCounts.push(score)
        	      scoreLabels.push(moment(date).format('DD MMM'))
        	    }
+
           }
        }
        else if (habit.frequency.type === 'month') {
@@ -245,7 +250,7 @@ function HabitPage (props) {
        	  	let date = new Date()
        	    date.setMonth(date.getMonth() - i)
        	    const scoreLabel = date.toJSON().slice(0, 10)
-       	    const filteredData = commitsData.filter(x => moment(new Date(x.date)).format('W') === scoreLabel)
+       	    const filteredData = data.filter(x => moment(new Date(x.date)).format('W') === scoreLabel)
        	   if (filteredData.length >= habit.frequency.number) {
              score += 1
              cumulativeStreak += 1
@@ -296,13 +301,15 @@ function HabitPage (props) {
     }
 
     const dataScore = {
-      labels: getScoreData(allRoutines).scoreLabels,
+      labels: getScoreData(commitsData).scoreLabels,
       datasets: [
         {
-          data: getScoreData(allRoutines).scoreCounts
+          data: getScoreData(commitsData).scoreCounts
         }
       ]
     }
+
+    
   
 
 
@@ -350,8 +357,14 @@ function HabitPage (props) {
       	  <Text style={styles.titleSectionText}>Overview</Text>
       	  <View style={styles.overviewWrapper}>
       	    <View style={styles.overviewContainer}>
-      	       <Text style={styles.overviewValueText}>{habitScore}%</Text>
-      	       <Text style={styles.overviewText}>Progress</Text>
+      	       {!route.params.goal.doneAt && habit.acheived === null && (<Text style={styles.overviewValueText}>{habitScore}%</Text>)}
+               {route.params.goal.doneAt && habit.acheived === null && (<Image source={require('../../../static/check.png')} style={styles.imageIcon} />)}
+               {route.params.goal.doneAt && habit.acheived === true && (<Image source={require('../../../static/check.png')} style={styles.imageIcon} />)}
+               {habit.acheived === false && (<Image source={require('../../../static/uncheck.png')} style={styles.imageIcon} />)}
+               {!route.params.goal.doneAt && habit.acheived === null && (<Text style={styles.overviewText}>Progress</Text>)}
+      	       {route.params.goal.doneAt && habit.acheived === null && (<Text style={styles.overviewText}>Status</Text>)}
+               {route.params.goal.doneAt && habit.acheived === true && (<Text style={styles.overviewText}>Status</Text>)}
+               {habit.acheived === false && (<Text style={styles.overviewText}>Status</Text>)}
       	     </View>
       	     <View style={styles.overviewContainer}>
       	       <Text style={styles.overviewValueText}>{commitsData.length}</Text>
@@ -479,6 +492,10 @@ const styles = EStyleSheet.create({
     height: '25rem',
     width: '25rem',
     marginRight: '10rem',
+  },
+  imageIcon: {
+    height: '25rem',
+    width: '25rem',
   },
 })
 
