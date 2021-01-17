@@ -2,6 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { 
   View, 
   SafeAreaView,
+  Keyboard,
   Text, 
   TextInput,
   TouchableOpacity, 
@@ -19,8 +20,10 @@ import {
 } from 'react-native-popup-menu'
 
 import EditProjectForm from './EditProjectForm'
+import AddTask from '../../components/AddElem/AddTask'
 import DeletePopup from '../../components/DeletePopup'
 import TaskDescription from '../../components/TaskDescription'
+import AddButton from '../../components/AddButton'
 import { sortProjectTasks } from '../../utils'
 import ProjectTask from '../../components/Task/ProjectTask'
 import ListButton from '../../components/ListButton'
@@ -44,11 +47,15 @@ function ProjectPage (props) {
     const [describeTask, setDescribeTask] = useState(null)
     const [showEditForm, setShowEditForm] = useState(false)
     const [showDeleteForm, setShowDeleteForm] = useState(false)
+    const [isAddingTask, setIsAddingTask] = useState(false)
 
     useEffect(() => {
+      Keyboard.addListener('keyboardDidHide', () => setIsAddingTask(false))
     	getAllTasks()
       getData()
+      return () => Keyboard.removeListener('keyboardDidHide', () => setIsAddingTask(false))
     }, [])
+
 
     const getData = async () => {
       const respGoals = await api.getGoals()
@@ -170,6 +177,8 @@ function ProjectPage (props) {
           onDescribe={setDescribeTask}
           onUpdate={getAllTasks}
         />)}
+        {!isAddingTask && (
+          <View>
         <View style={styles.headerWrapper}>
       	  <Text style={styles.titleText}>{currentContent}</Text>
           <ListButton list={currentList} onListChange={() => {setCurrentList(currentList === 'Personal' ? 'Work' : 'Personal')}} />
@@ -200,6 +209,9 @@ function ProjectPage (props) {
             {allTasks.length > 0 && (<Text style={styles.titleSectionText}>{doneTasks.length} / {allTasks.length}</Text>)}
       	 	 </View>
       	 	 <ScrollView style={styles.listTasksContainer}>
+             <TouchableOpacity style={styles.addTaskContainer} onPress={() => setIsAddingTask(true)}>
+               <Text style={styles.addTaskText}>Add a new task</Text>
+             </TouchableOpacity>
       	 	   {allTasks.map((item) => (
   				    <ProjectTask
                 key={item._id}
@@ -213,6 +225,18 @@ function ProjectPage (props) {
       	 	 </ScrollView>
       	 	 
       	 </View>
+         </View>
+         )}
+         {isAddingTask && (
+           <AddTask 
+              goalId={type === 'goal' ? _id : null}
+              projectId={type === 'project' ? _id : null}
+              onCreate={(task, chosenDateOption) => {
+                setAllTasks(sortProjectTasks([task, ...allTasks]))
+              }}
+              onUpdate={getAllTasks}
+            />
+         )}
       </SafeAreaView>
 	)
 }
@@ -297,6 +321,15 @@ const styles = EStyleSheet.create({
     height: '30rem',
     width: '30rem',
   },
+  addTaskContainer: {
+    height: '35rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addTaskText: {
+    textDecorationLine: 'underline',
+    fontStyle: 'italic',
+  }
 })
 
 export default ProjectPage

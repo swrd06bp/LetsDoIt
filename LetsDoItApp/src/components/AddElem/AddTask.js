@@ -52,6 +52,11 @@ function AddTask (props) {
     else if(chosenDateOption === 'Next Monday') dueDate = nextMondayDate()
     else if(chosenDateOption === 'Someday') dueDate = null
 
+    let goalId = null
+    let projectId = null
+    if(props.goalId) goalId = props.goalId
+    if(props.projectId) projectId = props.projectId 
+
     
     const api = new Api() 
       const newTask = {
@@ -59,7 +64,10 @@ function AddTask (props) {
         list: 'Personal',
         dueDate,
         note: null,
+        projectId,
+        goalId,
       }
+
     if (taskInput) {
       const resp = await api.insertTask(newTask)
       const json = await resp.json()

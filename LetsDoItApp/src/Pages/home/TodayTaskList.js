@@ -287,7 +287,6 @@ function TodayTaskList (props) {
     getAllItems()
   }
 
-  console.log('sdlfjsdkflsdjfls', isDataEmpty, itemsToday)
 
   return (
     <View>
