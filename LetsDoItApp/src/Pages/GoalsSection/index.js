@@ -18,6 +18,7 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu'
 
+import EditProjectForm from './EditProjectForm'
 import Footer from '../../components/Footer'
 import ProjectItem from './ProjectItem'
 import GoalItem from './GoalItem'
@@ -31,6 +32,7 @@ function GoalsSection (props) {
 	  const [showCompletedProjects, setShowCompletedProjects] = useState(false)
     const [showCompletedGoals, setShowCompletedGoals] = useState(false)
     const [showCompletedHabits, setShowCompletedHabits] = useState(false)
+    const [showNewProjectForm, setShowNewProjectForm] = useState(null)
     const [allProjects, setAllProjects] = useState([])
     const [allGoals, setAllGoals] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -50,6 +52,15 @@ function GoalsSection (props) {
     	setAllProjects(resultProjects)
       setIsLoading(false)
   	}
+
+    const onAddProject = async (type, newItem) => {
+       if (type === 'goal')
+        await api.insertGoal(newItem)
+       else if (type === 'project')
+        await api.insertProject(newItem)
+      setShowNewProjectForm(null)
+      getData()
+    }
 
    useLayoutEffect(() => {
     navigation.setOptions({
@@ -109,11 +120,22 @@ function GoalsSection (props) {
 
 	return (
 	  <SafeAreaView style={styles.wrapper}>
+      {showNewProjectForm && (
+         <EditProjectForm
+           isVisible={showNewProjectForm ? true : false}
+           onClose={() => setShowNewProjectForm(null)}
+           type={showNewProjectForm}
+           onAddItem={onAddProject}
+        />
+      )}
 	    <ScrollView style={styles.goalsWrapper}>
           <View style={styles.goalsSection}>
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Goals</Text>
-                <TouchableOpacity style={styles.addButtonContainer} >
+                <TouchableOpacity 
+                  style={styles.addButtonContainer} 
+                  onPress={() => setShowNewProjectForm('goal')}
+                  >
                   <Text style={styles.addButtonText}>+</Text>
                 </TouchableOpacity>
               </View>
@@ -129,6 +151,7 @@ function GoalsSection (props) {
                         key={item._id} 
                         item={item}
                         completed={showCompletedGoals} 
+                        onGoBack={getData}
                         type={'goal'}
                         completedHabits={showCompletedHabits}
                       />
@@ -140,7 +163,10 @@ function GoalsSection (props) {
            <View style={styles.projectsSection}>
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Projects</Text>
-                <TouchableOpacity style={styles.addButtonContainer} >
+                <TouchableOpacity 
+                  style={styles.addButtonContainer}
+                  onPress={() => setShowNewProjectForm('project')}
+                >
                   <Text style={styles.addButtonText}>+</Text>
                 </TouchableOpacity>
               </View>
@@ -155,6 +181,7 @@ function GoalsSection (props) {
                 	<ProjectItem 
                   	key={item._id} 
                   	item={item}
+                    onGoBack={getData}
                   	completed={showCompletedProjects} 
                   	type={'project'}
                   	/>

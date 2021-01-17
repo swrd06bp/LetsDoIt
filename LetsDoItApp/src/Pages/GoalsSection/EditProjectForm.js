@@ -14,14 +14,15 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import moment from 'moment'
 
 import ActionButton from '../../components/ActionButton'
+import ListButton from '../../components/ListButton'
 import Api from '../../Api'
 
 function EditHabitForm(props) {
   const nextYear = new Date()
   nextYear.setDate(new Date().getDate() + 365)
-	const [content, setContent] = useState('')
-  const [list, setList] = useState('Work')
-  const [dueDate, setDueDate] = useState(nextYear
+	const [content, setContent] = useState(props.item ? props.item.content : '')
+  const [list, setList] = useState(props.item ? props.item.list : 'Work')
+  const [dueDate, setDueDate] = useState(props.item ? props.item.dueDate : nextYear)
   const [showDatePicker, setShowDatePicker] = useState(false)
 
 
@@ -31,25 +32,28 @@ function EditHabitForm(props) {
 	return (
        <Modal
          style={styles.wrapper}
-         isVisible={props.goalId ? true : false}
+         isVisible={props.isVisible}
          hasBackdrop={true}
          onBackdropPress={props.onClose}
        >
         {showDatePicker && (
           <DateTimePicker
             testID="dateTimePicker"
-            value={dueDate}
+            value={new Date(dueDate)}
             mode={'date'}
             display="default"
             onPressCancel={() => setShowDatePicker(false)}
             onCloseModal={() => setShowDatePicker(false)}
-            onChange={setDueDate}
+            onChange={(event, value) => {
+              if (value)
+                setDueDate(new Date(value).toJSON())
+            }}
           />
         )}
 
          <View style={styles.container}>
          <View style={styles.titleContainer}>
-           <Text style={styles.titleText}>{props.habit ? 'Edit this' : 'Create a'} Goal</Text>
+           <Text style={styles.titleText}>{props.item ? 'Edit this' : 'Create a'} {props.type}</Text>
          </View>
          <View style={styles.nameContainer}>
            <Text>Name:</Text>
@@ -60,20 +64,33 @@ function EditHabitForm(props) {
              style={styles.nameInputContainer}
             />
          </View>
-       
+         <View style={styles.infoContainer}>
+           
+            <View style={styles.dueContainer}>
+              <Text>Due</Text>
+              <TouchableOpacity
+                onPress={() => {setShowDatePicker('dueDate')}}
+                style={styles.dueDate}
+              >
+              <Text>{new Date(dueDate).toJSON().slice(0, 10)}</Text> 
+            </TouchableOpacity>
+            </View>
+
+           <View>
+             <ListButton list={list} onListChange={() => {
+              const newList = list === 'Personal' ? 'Work' : 'Personal'
+              setList(newList)
+            }} />
+          </View>
+         </View>
          <ActionButton text={'Save'} onSubmit={() => {
           if (content) {
-            const habit = { 
+            const newItem = { 
               content, 
-              frequency: chosenFrequency, 
-              goalId: props.goalId, 
-              doneAt: null,
-              acheived: null,
-              startTime,
-              maxStreak,
-              isNotification,
+              list,
+              dueDate,
             }
-            props.onAddHabit(habit)
+            props.onAddItem(props.type, newItem)
          }
          }} />
          </View>
@@ -107,62 +124,29 @@ const styles = EStyleSheet.create({
     width: '100%',
     marginVertical: '2rem',
   },
+
   nameInputContainer: {
     borderColor: 'grey',
     borderWidth: 0.5,
     height: '40rem'
   },
-  frequencyContainer: {
+  infoContainer: {
+    marginVertical: '15rem',
     flexDirection: 'row',
-    height: '40rem',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: '2rem',
   },
-  notificationContainer: {
-    flexDirection: 'row',
+  dueContainer: {
+    marginHorizontal: '5rem',
     height: '40rem',
-    alignItems: 'center',
-    marginVertical: '2rem',
-  },
-  startTimeContainer: {
-    borderWidth: 0.5,
-    borderColor: 'grey',
-    marginVertical: '2rem',
-    height: '40rem',
-    justifyContent: 'center',
-    paddingHorizontal: '3rem',
-  },
-  checkbox: { 
-    height: '18rem', 
-    width: '18rem',
-    marginRight: '10rem', 
-  },
-  maxStreakContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: '40rem',
   },
-  inputTextContainer: {
-    borderColor: 'lightgrey',
-    borderWidth: 1,
-    height: '40rem',
-    alignItems: 'center',
-    paddingHorizontal: '3rem',
-  }, 
-  linkAndroidContainer: {
-    marginLeft: '5rem',
-    height: '40rem',
-    width: '110rem',
-  }, 
-
-  inputIOS: {
-    marginLeft: '5rem',
-    height: '40rem',
-    width: '110rem',
+  dueDate: {
+    marginHorizontal: '5rem',
     borderWidth: 1,
     borderColor: 'lightgrey',
-    paddingLeft: '5rem'
-    }
+  },
 
  })
 

@@ -52,7 +52,7 @@ function GoalItem (props) {
         item={props.item}
         completed={props.completed}
         type={'goal'}
-        onGoBack={() => {}}
+        onGoBack={props.onGoBack}
        /> 
       <View style={styles.itemsContainer}>
         <TouchableOpacity 

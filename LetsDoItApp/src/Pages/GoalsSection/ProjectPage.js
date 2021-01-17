@@ -18,6 +18,7 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu'
 
+import EditProjectForm from './EditProjectForm'
 import TaskDescription from '../../components/TaskDescription'
 import { sortProjectTasks } from '../../utils'
 import ProjectTask from '../../components/Task/ProjectTask'
@@ -32,7 +33,10 @@ function ProjectPage (props) {
 	const route = useRoute()
 	const navigation = useNavigation()
 	const api = new Api()
-    const { type, item: { _id, content, dueDate, list, note } } = route.params  
+    const { onGoBack, type, item: { _id, content, dueDate, list, note } } = route.params  
+    const [currentDueDate, setCurrentDueDate] = useState(dueDate) 
+    const [currentList, setCurrentList] = useState(list)
+    const [currentContent, setCurrentContent] = useState(content)
     const [showEditForm, setShowEditForm] = useState(false)
     const [noteText, setNoteText] = useState(note)
     const [allTasks, setAllTasks] = useState([])
@@ -50,6 +54,7 @@ function ProjectPage (props) {
       const resultGoals = await respGoals.json()
       const respProjects = await api.getProjects()
       const resultProjects = await respProjects.json()
+      const [showEditProjectForm, setShowEditProjectForm] = useState(null)
       setAllGoals(resultGoals)
       setAllProjects(resultProjects)
     }
@@ -64,6 +69,18 @@ function ProjectPage (props) {
     	const json = await resp.json()
       const sortedTasks = sortProjectTasks(json)
     	setAllTasks(sortedTasks)
+    }
+
+    const onEditItem = async (type, editItem) => {
+      if (type === 'goal')
+        await api.updateGoal(_id, editItem)
+      else if(type === 'project')
+        await api.updateProject(_id, editItem)
+      setCurrentList(editItem.list)
+      setCurrentDueDate(editItem.dueDate)
+      setCurrentContent(editItem.content)
+      setShowEditForm(false)
+      onGoBack()
     }
 
 
@@ -99,6 +116,15 @@ function ProjectPage (props) {
 
 	return (
       <SafeAreaView style={styles.wrapper}>
+      {showEditForm && (
+         <EditProjectForm
+           isVisible={showEditForm}
+           onClose={() => setShowEditForm(null)}
+           type={type}
+           onAddItem={onEditItem}
+           item={{content: currentContent, dueDate: currentDueDate, list: currentList}}
+        />
+      )}
         {describeTask && ( <TaskDescription 
           task={describeTask.task}
           projects={allProjects}
@@ -108,15 +134,15 @@ function ProjectPage (props) {
           onUpdate={getAllTasks}
         />)}
         <View style={styles.headerWrapper}>
-      	  <Text style={styles.titleText}>{content}</Text>
-          <ListButton list={list} onListChange={() => {}} />
+      	  <Text style={styles.titleText}>{currentContent}</Text>
+          <ListButton list={currentList} onListChange={() => {setCurrentList(currentList === 'Personal' ? 'Work' : 'Personal')}} />
 	      <View style={styles.subTitleWrapper}>
 	      	<View style={styles.subTitleContainer}>
-	      	  <Text style={styles.subTitleValueText}>{dueDate ? dueDate.slice(0 ,10) : 'Someday'}</Text>
+	      	  <Text style={styles.subTitleValueText}>{currentDueDate ? currentDueDate.slice(0 ,10) : 'Someday'}</Text>
 	      	  <Text style={styles.subTitleText}>Due Date</Text>
 	      	 </View>
 	      	 <View style={styles.subTitleContainer}>
-	           <Text style={styles.subTitleValueText}>{dueDate ? Math.floor((new Date(dueDate).getTime() - new Date().getTime()) / (1000*60*60*24)) : '-'}</Text>
+	           <Text style={styles.subTitleValueText}>{currentDueDate ? Math.floor((new Date(currentDueDate).getTime() - new Date().getTime()) / (1000*60*60*24)) : '-'}</Text>
 	      	   <Text style={styles.subTitleText}>Days Left</Text>
 	         </View>
 	       </View>  
