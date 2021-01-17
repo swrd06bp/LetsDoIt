@@ -12,9 +12,15 @@ import { useNavigation } from '@react-navigation/native'
 function ProjectItem (props) {
   const navigation = useNavigation()
   
-  if (props.completed && !props.item.doneAt) return null
 
   if (!props.completed && props.item.doneAt) return null
+
+
+  let date = 'Someday'
+  if (props.doneAt)
+    date = props.item.doneAt.slice(0, 10)
+  else if (props.item.dueDate)
+    date = props.item.dueDate.slice(0, 10)
 	
   return (
     <View style={styles.backgroundWrapper}>
@@ -38,8 +44,7 @@ function ProjectItem (props) {
         <View style={styles.secondPartItem}>
            <View style={styles.dueDateContainer}>
              <Text style={styles.dueDateText}>
-               {props.completed ? (props.item.doneAt ? props.item.doneAt.slice(0, 10) : 'Someday')
-               	 : (props.item.dueDate ? props.item.dueDate.slice(0, 10) : 'Someday')}
+               {date}
              </Text>
            </View>
         </View>

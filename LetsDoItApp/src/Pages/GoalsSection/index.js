@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { useNavigation } from '@react-navigation/native'
+import CheckBox from '@react-native-community/checkbox'
 import {
   Menu,
   MenuOptions,
@@ -62,17 +63,42 @@ function GoalsSection (props) {
           <MenuOption onSelect={() => {
             setShowCompletedProjects(!showCompletedProjects)
           }} >
-            <Text>{showCompletedProjects ? 'Show pending projects' : 'Show completed projects'}</Text>
+            <View style={styles.headerOptionContainer}>
+            <CheckBox 
+              boxType={'square'}
+              style={styles.checkbox}
+              value={showCompletedProjects}
+              onValueChange={() => {}}
+              />
+            <Text>Show completed projects</Text>
+            </View>
           </MenuOption>
           <MenuOption onSelect={() => {
             setShowCompletedGoals(!showCompletedGoals)
           }} >
-            <Text>{showCompletedGoals ? 'Show pending goals' : 'Show completed goals'}</Text>
+            <View style={styles.headerOptionContainer}>
+              <CheckBox 
+                boxType={'square'}
+                style={styles.checkbox}
+                value={showCompletedGoals}
+                onValueChange={() => {}}
+                />
+              <Text>Show completed goals</Text>
+            </View>
           </MenuOption>
           <MenuOption onSelect={() => {
             setShowCompletedHabits(!showCompletedHabits)
           }} >
-            <Text>{showCompletedHabits ? 'Show only remaining habits' : 'Show all habits'}</Text>
+            <View style={styles.headerOptionContainer}>
+              <CheckBox 
+                boxType={'square'}
+                style={styles.checkbox}
+                value={showCompletedHabits}
+                onValueChange={() => {}}
+                />
+              <Text>Show completed habits</Text>
+            </View>
+            
           </MenuOption>
         </MenuOptions>
         </Menu>
@@ -192,6 +218,14 @@ const styles = EStyleSheet.create({
     height: '25rem',
     width: '25rem',
     marginRight: '10rem',
+  },
+  headerOptionContainer: {
+    flexDirection: 'row'
+  },
+  checkbox: { 
+    height: '18rem', 
+    width: '18rem',
+    marginRight: '10rem', 
   },
  })
 

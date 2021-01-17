@@ -37,7 +37,6 @@ function GoalItem (props) {
     setAllHabits(json)
   }
 
-  if (props.completed && !props.item.doneAt) return null
   if (!props.completed && props.item.doneAt) return null
 
 	return (
