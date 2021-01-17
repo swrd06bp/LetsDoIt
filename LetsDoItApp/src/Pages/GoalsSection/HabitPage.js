@@ -85,10 +85,20 @@ function HabitPage (props) {
   let frequency
   if (habit.frequency.type === 'day') 
     frequency = 'Every day'
-  else if (habit.frequency.type === 'week') 
-    frequency = `${habit.frequency.number} times a week`
+  else if (habit.frequency.type === 'week')
+    if (habit.frequency.number === 1)
+       frequency = `Once a week`
+    else if (habit.frequency.number === 2)
+       frequency = `Twice a week`
+    else
+      frequency = `${habit.frequency.number} times a week`
   else if (habit.frequency.type === 'month') 
-    frequency = `${habit.frequency.number} times a month`
+    if (habit.frequency.number === 1)
+       frequency = `Once a month`
+    else if (habit.frequency.number === 2)
+       frequency = `Twice a month`
+    else
+      frequency = `${habit.frequency.number} times a month`
 
 
 

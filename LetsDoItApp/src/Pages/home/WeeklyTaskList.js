@@ -8,9 +8,11 @@ import {
   Vibration,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native'
 import { DraxProvider, DraxView } from 'react-native-drax'
 import EStyleSheet from 'react-native-extended-stylesheet'
+import moment from 'moment'
 
 import Api from '../../Api'
 import AddTask from '../../components/AddElem/AddTask'
@@ -53,7 +55,8 @@ function WeeklyTaskList (props) {
   const [draggedTask, setDraggedTask] = useState(null)
   const [showDeletion, setShowDeletion] =useState(false)
   const [date, setDate] = useState(new Date())
-  const [weekDates, setWeekDates] = useState([weekDayDate(new Date(), 0), weekDayDate(new Date(), 7)])
+  const [weekNumber, setWeekNumber] = useState(0)
+  const [weekDates, setWeekDates] = useState([weekDayDate(new Date(), weekNumber*7), weekDayDate(new Date(), (weekNumber + 1)*7)])
   const [itemsMonday, setItemsMonday] = useState([])
   const [itemsTuesday, setItemsTuesday] = useState([])
   const [itemsWednesday, setItemsWednesday] = useState([])
@@ -73,14 +76,17 @@ function WeeklyTaskList (props) {
   }, [])
 
   useEffect(() => {
+    setIsRefreshing(true)
     getAllItems() 
-  },[props.task]) 
+  },[props.task, weekDates]) 
   
   const getAllItems = async () => {
     const response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
     const allTasks = await response.json()
-    
   
+    console.log(weekDates, allTasks, isRefreshing, 'lsdkfs')  
+  
+
    if (allTasks) {
       const weekDaysTasks = decomposeItemsWeek(allTasks, date, 'task')
       const weekDaysProjects = decomposeItemsWeek(props.projects, date, 'project')
@@ -98,7 +104,6 @@ function WeeklyTaskList (props) {
     setIsRefreshing(false)
   }
 
-  
   
   const id2List = {
     Monday: itemsMonday,
@@ -157,6 +162,14 @@ function WeeklyTaskList (props) {
       data: itemsSunday
     },
   ]
+
+  const isDataEmpty = itemsMonday.length === 0
+    && itemsTuesday.length === 0
+    && itemsWednesday.length === 0
+    && itemsThursday.length === 0
+    && itemsFriday.length === 0
+    && itemsSaturday.length === 0
+    && itemsSunday.length === 0
   
   const onDragEnd = action => {
       const { source, destination } = action
@@ -252,6 +265,7 @@ function WeeklyTaskList (props) {
   }
   
 
+
   return (
     <View>
       {describeTask && ( <TaskDescription 
@@ -263,9 +277,39 @@ function WeeklyTaskList (props) {
         onUpdate={getAllItems}
       />)}
       {!isAddingTask && (
-      <View style={styles.wrapper}>
-	
+        <View style={styles.wrapper}>
+          <View style={styles.weekHeaderContainer}>
+             <TouchableOpacity
+               style={styles.weekButtonContainer}
+               onPress={() => {
+                const newWeekNumber = weekNumber - 1
+                const newDate = date
+                newDate.setDate(newDate.getDate() - 7)
+                setDate(newDate)
+                setWeekNumber(newWeekNumber)
+                setWeekDates([weekDayDate(new Date(), newWeekNumber*7), weekDayDate(new Date(), (newWeekNumber + 1)*7)])
+              }}
+             >
+               <Text style={styles.weekButtonText}>&lt;</Text>
+             </TouchableOpacity>
+             <TouchableOpacity
+               style={styles.weekButtonContainer}
+               onPress={() => {
+                const newWeekNumber = weekNumber + 1
+                const newDate = date
+                newDate.setDate(newDate.getDate() + 7)
+                setDate(newDate)
+                setWeekNumber(newWeekNumber)
+                setWeekDates([weekDayDate(new Date(), newWeekNumber*7), weekDayDate(new Date(), (newWeekNumber + 1)*7)])
+              }}
+             >
+               <Text style={styles.weekButtonText}>&gt;</Text>
+             </TouchableOpacity>
+             <Text style={styles.monthText}>{moment(weekDates[0]).format('D MMMM')} to {moment(weekDates[1]).format('D MMMM')}</Text>
+          </View>
+
         <FocusButton type={'week'} navigation={props.navigation}/>
+
         <DraxProvider>
           <View style={draggedTask ? styles.listContainerDragged : styles.listContainer}>
             <SectionList
@@ -322,7 +366,7 @@ function WeeklyTaskList (props) {
                  />
               )}
               renderSectionHeader={({ section }) => {
-                if (section.title === 'Unfinished' && !section.data.length)
+                if ((section.data.length === 0 && !draggedTask))
                   return null
                 else {
                   return (
@@ -332,7 +376,10 @@ function WeeklyTaskList (props) {
                       receivingStyle={styles.backgroundReceivingTitle}
                       renderContent={({ viewState }) => {
                         return (
-                          <Text style={styles.sectionTitleColor}>{section.title}</Text>
+                          <View style={styles.sectionTitleContainer}>
+                            <Text style={styles.sectionTitleColor}>{section.title}</Text>
+                  
+                          </View>
                         )
                       }}
                       onReceiveDragDrop={(event) => {
@@ -345,7 +392,21 @@ function WeeklyTaskList (props) {
                   )
                 }
               }}
-            />     
+            /> 
+            
+             {isDataEmpty && !isRefreshing && (
+              <View style={styles.noDataContainer}>
+              <TouchableOpacity style={styles.noDataButton} onPress={() => setIsAddingTask(true)}>
+               <Text style={styles.noDataText}>No task for this week</Text>
+               <Text style={styles.noDataAddText}>Add a new one</Text>
+              </TouchableOpacity>
+              </View>
+            )}
+            {isDataEmpty && isRefreshing && (
+              <View style={styles.noDataContainer}>
+                <ActivityIndicator size='large' />
+              </View>
+            )}     
             </View>
               {!draggedTask && (
                 <View style={styles.navigation}>
@@ -393,6 +454,7 @@ function WeeklyTaskList (props) {
               )}
           </DraxProvider>
 
+
         </View>
         )}
         {isAddingTask && (
@@ -434,6 +496,9 @@ const styles = EStyleSheet.create({
     marginBottom: '10rem',
     color: '#32A3BC',
   },
+  sectionTitleContainer: {
+    flexDirection: 'row',
+  },
   backgroundItem: {
     height: '40rem',
     backgroundColor: '#E5E5E5'
@@ -462,6 +527,50 @@ const styles = EStyleSheet.create({
     bottom: '90rem',
     right: '30rem',
   },
+  weekHeaderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '10rem',
+  },
+  weekButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#32A3BC',
+    borderColor: 'white',
+    paddingLeft: '10rem',
+    paddingRight: '10rem',
+    borderWidth: 1,
+    borderRadius: 5,
+    borderStyle: 'solid',
+  },
+  weekButtonText: {
+    fontSize: '18rem',
+    color: 'white',  
+    fontWeight: 'bold', 
+  },
+  monthText: {
+    marginHorizontal: '10rem',
+    fontSize: '16rem'
+  },
+  noDataContainer: {
+    flex: 1,
+   
+    alignItems: 'center'
+  },
+  noDataButton: {
+    alignItems: 'center'
+  },
+  noDataText: {
+    fontSize: '14rem',
+  },
+  noDataAddText: {
+    color: 'blue',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    fontSize: '14rem'
+  },
+
 })
 
 

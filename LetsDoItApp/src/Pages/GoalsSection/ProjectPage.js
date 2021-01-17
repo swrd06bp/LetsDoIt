@@ -55,7 +55,6 @@ function ProjectPage (props) {
       const resultGoals = await respGoals.json()
       const respProjects = await api.getProjects()
       const resultProjects = await respProjects.json()
-      const [showEditProjectForm, setShowEditProjectForm] = useState(null)
       setAllGoals(resultGoals)
       setAllProjects(resultProjects)
     }
@@ -203,6 +202,7 @@ function ProjectPage (props) {
       	 	 <ScrollView style={styles.listTasksContainer}>
       	 	   {allTasks.map((item) => (
   				    <ProjectTask
+                key={item._id}
                 describeTask={describeTask}
                 onDescribe={setDescribeTask}
                 onUpdate={getAllTasks} 

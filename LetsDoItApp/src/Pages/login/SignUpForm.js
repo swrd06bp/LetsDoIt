@@ -18,8 +18,7 @@ import Api from '../../Api'
 function SignUpForm(props) {
   const [name, setName] = useState('')
   const [emailInput, setEmailInput] = useState('')
-  const [passwordInput1, setPasswordInput1] = useState('')
-  const [passwordInput2, setPasswordInput2] = useState('')
+  const [passwordInput, setPasswordInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const view = useRef(null)
@@ -37,7 +36,7 @@ function SignUpForm(props) {
     }))
 
 
-  const attemptSignUp = async (username, password1, password2) => {
+  const attemptSignUp = async (username, password) => {
     // check if password are the same
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!reg.test(username)) {
@@ -47,23 +46,17 @@ function SignUpForm(props) {
       return      
     }
 
-    if (!password1) {
+    if (!password) {
       setErrorMessage('The password can not be null')
       view.current.bounce()
       setIsLoading(false)
       return      
     }
 
-    if (password1 !== password2) {
-      setErrorMessage('The passwords are not the same')
-      view.current.bounce()
-      setIsLoading(false)
-      return
-    }
 
 
     try {
-      const isSignup = await timeout(5000, api.signup(name, username, password1, 'Le soleil est grand et beau'))
+      const isSignup = await timeout(5000, api.signup(name, username, password, 'Le soleil est grand et beau'))
       if (isSignup.status === 400) {
         setErrorMessage('The username already exists')
         view.current.bounce()
@@ -93,6 +86,7 @@ function SignUpForm(props) {
           returnKeyType="next"
           placeholder='First name'
           placeholderTextColor='#d4d4d4'
+          blurOnSubmit={false}
           editable={!isLoading}
         />
         <TextInput
@@ -104,6 +98,7 @@ function SignUpForm(props) {
           returnKeyType="next"
           placeholder='Email address'
           placeholderTextColor='#d4d4d4'
+          blurOnSubmit={false}
           editable={!isLoading}
         />
 
@@ -112,29 +107,15 @@ function SignUpForm(props) {
           autoCapitalize="none"
           returnKeyType="next"
           onSubmitEditing={()=> Keyboard.dismiss()}
-          onChangeText={(text) => setPasswordInput1(text)}
+          onChangeText={(text) => setPasswordInput(text)}
           placeholder='Password'
+          autoCorrect={false}
           blurOnSubmit={false}
           placeholderTextColor='#d4d4d4'
           secureTextEntry
           textContentType="oneTimeCode"
           editable={!isLoading}
         />
-
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onSubmitEditing={()=> Keyboard.dismiss()}
-          returnKeyType="go"
-          onChangeText={(text) => setPasswordInput2(text)}
-          placeholder='Confirm password'
-          textContentType="oneTimeCode"
-          blurOnSubmit={false}
-          placeholderTextColor='#d4d4d4'
-          secureTextEntry
-          editable={!isLoading}
-        />
-
 
         <TouchableOpacity
           style={styles.buttonContainer}
@@ -142,7 +123,7 @@ function SignUpForm(props) {
           onPress={() => {
             if (!isLoading) {
               setIsLoading(true)
-              attemptSignUp(emailInput, passwordInput1, passwordInput2)
+              attemptSignUp(emailInput, passwordInput)
             }
           }}>
           {isLoading && (

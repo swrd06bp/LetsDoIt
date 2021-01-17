@@ -37,31 +37,35 @@ function EditHabitForm(props) {
 
 
   const weeklyFrequencyOptions = [...Array(7).keys()].slice(1).map(x => {
-    const s = ' time per week'
-    const ss= ' times per week'
-    if (x === 1) return {label: x + s, value: x}
-    else return {label: x + ss, value: x}
+    const s = 'Once per week'
+    const ss = 'Twice per week'
+    const sss = ' times per week'
+    if (x === 1) return {label:  s, value: x}
+    else if (x === 2) return {label: ss, value: x}
+    else return {label: x + sss, value: x}
   })  
 
   const monthlyFrequencyOptions = [...Array(27).keys()].slice(1).map(x => {
-    const s = ' time per month'
-    const ss= ' times per month'
-    if (x === 1) return {label: x + s, value: x}
-    else return {label: x + ss, value: x}
+    const s = 'Once per month'
+    const ss = 'Twice per month'
+    const sss = ' times per month'
+    if (x === 1) return {label:  s, value: x}
+    else if (x === 2) return {label: ss, value: x}
+    else return {label: x + sss, value: x}
   })
 
   const onOptionChange = (value) => {
-    setFrequencyOption(value)
     if (value === 0) setChosenFrequency({type: 'day', number: 1})
     if (value === 1) setChosenFrequency({type: 'week', number: 1})
     if (value === 2) setChosenFrequency({type: 'month', number: 1})
+    setFrequencyOption(value)
   }
 
-  const onOptionWeeklyChange = ({value}) => {
+  const onOptionWeeklyChange = (value) => {
     setChosenFrequency({type: 'week', number: value})
   }
 
-  const onOptionMonthlyChange = ({value}) => {
+  const onOptionMonthlyChange = (value) => {
     setChosenFrequency({type: 'month', number: value})
   }
 

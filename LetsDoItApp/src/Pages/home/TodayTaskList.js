@@ -8,6 +8,7 @@ import {
   Vibration,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native'
 import moment from 'moment'
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -184,6 +185,12 @@ function TodayTaskList (props) {
 
   }
 
+  const isDataEmpty = itemsUnfinished.length === 0
+    && itemsToday.length === 0
+    && itemsTomorrow.length === 0
+    && itemsSomeday.length === 0
+
+
   const getList = id => id2List[id]
 
   const DATA = [
@@ -279,7 +286,8 @@ function TodayTaskList (props) {
     setListFunction([...listTasks])
     getAllItems()
   }
-  
+
+  console.log('sdlfjsdkflsdjfls', isDataEmpty, itemsToday)
 
   return (
     <View>
@@ -358,7 +366,7 @@ function TodayTaskList (props) {
                  />
               )}
               renderSectionHeader={({ section }) => {
-                if (section.title === 'Unfinished' && !section.data.length)
+                if ((section.title === 'Unfinished' && section.data.length === 0) || (section.data.length === 0 && !draggedTask))
                   return null
                 else {
                   return (
@@ -381,7 +389,22 @@ function TodayTaskList (props) {
                   )
                 }
               }}
-            />     
+            />
+            
+             {isDataEmpty && !isRefreshing && (
+              <View style={styles.noDataContainer}>
+              <TouchableOpacity style={styles.noDataButton} onPress={() => setIsAddingTask(true)}>
+               <Text style={styles.noDataText}>No task for now</Text>
+               <Text style={styles.noDataAddText}>Add a new one</Text>
+              </TouchableOpacity>
+              </View>
+            )}
+            {isDataEmpty && isRefreshing && (
+              <View style={styles.noDataContainer}>
+                <ActivityIndicator size='large' />
+              </View>
+            )}                    
+
             </View>
               {!draggedTask && (
                 <View style={styles.navigation}>
@@ -502,6 +525,21 @@ const styles = EStyleSheet.create({
     position: 'absolute',
     bottom: '90rem',
     right: '30rem',
+  },
+  noDataContainer: {
+    alignItems: 'center'
+  },
+  noDataButton: {
+    alignItems: 'center'
+  },
+  noDataText: {
+    fontSize: '14rem',
+  },
+  noDataAddText: {
+    color: 'blue',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    fontSize: '14rem'
   },
 })
 
