@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { 
   View, 
   Text, 
   TouchableOpacity, 
+  Image,
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { useNavigation } from '@react-navigation/native'
@@ -17,7 +18,7 @@ function ProjectItem (props) {
 
 
   let date = 'Someday'
-  if (props.doneAt)
+  if (props.item.doneAt)
     date = props.item.doneAt.slice(0, 10)
   else if (props.item.dueDate)
     date = props.item.dueDate.slice(0, 10)
@@ -42,11 +43,14 @@ function ProjectItem (props) {
         </View>
 
         <View style={styles.secondPartItem}>
-           <View style={styles.dueDateContainer}>
+           <View style={[styles.dueDateContainer, props.item.doneAt && {backgroundColor: 'lightgreen'}]}>
              <Text style={styles.dueDateText}>
                {date}
              </Text>
            </View>
+           {props.item.doneAt && (
+              <Image source={require('../../../static/check.png')} style={styles.imageIncon} />
+           )}
         </View>
     </TouchableOpacity>
     </View>
@@ -130,6 +134,10 @@ const styles = EStyleSheet.create({
   },
   dueDateText: {
   	fontSize: '12rem',
+  },
+  imageIncon: {
+    height: '25rem',
+    width: '25rem',
   },
  })
 
