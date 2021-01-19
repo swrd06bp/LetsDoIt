@@ -335,7 +335,7 @@ function WeeklyTaskList (props) {
               }}
               task={props.task}
               isPast={id2DueDate('monday') < todayDate()}
-              scale={0.7}
+              type={'week'}
               projects={props.projects}
               goals={props.goals}
             />

@@ -11,11 +11,11 @@ import { getDimRatio } from '../../app/DynamicSizing'
 
 const grid = 2
 
-const getListStyle = (isDraggingOver, scale, isPast) => ({
+const getListStyle = (isDraggingOver, type, isPast) => ({
     background: isDraggingOver ? 'lightblue' : isPast ? 'repeating-linear-gradient(#BDBDBD, #A4A4A4)' : 'lightgrey',
     padding: grid,
-    height: scale === 1 ? null : 400 * getDimRatio().Y,
-    overflow: scale === 1 ? null : 'auto',
+    height: type === 'day' ? null : 400 * getDimRatio().Y,
+    overflow: type === 'day' ? null : 'auto',
 })
 
 const getItemStyle = (isDragging, draggableStyle, isPast) => ({
@@ -43,9 +43,9 @@ function TaskList (props) {
         {(provided, snapshot) => (
             <div
                 ref={provided.innerRef}
-                style={getListStyle(
+                style={props.hide ? {} : getListStyle(
                   snapshot.isDraggingOver, 
-                  props.scale,
+                  props.type,
                   props.isPast
                 )}>
                 {props.items.map((item, index) => (
@@ -71,7 +71,7 @@ function TaskList (props) {
                                 <SimpleTask 
                                   item={item}
                                   onDescribe={props.onDescribe}
-                                  scale={props.scale}
+                                  type={props.type}
                                   task={props.task}
                                   onUpdate={props.onUpdate}
                                   onDelete={props.onDelete}
@@ -85,7 +85,7 @@ function TaskList (props) {
                                 <RoutineTask 
                                   item={item}
                                   onDescribe={() => {}}
-                                  scale={props.scale}
+                                  type={props.type}
                                   task={props.task}
                                   onUpdate={props.onUpdate}
                                   goals={props.goals}
@@ -102,7 +102,7 @@ function TaskList (props) {
                                   item={item}
                                   onDescribe={() => {}}
                                   project={props.project}
-                                  scale={props.scale}
+                                  type={props.type}
                                   onUpdate={props.onUpdate}
                                 />
                               )}  
@@ -111,7 +111,7 @@ function TaskList (props) {
                                   item={item}
                                   onDescribe={() => {}}
                                   goal={props.project}
-                                  scale={props.scale}
+                                  type={props.type}
                                   onUpdate={props.onUpdate}
                                 />
                               )}  
@@ -119,7 +119,7 @@ function TaskList (props) {
                                 <ProjectTask 
                                   item={item}
                                   onDescribe={props.onDescribe}
-                                  scale={props.scale}
+                                  type={props.type}
                                   project={props.project}
                                   goal={props.goal}
                                   task={props.task}

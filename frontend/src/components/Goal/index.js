@@ -5,7 +5,7 @@ import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 
 function Goal (props) {
   
-  const scale = props.scale ? props.scale : 1
+  const scale = props.type === 'day' ? 1 : 0.8
 
   return (
     <div 

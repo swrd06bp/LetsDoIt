@@ -7,7 +7,7 @@ import Api from '../../app/Api'
 import TaskList from '../../components/TaskList'
 import AddTask from '../../components/AddTask'
 import WeekGoal from '../../components/WeekGoal'
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 import {
   sortTasks,
   todayDate,
@@ -45,6 +45,8 @@ function TodayTaskList (props) {
   const [itemsTomorrow, setItemsTomorrow] = useState([])
   const [itemsUpcoming, setItemsUpcoming] = useState([])
   const [itemsSomeday, setItemsSomeday] = useState([])
+  const [isDragging, setIsDragging] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const api = new Api()
   const mixpanel = useMixpanel()
 
@@ -139,6 +141,7 @@ function TodayTaskList (props) {
     setItemsTomorrow(tomorrowTasks)
     setItemsUpcoming(upcomingTasks)
     setItemsSomeday(somedayTasks)
+    setIsLoading(false)
   }
 
 
@@ -220,6 +223,7 @@ function TodayTaskList (props) {
               getAllItems()
           })
         }
+      setIsDragging(false)
     }
 
 
@@ -250,6 +254,11 @@ function TodayTaskList (props) {
     })
   }
 
+  const isNoItems = itemsToday.length === 0 
+    && itemsTomorrow.length === 0
+    && itemsUpcoming.length === 0
+    && itemsSomeday.length === 0
+
   return (
     <div style={styles().wrapper}>
       <div style={styles().titleContainer}>
@@ -263,8 +272,24 @@ function TodayTaskList (props) {
           }}
         />
       </div>
+      {isLoading && (
       <div style={styles().allTasksContainer}>
-            <DragDropContext onDragEnd={onDragEnd}>
+        <div style={styles().noTaskContainer}>
+          <img src={'./loading.svg'} height={30} width={30} />
+        </div>
+      </div>
+      )}
+      {isNoItems && !isLoading && (
+      <div style={styles().allTasksContainer}>
+        <div style={styles().noTaskContainer}>
+          <div style={styles().noTaskText}>No task for now</div>
+          <div style={styles().noTaskTextAction}>Please create a new one</div>
+        </div>
+      </div>
+      )}
+      {!isNoItems && !isLoading && (
+      <div style={styles().allTasksContainer}>
+            <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setIsDragging(true)}>
               {itemsUnfinished.length > 0 && (
                 <div>
                   <h3 style={styles().sectionTitleText}>Unfinished</h3>
@@ -284,14 +309,17 @@ function TodayTaskList (props) {
                     task={props.task}
                     projects={props.projects}
                     goals={props.goals}
-                    scale={1}
+                    type={'day'}
                   />
                 </div>
               )}
               <div>
+              { !(!isDragging && itemsToday.length === 0) && (
                 <h3 style={styles().sectionTitleText}>Today</h3>
+              )}
                 <TaskList
                   droppableId={"today"}
+                  hide={(!isDragging && itemsToday.length === 0)}
                   items={itemsToday}
                   onUpdate={getAllItems}
                   onDelete={(taskId) => {
@@ -306,13 +334,16 @@ function TodayTaskList (props) {
                   projects={props.projects}
                   goals={props.goals}
                   task={props.task}
-                  scale={1}
+                  type={'day'}
                 />
               </div>
               <div>
-                <h3 style={styles().sectionTitleText}>Tomorrow</h3>
+              { !(!isDragging && itemsTomorrow.length === 0) && (
+              <h3 style={styles().sectionTitleText}>Tomorrow</h3>
+              )}
                 <TaskList
                   droppableId={"tomorrow"}
+                  hide={(!isDragging && itemsTomorrow.length === 0)}
                   items={itemsTomorrow}
                   onUpdate={getAllItems}
                   onDelete={(taskId) => {
@@ -327,13 +358,16 @@ function TodayTaskList (props) {
                   projects={props.projects}
                   goals={props.goals}
                   task={props.task}
-                  scale={1}
+                  type={'day'}
                 />
               </div>
               <div>
+              { !(!isDragging && itemsUpcoming.length === 0) && (
                 <h3 style={styles().sectionTitleText}>Upcoming</h3>
+              )}
                 <TaskList
                   droppableId={"upcoming"}
+                  hide={(!isDragging && itemsUpcoming.length === 0)}
                   items={itemsUpcoming}
                   onUpdate={getAllItems}
                   onDelete={(taskId) => {
@@ -348,13 +382,16 @@ function TodayTaskList (props) {
                   projects={props.projects}
                   goals={props.goals}
                   task={props.task}
-                  scale={1}
+                  type={'day'}
                 />
               </div>
               <div>
+              { !(!isDragging && itemsSomeday.length === 0) && (
                 <h3 style={styles().sectionTitleText}>Someday</h3>
+              )}
                 <TaskList
                   droppableId={"someday"}
+                  hide={(!isDragging && itemsSomeday.length === 0)}
                   items={itemsSomeday}
                   onUpdate={getAllItems}
                   onDelete={(taskId) => {
@@ -369,17 +406,19 @@ function TodayTaskList (props) {
                   goals={props.goals}
                   projects={props.projects}
                   task={props.task}
-                  scale={1}
+                  type={'day'}
                 />
               </div>
             </DragDropContext>
        </div>
+      )}
       <AddTask
         onCreate={(task) => {
           setItemsToday(sortTasks([task, ...itemsToday]))
         }}
       />
     </div>
+    
   )
 }
 
@@ -400,7 +439,7 @@ const styles =  () => ({
   sectionTitleText: {
     color: '#32A3BC',
     fontWeight: 'bold',
-    fontSize: 23 * getDimRatio().X,
+    fontSize: 23 * getDimRatioText().X,
   },
   titleContainer: {
     display: 'flex',
@@ -414,6 +453,23 @@ const styles =  () => ({
     fontWeight: 'normal',
     height: '5%',
   },
+  noTaskContainer: {
+    flex: 1,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noTaskText: {
+    fontSize: 16 * getDimRatioText().X,
+  },
+  noTaskTextAction: {
+    fontSize: 16 * getDimRatioText().X,
+    color: 'blue',
+    textDecoration: 'underline',
+  },
+
 })
 
 

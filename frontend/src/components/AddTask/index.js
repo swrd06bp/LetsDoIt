@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import { getDimRatio } from '../../app/DynamicSizing'
 import Api from '../../app/Api.js'
@@ -6,7 +6,15 @@ import Api from '../../app/Api.js'
 
 function AddTask (props) {
   const [taskInput, setTaskInput] = useState('')
+  const inputRef = useRef(null)
 
+  useEffect(() => {
+    inputRef.current.focus()
+    window.addEventListener('focus', () => (inputRef.current ? inputRef.current.focus() : null))
+
+    return () => window.addEventListener('focus', () => (inputRef.current ? inputRef.current.focus() : null))
+
+  }, [])
 
   const onSubmit = async () => {
     const api = new Api() 
@@ -34,9 +42,10 @@ function AddTask (props) {
     <div style={styles().wrapper}>
           <input 
             style={styles().inputText}
+            ref={inputRef}
             type="text"
             name="task"
-            placeholder="I want to.."
+            placeholder="Create a quick task"
             value={taskInput}
             onChange={(event) => setTaskInput(event.target.value)}
             onKeyUp={(event) => {

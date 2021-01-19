@@ -73,6 +73,7 @@ function GoalSection (props) {
               goal={props.goal}
               onUpdate={getData}
               onDescribe={props.onDescribe}
+              type={'day'}
             />  
           )
         else
@@ -117,6 +118,7 @@ function GoalSection (props) {
               project={props.project}
               onUpdate={getData}
               onDescribe={props.onDescribe}
+              type={'day'}
             />  
           )
           else

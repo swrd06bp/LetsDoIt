@@ -30,6 +30,7 @@ function ProjectTask (props) {
       'Someday'
 
 
+  const scale = props.type === 'day' ? 1 : 0.7
 
   return (
     <div
@@ -52,7 +53,7 @@ function ProjectTask (props) {
             onChange={() => onCheckboxChange(props.item.doneAt)}
           />
           <div 
-            style={{display: 'flex', height: '100%', marginLeft: 5, flexGrow: 1, fontSize:15 * props.scale * getDimRatio().X, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}}
+            style={{display: 'flex', height: '100%', marginLeft: 5, flexGrow: 1, fontSize:15 * scale * getDimRatio().X, textDecoration: props.item.doneAt ? 'line-through': null, color: props.item.doneAt ? 'grey': 'black'}}
             onClick={() => {
               props.onDescribe({
                 task: props.item,

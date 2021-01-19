@@ -34,6 +34,7 @@ function SimpleTask (props) {
   const  goal = props.goals.filter(x => x._id === props.item.goalId).length
     ? props.goals.filter(x => x._id === props.item.goalId)[0] : null
 
+  const scale = props.type === 'day' ? 1 : 0.8
 
   return (
     <div 
@@ -58,9 +59,8 @@ function SimpleTask (props) {
             height: '100%',
             marginLeft: 5,
             flexGrow: 1,
-            fontSize:18 * props.scale * getDimRatioText().X,
-            textDecoration: props.item.doneAt ? 'line-through': null,
-            color: props.item.doneAt ? 'grey': 'black',
+            fontSize:18 * scale * getDimRatioText().X,
+            textDecoration: props.item.doneAt && props.type === 'day' ? 'line-through': null,
           }} 
           onClick={() => {props.onDescribe({task: props.item, project: null, goal: null})}}
         >
@@ -71,7 +71,7 @@ function SimpleTask (props) {
        <div>
           {!props.hideList && (
             <ListButton
-              scale={props.scale}
+              scale={scale}
               active={true}
               item={props.item}
               onListChange={ (list) => {
@@ -86,12 +86,11 @@ function SimpleTask (props) {
             <GoalShape goal={goal} />
           </div>
         </div>
-      
-        <div 
-          style={{visibility: isOver ? 'visible': 'hidden'}} 
-        >
+        {isOver && (  
+        <div> 
           <DeleteButton width='13' height='13' onDelete={onDelete} />
         </div>
+        )}
       </div>
     </div>
   )
