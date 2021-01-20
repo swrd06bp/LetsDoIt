@@ -11,10 +11,10 @@ import { getDimRatio } from '../../app/DynamicSizing'
 
 const grid = 2
 
-const getListStyle = (isDraggingOver, type, isPast) => ({
+const getListStyle = (isDraggingOver, type, isPast, isEmpty) => ({
     background: isDraggingOver ? 'lightblue' : isPast ? 'repeating-linear-gradient(#BDBDBD, #A4A4A4)' : 'lightgrey',
     padding: grid,
-    height: type === 'day' ? null : 400 * getDimRatio().Y,
+    height: type === 'day' ? (isEmpty ? 45 : null) : 400 * getDimRatio().Y,
     overflow: type === 'day' ? null : 'auto',
 })
 
@@ -46,7 +46,8 @@ function TaskList (props) {
                 style={props.hide ? {} : getListStyle(
                   snapshot.isDraggingOver, 
                   props.type,
-                  props.isPast
+                  props.isPast,
+                  !props.hide && props.items.length === 0
                 )}>
                 {props.items.map((item, index) => (
                     <Draggable

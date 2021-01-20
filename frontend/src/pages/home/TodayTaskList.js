@@ -187,6 +187,7 @@ function TodayTaskList (props) {
 
       // dropped outside the list
       if (!destination) {
+          setIsDragging(false)
           return
       }
 
@@ -289,7 +290,7 @@ function TodayTaskList (props) {
       )}
       {!isNoItems && !isLoading && (
       <div style={styles().allTasksContainer}>
-            <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setIsDragging(true)}>
+            <DragDropContext onDragEnd={onDragEnd} onBeforeCapture={() => setIsDragging(true)}>
               {itemsUnfinished.length > 0 && (
                 <div>
                   <h3 style={styles().sectionTitleText}>Unfinished</h3>
@@ -319,7 +320,6 @@ function TodayTaskList (props) {
               )}
                 <TaskList
                   droppableId={"today"}
-                  hide={(!isDragging && itemsToday.length === 0)}
                   items={itemsToday}
                   onUpdate={getAllItems}
                   onDelete={(taskId) => {
@@ -335,6 +335,7 @@ function TodayTaskList (props) {
                   goals={props.goals}
                   task={props.task}
                   type={'day'}
+                  hide={(!isDragging && itemsToday.length === 0)}
                 />
               </div>
               <div>
