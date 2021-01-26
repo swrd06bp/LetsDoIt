@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useMixpanel } from 'react-mixpanel-browser'
+import Switch from "react-switch"
 
 import GoalSection from './GoalSection'
 import TodayTaskList from './TodayTaskList'
@@ -54,14 +55,15 @@ function HomePage() {
           Let's do it{name && ', ' + name}!
         </div>
         <div style={{display: 'flex',}}>
-          <input 
-            type='checkbox'
+          <Switch 
             checked={isWeekly}
             onChange={() => {
               if (mixpanel.config.token)
                 mixpanel.track('Home page - set weekly')
               setIsWeekly(!isWeekly)
             }}
+            height={20}
+            width={40}
           />
           <div style={styles().weeklyToogle}>
             Show weekly

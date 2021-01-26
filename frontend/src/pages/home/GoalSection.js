@@ -65,7 +65,7 @@ function GoalSection (props) {
       </div>
       <div style={styles().goalSection}>
       {props.goals.map((item) => {
-        if ((item.doneAt === null) === (!showCompletedGoals))
+        if (!item.doneAt || showCompletedGoals)
           return (
             <Goal
               key={item._id}
@@ -88,7 +88,7 @@ function GoalSection (props) {
             mixpanel.track('Goal Section Page - Show completed/pending goals', {showCompleted: !showCompletedGoals})
           setShowCompletedGoals(!showCompletedGoals)
         }}
-      >{showCompletedGoals ? 'Show pending' : 'Show completed'}</div>
+      >{showCompletedGoals ? 'Hide completed' : 'Show completed'}</div>
       <div style={styles().toolContainer}>
         <h3 style={styles().titleSection}>Projects</h3>
         <div 
@@ -111,7 +111,7 @@ function GoalSection (props) {
       </div>
       <div style={styles().projectSection}>
         {props.projects.map((item) => {
-        if ((item.doneAt === null) === (!showCompletedProjects))
+        if (!item.doneAt || showCompletedProjects)
           return (
             <Project
               key={item._id}
@@ -133,7 +133,7 @@ function GoalSection (props) {
             mixpanel.track('Goal Section Page - Show completed/pending projects', {showCompleted: !showCompletedProjects})
           setShowCompletedProjects(!showCompletedProjects)
         }}
-      >{showCompletedProjects ? 'Show pending' : 'Show completed'}</div>
+      >{showCompletedProjects ? 'Hide completed' : 'Show completed'}</div>
     </div>
     </div>
   )

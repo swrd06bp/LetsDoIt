@@ -89,8 +89,8 @@ function Goal (props) {
           {props.item.content}
         </div>
         <div style={styles(scale).backContainer}>
-          <div style={styles(scale).dueDate}>
-            {props.item.dueDate ? props.item.dueDate.slice(0, 10) : 'Someday'}
+          <div style={{...styles(scale).dueDate, background: props.item.doneAt ? 'lightgreen' : 'lightgrey'}}>
+            {props.item.doneAt ? props.item.doneAt.slice(0, 10) : (props.item.dueDate ? props.item.dueDate.slice(0, 10) : 'Someday')}
           </div>
         </div>
       </div>
@@ -133,7 +133,6 @@ const styles = (scale) => ({
   dueDate: {
     fontSize: 14 * scale *  getDimRatioText().X,
     borderRadius: 20,
-    background: 'lightgrey'
   },
   habitsWrapper: {
     display: 'flex',
