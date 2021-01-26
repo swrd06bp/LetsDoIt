@@ -30,7 +30,7 @@ function ProjectTask (props) {
       'Someday'
 
 
-  const scale = props.type === 'day' ? 1 : 0.7
+  const scale = 1
 
   return (
     <div

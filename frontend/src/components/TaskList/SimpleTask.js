@@ -34,7 +34,7 @@ function SimpleTask (props) {
   const  goal = props.goals.filter(x => x._id === props.item.goalId).length
     ? props.goals.filter(x => x._id === props.item.goalId)[0] : null
 
-  const scale = props.type === 'day' ? 1 : 0.8
+  const scale = (props.type === 'day' || isOver) ? 1 : 0.8
 
   return (
     <div 
@@ -69,6 +69,11 @@ function SimpleTask (props) {
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
        <div>
+        {isOver && props.type === 'week' && (  
+        <div> 
+          <DeleteButton width='13' height='13' onDelete={onDelete} />
+        </div>
+        )}
           {!props.hideList && (
             <ListButton
               scale={scale}
@@ -86,7 +91,7 @@ function SimpleTask (props) {
             <GoalShape goal={goal} />
           </div>
         </div>
-        {isOver && (  
+        {isOver && props.type === 'day' && (  
         <div> 
           <DeleteButton width='13' height='13' onDelete={onDelete} />
         </div>

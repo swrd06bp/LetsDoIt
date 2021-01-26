@@ -353,6 +353,7 @@ function WeeklyTaskList (props) {
             <div style={styles().dayNumberTitle}>{id2DueDate('tuesday').getDate()}</div>
             <TaskList
               droppableId={"tuesday"}
+              type={'week'}
               items={itemsTuesday}
               onUpdate={getTasks}
               onDelete={(taskId) => {
@@ -383,6 +384,7 @@ function WeeklyTaskList (props) {
             <div style={styles().dayTitle}>Wednesday</div>
             <div style={styles().dayNumberTitle}>{id2DueDate('wednesday').getDate()}</div>
             <TaskList
+              type={'week'}
               droppableId={"wednesday"}
               items={itemsWednesday}
               onUpdate={getTasks}
@@ -415,6 +417,7 @@ function WeeklyTaskList (props) {
             <div style={styles().dayNumberTitle}>{id2DueDate('thursday').getDate()}</div>
             <TaskList
               droppableId={"thursday"}
+              type={'week'}
               items={itemsThursday}
               onUpdate={getTasks}
               onDescribe={props.onDescribe}
@@ -445,6 +448,7 @@ function WeeklyTaskList (props) {
             <div style={styles().dayTitle}>Friday</div>
             <div style={styles().dayNumberTitle}>{id2DueDate('friday').getDate()}</div>
             <TaskList
+              type={'week'}
               droppableId={"friday"}
               items={itemsFriday}
               onUpdate={getTasks}
@@ -477,6 +481,7 @@ function WeeklyTaskList (props) {
             <div style={styles().dayNumberTitle}>{id2DueDate('saturday').getDate()}</div>
             <TaskList
               droppableId={"saturday"}
+              type={'week'}
               items={itemsSaturday}
               onUpdate={getTasks}
               isPast={id2DueDate('saturday') < todayDate()}
@@ -508,6 +513,7 @@ function WeeklyTaskList (props) {
             <div style={styles().dayNumberTitle}>{id2DueDate('sunday').getDate()}</div>
             <TaskList
               droppableId={"sunday"}
+              type={'week'}
               items={itemsSunday}
               onUpdate={getTasks}
               isPast={id2DueDate('sunday') < todayDate()}
