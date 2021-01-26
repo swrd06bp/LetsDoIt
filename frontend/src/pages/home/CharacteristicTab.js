@@ -93,22 +93,6 @@ function CharacteristicsTab (props) {
           </div>
         </div>
 
-       {props.goals && (
-        <div style={styles().checkboxContainer}>
-        Link to:
-        <div style={styles().checkbox}>
-          <GoalShape goal={goal} />
-          <Select 
-            styles={styles().dropdownSelect}
-            options={goalsOptions} 
-            selectValue={goalId} 
-            onChange={({value}) => {setGoalId(value)}} 
-            placeholder="Goal"
-          />
-        </div>
-        </div>
-        
-     )}
 
       <div>
         <div style={styles().noteTitle}>

@@ -107,6 +107,10 @@ function TodayTaskList (props) {
   
   const getHappiness = async () => {
     const api = new Api()
+    const respIsHappiness = await api.getCustomization()
+    const jsonIsHappiness = await respIsHappiness.json()
+    if (!jsonIsHappiness[0].customization || !jsonIsHappiness[0].customization.happiness)
+      return []
     const resp = await api.getHappiness({currentYear: parseInt(moment(new Date()).format('YYYY')), limit: 1})
     const json = await resp.json()
     if (!json.length || new Date(json[0].dueDate) < todayDate()) 

@@ -7,6 +7,7 @@ import { MixpanelProvider } from 'react-mixpanel-browser'
 import HomePage from './pages/home/HomePage'
 import LoginPage from './pages/login/LoginPage'
 import AccountPage from './pages/account'
+import CustomizationPage from './pages/customization'
 import HappinessPage from './pages/happiness'
 import HappinessCreatePage from './pages/happiness/Create'
 import SignupPage from './pages/signup/SignupPage'
@@ -33,6 +34,7 @@ function App() {
           <PrivateRoute exact path="/happinessEdit/:happinessId/:dueDate" component={HappinessCreatePage} />
           <PrivateRoute exact path="/happiness" component={HappinessPage} />
           <PrivateRoute exact path="/account" component={AccountPage} />
+          <PrivateRoute exact path="/customization" component={CustomizationPage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/signup" component={SignupPage} />
         </div>

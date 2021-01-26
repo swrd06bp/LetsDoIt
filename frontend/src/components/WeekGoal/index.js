@@ -7,6 +7,7 @@ import Api from '../../app/Api'
 
 
 function WeekGoal (props) {
+  const [customization, setCustomization] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
   const [focusGoal, setFocusGoal] = useState(null)
@@ -17,6 +18,7 @@ function WeekGoal (props) {
 
   useEffect(() => {
     getFocus()
+    getCurrentCustomization()
   }, [props.weekNumber])
 
   const getFocus = async () => {
@@ -34,10 +36,20 @@ function WeekGoal (props) {
     }
   }
 
+  const getCurrentCustomization = async () => {
+    const resp = await api.getCustomization() 
+    const json = await resp.json()
+    if (json[0].customization) {
+      const customization = json[0].customization
+      setCustomization(customization)
+    }
+  } 
 
   const scale = props.scale ? props.scale : 1
 
   if (isLoading || !isShowing) return null
+
+  if (!customization.dailyFocus || !customization.weeklyFocus) return null
 
   return (
     <div>

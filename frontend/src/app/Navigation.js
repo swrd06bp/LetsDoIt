@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Navbar, Nav, NavDropdown, } from 'react-bootstrap'
 import { useMixpanel } from 'react-mixpanel-browser'
 import moment from 'moment'
@@ -8,7 +8,22 @@ import { updateSocketElems, removeSocketListener } from '../app/socket'
 import Api from './Api'
 
 function TopNavigation() {
+  const [happiness, setHappiness] = useState(false)
   const mixpanel = useMixpanel()
+  const api = new Api()
+
+  useEffect(() => {
+    getCurrentCustomization()  
+  }, [])
+
+  const getCurrentCustomization = async () => {
+    const resp = await api.getCustomization() 
+    const json = await resp.json()
+    if (json[0].customization) {
+      const customization = json[0].customization
+      setHappiness(customization.happiness)
+    }
+  } 
 
   const clickLogout = () => {
     if (mixpanel.config.token)
@@ -24,6 +39,11 @@ function TopNavigation() {
     window.location.assign('/account')
   }
 
+  const goCustomizationPage = () => {
+    if (mixpanel.config.token)
+      mixpanel.track('Top navigation - Go to customization page')
+    window.location.assign('/customization')
+  }
   
   return (
     <Navbar bg="light" expand="lg">
@@ -40,13 +60,14 @@ function TopNavigation() {
                 mixpanel.track('Top navigation - Go to home page')
             }}>Home</Nav.Link>
           </Nav.Item>
-          <Nav.Item>
+          {happiness && (<Nav.Item>
             <Nav.Link href='/happiness' onClick={() =>{
               if (mixpanel.config.token)
                 mixpanel.track('Top navigation - Go to happiness page')
             }}>Happiness</Nav.Link>
-          </Nav.Item>
-          <NavDropdown title="Settings" id="basic-nav-dropdown">
+          </Nav.Item>)}
+          <NavDropdown title="Settings" id="basic-nav-dropdown" alignRight>
+            <NavDropdown.Item onClick={goCustomizationPage}>Customization</NavDropdown.Item>
             <NavDropdown.Item onClick={goAccountPage}>Account</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Divider />

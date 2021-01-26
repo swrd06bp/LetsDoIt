@@ -65,6 +65,17 @@ class Api {
     const body = {name}
     return await this.put(url, body)
   }
+  
+  async getCustomization() {
+    const url = this.baseUrl + '/user'
+    return await this.get(url)
+  }
+
+  async setCustomization(customization) {
+    const url = this.baseUrl + '/user'
+    const body = {customization}
+    return await this.put(url, body)
+  }
 
 
   async getHappiness ({currentYear, limit}) {

@@ -73,6 +73,7 @@ function GoalSection (props) {
               goal={props.goal}
               onUpdate={getData}
               onDescribe={props.onDescribe}
+              completed={showCompletedGoals}
               type={'day'}
             />  
           )
@@ -195,14 +196,14 @@ const styles = () => ({
   },
   goalSection: {
     background: 'rgba(196, 196, 196, 0.21)',
-    height: '30%',
+    height: '60%',
     marginRight: 10,
     marginLeft: 10,
     overflow: 'scroll',
   },
   projectSection: {
     background: 'rgba(196, 196, 196, 0.21)',
-    height: '50%',
+    height: '30%',
     marginRight: 10,
     marginLeft: 10,
     overflow: 'scroll',

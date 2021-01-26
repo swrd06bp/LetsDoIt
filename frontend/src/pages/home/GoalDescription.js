@@ -58,21 +58,6 @@ function GoalDescription (props) {
         <DeleteButton confirm={true} width='15' height='15' onDelete={onDelete} />
       </div>
 
-      <div style={styles().navbarContainer}>
-        <div 
-          style={showPage === 'Characteristics' ? styles().narbarOptionActive : styles().narbarOption}
-          onClick={() => setShowPage('Characteristics')}
-        >
-          Characteristics
-        </div>
-        <div 
-          style={showPage === 'Habits' ? styles().narbarOptionActive : styles().narbarOption}
-          onClick={() => setShowPage('Habits')}
-        >
-          Habits
-        </div>
-      </div>
-    {showPage === 'Characteristics' && ( 
       <CharacteristicsTab
         isGoal={true}
         tasks={tasks}
@@ -82,11 +67,6 @@ function GoalDescription (props) {
         onSave={onSave} 
         onDescribe={props.onDescribe}
       />
-    )}
-    {showPage === 'Habits' && (
-      <HabitsTab goal={props.goal} />
-    )} 
-
     </div>
   )
 }
@@ -116,25 +96,6 @@ const styles = () => ({
   buttonBack: {
     height: 20 * getDimRatio().X,
     width: 20 * getDimRatio().X,
-  },
-  navbarContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  narbarOptionActive: {
-    background: 'lightblue',
-    marginLeft: 10,
-    paddingLeft: 4,
-    paddingRight: 4,
-    color: 'blue',
-    cursor: 'pointer',
-    borderRadius: 10,
-  },
-  narbarOption: {
-    marginLeft: 10,
-    color: 'blue',
-    cursor: 'pointer',
   },
   habitsWrapper: {
     display: 'flex',
