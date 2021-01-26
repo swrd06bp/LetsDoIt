@@ -48,8 +48,8 @@ function WeekGoal (props) {
   const scale = props.scale ? props.scale : 1
 
   if (isLoading || !isShowing) return null
-
-  if (!customization.dailyFocus || !customization.weeklyFocus) return null
+  if (!customization.dailyFocus && props.day) return null
+  if (!customization.weeklyFocus && !props.day) return null
 
   return (
     <div>

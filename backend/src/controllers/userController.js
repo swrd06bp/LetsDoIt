@@ -63,7 +63,12 @@ exports.userSignup = async (req, res) => {
     }
     
     // create a user
-    const userId = await dbClient.writeElem({table: 'users', elem: {name, username, encryptedPass}})
+    const userId = await dbClient.writeElem({table: 'users', elem: {
+      name,
+      username,
+      encryptedPass,
+      customization: {happiness: false, dailyFocus: false, weeklyFocus: false},
+    }})
     res.status(200)
     res.json({'userId': userId})
     res.end()
