@@ -1,63 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import GoalShape from './GoalShape'
+import HabitsItem from './HabitsItem'
 import { useMixpanel } from 'react-mixpanel-browser'
 
 import Api from '../../app/Api'
 import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 
 
-function HabitsWrapper (props) {
-  const [allHabits, setAllHabits] = useState([])
-  const mixpanel = useMixpanel()
-  const api = new Api()
-
-  useEffect(() => {
-    getHabits() 
-  }, [])
-
-  const getHabits = async () => {
-    const resp = await api.getHabitsGoal(props.goal._id, props.completed)
-    const json = await resp.json()
-    setAllHabits(json)
-  }
-
-  return (
-    <div style={styles().habitsWrapper}>
-      <div style={styles().firstHabitPart}>
-      <div
-        onClick={() => {
-          if (mixpanel.config.token)
-            mixpanel.track('Goal Section Page - Add an Habit')
-        }}
-        style={styles().toolButton}
-        title={'Add an habit for this goal'}
-        onMouseOver={(event) => {
-          event.target.style.background = '#58FAD0'
-        }}
-        onMouseLeave={(event) => {
-          event.target.style.background = '#32A3BC'
-        }}
-      >+</div>
-      </div>
-      <div style={{...styles().secondHabitPart, borderLeftColor: props.goal.colorCode}}>
-    
-        {allHabits.map(habit => (
-          <div 
-            style={styles().habitContainer}
-          >
-            <div style={styles(1).habitText}>{habit.content}</div>
-          </div>
-        ))}          
-      </div>
-    </div>
-  )
-}
 
 
 function Goal (props) {
-  
-  
-
   const scale = props.type === 'day' ? 1 : 0.8
 
   return (
@@ -95,7 +47,7 @@ function Goal (props) {
         </div>
       </div>
       {props.type === 'day' && ( 
-        <HabitsWrapper goal={props.item} completed={props.completed} />
+        <HabitsItem goal={props.item} completed={props.completed} />
       )}
     </div>
   )

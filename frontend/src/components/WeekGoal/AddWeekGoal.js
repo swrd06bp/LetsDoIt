@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Modal from 'react-modal'
 
 import Api from '../../app/Api'
@@ -6,6 +6,7 @@ import { getDimRatio } from '../../app/DynamicSizing'
 
 function AddWeekGoal(props) {
   const [content, setContent] = useState(null)
+  const inputRef = useRef(null)
   const api = new Api()
   
   useEffect(() => {
@@ -16,6 +17,12 @@ function AddWeekGoal(props) {
     setContent(props.focusGoal ? props.focusGoal.content : '')
   }, [props.focusGoal])
 
+  useEffect(() => {
+    setTimeout(() => {
+      if(inputRef.current)
+        inputRef.current.focus()
+    }, 500)
+  }, [props.modalOpen])
 
   const onConfirm = async () => {
     if (content !== '') {
@@ -48,6 +55,7 @@ function AddWeekGoal(props) {
         </div>
         <input
           style={styles().inputAddWeekGoal}
+          ref={inputRef}
           type='text'
           placeholder= 'I am going to acheive..'
           value={content}

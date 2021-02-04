@@ -38,7 +38,7 @@ function ProjectTask (props) {
       onMouseOver={() => setIsOver(true)} 
       onMouseLeave={() => setIsOver(false)} 
     >
-     <div style={{borderRadius: 10, background: '#C4C4C4', fontSize: 11 * getDimRatio().X, fontWeight: 'bold',width: 60 * getDimRatio().X, textAlign: 'center', padding: 3}}>
+     <div style={{borderRadius: 10, background: props.item.doneAt ? 'lightgreen' : '#C4C4C4', fontSize: 11 * getDimRatio().X, fontWeight: 'bold',width: 60 * getDimRatio().X, textAlign: 'center', padding: 3, marginRight: 3}}>
       {date} 
      </div>
       <div 

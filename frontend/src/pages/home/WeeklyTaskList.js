@@ -546,12 +546,12 @@ function WeeklyTaskList (props) {
         <div style={styles().filtersContainer}>
           <div>Filter</div>
           <div style={styles().filtersDropdown}>
-          <Select
-            styles={styles().dropdownSelect}
-            options={dropdownOptions}
-            selectValue={selectedDropdownOption.value}
-            onChange={setSelectedDropdownOption}
-          />
+            <Select
+              styles={styles().dropdownSelect}
+              options={dropdownOptions}
+              selectValue={selectedDropdownOption.value}
+              onChange={setSelectedDropdownOption}
+            />
           </div>
         </div>
         <AddTask
