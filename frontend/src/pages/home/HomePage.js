@@ -8,7 +8,9 @@ import WeeklyTaskList from './WeeklyTaskList'
 import TaskDescription from './TaskDescription'
 import ProjectDescription from './ProjectDescription'
 import GoalDescription from './GoalDescription'
+import HabitDescription from './HabitDescription'
 import TopNavigation from '../../app/Navigation'
+import { sortProjects } from '../../app/utils'
 import { getDimScreen, getDimRatio } from '../../app/DynamicSizing'
 import './HomePage.css'
 import Api from '../../app/Api'
@@ -16,7 +18,7 @@ import { createSocketConnection } from '../../app/socket'
 
 
 function HomePage() {
-  const [describeElem, setDescribeElem] = useState({task: null, project: null, goal: null})
+  const [describeElem, setDescribeElem] = useState({task: null, project: null, goal: null, habit: null})
   const [isWeekly, setIsWeekly] = useState(false)
   const [allGoals, setAllGoals] = useState([])
   const [allProjects, setAllProjects] = useState([])
@@ -38,8 +40,8 @@ function HomePage() {
     const resultProjects = await respProjects.json()
     const respName = await api.getName()
     const resultName = await respName.json()
-    setAllGoals(resultGoals)
-    setAllProjects(resultProjects)
+    setAllGoals(sortProjects(resultGoals))
+    setAllProjects(sortProjects(resultProjects))
     if (resultName.length) {
       mixpanel.identify(resultName[0]._id)
       setName(resultName[0].name)
@@ -81,9 +83,10 @@ function HomePage() {
               onUpdate={getData}
               project={describeElem.project}
               goal={describeElem.goal}
+              describeElem={describeElem}
               onDescribe={setDescribeElem}
             />
-            {!describeElem.project && !describeElem.goal && (
+            {!describeElem.project && !describeElem.goal && !describeElem.habit && (
               <TodayTaskList
                 task={describeElem.task}
                 onDescribe={setDescribeElem}
@@ -91,7 +94,7 @@ function HomePage() {
                 goals={allGoals}
               />
             )}
-            {describeElem.project && !describeElem.goal && (
+            {describeElem.project && !describeElem.goal && !describeElem.habit && (
               <ProjectDescription
                 describeElem={describeElem}
                 onDescribe={(value) => {
@@ -102,7 +105,7 @@ function HomePage() {
                 goals={allGoals}
               />
             )}
-            {describeElem.goal && !describeElem.project && (
+            {describeElem.goal && !describeElem.project && !describeElem.habit && (
               <GoalDescription
                 describeElem={describeElem}
                 onDescribe={(value) => {
@@ -110,6 +113,16 @@ function HomePage() {
                   setDescribeElem(value)
                 }}
                 goal={describeElem.goal}
+              />
+            )}
+            {describeElem.habit && !describeElem.project && describeElem.goal && (
+              <HabitDescription
+                describeElem={describeElem}
+                onDescribe={(value) => {
+                  getData()
+                  setDescribeElem(value)
+                }}
+                habit={describeElem.habit}
               />
             )}
           </div>

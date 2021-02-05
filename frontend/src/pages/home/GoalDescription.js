@@ -38,18 +38,18 @@ function GoalDescription (props) {
       props.goal._id,
       {content, dueDate, note, goalId: props.goalId, list, doneAt}
     )
-    props.onDescribe({task: null, project: null, goal: null})
+    props.onDescribe({task: null, project: null, goal: null, habit: null})
   }
 
   const onDelete = async () => {
     await api.deleteGoal(props.goal._id)
-    props.onDescribe({task: null, project: null, goal: null})
+    props.onDescribe({task: null, project: null, goal: null, habit: null})
   }
   return (
     <div style={styles().wrapper}>
       <div style={styles().titleContainer}>
         <div
-          onClick={() => props.onDescribe({task: null, project: null, goal: null})}
+          onClick={() => props.onDescribe({task: null, project: null, goal: null, habit: null})}
           style={styles().containerToDo}
         >
           <img style={styles().imgToDo} src={'./left-arrow.png'} alt='' />

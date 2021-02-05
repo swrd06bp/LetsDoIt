@@ -62,7 +62,7 @@ function SimpleTask (props) {
             fontSize:18 * scale * getDimRatioText().X,
             textDecoration: props.item.doneAt && props.type === 'day' ? 'line-through': null,
           }} 
-          onClick={() => {props.onDescribe({task: props.item, project: null, goal: null})}}
+          onClick={() => {props.onDescribe({task: props.item, project: null, goal: null, habit: null})}}
         >
           {props.item.content}
         </div>

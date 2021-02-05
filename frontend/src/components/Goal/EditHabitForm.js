@@ -12,10 +12,10 @@ function EditHabitForm (props) {
   const [content, setContent] = useState(props.habit ? props.habit.content : '')
   const [maxStreak, setMaxStreak] = useState(props.habit && props.habit.maxStreak ? props.habit.maxStreak : 66)
   const [showTimePicker, setShowTimePicker] = useState(false)
-  const [frequencyOption, setFrequencyOption] = useState(!props.habit ? 0 : (props.habit.frequency.type === 'day' ? 0 : (props.habit.frequency.type === 'week' ? 1 : 2)))
+  const [frequencyOption, setFrequencyOption] = useState(!props.habit ? {label: 'every day', value: 0} : (props.habit.frequency.type === 'day' ? {label: 'every day', value: 0}: (props.habit.frequency.type === 'week' ? {label: 'every week', value: 1} : {label: 'every month', value: 2})))
   const [chosenFrequency, setChosenFrequency] = useState(props.habit ? props.habit.frequency : {type: 'day', number:1})
-  const [startTime, setStartTime] = useState(props.habit && props.habit.startTime ? props.habit.startTime : moment(new Date()))
-  const [isNotification, setIsNotification] = useState(false)
+  const [startTime, setStartTime] = useState(props.habit && props.habit.startTime ? moment(props.habit.startTime, 'HH:mm') : moment(new Date()))
+  const [isNotification, setIsNotification] = useState(props.habit && props.habit.isNotification ? props.habit.isNotification : false)
   
   useEffect(() => {
     Modal.setAppElement('body')
@@ -88,6 +88,7 @@ function EditHabitForm (props) {
          <div style={styles().frequencyContainer}>
            <div>Frequency:</div>
            <Select 
+             defaultValue={frequencyOption}
              styles={styles().dropdownSelect}
              options={allFrequencyOptions}
              onChange={({value}) => onOptionChange(value)}
@@ -112,7 +113,7 @@ function EditHabitForm (props) {
             <input 
               type='checkbox'
               style={styles.checkbox}
-              value={isNotification}
+              checked={isNotification}
               onChange={() => {
               setIsNotification(!isNotification)
             }}/>

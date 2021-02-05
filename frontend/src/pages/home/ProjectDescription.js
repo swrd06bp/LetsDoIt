@@ -36,12 +36,12 @@ function ProjectDescription (props) {
       props.project._id,
       {content, dueDate, note, goalId, list, doneAt}
     )
-    props.onDescribe({project: null, project: null, goal: null})
+    props.onDescribe({project: null, project: null, goal: null, habit: null})
   }
 
   const onDelete = async () => {
     await api.deleteProject(props.project._id)
-    props.onDescribe({project: null, project: null, goal: null})
+    props.onDescribe({project: null, project: null, goal: null, habit: null})
   }
   return (
     <div style={styles().wrapper}>

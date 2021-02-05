@@ -51,6 +51,15 @@ const sortProjectTasks = tasks => {
   return sortedTasks
 }
 
+const sortProjects = projects => {
+  let sortedProjects = JSON.parse(JSON.stringify(projects))
+  sortedProjects.sort((a, b) => {return(a.dueDate < b.dueDate)})
+  sortedProjects.sort((a, b) => {return(a.dueDate && !b.dueDate)})
+  sortedProjects.sort((a, b) => {return(a.doneAt < b.doneAt)})
+  sortedProjects.sort((a, b) => {return(a.doneAt && !b.doneAt)})
+  return sortedProjects
+}
+
 const decomposeTasksToday = allTasks => {
     const unfinishedTasks = sortTasks(allTasks.filter( x => {
       return x.dueDate && new Date(x.dueDate) < todayDate() && !x.doneAt 
@@ -185,6 +194,7 @@ export {
   lastMonthDate,
   weekDayDate,
   sortProjectTasks,
+  sortProjects,
   sortTasks,
   decomposeTasksToday,
   decomposeItemsWeek,

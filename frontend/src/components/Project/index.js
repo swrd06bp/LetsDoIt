@@ -18,6 +18,7 @@ function Project (props) {
         task: null,
         goal: null,
         project: props.project ? null : props.item,
+        habit: null,
       })}
       onMouseOver={(event) => {
         if ((!props.project || (props.project && props.project._id !== props.item._id)) && event.target.className === 'task')
@@ -38,6 +39,9 @@ function Project (props) {
         <div style={{...styles(scale).dueDate, background: props.item.doneAt ? 'lightgreen' : 'lightgrey'}}>
           {props.item.doneAt ? props.item.doneAt.slice(0, 10) : (props.item.dueDate ? props.item.dueDate.slice(0, 10) : 'Someday')}
         </div>
+        {props.item.doneAt && (
+          <img src='/check.png' alt='' height='20' width='20' />
+        )}
       </div>
     </div>
   )
@@ -67,14 +71,16 @@ const styles = (scale) => ({
   },
   backContainer: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: 90 * scale * getDimRatio().X,
+    justifyContent: 'space-around',
+    marginRight: 3
   },
   dueDate: {
     fontSize: 14 * scale *  getDimRatio().X,
     borderRadius: 20,
+    padding: 1,
+    marginRight: 2,
     background: 'lightgrey'
   }
 })

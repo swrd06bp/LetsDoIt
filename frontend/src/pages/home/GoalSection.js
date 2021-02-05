@@ -74,6 +74,7 @@ function GoalSection (props) {
               onUpdate={getData}
               onDescribe={props.onDescribe}
               completed={showCompletedGoals}
+              describeElem={props.describeElem}
               type={'day'}
             />  
           )

@@ -18,12 +18,13 @@ function Goal (props) {
         className='task'
         style={{
           ...styles().wrapper,
-          background: props.goal && props.goal._id === props.item._id ? 'lightgreen' : 'white'
+          background: props.goal && !props.describeElem.habit && props.goal._id === props.item._id ? 'lightgreen' : 'white'
         }}
         onClick={() => props.onDescribe({
           task: null,
           project: null,
           goal: props.goal ? null : props.item,
+          habit: null,
         })}
         onMouseOver={(event) => {
           if ((!props.goal || (props.goal && props.goal._id !== props.item._id)) && event.target.className === 'task')
@@ -44,10 +45,18 @@ function Goal (props) {
           <div style={{...styles(scale).dueDate, background: props.item.doneAt ? 'lightgreen' : 'lightgrey'}}>
             {props.item.doneAt ? props.item.doneAt.slice(0, 10) : (props.item.dueDate ? props.item.dueDate.slice(0, 10) : 'Someday')}
           </div>
+          {props.item.doneAt && (
+            <img src='/check.png' alt='' height='20' width='20' />
+          )}
         </div>
       </div>
       {props.type === 'day' && ( 
-        <HabitsItem goal={props.item} completed={props.completed} />
+        <HabitsItem 
+          goal={props.item} 
+          describeElem={props.describeElem}
+          onDescribe={props.onDescribe}
+          completed={props.completed}
+        />
       )}
     </div>
   )
@@ -77,14 +86,16 @@ const styles = (scale) => ({
   },
   backContainer: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: 90 * scale * getDimRatio().X,
+    justifyContent: 'space-around',
+    marginRight: 3
   },
   dueDate: {
     fontSize: 14 * scale *  getDimRatioText().X,
     borderRadius: 20,
+    padding: 1,
+    marginRight: 2,
   },
   habitsWrapper: {
     display: 'flex',

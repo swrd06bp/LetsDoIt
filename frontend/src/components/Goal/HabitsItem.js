@@ -15,7 +15,7 @@ function HabitsItem (props) {
 
   useEffect(() => {
     getHabits() 
-  }, [])
+  }, [props.describeElem.habit])
 
   const getHabits = async () => {
     const resp = await api.getHabitsGoal(props.goal._id, props.completed)
@@ -60,9 +60,26 @@ function HabitsItem (props) {
         {allHabits.map(habit => (
           <div 
             key={habit._id}
-            style={styles().habitContainer}
+            onClick={() => { 
+              if (props.describeElem.habit)
+                props.onDescribe({goal: null, task: null, project: null, habit: null})
+              else
+                props.onDescribe({goal: props.goal, task: null, project: null, habit})
+            }}
+            style={{...styles().habitContainer, background: props.describeElem.habit && props.describeElem.habit._id === habit._id ? 'lightgreen' : '#d8d0d2'}}
           >
             <div style={styles(1).habitText}>{habit.content}</div>
+            <div style={styles().checkIcon}>
+              {habit.acheived && (
+                <img src='/check.png' alt='' height='17' witdh='17' />
+              )}
+              {props.goal.doneAt && habit.acheived === null && (
+                <img src='/check.png' alt='' height='17' witdh='17' />
+              )}
+              {habit.acheived === false && (
+                <img src='/uncheck.png' alt='' height='17' witdh='17' />
+              )}
+            </div>
           </div>
         ))}          
       </div>
@@ -90,10 +107,12 @@ const styles = (scale) => ({
     flex: 1,
   },
   habitContainer: {
-    background: '#d8d0d2',
     cursor: 'pointer',
     borderRadius: 20,
     marginTop: 2 * getDimRatio().X,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   habitText: {
     marginLeft: 10,
@@ -114,6 +133,9 @@ const styles = (scale) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  checkIcon: {
+    marginRight: 4,
   },
 })
 
