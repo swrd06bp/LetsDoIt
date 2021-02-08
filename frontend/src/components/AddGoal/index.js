@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Select from 'react-select'
 
 import ListButton from '../ListButton'
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 import Api from '../../app/Api.js'
 
 
@@ -62,13 +62,14 @@ function AddGoal (props) {
 
 
   return (
-    <div style={styles.wrapper}>
-    <form style={styles.formContainer} onSubmit={onSubmit}>
-      <div style={styles.elemsContainer}>
-      <label style={styles.labelContainer}>
-       <div style={styles.labelTitles}>{props.type === 'goal' ? 'Goal' : 'Project'}:</div> 
+    <div style={styles().wrapper}>
+      <div style={styles().titleText}>Create a {props.type === 'goal' ? 'goal' : 'project'}</div>
+    <form style={styles().formContainer} onSubmit={onSubmit}>
+      <div style={styles().elemsContainer}>
+      <label style={styles().labelContainer}>
+       <div style={styles().labelTitles}>{props.type === 'goal' ? 'Goal' : 'Project'}:</div> 
         <input 
-          style={styles.inputGoal}
+          style={styles().inputGoal}
           type="text"
           name="goalInput"
           placeholder={props.type === 'goal' ? "Set a positive goal..": 'Create a new project'}
@@ -77,9 +78,9 @@ function AddGoal (props) {
         />
         <ListButton active={true} onListChange={setGoalList} scale={1} item={{list: goalList}} />
       </label>
-      <div style={styles.labelContainer}>
+      <div style={styles().labelContainer}>
 
-        <div style={styles.labelTitles}>Deadline:</div> 
+        <div style={styles().labelTitles}>Deadline:</div> 
         <Select
           menuPlacement="top"
           styles={{control: (styles) => ({...styles, width: 150 * getDimRatio().X})}}
@@ -102,7 +103,7 @@ function AddGoal (props) {
       <input 
         type="submit"
         value="Add"
-        style={{...styles.submitButton, cursor: goalInput ? 'pointer' : 'not-allowed'}}
+        style={{...styles().submitButton, cursor: goalInput ? 'pointer' : 'not-allowed'}}
         onMouseOver={(event) => {
           if(goalInput)
             event.target.style.background = '#58FAD0'
@@ -118,11 +119,17 @@ function AddGoal (props) {
   )
 }
 
-const styles = {
+const styles = () => ({
   wrapper: {
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
+  },
+  titleText: {
+    fontSize: 28 * getDimRatioText().X,
+    fontWeight: 'bold',
+    color: '#32A3BC',
+    margin: 20 * getDimRatio().X,
   },
   formContainer: {
     marginTop: 25,
@@ -158,6 +165,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 25,
   },
   labelTitles: {
     fontSize: 20,
@@ -177,7 +185,7 @@ const styles = {
     textAlign: 'center',
     fontWeight: 'bold',
   },
-}
+})
 
 export default AddGoal
 

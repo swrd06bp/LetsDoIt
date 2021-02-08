@@ -5,6 +5,7 @@ import GoalShape from '../Goal/GoalShape'
 import ListButton from '../ListButton'
 import DeleteButton from '../DeleteButton'
 import Api from '../../app/Api'
+import moment from 'moment'
 import { getDimRatioText } from '../../app/DynamicSizing'
 import { todayDate } from '../../app/utils'
 
@@ -68,6 +69,16 @@ function SimpleTask (props) {
         </div>
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
+      {props.item.isNotification && props.type === 'day' && ( 
+        <img 
+          src='/notification.png' 
+          alt='sdf'
+          height='13'
+          width='13'
+          title={moment(props.item.dueDate).format('hh:MM')}
+          style={{cursor: 'default'}}
+        />
+      )}
        <div>
         {isOver && props.type === 'week' && (  
         <div> 
