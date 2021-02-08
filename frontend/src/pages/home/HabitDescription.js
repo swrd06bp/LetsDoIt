@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import 'react-calendar-heatmap/dist/styles.css'
+import { Line } from '@reactchartjs/react-chart.js'
 import moment from 'moment'
 
 import HabitsTab from './HabitsTab'
@@ -67,9 +68,10 @@ function HabitDescription (props) {
       date: x.createdAt.slice(0, 10),
       count: 1,
     }))
+    const scoreCounts = getScoreData(newCommitsData).scoreCounts
     setAllRoutines(json)
     setCommitsData(newCommitsData)
-    setHabitScore(getHabitScore(newCommitsData))
+    setHabitScore(scoreCounts[scoreCounts.length - 1])
   }
 
   const onSave = async ({content, dueDate, note, list, doneAt}) => {
@@ -91,12 +93,9 @@ function HabitDescription (props) {
     setShowEditForm(false)
   }
   
-  const getHabitScore = (routines) => {
-    const newScoreCounts = getScoreData(routines).scoreCounts
-    let newHabitScore = 0
-    if (newScoreCounts.length > 0)
-      newHabitScore = Math.round(100 * newScoreCounts[newScoreCounts.length - 1] / maxStreaks)
-    return newHabitScore
+
+  const deriveScore = (score) => {
+    return Math.min(100, Math.floor(100 * score / maxStreaks))
   }
 	
   const getScoreData = (data) => {
@@ -131,10 +130,8 @@ function HabitDescription (props) {
        	   	  }
        	   	 cumulativeStreak = 0
        	   }
-           if (score > 100)
-             score = 100
        	   if (i % 6 == 0) {
-       	     scoreCounts.push(score)
+       	     scoreCounts.push(deriveScore(score))
        	     scoreLabels.push(moment(date).format('DD MMM'))
        	   }
        	  }
@@ -144,9 +141,9 @@ function HabitDescription (props) {
        	  	let date = new Date()
        	    date.setDate(date.getDate() - 7 * i)
        	    const scoreLabel = moment(date).format('W')
-       	    const filteredData = data.filter(x => x.date === scoreLabel)
+       	    const filteredData = data.filter(x => moment(x.date).format('W') === scoreLabel)
        	   if (filteredData.length >= habit.frequency.number) {
-             score += 1
+             score += 3
              cumulativeStreak += 1
           }
        	   else {
@@ -164,10 +161,8 @@ function HabitDescription (props) {
        	   	 }
        	   	 cumulativeStreak = 0
        	   }
-           if (score > 100)
-             score = 100
        	   if (i % 2 === 0) {
-       	      scoreCounts.push(score)
+       	      scoreCounts.push(deriveScore(score))
        	      scoreLabels.push(moment(date).format('DD MMM'))
        	    }
 
@@ -177,8 +172,8 @@ function HabitDescription (props) {
        	 for (let i = maxStreaks; i >= 0; i --) {
        	  	let date = new Date()
        	    date.setMonth(date.getMonth() - i)
-       	    const scoreLabel = date.toJSON().slice(0, 10)
-       	    const filteredData = data.filter(x => moment(new Date(x.date)).format('W') === scoreLabel)
+       	    const scoreLabel = moment(date).format('MM YYYY')
+       	    const filteredData = data.filter(x => moment(new Date(x.date)).format('MM YYYY') === scoreLabel)
        	   if (filteredData.length >= habit.frequency.number) {
              score += 1
              cumulativeStreak += 1
@@ -198,16 +193,37 @@ function HabitDescription (props) {
        	   	  }
        	   	 cumulativeStreak = 0
        	   }
-       	   if (score > 100)
-             score = 100
-       	    scoreCounts.push(score)
-       	    scoreLabels.push(moment(date).format('DD MMM'))
+       	    scoreCounts.push(deriveScore(score))
+       	    scoreLabels.push(moment(date).format('MMMM'))
        	   
           }
        }
        return { scoreLabels, scoreCounts }
 	}
   
+  const scoreOptions = {
+    scales: {
+      yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+        },
+      }],
+    },
+    legend: {
+      display: false
+    },
+  }
+  
+  let graphScoreData = {
+    labels: getScoreData(commitsData).scoreLabels, 
+    datasets: [
+      {
+        label: 'score',
+        data: getScoreData(commitsData).scoreCounts,
+      }
+    ]
+  }
 
   return (
     <div style={styles().wrapper}>
@@ -275,6 +291,15 @@ function HabitDescription (props) {
       	  </div>
           {commitsData.length > 0 && ( 
           <div>
+            <div style={styles().titleSectionText}>Score</div>
+              <div>
+                <Line
+                  data={graphScoreData}
+                  options={scoreOptions}
+                  legend={null}
+                  height={100}
+                />
+              </div>
             <div style={styles().titleSectionText}>Calendar</div>
             <div style={styles().calendarHeatmap}>
               <CalendarHeatmap

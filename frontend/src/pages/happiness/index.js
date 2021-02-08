@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Bar, Line } from '@reactchartjs/react-chart.js'
+import { Bar } from '@reactchartjs/react-chart.js'
 import moment from 'moment'
 
+import WeekGoal from '../../components/WeekGoal'
 import YearChart from './YearChart'
 import TopNavigation from '../../app/Navigation'
 import { scoreToColor } from './utils'
@@ -15,7 +16,6 @@ function HappinessPage (props) {
   const [month, setMonth] = useState('')
   const [year, setYear] = useState(parseInt(moment(new Date()).format('YYYY')))
   const [notes, setNotes] = useState([])
-   
 
   useEffect(() => {
     getHappiness()
@@ -30,28 +30,26 @@ function HappinessPage (props) {
     setAllData(json)
     if (json.length)
       drawGraph(json.slice(indexInf, indexSup).reverse())
-    
   }
 
 
   const drawGraph = (rawData) => {
-      let formatedData = {
-        labels: rawData.map(x => moment(new Date(x.dueDate)).format('dddd, Do')),
-        datasets: [
-          {
-            label: 'Happiness score',
-            data: rawData.map(x => x.score),
-            backgroundColor: rawData.map(x => scoreToColor(x.score)),
-            borderColor: rawData.map(x => scoreToColor(x.score)),
-            borderWidth: 1,
-          }
-        ]
-      }
-      setShortData(rawData)
-      setGraphData(formatedData) 
-      setMonth(moment(new Date(rawData.slice(-1)[0].dueDate)).format('MMMM YYYY'))
-      setNotes(rawData.map(x => x.note))
-  
+    let formatedData = {
+      labels: rawData.map(x => moment(new Date(x.dueDate)).format('dddd, Do')),
+      datasets: [
+        {
+          label: 'Happiness score',
+          data: rawData.map(x => x.score),
+          backgroundColor: rawData.map(x => scoreToColor(x.score)),
+          borderColor: rawData.map(x => scoreToColor(x.score)),
+          borderWidth: 1,
+        }
+      ]
+    }
+    setShortData(rawData)
+    setGraphData(formatedData) 
+    setMonth(moment(new Date(rawData.slice(-1)[0].dueDate)).format('MMMM YYYY'))
+    setNotes(rawData.map(x => x.note))
   }
 
   const onChooseData = (uniqueId) => {
@@ -90,6 +88,8 @@ function HappinessPage (props) {
     }
   }
 
+
+
   return (
     <div>
         <div>
@@ -115,6 +115,26 @@ function HappinessPage (props) {
                   height={150}
                 />
               </div>
+              
+              <div style={styles().dailyFocusContainer}>
+                {shortData.map(singleData => {
+                  return (
+                  <div key={singleData._id} style={{
+                    display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    width: (100/shortData.length).toString() + '%',
+                  }}>
+                  <WeekGoal 
+                    day={true} 
+                    weekNumber={new Date(singleData.dueDate).getFullYear() * 1000 + moment(singleData.dueDate).dayOfYear()} 
+                    scale={0.7}
+                  />
+                  </div>
+                  )
+                })}
+              </div>
+              
             </div>
           </div>
         </div>
@@ -140,7 +160,12 @@ const styles = () => ({
   graphContainer: {
     display: 'flex',
     flexDirection: 'row',
-
+  },
+  dailyFocusContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginLeft: 30,
   },
 })
 

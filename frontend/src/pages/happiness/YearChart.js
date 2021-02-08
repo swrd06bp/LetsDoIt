@@ -176,7 +176,7 @@ const styles = () => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: 25 * getDimRatio().X,
-    height: 40 * getDimRatio().X,
+    height: 45 * getDimRatio().X,
     borderColor: 'grey',
     borderWidth: 0.5,
     borderStyle: 'solid',
