@@ -5,7 +5,6 @@ import Modal from 'react-modal'
 import Goal from '../../components/Goal'
 import Project from '../../components/Project'
 import AddGoal from '../../components/AddGoal'
-import AddProject from '../../components/AddProject'
 import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 
 
@@ -36,10 +35,10 @@ function GoalSection (props) {
         contentLabel="Example Modal"
       >
         { modalOpen === 'goals' && (
-          <AddGoal onUpdate={getData} />
+          <AddGoal type={'goal'} onUpdate={getData}/>
         )}
         { modalOpen === 'projects' && (
-          <AddProject onUpdate={getData}/>
+          <AddGoal type={'project'} onUpdate={getData}/>
         )}
       </Modal>
     <div style={styles().wrapper}>

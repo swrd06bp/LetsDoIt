@@ -5,7 +5,6 @@ import 'react-calendar-heatmap/dist/styles.css'
 import { Line } from '@reactchartjs/react-chart.js'
 import moment from 'moment'
 
-import HabitsTab from './HabitsTab'
 import EditHabitForm from '../../components/Goal/EditHabitForm'
 import CharacteristicsTab from './CharacteristicTab'
 import DeleteButton from '../../components/DeleteButton'

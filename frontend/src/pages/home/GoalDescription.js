@@ -1,7 +1,6 @@
 import React, { useState, useEffect} from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 
-import HabitsTab from './HabitsTab'
 import CharacteristicsTab from './CharacteristicTab'
 import DeleteButton from '../../components/DeleteButton'
 import Api from '../../app/Api'
