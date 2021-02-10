@@ -69,7 +69,7 @@ function SimpleTask (props) {
         </div>
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
-      {props.item.isNotification && props.type === 'day' && ( 
+      {props.item.isNotification && !props.item.doneAt && props.type === 'day' && ( 
         <img 
           src='/notification.png' 
           alt='sdf'
