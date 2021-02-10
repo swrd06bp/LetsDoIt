@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Bar } from '@reactchartjs/react-chart.js'
+import { Bar, Line } from '@reactchartjs/react-chart.js'
 import moment from 'moment'
 
 import WeekGoal from '../../components/WeekGoal'
@@ -24,12 +24,12 @@ function HappinessPage (props) {
   const getHappiness = async () => {
     const api = new Api()
     const resp = await api.getHappiness({currentYear: year, limit: 365})
-    const json = await resp.json()
+    let json = await resp.json()
     const indexInf = 0
     const indexSup = Math.min(7, json.length)
-    setAllData(json)
+    setAllData(json.reverse())
     if (json.length)
-      drawGraph(json.slice(indexInf, indexSup).reverse())
+      drawGraph(json.slice(indexInf, indexSup))
   }
 
 
@@ -56,7 +56,7 @@ function HappinessPage (props) {
     const indexSup = allData.map(x => x._id).indexOf(uniqueId) + 1
     const indexInf = Math.max(indexSup - 7, 0)
     if (indexSup > indexInf)
-      drawGraph(allData.slice(indexInf, indexSup).reverse())
+      drawGraph(allData.slice(indexInf, indexSup))
 
   }
 
@@ -88,6 +88,90 @@ function HappinessPage (props) {
     }
   }
 
+
+  let averageData = {
+    labels: allData.map(x => new Date(x.dueDate).getDay() === 0 ? moment(new Date(x.dueDate)).format('Do MMMM') : null).filter(x => x),
+    datasets: [
+      {
+        label: 'Average score',
+        data: allData.map((x, index) => {
+          if (new Date(x.dueDate).getDay() === 0) {
+            let average = x.score
+            for (let i = 1; i < 7; i++) {
+              const newIndex = index - i
+              if (newIndex < 0)
+                return average / i
+              else
+                average += allData[newIndex].score
+            }
+            return average / 7
+          }
+          else 
+            return null
+        }).filter(x => x),
+        borderWidth: 1,
+        borderColor: 'black',
+        fill: false,
+      },
+      {
+        label: 'Maximum score',
+        data: allData.map((x, index) => {
+          if (new Date(x.dueDate).getDay() === 0) {
+            let maxScore = x.score
+            for (let i = 1; i < 7; i++) {
+              const newIndex = index - i
+              if (newIndex < 0)
+                return maxScore
+              else
+                maxScore = Math.max(allData[newIndex].score, maxScore)
+            }
+            return maxScore
+          }
+          else 
+            return null
+        }).filter(x => x),
+        borderWidth: 1,
+        borderColor: 'grey',
+        fill: false,
+      },
+      {
+        label: 'Minimum score',
+        data: allData.map((x, index) => {
+          if (new Date(x.dueDate).getDay() === 0) {
+            let minScore = x.score
+            for (let i = 1; i < 7; i++) {
+              const newIndex = index - i
+              if (newIndex < 0)
+                return minScore
+              else
+                minScore = Math.min(allData[newIndex].score, minScore)
+            }
+            return minScore
+          }
+          else 
+            return null
+        }).filter(x => x),
+        borderColor: 'grey',
+        borderWidth: 1,
+        fill: '-1',
+      }
+    ]
+  }
+
+  const averageOptions = {
+    scales: {
+      yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+          suggestedMax: 10,
+        },
+      }],
+    },
+    legend: {
+      display: false
+    },
+  }
 
 
   return (
@@ -137,6 +221,34 @@ function HappinessPage (props) {
               
             </div>
           </div>
+          <div style={styles().averageContainer}>
+            <Line 
+              data={averageData}
+              options={averageOptions}
+              legend={null}
+              height={100}
+            />
+              <div style={styles().weeklyFocusContainer}>
+                {allData.map(singleData => {
+                  if (new Date(singleData.dueDate).getDay() === 1) {
+                    return (
+                      <div key={singleData._id} style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: (100/allData.length).toString() + '%',
+                      }}>
+                        <WeekGoal 
+                          weekNumber={new Date(singleData.dueDate).getFullYear()*100 + parseInt(moment(singleData.dueDate).isoWeek())}
+                          scale={0.7}
+                        />
+                      </div>
+                    )
+                  }
+                  else return null
+                }).filter(x => x)}
+              </div>
+          </div>
         </div>
     </div>
   )
@@ -166,6 +278,21 @@ const styles = () => ({
     alignItems: 'center',
     justifyContent: 'space-around',
     marginLeft: 30,
+  },
+  weeklyFocusContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginLeft: 50,
+    marginRight: 50,
+  },
+  averageContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    margin: 50,
   },
 })
 
