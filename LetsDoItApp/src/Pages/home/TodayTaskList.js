@@ -63,6 +63,12 @@ function TodayTaskList (props) {
   const [itemsSomeday, setItemsSomeday] = useState([])
   const api = new Api()
 
+
+  const number = (new Date()).getFullYear()*1000 
+    + (Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) 
+      - Date.UTC(new Date().getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000
+ 
+
   useEffect(() => {
     AppState.addEventListener("change", getAllItems)
     Keyboard.addListener('keyboardDidHide', () => setIsAddingTask(false))
@@ -301,7 +307,7 @@ function TodayTaskList (props) {
       {!isAddingTask && (
         <View style={styles.wrapper}>
 	    
-        <FocusButton type={'day'} navigation={props.navigation}/>
+        <FocusButton type={'day'} number={number} navigation={props.navigation}/>
         <DraxProvider>
           <View style={draggedTask ? styles.listContainerDragged : styles.listContainer}>
             <SectionList

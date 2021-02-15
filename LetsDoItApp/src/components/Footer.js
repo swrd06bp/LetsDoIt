@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { CommonActions} from '@react-navigation/native'
+import Api from '../Api'
 
 function navAction(name) {
   return CommonActions.reset({
@@ -13,8 +14,8 @@ function navAction(name) {
 }
 
 function Footer (props) {
-
-
+    const [customization, setCustomization] = useState({})
+    const api = new Api()
    
     const tasksImage = props.current === 'tasks' ? require('../../static/tasks_active.png')
     	: require('../../static/tasks.png')
@@ -24,6 +25,20 @@ function Footer (props) {
 
     const happinessImage = props.current === 'happiness' ? require('../../static/happiness_active.png')
     	: require('../../static/happiness.png')
+
+  const getCurrentCustomization = async () => {
+    const resp = await api.getCustomization() 
+    const json = await resp.json()
+    if (json[0].customization) {
+      const customization = json[0].customization
+      setCustomization(customization)
+    }
+  }
+
+  useEffect(() => {
+    getCurrentCustomization()
+  }, [])
+
 
 	return (
 	  <View style={styles.wrapper}>
@@ -39,12 +54,14 @@ function Footer (props) {
 	      <Image source={goalsImage} style={styles.image} />
 	      <Text style={[props.current === 'goals' && {color: 'blue'}]}>Goals</Text>
 	    </TouchableOpacity>
-	    <TouchableOpacity style={styles.navContainer} onPress={() => {
+	    {customization.happiness && (
+        <TouchableOpacity style={styles.navContainer} onPress={() => {
         props.navigation.dispatch(navAction('HappinessPage'))
       }}>
 	      <Image source={happinessImage} style={styles.image} />
 	      <Text style={[props.current === 'happiness' && {color: 'blue'}]}>Happiness</Text>
 	    </TouchableOpacity>
+      )}
 	  </View>
 	)
 }

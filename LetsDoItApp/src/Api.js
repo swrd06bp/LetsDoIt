@@ -51,6 +51,19 @@ class Api {
     return await this.get(url)
   }
 
+
+  async getCustomization() {
+    const url = this.baseUrl + '/user'
+    return await this.get(url)
+  }
+
+  async setCustomization(customization) {
+    const url = this.baseUrl + '/user'
+    const body = {customization}
+    return await this.put(url, body)
+  }
+
+
   async getNotifications () {
     const url = this.baseUrl + `/notifications`
     return await this.get(url)
