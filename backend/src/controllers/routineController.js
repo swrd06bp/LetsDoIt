@@ -38,3 +38,15 @@ exports.routinePost = async (req, res) => {
   req.app.get("socketService").emiter('routines', 'update', token, req.decoded)
 }
 
+exports.routineDelete = async (req, res) => {
+  const routineId = req.params.routineId
+  await dbClient.deleteElem({
+    table: 'routines',
+    elemId: routineId,
+    userId: req.decoded,
+  })
+  res.status(200)
+  res.json({'routineId': routineId})
+  res.end()
+}
+

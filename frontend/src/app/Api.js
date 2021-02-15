@@ -152,6 +152,10 @@ class Api {
     return await this.post(url, routine)
   }
 
+  async deleteRoutine(routineId) {
+    const url = this.baseUrl + `/routine/${routineId}`
+    return await this.delete(url)
+  }
 
   async getTasks({from, until, unfinished, someday}) {
     let url = this.baseUrl 

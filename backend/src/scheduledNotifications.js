@@ -79,7 +79,7 @@ async function getNotifRoutines () {
       query: { 
         habitId: habit._id,
         isDone: { '$eq': true },
-        createdAt: {'$gte': new Date(since).toJSON()},
+        dueDate: {'$gte': new Date(since).toJSON()},
       },
       maxNum: parseInt(habit.frequency.number),
     })
@@ -90,7 +90,7 @@ async function getNotifRoutines () {
       query: { 
         habitId: habit._id,
         isDone: { '$eq': false },
-        createtAt: {'$gte': new Date(since).toJSON()},
+        dueDate: {'$gte': new Date(since).toJSON()},
       },
       maxNum: 1,
     })

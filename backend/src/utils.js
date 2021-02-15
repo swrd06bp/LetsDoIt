@@ -87,7 +87,7 @@ const generateRoutineTask = ({habit, doneRoutines, unDoneRoutines}) => {
   let nextTime = new Date()
   nextTime.setMinutes(nextTime.getMinutes() + 15)
 
-  if ( (parseInt(startHour) > nextTime.getHours() && parseInt(startMinute) > nextTime.getMinutes()) || (parseInt(startHour) < new Date().getHours() && parseInt(startMinute) < new Date().getMinutes()))
+  if ( (parseInt(startHour) >= nextTime.getHours() && parseInt(startMinute) > nextTime.getMinutes()) || (parseInt(startHour) <= new Date().getHours() && parseInt(startMinute) < new Date().getMinutes()))
     return null
   else if (doneRoutines.length === 0 && unDoneRoutines.length === 0)
     return routineTask

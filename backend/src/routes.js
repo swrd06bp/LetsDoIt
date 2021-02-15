@@ -85,5 +85,6 @@ router.delete('/habit/:habitId', habitController.habitDelete)
 // routines
 router.get('/habit/:habitId/routines', routineController.routineHabitGet)
 router.post('/routine', routineController.routinePost)
+router.delete('/routine/:routineId', routineController.routineDelete)
 
 exports.router = router

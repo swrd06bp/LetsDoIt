@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import 'react-calendar-heatmap/dist/styles.css'
+import './HomePage.css'
 import { Line } from '@reactchartjs/react-chart.js'
 import moment from 'moment'
 
@@ -27,8 +28,6 @@ function HabitDescription (props) {
     getHabitRoutines()
   }, [])
 
-  let startCalendarDay = new Date()
-  startCalendarDay.setDate(new Date().getDate() - 150)
   
   let maxStreaks
   if (habit.maxStreaks)
@@ -64,7 +63,7 @@ function HabitDescription (props) {
     const resp = await api.getRoutinesHabit({habitId: props.describeElem.habit._id}) 
     const json = await resp.json()
     const newCommitsData = json.filter((x) => x.isDone).map( x => ({
-      date: x.createdAt.slice(0, 10),
+      date: x.dueDate.slice(0, 10),
       count: 1,
     }))
     const scoreCounts = getScoreData(newCommitsData).scoreCounts
@@ -91,6 +90,33 @@ function HabitDescription (props) {
     setHabit({_id: habit._id, ...newHabit})
     setShowEditForm(false)
   }
+
+  const onUpdateRoutine = async (value) => {
+    const subRoutines = allRoutines.filter(x => x.dueDate.slice(0, 10) === value.date)
+    
+    if (subRoutines.length === 0)
+      await api.insertRoutine({
+        habitId: props.describeElem.habit._id,
+        isDone: true,
+        dueDate: new Date(value.date).toJSON(),
+        note: null,
+        postponeUntil: null
+      })
+    else
+      await subRoutines.map(async (routine) => {
+        await api.deleteRoutine(routine._id)
+        if(!routine.isDone)    
+          await api.insertRoutine({
+            habitId: routine.habitId,
+            isDone: true,
+            dueDate: new Date(value.date).toJSON(),
+            note: null,
+            postponeUntil: null
+          })
+      })
+
+    await getHabitRoutines()
+  } 
   
 
   const deriveScore = (score) => {
@@ -214,7 +240,7 @@ function HabitDescription (props) {
     },
   }
   
-  let graphScoreData = {
+  const graphScoreData = {
     labels: getScoreData(commitsData).scoreLabels, 
     datasets: [
       {
@@ -223,6 +249,20 @@ function HabitDescription (props) {
       }
     ]
   }
+  
+  let startCalendarDay = new Date()
+  startCalendarDay.setDate(new Date().getDate() - 150)
+
+  const calendarData = [...Array(150).keys()].map(i => {
+    let date = new Date()
+    date.setDate(date.getDate() - i)
+
+    const data = commitsData.filter(x => x.date === date.toJSON().slice(0, 10))
+    if (data.length > 0)
+      return data[0]
+    else
+      return {date: date.toJSON().slice(0, 10), count: 0}
+  })
 
   return (
     <div style={styles().wrapper}>
@@ -306,8 +346,12 @@ function HabitDescription (props) {
                 showWeekdayLabels
                 endDate={new Date().toJSON().slice(0, 10)}
                 startDate={startCalendarDay.toJSON().slice(0, 10)}
-                values={commitsData}
-                onMouseOver={(value) => console.log(value)}
+                values={calendarData}
+                onClick={(value) => onUpdateRoutine(value)}
+                classForValue={(value) => {
+                  return (value.count > 0 ? 'color-scale-2' : 'color-scale-0')
+                }}
+                titleForValue={(value) => `Date is ${value.date}`}
               />
             </div>
             </div>
