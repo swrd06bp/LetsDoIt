@@ -65,6 +65,7 @@ function WeeklyTaskList (props) {
   const [itemsSaturday, setItemsSaturday] = useState([])
   const [itemsSunday, setItemsSunday] = useState([])
   const api = new Api()
+  const number = date.getFullYear()*100 + parseInt(moment(date).isoWeek())
 
   useEffect(() => {
     AppState.addEventListener("change", getAllItems)
@@ -307,7 +308,7 @@ function WeeklyTaskList (props) {
              <Text style={styles.monthText}>{moment(weekDates[0]).format('D MMMM')} to {moment(weekDates[1]).format('D MMMM')}</Text>
           </View>
 
-        <FocusButton type={'week'} navigation={props.navigation}/>
+        <FocusButton number={number} type={'week'} navigation={props.navigation}/>
 
         <DraxProvider>
           <View style={draggedTask ? styles.listContainerDragged : styles.listContainer}>
