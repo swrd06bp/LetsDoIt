@@ -1,3 +1,18 @@
+const todayDate = () => new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
+
+const lastWeekDate = () => {
+    let date = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
+    date.setDate(date.getDate() - 7)
+    return date
+}
+
+const lastMonthDate = () => {
+    let date = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
+    date.setMonth(date.getMonth() - 1)
+    return date
+}
+
+
 function buildGetTasksQuery (params) {
 
   const {from, until, unfinished, someday} = params
@@ -57,9 +72,49 @@ function getRandomColor() {
     return color
 }
 
+const generateRoutineTask = ({habit, doneRoutines, unDoneRoutines}) => {
+  const routineTask = {
+    id: habit._id,
+    type: 'routine',
+    content: habit.content,
+    goalId: habit.goalId,
+    userId: habit.userId,
+  }
+  console.log('sldfksdlf', doneRoutines, unDoneRoutines)
+
+  const [startHour, startMinute] = habit.startTime.split(':')
+
+  let nextTime = new Date()
+  nextTime.setMinutes(nextTime.getMinutes() + 15)
+
+  if ( (parseInt(startHour) > nextTime.getHours() && parseInt(startMinute) > nextTime.getMinutes()) || (parseInt(startHour) < new Date().getHours() && parseInt(startMinute) < new Date().getMinutes()))
+    return null
+  else if (doneRoutines.length === 0 && unDoneRoutines.length === 0)
+    return routineTask
+  else if (doneRoutines.length === 0 && new Date(unDoneRoutines[0].postponeUntil) < tomorrowDate())
+    return routineTask
+  else if (doneRoutines.length === 0 && new Date(unDoneRoutines[0].postponeUntil) >= tomorrowDate())
+    return null
+  else if (
+    (
+      (doneRoutines.length && doneRoutines.length < habit.frequency.number
+      && new Date(doneRoutines[0].createAt) >= todayDate())
+    ) && (
+      !(unDoneRoutines 
+        && new Date(unDoneRoutines[0].postponeUntil) >= tomorrowDate())
+    )
+  )
+    return routineTask
+  else
+    return null
+}
 
 
 
 exports.buildGetTasksQuery = buildGetTasksQuery
 exports.buildGetProjectsQuery = buildGetProjectsQuery
 exports.getRandomColor = getRandomColor
+exports.generateRoutineTask = generateRoutineTask
+exports.todayDate = todayDate
+exports.lastWeekDate = lastWeekDate
+exports.lastMonthDate = lastMonthDate

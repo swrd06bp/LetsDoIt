@@ -307,6 +307,7 @@ function HabitDescription (props) {
                 endDate={new Date().toJSON().slice(0, 10)}
                 startDate={startCalendarDay.toJSON().slice(0, 10)}
                 values={commitsData}
+                onMouseOver={(value) => console.log(value)}
               />
             </div>
             </div>

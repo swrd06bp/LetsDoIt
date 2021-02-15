@@ -6,7 +6,10 @@ const { SocketService } = require('./SocketService')
 const cors = require('cors')
 const { router } = require('./routes')
 const { host, port, dns } = require('./config')
-const { sendAllNotifications } = require('./scheduledNotifications')
+const { 
+  sendTasksNotifications,
+  sendRoutinesNotifications
+} = require('./scheduledNotifications')
 const cron = require('node-cron')
 
 const app = express()
@@ -22,7 +25,8 @@ app.set('socketService', new SocketService(server))
 
 cron.schedule('*/15 * * * *', function() {
   console.log('running a task every hour')
-  sendAllNotifications()
+  sendTasksNotifications()
+  sendRoutinesNotifications()
 })
 
 server.listen(port, host, () => {

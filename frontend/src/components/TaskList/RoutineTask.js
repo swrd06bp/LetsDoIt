@@ -13,7 +13,13 @@ function FailureScreen (props) {
   const api = new Api()
 
   const onFailure = async () => {
-    await api.insertRoutine({habitId: props.item.id, note, postponeUntil, isDone: false}) 
+    await api.insertRoutine({
+      habitId: props.item.id,
+      note,
+      postponeUntil,
+      isDone: false,
+      dueDate: new Date().toJSON()
+    }) 
     await props.onUpdate()
     props.onClose()
   }
@@ -74,7 +80,8 @@ function RoutineTask (props) {
       habitId: props.item.id,
       note: null,
       postponeUntil: null,
-      isDone: true
+      isDone: true,
+      dueDate: new Date().toJSON()
     }) 
     props.onUpdate()
   }

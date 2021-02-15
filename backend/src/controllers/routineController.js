@@ -6,7 +6,7 @@ exports.routineHabitGet = async (req, res) => {
   let query =  { habitId }
 
   if (since)
-    query['createdAt'] = {'$gte': new Date(since).toJSON()}
+    query['dueDate'] = {'$gte': new Date(since).toJSON()}
   if (isDone)
     query['isDone'] = (isDone === 'true')
   
