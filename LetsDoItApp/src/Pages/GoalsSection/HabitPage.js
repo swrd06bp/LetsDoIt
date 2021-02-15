@@ -113,7 +113,6 @@ function HabitPage (props) {
     setAllRoutines(json)
     setCommitsData(newCommitsData)
     setHabitScore(getHabitScore(newCommitsData))
-
   }
 
   const getHabitScore = (routines) => {

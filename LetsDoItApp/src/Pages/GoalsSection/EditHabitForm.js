@@ -25,7 +25,7 @@ function EditHabitForm(props) {
   const [showTimePicker, setShowTimePicker] = useState(false)
   const [frequencyOption, setFrequencyOption] = useState(!props.habit ? 0 : (props.habit.frequency.type === 'day' ? 0 : (props.habit.frequency.type === 'week' ? 1 : 2)))
   const [chosenFrequency, setChosenFrequency] = useState(props.habit ? props.habit.frequency : {type: 'day', number:1})
-  const [startTime, setStartTime] = useState('00:00')
+  const [startTime, setStartTime] = useState(props.habit.startTime ? props.habit.startTime : '00:00')
   const [isNotification, setIsNotification] = useState(false)
 
 

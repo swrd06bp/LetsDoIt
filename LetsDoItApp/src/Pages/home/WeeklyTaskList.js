@@ -84,7 +84,6 @@ function WeeklyTaskList (props) {
     const response = await api.getTasks({from: weekDates[0].toJSON(), until: weekDates[1].toJSON()})
     const allTasks = await response.json()
   
-    console.log(weekDates, allTasks, isRefreshing, 'lsdkfs')  
   
 
    if (allTasks) {
