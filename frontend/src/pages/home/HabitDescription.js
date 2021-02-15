@@ -328,17 +328,6 @@ function HabitDescription (props) {
       	       <div style={styles().overviewText}>Total</div>
       	     </div>
       	  </div>
-          {commitsData.length > 0 && ( 
-          <div>
-            <div style={styles().titleSectionText}>Score</div>
-              <div>
-                <Line
-                  data={graphScoreData}
-                  options={scoreOptions}
-                  legend={null}
-                  height={100}
-                />
-              </div>
             <div style={styles().titleSectionText}>Calendar</div>
             <div style={styles().calendarHeatmap}>
               <CalendarHeatmap
@@ -354,6 +343,17 @@ function HabitDescription (props) {
                 titleForValue={(value) => `Date is ${value.date}`}
               />
             </div>
+          {commitsData.length > 0 && ( 
+          <div>
+            <div style={styles().titleSectionText}>Score</div>
+              <div>
+                <Line
+                  data={graphScoreData}
+                  options={scoreOptions}
+                  legend={null}
+                  height={100}
+                />
+              </div>
             </div>
           )}
       	</div>
