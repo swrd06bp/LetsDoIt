@@ -80,31 +80,40 @@ const generateRoutineTask = ({habit, doneRoutines, unDoneRoutines}) => {
     goalId: habit.goalId,
     userId: habit.userId,
   }
-  console.log('sldfksdlf', doneRoutines, unDoneRoutines)
 
   const [startHour, startMinute] = habit.startTime.split(':')
 
   let nextTime = new Date()
   nextTime.setMinutes(nextTime.getMinutes() + 15)
 
-  if ( (parseInt(startHour) >= nextTime.getHours() && parseInt(startMinute) > nextTime.getMinutes()) || (parseInt(startHour) <= new Date().getHours() && parseInt(startMinute) < new Date().getMinutes()))
-    return null
-  else if (doneRoutines.length === 0 && unDoneRoutines.length === 0)
-    return routineTask
+  let timeRoutine = new Date()
+  timeRoutine.setHours(parseInt(startHour), parseInt(startMinute), 0)
+
+  if (doneRoutines.length === 0 && unDoneRoutines.length === 0)
+    if (new Date() <= timeRoutine && timeRoutine <= nextTime)
+      return routineTask
+    else 
+      return null
   else if (doneRoutines.length === 0 && new Date(unDoneRoutines[0].postponeUntil) < tomorrowDate())
-    return routineTask
+    if (new Date() <= timeRoutine && timeRoutine <= nextTime)
+      return routineTask
+    else 
+      return null
   else if (doneRoutines.length === 0 && new Date(unDoneRoutines[0].postponeUntil) >= tomorrowDate())
     return null
   else if (
     (
       (doneRoutines.length && doneRoutines.length < habit.frequency.number
-      && new Date(doneRoutines[0].createAt) >= todayDate())
+      && new Date(doneRoutines[0].dueDate) >= todayDate())
     ) && (
       !(unDoneRoutines 
         && new Date(unDoneRoutines[0].postponeUntil) >= tomorrowDate())
     )
   )
-    return routineTask
+    if (new Date() <= timeRoutine && timeRoutine <= nextTime)
+      return routineTask
+    else 
+      return null
   else
     return null
 }
