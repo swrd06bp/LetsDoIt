@@ -6,6 +6,7 @@ import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 function Project (props) {
   
   const scale = props.type === 'day' ? 1 : 0.8
+
   
   return (
     <div 
@@ -60,14 +61,14 @@ const styles = (scale) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    fontSize: 18 * scale *  getDimRatio().X,
+    fontSize: 18 * scale *  getDimRatioText().X,
   },
   frontContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 30 * scale *  getDimRatio().X,
+    width: 30 * scale *  getDimRatioText().X,
   },
   backContainer: {
     display: 'flex',
@@ -77,7 +78,7 @@ const styles = (scale) => ({
     marginRight: 3
   },
   dueDate: {
-    fontSize: 14 * scale *  getDimRatio().X,
+    fontSize: 14 * scale *  getDimRatioText().X,
     borderRadius: 20,
     padding: 1,
     marginRight: 2,

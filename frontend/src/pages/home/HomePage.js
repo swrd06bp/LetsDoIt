@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from "react-router-dom"
 import { useMixpanel } from 'react-mixpanel-browser'
 import Switch from "react-switch"
 
@@ -17,14 +18,15 @@ import Api from '../../app/Api'
 import { createSocketConnection } from '../../app/socket'
 
 
-function HomePage() {
+function HomePage(props) {
   const [describeElem, setDescribeElem] = useState({task: null, project: null, goal: null, habit: null})
-  const [isWeekly, setIsWeekly] = useState(false)
+  const [isWeekly, setIsWeekly] = useState(props.location.pathname === '/week')
   const [allGoals, setAllGoals] = useState([])
   const [allProjects, setAllProjects] = useState([])
   const [name, setName] = useState('')
   const api = new Api()
   const mixpanel = useMixpanel()
+  const history = useHistory()
  
   useEffect(() => {
     createSocketConnection()
@@ -62,6 +64,10 @@ function HomePage() {
             onChange={() => {
               if (mixpanel.config.token)
                 mixpanel.track('Home page - set weekly')
+              if (!isWeekly)
+                history.replace({ pathname: '/week'})
+              else if (isWeekly)
+                history.replace({ pathname: '/'})
               setIsWeekly(!isWeekly)
             }}
             height={20}
