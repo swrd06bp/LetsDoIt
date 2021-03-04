@@ -23,7 +23,7 @@ app.use('/v1', router)
 app.set('port', process.env.port || 4001)
 app.set('socketService', new SocketService(server))
 
-cron.schedule('* * * * *', function() {
+cron.schedule('*/15 * * * *', function() {
   console.log('running a task every hour')
   sendTasksNotifications()
   sendRoutinesNotifications()
