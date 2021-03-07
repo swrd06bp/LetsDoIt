@@ -25,7 +25,7 @@ function EditHabitForm(props) {
   const [showTimePicker, setShowTimePicker] = useState(false)
   const [frequencyOption, setFrequencyOption] = useState(!props.habit ? 0 : (props.habit.frequency.type === 'day' ? 0 : (props.habit.frequency.type === 'week' ? 1 : 2)))
   const [chosenFrequency, setChosenFrequency] = useState(props.habit ? props.habit.frequency : {type: 'day', number:1})
-  const [startTime, setStartTime] = useState(props.habit.startTime ? props.habit.startTime : '00:00')
+  const [startTime, setStartTime] = useState(props.habit && props.habit.startTime ? props.habit.startTime : '00:00')
   const [isNotification, setIsNotification] = useState(false)
 
 
@@ -55,6 +55,7 @@ function EditHabitForm(props) {
   })
 
   const onOptionChange = (value) => {
+    console.log('sdkfjsdl', value)
     if (value === 0) setChosenFrequency({type: 'day', number: 1})
     if (value === 1) setChosenFrequency({type: 'week', number: 1})
     if (value === 2) setChosenFrequency({type: 'month', number: 1})
@@ -128,7 +129,7 @@ function EditHabitForm(props) {
                 value={frequencyOption}
                 defaultValue={frequencyOption}
                 containerStyle={styles.linkAndroidContainer}
-                onChangeItem={onOptionChange}
+                onChangeItem={(item) => onOptionChange(item.value)}
               />
             )}
            {Platform.OS === 'ios' && frequencyOption !== 0 && (
@@ -145,7 +146,7 @@ function EditHabitForm(props) {
                 value={chosenFrequency.number}
                 defaultValue={chosenFrequency.number}
                 containerStyle={styles.linkAndroidContainer}
-                onChangeItem={frequencyOption === 1 ? onOptionWeeklyChange : onOptionMonthlyChange}
+                onChangeItem={frequencyOption === 1 ? (item) => onOptionWeeklyChange(item.value) : (item) => onOptionMonthlyChange(item.value)}
               />
             )}
          </View>
