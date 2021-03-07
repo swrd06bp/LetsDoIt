@@ -28,9 +28,7 @@ function TopNavigation() {
   const clickLogout = () => {
     if (mixpanel.config.token)
       mixpanel.track('Top navigation - Logout')
-    const api = new Api()
-    api.logout()
-    window.location.assign('/login')
+    window.location.assign('/logout')
   } 
 
   const goAccountPage = () => {
