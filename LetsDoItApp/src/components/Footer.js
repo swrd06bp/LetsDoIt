@@ -14,6 +14,7 @@ function navAction(name) {
 }
 
 function Footer (props) {
+    const [isLoading, setIsLoading] = useState(true)
     const [customization, setCustomization] = useState({})
     const api = new Api()
    
@@ -33,6 +34,7 @@ function Footer (props) {
       const customization = json[0].customization
       setCustomization(customization)
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -41,7 +43,9 @@ function Footer (props) {
 
 
 	return (
-	  <View style={styles.wrapper}>
+    <View style={styles.wrapper}>
+	  {!isLoading && (
+     <View style={styles.wrapper}>
 	    <TouchableOpacity style={styles.navContainer} onPress={() => {
         props.navigation.dispatch(navAction('HomePage'))
       }}>
@@ -63,6 +67,11 @@ function Footer (props) {
 	    </TouchableOpacity>
       )}
 	  </View>
+    )}
+    {isLoading && (
+       <View style={styles.wrapper}></View>
+    )}
+    </View>
 	)
 }
 
