@@ -8,6 +8,7 @@ import { updateSocketElems, removeSocketListener } from '../app/socket'
 import Api from './Api'
 
 function TopNavigation() {
+  const [isLoading, setIsLoading] = useState(true)
   const [happiness, setHappiness] = useState(false)
   const mixpanel = useMixpanel()
   const api = new Api()
@@ -23,6 +24,7 @@ function TopNavigation() {
       const customization = json[0].customization
       setHappiness(customization.happiness)
     }
+    setIsLoading(false)
   } 
 
   const clickLogout = () => {
@@ -51,6 +53,7 @@ function TopNavigation() {
         if (mixpanel.config.token)
           mixpanel.track('Top navigation - Go to logo icon home')
       }}><img src='/logo.png' style={styles.logoImage} alt='' /></Navbar.Brand>
+      {!isLoading && (
         <Nav className="sm-2" align="right">
           <Nav.Item>
             <Nav.Link href='/' onClick={() => {
@@ -72,6 +75,7 @@ function TopNavigation() {
             <NavDropdown.Item onClick={clickLogout}>Logout</NavDropdown.Item>
           </NavDropdown>
         </Nav>
+      )}
       </Navbar.Collapse>
     </Navbar>
   )
