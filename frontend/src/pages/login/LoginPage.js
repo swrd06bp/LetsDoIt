@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from "react-router-dom"
 import { useMixpanel } from 'react-mixpanel-browser'
 
 import './LoginPage.css'
@@ -10,6 +11,7 @@ function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassowrd] = useState('')
   const [showError, setShowError] = useState(false)
+  let history = useHistory()
   const mixpanel = useMixpanel()
   
   const handleSubmit = async () => {
@@ -17,7 +19,7 @@ function LoginPage() {
     const isLogin = await new Api().login(username, password)
     if (mixpanel.config.token)
       mixpanel.track('Login Page - Submit Login', {isLogin})
-    if (isLogin) window.location.assign('/')
+    if (isLogin) history.replace("/") 
     else setShowError(true)
     setIsLoading(false)
   }
