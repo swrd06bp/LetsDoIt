@@ -24,6 +24,7 @@ function HomePage(props) {
   const [allGoals, setAllGoals] = useState([])
   const [allProjects, setAllProjects] = useState([])
   const [name, setName] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
   const api = new Api()
   const mixpanel = useMixpanel()
   const history = useHistory()
@@ -48,6 +49,7 @@ function HomePage(props) {
       mixpanel.identify(resultName[0]._id)
       setName(resultName[0].name)
     }
+    setIsLoading(false)
   }
 
 
@@ -79,6 +81,7 @@ function HomePage(props) {
         </div>
       </div>
       
+      {!isLoading && (
       <div style={styles().mainCantainer}>
         
         {!isWeekly && (
@@ -155,6 +158,7 @@ function HomePage(props) {
           />
         )}
       </div>
+      )}
     </div>
   )
 

@@ -77,6 +77,9 @@ function TodayTaskList (props) {
 
     let allRoutineTasks = []
     for (let habit of allHabits) {
+      const isFinishedGoal = props.goals.filter(x => x._id === habit.goalId && x.doneAt).length > 0
+      if (isFinishedGoal)
+        continue
       // get the doneRoutines
       const since = habit.frequency.type === 'day' ? todayDate().toJSON() 
         : (habit.frequency.type === 'week' ? lastWeekDate().toJSON() : lastMonthDate().toJSON())
