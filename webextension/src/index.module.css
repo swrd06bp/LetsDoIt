@@ -1,0 +1,41 @@
+.taskWrapper {
+    display: 'flex';
+    justifyContent: "space-around";
+}
+
+
+
+deleteTask {
+    margin-left:auto; margin-right:0;
+}
+
+
+.listDragged {
+    background: 'lightblue';
+    padding: 8;
+    width: 250;
+}
+
+
+.listStatic {
+    background: 'lightgrey';
+    padding: 8;
+    width: 250;
+
+}
+
+.taskDragged {
+
+    userSelect: 'none';
+    padding: 16;
+    margin: `0 0 8px 0`;
+    background: 'lightgreen';
+}
+
+.taskStatic {
+    userSelect: 'none';
+    padding: 16;
+    margin: `0 0 8px 0`;
+    background: 'grey';
+}
+
