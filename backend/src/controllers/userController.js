@@ -68,6 +68,8 @@ exports.userSignup = async (req, res) => {
       username,
       encryptedPass,
       customization: {happiness: false, dailyFocus: false, weeklyFocus: false},
+      createdAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON(),
     }})
     res.status(200)
     res.json({'userId': userId})
