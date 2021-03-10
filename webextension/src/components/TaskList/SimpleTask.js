@@ -34,6 +34,9 @@ function SimpleTask (props) {
   const  goal = props.goals.filter(x => x._id === props.item.goalId).length
     ? props.goals.filter(x => x._id === props.item.goalId)[0] : null
 
+  const regex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+
+  const links = props.item.note ? props.item.note.match(regex) : []
 
   return (
     <div 
@@ -67,6 +70,9 @@ function SimpleTask (props) {
           }}
         >
           {props.item.content}
+          {links && links.length > 0 && (
+              <a href={links[0]}>&nbsp;- link</a>
+          )}
         </div>
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>

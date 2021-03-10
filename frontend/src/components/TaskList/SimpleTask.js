@@ -36,6 +36,10 @@ function SimpleTask (props) {
     ? props.goals.filter(x => x._id === props.item.goalId)[0] : null
 
   const scale = (props.type === 'day' || isOver) ? 1 : 0.8
+  
+  const regex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+
+  const links = props.item.note ? props.item.note.match(regex) : []
 
   return (
     <div 
@@ -65,7 +69,10 @@ function SimpleTask (props) {
           }} 
           onClick={() => {props.onDescribe({task: props.item, project: null, goal: null, habit: null})}}
         >
-          {props.item.content}
+          {props.item.content} 
+          {links && links.length > 0 && (
+              <a href={links[0]}>&nbsp;- link</a>
+          )}
         </div>
       </div>
       <div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
