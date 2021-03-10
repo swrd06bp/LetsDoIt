@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "LetsDoIt",
   "author": "Boris",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Best to do list to help you acheive your goals",
   "icons": {
     "16": "logo2.png",
