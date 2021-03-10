@@ -38,6 +38,9 @@ function SimpleTask (props) {
 
   const links = props.item.note ? props.item.note.match(regex) : []
 
+  const scale = (props.type === 'day' || isOver) ? 1 : 0.8
+
+
   return (
     <div 
       onMouseOver={() => setIsOver(true)} 
@@ -61,7 +64,7 @@ function SimpleTask (props) {
             height: '100%',
             marginLeft: 5,
             flexGrow: 1,
-            fontSize:18 * props.scale * getDimRatioText().X,
+            fontSize:18 * scale * getDimRatioText().X,
             textDecoration: props.item.doneAt ? 'line-through': null,
             color: props.item.doneAt ? 'grey': 'black',
           }} 
@@ -79,7 +82,7 @@ function SimpleTask (props) {
        <div>
           {!props.hideList && (
             <ListButton
-              scale={props.scale}
+              scale={scale}
               active={true}
               item={props.item}
               onListChange={ (list) => {

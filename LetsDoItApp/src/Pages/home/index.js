@@ -37,6 +37,7 @@ export default function Home (props) {
   const [isWeekly, setIsWeekly] = useState(false)
   const [allProjects, setAllProjects] = useState([])
   const [allGoals, setAllGoals] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const api = new Api()
 
   useEffect(() => {
@@ -85,6 +86,7 @@ export default function Home (props) {
     const resultProjects = await respProjects.json()
     setAllGoals(resultGoals)
     setAllProjects(resultProjects)
+    setIsLoading(false)
   }
 
   useLayoutEffect(() => {
@@ -117,6 +119,7 @@ export default function Home (props) {
 
   return (
     <SafeAreaView>
+      {!isLoading && (
       <View style={styles.todayTaskList}>
       {isWeekly && (
         <WeeklyTaskList 
@@ -138,6 +141,7 @@ export default function Home (props) {
         />
       )}
       </View>
+      )}
     </SafeAreaView>
   )
 }
