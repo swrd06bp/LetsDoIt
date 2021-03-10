@@ -45,6 +45,7 @@ function SimpleTask (props) {
     <div 
       onMouseOver={() => setIsOver(true)} 
       onMouseLeave={() => setIsOver(false)} 
+      title={props.item.note}
       className='taskWrapper'
       style={{
         ...styles.wrapper,
@@ -74,7 +75,7 @@ function SimpleTask (props) {
         >
           {props.item.content}
           {links && links.length > 0 && (
-              <a href={links[0]}>&nbsp;- link</a>
+              <a href={links[0]} onClick={() => setTimeout(() => window.close(), 100)}>&nbsp;- link</a>
           )}
         </div>
       </div>
