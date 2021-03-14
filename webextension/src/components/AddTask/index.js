@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 import Api from '../../app/Api.js'
 
 
 function AddTask (props) {
   const [taskInput, setTaskInput] = useState('')
+  const [note, setNote] = useState(null)
 
 
   const onSubmit = async () => {
@@ -14,7 +15,7 @@ function AddTask (props) {
       content: taskInput,
       list: props.list ? props.list : 'Work',
       dueDate: props.dueDate ? props.dueDate.toJSON() : new Date().toJSON(),
-      note: null,
+      note,
       projectId: props.projectId ? props.projectId : null,
       goalId: props.goalId ? props.goalId : null,
     }
@@ -27,6 +28,15 @@ function AddTask (props) {
       props.onCreate(newTask)
     }
     setTaskInput('')
+  }
+
+  const linkTab = () => {
+    const browser = window.browser || window.chrome
+    browser.tabs.query({currentWindow: true, active: true}, (tabs) => {
+      let tab = tabs[0]
+      setNote(tab.url)
+      setTaskInput('Read this article')
+    })
   }
 
 
@@ -56,6 +66,13 @@ function AddTask (props) {
         >
           Add
         </div>
+        <img 
+          onClick={linkTab}
+          src="/link.png"
+          alt=""
+          title="Add this page in your to do"
+          style={styles().imageLink}
+        />
     </div>
   )
 }
@@ -73,22 +90,28 @@ const styles = () => ({
   inputText: {
     borderRadius: 20,
     width: '70%',
-    height: 30 * getDimRatio().Y,
+    height: 35 * getDimRatio().Y,
+    fontSize: 18* getDimRatioText().X,
     paddingLeft: 20,
   },
   button: {
     display: 'flex',
-    height: 30*getDimRatio().Y,
-    width: 40* getDimRatio().X,
+    height: 40*getDimRatio().Y,
+    width: 50* getDimRatio().X,
     cursor: 'pointer',
     backgroundColor: '#32A3BC',
     borderRadius: 40,
-    fontSize: 14* getDimRatio().X,
+    fontSize: 18* getDimRatioText().X,
     alignItems: 'center',
     justifyContent: 'center',
     color: 'white',
     fontWeight: 'bold',
     margin: 10,
+  },
+  imageLink: {
+    height: 45 * getDimRatio().X,
+    width: 45 * getDimRatio().X,
+    cursor: 'pointer',
   },
 })
 
