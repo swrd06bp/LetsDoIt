@@ -15,10 +15,11 @@ const cron = require('node-cron')
 const app = express()
 const server =  http.createServer(app) 
 
-
 app.use('/public', express.static('build'))
 app.use(cors())
+
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/v1', router)
 app.set('port', process.env.port || 4001)
 app.set('socketService', new SocketService(server))

@@ -11,12 +11,18 @@ const goalController = require('./controllers/goalController')
 const habitController = require('./controllers/habitController')
 const routineController = require('./controllers/routineController')
 const photoController = require('./controllers/photoController')
+const integrationsController = require('./controllers/integrationsController')
+const { slackLogin, slackTask } = require('./controllers/slackController')
 
 
 
 // users login
 router.post('/login', userController.userLogin) 
 router.post('/signup', userController.userSignup) 
+
+// slack
+router.post('/slackLogin', slackLogin)
+router.post('/slackTask', slackTask)
 
 // auth
 router.use(require('./tokenChecker'))
@@ -39,6 +45,10 @@ router.put('/newpassword', userController.userChangePassword)
 // get token for notifications
 router.get('/notifications', notificationsController.notificationsGet)
 router.post('/notifications', notificationsController.notificationsPost)
+
+// integrations
+router.get('/slackIntegrations', integrationsController.slackGet)
+router.post('/integrations', integrationsController.integrationsPost)
 
 // happiness
 router.get('/happiness', happinessController.happinessGet)

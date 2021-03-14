@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 
-import { getDimRatio } from '../../app/DynamicSizing'
+import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 import Api from '../../app/Api.js'
 
 
@@ -82,7 +82,8 @@ const styles = () => ({
   inputText: {
     borderRadius: 20,
     width: '70%',
-    height: 30 * getDimRatio().Y,
+    fontSize: 17 * getDimRatioText().X,
+    height: 35 * getDimRatio().Y,
     paddingLeft: 20,
   },
   button: {
@@ -92,7 +93,7 @@ const styles = () => ({
     cursor: 'pointer',
     backgroundColor: '#32A3BC',
     borderRadius: 40,
-    fontSize: 14* getDimRatio().X,
+    fontSize: 18* getDimRatioText().X,
     alignItems: 'center',
     justifyContent: 'center',
     color: 'white',

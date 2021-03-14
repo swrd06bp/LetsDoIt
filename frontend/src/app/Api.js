@@ -76,6 +76,17 @@ class Api {
     const body = {customization}
     return await this.put(url, body)
   }
+  
+  async getSlackIntegrations () {
+    const url = this.baseUrl + `/slackIntegrations`
+    return await this.get(url)
+  }
+  
+  async postIntegrations ({type, values}) {
+    const url = this.baseUrl + '/integrations'
+    const body = {type, values}
+    return await this.post(url, body)
+  }
 
 
   async getHappiness ({currentYear, limit}) {

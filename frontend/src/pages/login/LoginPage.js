@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { useHistory } from "react-router-dom"
 import { useMixpanel } from 'react-mixpanel-browser'
+ import queryString from 'query-string'
+
 
 import './LoginPage.css'
 
 import Api from '../../app/Api'
 
-function LoginPage() {
+function LoginPage(props) {
   const [isLoading, setIsLoading] = useState(false) 
   const [username, setUsername] = useState('')
   const [password, setPassowrd] = useState('')
@@ -15,15 +17,30 @@ function LoginPage() {
   const mixpanel = useMixpanel()
   
   const handleSubmit = async () => {
+    const api = new Api()
     setIsLoading(true)
-    const isLogin = await new Api().login(username, password)
+    const isLogin = await api.login(username, password)
     if (mixpanel.config.token)
       mixpanel.track('Login Page - Submit Login', {isLogin})
-    if (isLogin) history.replace("/") 
+    if (isLogin) {
+      const params = queryString.parse(props.location.search)
+      console.log(params)
+      if (params.type === 'slack') {
+        const response = await api.postIntegrations({ 
+          type: 'slack',
+          values: {
+            teamId: params.teamId,
+            userId: params.userId,
+          },
+        })
+      }
+      history.replace("/") 
+    }
     else setShowError(true)
     setIsLoading(false)
   }
 
+  console.log(props)
   
   return (
     <div className="login-page">
