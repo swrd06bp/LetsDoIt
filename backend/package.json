@@ -16,9 +16,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.4.1",
     "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "redis": "^3.0.2",
-    "request": "^2.88.2",
     "socket.io": "^2.3.0",
     "web-push": "^3.4.3"
   },

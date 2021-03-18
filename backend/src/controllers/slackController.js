@@ -1,24 +1,26 @@
-const request = require('request')
+const fetch = require('node-fetch')
 const { ObjectId } = require('mongodb')
 const dbClient = require('../dbclient')
 
+const slack_api_token = 'xoxb-31777162896-1848862255779-E4ZNr3psfdHJUeADqorqsPxJ'
 const slack_token = 'SA4OE9yoCf4HC0ufqHQhYzpm'
 
-const sendMessageToSlackResponseURL = (responseURL, JSONmessage) => {
-  var postOptions = {
-	uri: responseURL,
+const sendMessageToSlackResponseURL = async (responseUrl, JSONmessage) => {
+  const postOptions = {
 	method: 'POST',
 	headers: {
 	  'Content-type': 'application/json'
 	},
-	json: JSONmessage
+	body: JSON.stringify(JSONmessage)
+  }
+  await fetch(responseUrl, postOptions)
+    .catch(err => console.error(err))
 }
-  request(postOptions, (error, response, body) => {
-	if (error){
-      console.log(error)	
-	}
-  })
-}
+
+const getListUsers = async (teamId) => {
+  const url = `https://slack.com/api/users.list?team_id=${teamId}&pretty=1`
+  return await fetch(url, {headers: {"Authorization": "Bearer " + slack_api_token}})
+} 
 
 exports.slackTask = async (req, res) => {
   const body = req.body
@@ -38,13 +40,23 @@ exports.slackTask = async (req, res) => {
       },
     })
     if (integrations.length > 0) {
+      let person = payload.channel.name
+
+      if (person === 'directmessage') {
+        const resp = await getListUsers(payload.message.team) 
+        const users = await resp.json()
+        const result = users.members.filter(x => x.id === payload.message.user)
+        if (result.length > 0) person = result[0].name 
+      }
+
+
       const userId = integrations[0].userId
       const task = {
         createdAt: new Date().toJSON(),
         updatedAt: new Date().toJSON(),
         dueDate: new Date().toJSON(),
         list: 'Work',
-        content: 'Slack: respond to ' + payload.channel.name,
+        content: 'Slack: respond to ' + person,
         doneAt: null,
         goalId: null,
         projectId: null,
