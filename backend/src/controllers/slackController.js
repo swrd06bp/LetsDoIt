@@ -60,7 +60,7 @@ exports.slackTask = async (req, res) => {
         doneAt: null,
         goalId: null,
         projectId: null,
-        note: payload.message.text
+        note: 'https://calipsa.slack.com/app_redirect?channel=' + payload.channel.id
       }
       const taskId = await dbClient.writeElem({table: 'tasks', elem: task, userId})
       req.app.get("socketService").emiter('tasks', 'update', slack_token, req.decoded)
