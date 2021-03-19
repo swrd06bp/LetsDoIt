@@ -35,7 +35,7 @@ function AddTask (props) {
     browser.tabs.query({currentWindow: true, active: true}, (tabs) => {
       let tab = tabs[0]
       setNote(tab.url)
-      setTaskInput('Read this article')
+      setTaskInput(tab.title)
     })
   }
 

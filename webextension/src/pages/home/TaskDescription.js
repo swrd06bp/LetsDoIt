@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
 import Modal from 'react-modal'
+import { TimePicker } from 'antd'
+import 'antd/dist/antd.css';
 // import { useMixpanel } from 'react-mixpanel-browser'
 
 import TitleElem from '../../components/CommonDescription/TitleElem'
@@ -9,6 +11,7 @@ import ProjectShape from '../../components/Project/ProjectShape'
 import DeleteButton from '../../components/DeleteButton'
 import { getDimRatio, getDimRatioText } from '../../app/DynamicSizing'
 
+import moment from 'moment'
 import Api from '../../app/Api'
 
 
@@ -18,7 +21,6 @@ function TaskDescription (props) {
   const [note, setNote] = useState(props.describeElem.task.note)
   const [dueDate, setDueDate] = useState(props.describeElem.task.dueDate)
   const [isNotification, setIsNotification] = useState(props.describeElem.task.isNotification)
-  const [hourNotif, setHourNotif] = useState(new Date(props.describeElem.task.dueDate).getHours())
   const [doneAt, setDoneAt] = useState(props.describeElem.task.doneAt)
   const [projectId, setProjectId] = useState(props.describeElem.task.projectId)
   const [goalId, setGoalId] = useState(props.describeElem.task.goalId)
@@ -134,23 +136,19 @@ function TaskDescription (props) {
             {isNotification && (
             <div style={styles().checkboxContainer}>
             hour 
-            <input 
-              style={{width: 40}}
-              type='number' 
-              value={hourNotif} 
-              min={0}
-              max={23}
-              onChange={(event) => {
-                // if (mixpanel.config.token)
-                //   mixpanel.track('Task Description - NumberInput dueDate', {dueDate})
-                if (event.target.value && event.target.value >= 0 && event.target.value < 24) {
-                  setHourNotif(event.target.value)
-                  const newDueDate = new Date(dueDate)
-                  newDueDate.setHours(parseInt(event.target.value))
-                  setDueDate(newDueDate)
-                }
+            <div>
+            <TimePicker
+              minuteStep={15}
+              format={'hh:mm'}
+              onChange={(value) => {
+                let newDueDate = new Date(dueDate)
+                newDueDate.setHours(value.format('hh'))
+                newDueDate.setMinutes(value.format('mm'))
+                setDueDate(newDueDate)
               }}
+              value={moment(dueDate)}
             />
+            </div>
             </div>
             )}
           </div>

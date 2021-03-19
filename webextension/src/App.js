@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react'
 
 import LoginPage from './pages/login/LoginPage'
 import HappinessCreatePage from './pages/happiness/Create'
-import TodayTaskList from './pages/Home/TodayTaskList'
-import TaskDescription from './pages/Home/TaskDescription'
+import TodayTaskList from './pages/home/TodayTaskList'
+import TaskDescription from './pages/home/TaskDescription'
 import Api from './app/Api'
 
 

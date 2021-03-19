@@ -1,5 +1,10 @@
 # Web extension
 
+### version
+npm = 7.3.0
+node = v15.5.1
+OS: mac
+
 ### Install
 
 ```sh
