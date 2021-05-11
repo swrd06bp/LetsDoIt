@@ -37,6 +37,7 @@ const styles = () => ({
   inputArea: {
     width: 600,
     height: 200,
+    fontFamily: 'Verdana, sans-serif',
     animation: `fade-in ${easings.easeOutQuad} 4000ms forwards`,
   },
   doneButton: {
