@@ -39,9 +39,35 @@ function AddTask (props) {
     })
   }
 
+  const addShowNote = async () => {
+    const api = new Api() 
+    let newTask = {
+      content: taskInput ? taskInput : 'New task',
+      list: props.list ? props.list : 'Work',
+      dueDate: props.dueDate ? props.dueDate.toJSON() : new Date().toJSON(),
+      note,
+      projectId: props.projectId ? props.projectId : null,
+      goalId: props.goalId ? props.goalId : null,
+    }
+    const resp = await api.insertTask(newTask)
+    const json = await resp.json()
+    newTask.type = 'task'
+    newTask.id = json.taskId.insertedId
+    newTask._id = json.taskId.insertedId
+    newTask.isNoteActive = true
+    props.onDescribe({task: newTask, goal: null, project: null})
+  }
+
 
   return (
     <div style={styles().wrapper}>
+        <img 
+          onClick={linkTab}
+          src="/link.png"
+          alt=""
+          title="Add this page in your to do"
+          style={styles().imageLink}
+        />
           <input 
             style={styles().inputText}
             type="text"
@@ -67,10 +93,10 @@ function AddTask (props) {
           Add
         </div>
         <img 
-          onClick={linkTab}
-          src="/link.png"
+          onClick={addShowNote}
+          src="/post-it.png"
           alt=""
-          title="Add this page in your to do"
+          title="Create a task"
           style={styles().imageLink}
         />
     </div>
@@ -112,6 +138,7 @@ const styles = () => ({
     height: 45 * getDimRatio().X,
     width: 45 * getDimRatio().X,
     cursor: 'pointer',
+    marginHorizontal: 10,
   },
 })
 

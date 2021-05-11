@@ -17,6 +17,7 @@ import Api from '../../app/Api'
 
 
 function TaskDescription (props) {
+  const [isSaving, setIsSaving] = useState(false)
   const [content, setContent] = useState(props.describeElem.task.content)
   const [note, setNote] = useState(props.describeElem.task.note)
   const [dueDate, setDueDate] = useState(props.describeElem.task.dueDate)
@@ -25,15 +26,19 @@ function TaskDescription (props) {
   const [projectId, setProjectId] = useState(props.describeElem.task.projectId)
   const [goalId, setGoalId] = useState(props.describeElem.task.goalId)
   const [list, setList] = useState(props.describeElem.task.list)
-  const [isNoteActive, setIsNoteActive] = useState(false)
+  const [isNoteActive, setIsNoteActive] = useState(props.describeElem.task.isNoteActive)
 
   // const mixpanel = useMixpanel()
   const api = new Api()
+  let timer = null
   
   useEffect(() => {
     Modal.setAppElement('body')
   }, [])
 
+  useEffect(() => {
+    onSave()
+  }, [list, content, note, dueDate, isNotification, doneAt, projectId, goalId])
 
 
   let projectsOptions = props.projects.map(x => ({value: x._id, label: x.content}))
@@ -52,13 +57,17 @@ function TaskDescription (props) {
   goalsOptions.unshift({value: null, label: 'none'})
 
   const onSave = async () => {
+    setIsSaving(true)
+    clearTimeout(timer)
     // if (mixpanel.config.token)
     //   mixpanel.track('Task Description - save')
-    await api.updateTask(
-      props.describeElem.task.id, 
-      {content, dueDate, projectId, goalId, note, list, doneAt, isNotification}
-    )
-    props.onDescribe({task: null, project: props.describeElem.project, goal: props.describeElem.goal})
+    timer = setTimeout(() => {
+      api.updateTask(
+        props.describeElem.task.id, 
+        {content, dueDate, projectId, goalId, note, list, doneAt, isNotification}
+      )
+        .then(() => setIsSaving(false))
+    }, 500)
   }
 
   const onDelete = async () => {
@@ -75,8 +84,22 @@ function TaskDescription (props) {
       {isNoteActive && (
         <div>
         <div style={{display: 'flex', flexDirection: 'row',alignItems: 'center', justifyContent: 'space-between'}}>
-          <div width='15' height='15' onClick={() => setIsNoteActive(false)}> back </div>
-          <h3 style={styles().title}>Note</h3>
+          <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <img 
+              src='./left-arrow.png'
+              style={styles().backImage}
+              width='15' 
+              height='15' 
+              onClick={() => props.onDescribe({
+                  task: null,
+                  project: props.describeElem.project,
+                  goal: props.describeElem.goal
+                })
+              }
+            />
+            <h3 style={styles().title}>Note</h3>
+          </div>
+          <DeleteButton width='15' height='15' onDelete={onDelete} />
         </div>
         <div style={styles().borderWrapper}>
           <textarea 
@@ -85,6 +108,7 @@ function TaskDescription (props) {
             value={content} 
             style={styles().titleTextNote}
             onChange={(event) => setContent(event.target.value)}
+            placeholder='Task'
           />
          <textarea 
             type='text' 
@@ -92,14 +116,40 @@ function TaskDescription (props) {
             value={note ? note : ''} 
             style={styles().noteTextNote}
             onChange={(event) => setNote(event.target.value)}
+            placeholder='Add some notes'
           />
+        </div>
+        <div style={styles().footer}>
+          {isSaving && (
+            <div style={styles().savingText}>Saving...</div>
+          )}
+          {!isSaving && (
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+              <img src={'./tick.png'} height='7' width='7' />
+              <div style={styles().savedText}>Saved</div>
+            </div>
+          )}          
         </div>
         </div>
       )}
       {!isNoteActive && (
         <div>
         <div style={{display: 'flex', flexDirection: 'row',alignItems: 'center', justifyContent: 'space-between'}}>
-          <h3 style={styles().title}>Description</h3>
+          <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <img 
+              src='./left-arrow.png'
+              style={styles().backImage}
+              width='15' 
+              height='15' 
+              onClick={() => props.onDescribe({
+                  task: null,
+                  project: props.describeElem.project,
+                  goal: props.describeElem.goal
+                })
+              }
+            />
+            <h3 style={styles().title}>Description</h3>
+          </div>
           <DeleteButton width='15' height='15' onDelete={onDelete} />
         </div>
         <TitleElem
@@ -265,44 +315,24 @@ function TaskDescription (props) {
             name='note'
             value={note ? note : ''} 
             style={styles().noteText}
-            onClick={() => setIsNoteActive(true)}
+            onClick={() => {
+              setIsNoteActive(true)
+            }}
           />
         </div>
 
         <div style={styles().footer}>
-          <div
-            style={styles().buttonCancel}
-            onClick={() => {
-              props.onDescribe({
-                task: null,
-                project: props.describeElem.project,
-                goal: props.describeElem.goal
-              })
-              // if (mixpanel.config.token)
-              //   mixpanel.track('Task Description - Cancel')
-            }}
-            onMouseOver={(event) => {
-              event.target.style.background = '#F5A9A9'
-            }}
-            onMouseLeave={(event) => {
-              event.target.style.background = '#F51111'
-            }}
-          >
-            Cancel
-          </div>
-          <div
-            style={styles().buttonSave} 
-            onClick={onSave}
-            onMouseOver={(event) => {
-              event.target.style.background = '#58FAD0'
-            }}
-            onMouseLeave={(event) => {
-              event.target.style.background = '#32A3BC'
-            }}
-          >
-            Save
-          </div>
+          {isSaving && (
+            <div style={styles().savingText}>Saving</div>
+          )}
+          {!isSaving && (
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+              <img src={'./tick.png'} height='7' width='7' />
+              <div style={styles().savedText}>Saved</div>
+            </div>
+          )}          
         </div>
+    
         </div>
       )}
     </div>
@@ -324,9 +354,8 @@ const styles = () => ({
     marginLeft: 10,
     fontWeight: 'normal',
   },
-  buttonBack: {
-    height: 20 * getDimRatio().X,
-    width: 20 * getDimRatio().Y,
+  backImage: {
+    cursor: 'pointer',
   },
   noteTitle: {
     marginLeft: 10,
@@ -368,10 +397,9 @@ const styles = () => ({
     control: (styles) => ({...styles, width: 140 * getDimRatio().X})
   },
   footer: {
-    height: 60 * getDimRatio().Y,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   buttonCancel: {
@@ -436,6 +464,13 @@ const styles = () => ({
     flexDirection: 'column',
     borderWidth: 1,
     borderRadius: 20
+  },
+  savingText: {
+    fontStyle: 'italic',
+    fontSize: 14 * getDimRatioText().X,
+  },
+  savedText: {
+    fontSize: 14 * getDimRatioText().X,
   },
 })
 
