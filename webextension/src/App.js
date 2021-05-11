@@ -22,6 +22,14 @@ function App() {
       if (isLogin) setShowPage('Today')
     }
 
+    const checkStorage = async () => {
+      const browser = window.browser || window.chrome
+      browser.storage.local.get('task')
+        .then((res) => {
+          if (res.task) setDescribeElem({task :res.task, project: null, goal: null})
+        })
+    }
+
     const getData = async () => {
       const respGoals = await api.getGoals()
       const resultGoals = await respGoals.json()
@@ -33,6 +41,7 @@ function App() {
       setIsLoading(false)
     }
 
+    checkStorage()
     getData()
     checkLogin()
   }, [])

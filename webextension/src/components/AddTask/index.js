@@ -7,7 +7,7 @@ import Api from '../../app/Api.js'
 function AddTask (props) {
   const [taskInput, setTaskInput] = useState('')
   const [note, setNote] = useState(null)
-
+  const browser = window.browser || window.chrome
 
   const onSubmit = async () => {
     const api = new Api() 
@@ -31,7 +31,6 @@ function AddTask (props) {
   }
 
   const linkTab = () => {
-    const browser = window.browser || window.chrome
     browser.tabs.query({currentWindow: true, active: true}, (tabs) => {
       let tab = tabs[0]
       setNote(tab.url)
@@ -55,7 +54,9 @@ function AddTask (props) {
     newTask.id = json.taskId.insertedId
     newTask._id = json.taskId.insertedId
     newTask.isNoteActive = true
-    props.onDescribe({task: newTask, goal: null, project: null})
+    newTask.isNew = true
+    browser.storage.local.set({task: newTask})
+      .then(() => props.onDescribe({task: newTask, goal: null, project: null}))
   }
 
 

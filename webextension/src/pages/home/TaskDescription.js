@@ -27,9 +27,11 @@ function TaskDescription (props) {
   const [goalId, setGoalId] = useState(props.describeElem.task.goalId)
   const [list, setList] = useState(props.describeElem.task.list)
   const [isNoteActive, setIsNoteActive] = useState(props.describeElem.task.isNoteActive)
+  const [isNew, setIsNew] = useState(props.describeElem.task.isNew)
 
   // const mixpanel = useMixpanel()
   const api = new Api()
+  const browser = window.browser || window.chrome
   let timer = null
   
   useEffect(() => {
@@ -43,8 +45,6 @@ function TaskDescription (props) {
 
   let projectsOptions = props.projects.map(x => ({value: x._id, label: x.content}))
   projectsOptions.unshift({value: null, label: 'none'})
-  
-  console.log(projectId, projectsOptions)
 
   const project = props.projects.filter(x => x._id === projectId).length
     ? props.projects.filter(x => x._id === projectId)[0] : null
@@ -62,18 +62,35 @@ function TaskDescription (props) {
     // if (mixpanel.config.token)
     //   mixpanel.track('Task Description - save')
     timer = setTimeout(() => {
+      if (isNoteActive) 
+        browser.storage.local.set({task: {
+          id: props.describeElem.task.id,
+          content,
+          dueDate,
+          projectId,
+          goalId,
+          note,
+          list,
+          doneAt,
+          isNotification,
+          isNoteActive: true,
+        }})
+      if (isNew && content !== 'New task')
+        setIsNew(false)
+
       api.updateTask(
         props.describeElem.task.id, 
         {content, dueDate, projectId, goalId, note, list, doneAt, isNotification}
       )
         .then(() => setIsSaving(false))
-    }, 500)
+    }, 1000)
   }
 
   const onDelete = async () => {
     // if (mixpanel.config.token)
     //   mixpanel.track('Task Description - delete')
     await api.deleteTask(props.describeElem.task.id)
+    await browser.storage.local.remove('task')
     props.onDescribe({task: null, project: props.describeElem.project, goal: props.describeElem.goal})
   }
 
@@ -90,12 +107,14 @@ function TaskDescription (props) {
               style={styles().backImage}
               width='15' 
               height='15' 
-              onClick={() => props.onDescribe({
+              onClick={() => {
+                browser.storage.local.remove('task')
+                props.onDescribe({
                   task: null,
                   project: props.describeElem.project,
                   goal: props.describeElem.goal
                 })
-              }
+              }}
             />
             <h3 style={styles().title}>Note</h3>
           </div>
@@ -109,6 +128,10 @@ function TaskDescription (props) {
             style={styles().titleTextNote}
             onChange={(event) => setContent(event.target.value)}
             placeholder='Task'
+            onClick={(event) => {
+              if (isNew)
+                event.target.select()
+            }}
           />
          <textarea 
             type='text' 
@@ -316,7 +339,20 @@ function TaskDescription (props) {
             value={note ? note : ''} 
             style={styles().noteText}
             onClick={() => {
-              setIsNoteActive(true)
+              browser.storage.local.set({
+                task: {
+                  content,
+                  dueDate,
+                  projectId,
+                  goalId,
+                  note, 
+                  list, 
+                  doneAt, 
+                  isNotification, 
+                  isNoteActive: true,
+                }
+              }).then(() => setIsNoteActive(true))
+              
             }}
           />
         </div>
@@ -340,9 +376,10 @@ function TaskDescription (props) {
 }
 
 const styles = () => ({
+
   wrapper: {
     background: 'white',
-    width: 450 * getDimRatio().X,
+    width: 600 * getDimRatio().X,
     height: '50%',
     margin: 30 * getDimRatio().X,
     display: 'flex',
@@ -439,6 +476,11 @@ const styles = () => ({
     borderRadius: 20,
     transform: 'translate(-50%, -50%)'
   },
+  borderWrapper: {
+    borderRadius: 5,
+    borderSize: 1,
+
+  },
   noteTextNote: {
     width: '90%',
     height: 600 * getDimRatio().Y,
@@ -458,12 +500,6 @@ const styles = () => ({
     overflow: 'auto',
     resize: null,
     fontFamily: 'Verdana, sans-serif',
-  },
-  noteWrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    borderWidth: 1,
-    borderRadius: 20
   },
   savingText: {
     fontStyle: 'italic',

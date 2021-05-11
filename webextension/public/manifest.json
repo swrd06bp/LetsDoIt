@@ -15,6 +15,7 @@
   },
   "permissions": [
     "tabs",
+    "storage",
     "<all_urls>",
     "https://api.lets-do-it.me/*",
     "https://app.lets-do-it.me/*"
