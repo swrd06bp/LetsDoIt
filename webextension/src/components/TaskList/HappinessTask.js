@@ -60,6 +60,7 @@ const styles = () => ({
     background: '#009933',
     color: 'white',
     borderRadius: 20,
+    textAlign: 'center',
     fontSize: 18 * getDimRatioText().X,
   },
   buttonContainer: {

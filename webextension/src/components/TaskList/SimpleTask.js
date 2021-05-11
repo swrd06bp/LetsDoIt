@@ -75,7 +75,7 @@ function SimpleTask (props) {
         >
           {props.item.content}
           {links && links.length > 0 && (
-              <a href={links[0]} onClick={() => setTimeout(() => window.close(), 100)}>&nbsp;- link</a>
+              <a href={links[0]} onClick={() => setTimeout(() => window.close(), 300)}>&nbsp;- link</a>
           )}
         </div>
       </div>

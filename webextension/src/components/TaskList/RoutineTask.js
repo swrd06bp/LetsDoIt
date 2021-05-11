@@ -155,6 +155,7 @@ const styles = () => ({
     width: 85 * getDimRatio().X,
     background: '#009933',
     color: 'white',
+    textAlign: 'center',
     borderRadius: 20,
     fontSize: 18 * getDimRatioText().X,
   },
