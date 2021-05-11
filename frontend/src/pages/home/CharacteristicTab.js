@@ -13,19 +13,30 @@ import { sortProjectTasks} from '../../app/utils'
 
 
 function CharacteristicsTab (props) {
+  const [isSaving, setIsSaving] = useState(false)
   const [content, setContent] = useState(props.elem.content)
   const [note, setNote] = useState(props.elem.note)
   const [dueDate, setDueDate] = useState(props.elem.dueDate)
   const [doneAt, setDoneAt] = useState(props.elem.doneAt)
-  const [goalId, setGoalId] = useState(props.elem.goalId)
   const [list, setList] = useState(props.elem.list)
   
-  const goal = props.goals && props.goals.filter(x => x._id === goalId).length
-    ? props.goals.filter(x => x._id === goalId)[0] : null
+  let timer = null
 
-  let goalsOptions = props.goals ? props.goals.map(x => ({value: x._id, label: x.content})) : null
-  if (goalsOptions)
-    goalsOptions.unshift({value: null, label: 'none'})
+  useEffect(() => {
+    savingAction()
+  }, [content, list, note, dueDate, doneAt])
+
+  const savingAction = async () => {
+    setIsSaving(true)
+    clearTimeout(timer)
+    // if (mixpanel.config.token)
+    //   mixpanel.track('Task Description - save')
+    timer = setTimeout(() => {
+        props.onSave({content, note, dueDate, list, doneAt})
+         .then(() => setIsSaving(false))
+    }, 1000)
+  }
+  
 
   return (
     <div style={styles().wrapper}>
@@ -61,7 +72,9 @@ function CharacteristicsTab (props) {
           <input 
             type='date' 
             value={new Date(dueDate).toJSON().slice(0, 10)} 
-            onChange={(event) => {setDueDate(new Date(event.target.value))}}
+            onChange={(event) => {
+              setDueDate(new Date(event.target.value))
+            }}
           />
           </div>
           )}
@@ -86,7 +99,9 @@ function CharacteristicsTab (props) {
               <input 
                 type='date' 
                 value={new Date(doneAt).toJSON().slice(0, 10)} 
-                onChange={(event) => {setDoneAt(new Date(event.target.value))}}
+                onChange={(event) => {
+                  setDoneAt(new Date(event.target.value))
+                }}
               />
             </div>
           )}
@@ -103,7 +118,9 @@ function CharacteristicsTab (props) {
             type='text' 
             name='note'
             value={note ? note : ''} 
-            onChange={(event) => setNote(event.target.value)} 
+            onChange={(event) => {
+              setNote(event.target.value)
+            }} 
             style={styles().noteText}
           />
        </div>
@@ -160,32 +177,15 @@ function CharacteristicsTab (props) {
     </div>
 
       <div style={styles().footer}>
-        <div 
-          style={styles().buttonCancel} 
-          onClick={() => props.onDescribe({
-            task: null, project: null, goal: null
-          })}
-          onMouseOver={(event) => {
-            event.target.style.background = '#F5A9A9'
-          }}
-          onMouseLeave={(event) => {
-            event.target.style.background = '#F51111'
-          }}
-        >
-          Cancel
-        </div>
-        <div 
-          style={styles().buttonSave}
-          onClick={() => props.onSave({content, note, dueDate, goalId, list, doneAt})}
-          onMouseOver={(event) => {
-            event.target.style.background = '#58FAD0'
-          }}
-          onMouseLeave={(event) => {
-            event.target.style.background = '#32A3BC'
-          }}
-        >
-          Save
-        </div>
+          {isSaving && (
+            <div style={styles().savingText}>Saving...</div>
+          )}
+          {!isSaving && (
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+              <img src={'./tick.png'} height='7' width='7' />
+              <div style={styles().savedText}>Saved</div>
+            </div>
+          )}          
       </div>
   </div>
   
@@ -309,6 +309,14 @@ const styles = () => ({
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
+  },
+  savingText: {
+    fontStyle: 'italic',
+    fontSize: 14 * getDimRatioText().X,
+  },
+  savedText: {
+    fontSize: 14 * getDimRatioText().X,
+    marginLeft: 5,
   },
 })
 

@@ -35,9 +35,9 @@ function GoalDescription (props) {
   const onSave = async ({content, dueDate, note, list, doneAt}) => {
     await api.updateGoal(
       props.goal._id,
-      {content, dueDate, note, goalId: props.goalId, list, doneAt}
+      {content, dueDate, note, list, doneAt}
     )
-    props.onDescribe({task: null, project: null, goal: null, habit: null})
+    props.update()
   }
 
   const onDelete = async () => {

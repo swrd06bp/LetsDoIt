@@ -496,6 +496,7 @@ const styles = () => ({
   },
   savedText: {
     fontSize: 14 * getDimRatioText().X,
+    marginLeft: 5,
   },
   backImage: {
     cursor: 'pointer',

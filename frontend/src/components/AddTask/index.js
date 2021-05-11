@@ -85,13 +85,13 @@ function AddTask (props) {
         >
           Add
         </div>
-        <img 
+        {!props.projectId && !props.goalId && ( <img 
           onClick={addShowNote}
           src="/post-it.png"
           alt=""
           title="Create a task"
           style={styles().imageLink}
-        />
+        />)}
     </div>
   )
 }

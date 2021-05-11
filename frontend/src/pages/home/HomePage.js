@@ -111,6 +111,7 @@ function HomePage(props) {
                   setDescribeElem(value)
                 }}
                 project={describeElem.project}
+                update={getData}
                 goals={allGoals}
               />
             )}
@@ -121,6 +122,7 @@ function HomePage(props) {
                   getData()
                   setDescribeElem(value)
                 }}
+                update={getData}
                 goal={describeElem.goal}
               />
             )}

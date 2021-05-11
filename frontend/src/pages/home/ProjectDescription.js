@@ -31,12 +31,12 @@ function ProjectDescription (props) {
   }
 
 
-  const onSave = async ({content, note, dueDate, goalId, list, doneAt, projectId}) => {
+  const onSave = async ({content, note, dueDate, list, doneAt}) => {
     await api.updateProject(
       props.project._id,
-      {content, dueDate, note, goalId, list, doneAt}
+      {content, dueDate, note, list, doneAt}
     )
-    props.onDescribe({project: null, project: null, goal: null, habit: null})
+    props.update()
   }
 
   const onDelete = async () => {
