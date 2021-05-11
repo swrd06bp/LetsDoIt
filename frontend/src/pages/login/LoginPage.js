@@ -24,7 +24,6 @@ function LoginPage(props) {
       mixpanel.track('Login Page - Submit Login', {isLogin})
     if (isLogin) {
       const params = queryString.parse(props.location.search)
-      console.log(params)
       if (params.type === 'slack') {
         const response = await api.postIntegrations({ 
           type: 'slack',
@@ -34,7 +33,7 @@ function LoginPage(props) {
           },
         })
       }
-      history.replace("/") 
+      history.push("/") 
     }
     else setShowError(true)
     setIsLoading(false)

@@ -424,6 +424,7 @@ function TodayTaskList (props) {
         onCreate={(task) => {
           setItemsToday(sortTasks([task, ...itemsToday]))
         }}
+        onDescribe={props.onDescribe}
       />
     </div>
     

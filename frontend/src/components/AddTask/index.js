@@ -36,6 +36,26 @@ function AddTask (props) {
     }
     setTaskInput('')
   }
+  
+  const addShowNote = async () => {
+    const api = new Api() 
+    let newTask = {
+      content: taskInput ? taskInput : 'New task',
+      list: props.list ? props.list : 'Work',
+      dueDate: props.dueDate ? props.dueDate.toJSON() : new Date().toJSON(),
+      note: null,
+      projectId: props.projectId ? props.projectId : null,
+      goalId: props.goalId ? props.goalId : null,
+    }
+    const resp = await api.insertTask(newTask)
+    const json = await resp.json()
+    newTask.type = 'task'
+    newTask.id = json.taskId.insertedId
+    newTask._id = json.taskId.insertedId
+    newTask.isNoteActive = true
+    newTask.isNew = true
+    props.onDescribe({task: newTask, goal: null, project: null})
+  }
 
 
   return (
@@ -65,6 +85,13 @@ function AddTask (props) {
         >
           Add
         </div>
+        <img 
+          onClick={addShowNote}
+          src="/post-it.png"
+          alt=""
+          title="Create a task"
+          style={styles().imageLink}
+        />
     </div>
   )
 }
@@ -99,6 +126,12 @@ const styles = () => ({
     color: 'white',
     fontWeight: 'bold',
     margin: 10,
+  },
+  imageLink: {
+    height: 40 * getDimRatio().X,
+    width: 40 * getDimRatio().X,
+    cursor: 'pointer',
+    marginHorizontal: 10,
   },
 })
 
