@@ -85,7 +85,7 @@ function AddTask (props) {
         >
           Add
         </div>
-        {!props.projectId && !props.goalId && ( <img 
+        {!props.projectId && !props.goalId && !props.isWeek && ( <img 
           onClick={addShowNote}
           src="/post-it.png"
           alt=""

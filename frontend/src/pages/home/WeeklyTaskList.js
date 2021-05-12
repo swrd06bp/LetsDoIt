@@ -555,6 +555,7 @@ function WeeklyTaskList (props) {
           </div>
         </div>
         <AddTask
+          isWeek={true}
           dueDate={getNewDueDate()}
           onCreate={onCreateTask}
           list={selectedList}
