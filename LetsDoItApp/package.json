@@ -21,7 +21,7 @@
     "@react-navigation/stack": "^5.8.0",
     "react": "^16.13.1",
     "react-devtools-core": "^4.8.2",
-    "react-native": "^0.63.4",
+    "react-native": "^0.62.3",
     "react-native-chart-kit": "^6.9.0",
     "react-native-datepicker": "^1.7.2",
     "react-native-drax": "^0.6.0",
