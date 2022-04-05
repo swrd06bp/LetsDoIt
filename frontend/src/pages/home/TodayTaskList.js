@@ -162,7 +162,7 @@ function TodayTaskList (props) {
       removeSocketListener('tasks')
       removeSocketListener('routines')
       removeSocketListener('happiness')
-      window.addEventListener('focus', getAllItems)
+      window.removeEventListener('focus', getAllItems)
 }
   },[props.task]) 
 

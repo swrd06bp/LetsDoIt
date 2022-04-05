@@ -119,8 +119,8 @@ function WeeklyTaskList (props) {
     window.addEventListener('focus', getTasks)
     updateSocketElems('tasks', (err, data) => getTasks())
     return () => {
+      window.removeEventListener('focus', getTasks)
       removeSocketListener('tasks')
-      window.addEventListener('focus', getTasks)
     }
   },[props.task, date]) 
 
