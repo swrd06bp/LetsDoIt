@@ -23,7 +23,7 @@ function HappinessPage (props) {
   
   const getHappiness = async () => {
     const api = new Api()
-    const resp = await api.getHappiness({currentYear: year, limit: 365})
+    const resp = await api.getHappiness({currentYear: year, limit: 400})
     let json = await resp.json()
     const indexInf = 0
     const indexSup = Math.min(7, json.length)

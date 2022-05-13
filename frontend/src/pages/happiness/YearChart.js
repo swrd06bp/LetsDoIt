@@ -9,14 +9,14 @@ function MonthChart (props) {
   const [editId, setEditId] = useState(null)
 
   const filteredData = props.allData.filter(x => (
-    moment(new Date(x.dueDate)).format('MMMM') === props.month)
+    moment(new Date(x.dueDate)).utc().format('MMMM') === props.month)
   )
 
   let monthData = []
 
 
   for (let i = 1; i <= moment(new Date(`${props.index}/1/${props.year}`)).daysInMonth(); i++) {
-    const index = filteredData.map(x => parseInt(moment(new Date(x.dueDate)).format('D'))).indexOf(i)
+    const index = filteredData.map(x => parseInt(moment(new Date(x.dueDate)).utc().format('D'))).indexOf(i)
     if (index === -1)
       monthData.push({
         _id: new Date(props.year, props.index - 1, i).toJSON(),
