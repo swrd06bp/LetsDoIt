@@ -5,6 +5,8 @@ db-data
 *.swp
 build/*
 build
+data
+data/*
 *.lock
 *.DS_Store
 Podfile.lock
