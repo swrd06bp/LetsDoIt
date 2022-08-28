@@ -33,7 +33,7 @@ function LoginPage(props) {
           },
         })
       }
-      history.push("/") 
+      history.replace("/") 
     }
     else setShowError(true)
     setIsLoading(false)
