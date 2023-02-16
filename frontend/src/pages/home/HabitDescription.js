@@ -63,7 +63,7 @@ function HabitDescription (props) {
     const resp = await api.getRoutinesHabit({habitId: props.describeElem.habit._id}) 
     const json = await resp.json()
     const newCommitsData = json.filter((x) => x.isDone).map( x => ({
-      date: x.dueDate.slice(0, 10),
+      date: x.dueDate ? x.dueDate.slice(0, 10) : x.createdAt.slice(0, 10),
       count: 1,
     }))
     const scoreCounts = getScoreData(newCommitsData).scoreCounts
@@ -92,7 +92,7 @@ function HabitDescription (props) {
   }
 
   const onUpdateRoutine = async (value) => {
-    const subRoutines = allRoutines.filter(x => x.dueDate.slice(0, 10) === value.date)
+    const subRoutines = allRoutines.filter(x => x.dueDate ? x.dueDate.slice(0, 10) : x.createdAt.slice(0, 10) === value.date)
     
     if (subRoutines.length === 0)
       await api.insertRoutine({
