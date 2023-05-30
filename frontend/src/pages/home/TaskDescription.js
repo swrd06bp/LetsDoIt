@@ -294,7 +294,7 @@ function TaskDescription (props) {
           </div>
           <div 
             style={styles().dropdownContainer}
-            title={projectsOptions.filter(x => x.value === projectId)[0].label}
+            title={projectsOptions.filter(x => x.value === projectId)[0] ? projectsOptions.filter(x => x.value === projectId)[0].label : ''}
           >
             <ProjectShape project={project} />
             <Select 
@@ -311,7 +311,7 @@ function TaskDescription (props) {
           </div>
           <div
             style={styles().dropdownContainer}
-            title={goalsOptions.filter(x => x.value === goalId)[0].label}
+            title={goalsOptions.filter(x => x.value === goalId)[0] ? goalsOptions.filter(x => x.value === goalId)[0].label : ''}
           >
             <GoalShape goal={goal} />
             <Select 
